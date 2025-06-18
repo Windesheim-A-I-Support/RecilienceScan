@@ -63,18 +63,35 @@ params:
 ---
 
 
-```{r package-installer, include=FALSE, echo=FALSE}
-# This chunk will check for and install missing packages automatically.
-# It ensures that the R environment Quarto is using has the necessary tools.
 
-required_packages <- c("readr", "dplyr", "stringr", "tidyr", "ggplot2", "fmsb", "scales")
+```{r package-installer, include=FALSE}
+# This chunk checks for and installs missing packages automatically.
+# Adding 'janitor' to help clean messy column names from the CSV source.
+required_packages <- c("readr", "dplyr", "stringr", "tidyr", "ggplot2", 
+                       "fmsb", "scales", "janitor")
 missing_packages <- required_packages[!sapply(required_packages, requireNamespace, quietly = TRUE)]
 
 if (length(missing_packages) > 0) {
+  # Use message() for informative output that doesn't halt the process on warnings
   message("Installing missing R packages: ", paste(missing_packages, collapse = ", "))
-  install.packages(missing_packages, repos = "https://cran.rstudio.com/", type = "binary")
-} else {
-  message("All required R packages are already installed.")
+  install.packages(missing_packages, repos = "https://cran.rstudio.com/")
+}
+```
+
+```{r helpers, include=FALSE}
+# This chunk defines reusable helper functions to keep the main setup chunk clean.
+# It makes the report logic easier to understand and debug.
+
+#' Convert a value to numeric, robustly handling common non-numeric entries.
+#'
+#' @param x The input value (can be a character or factor).
+#' @return A numeric value or NA.
+convert_to_numeric_simple <- function(x) {
+  x_char <- as.character(x)
+  # Unify all common missing/invalid formats to NA
+  x_char <- ifelse(tolower(trimws(x_char)) %in% c("?", "", " ", "n/a", "na", "n.a.", "nan"), NA_character_, x_char)
+  # Convert comma decimal separator to period and suppress warnings for NAs
+  suppressWarnings(as.numeric(str_replace(x_char, ",", ".")))
 }
 ```
 

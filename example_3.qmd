@@ -63,20 +63,52 @@ params:
 ---
 
 
-```{r package-installer, include=FALSE, echo=FALSE}
-# This chunk will check for and install missing packages automatically.
-# It ensures that the R environment Quarto is using has the necessary tools.
 
-required_packages <- c("readr", "dplyr", "stringr", "tidyr", "ggplot2", "fmsb", "scales")
+```{r package-installer, include=FALSE}
+# This chunk checks for and installs missing packages automatically.
+# Adding 'janitor' to help clean messy column names from the CSV source.
+required_packages <- c("readr", "dplyr", "stringr", "tidyr", "ggplot2", 
+                       "fmsb", "scales", "janitor")
 missing_packages <- required_packages[!sapply(required_packages, requireNamespace, quietly = TRUE)]
 
 if (length(missing_packages) > 0) {
+  # Use message() for informative output that doesn't halt the process on warnings
   message("Installing missing R packages: ", paste(missing_packages, collapse = ", "))
-  install.packages(missing_packages, repos = "https://cran.rstudio.com/", type = "binary")
-} else {
-  message("All required R packages are already installed.")
+  install.packages(missing_packages, repos = "https://cran.rstudio.com/")
 }
 ```
+
+```{r helpers, include=FALSE}
+# This chunk defines reusable helper functions to keep the main setup chunk clean.
+# It makes the report logic easier to understand and debug.
+
+#' Convert a value to numeric, robustly handling common non-numeric entries.
+#'
+#' @param x The input value (can be a character or factor).
+#' @return A numeric value or NA.
+#' 
+#' 
+# Add this function to your 'helpers' R chunk
+#' Safely format a score for printing, returning "N/A" if the score is missing.
+#'
+#' @param score The numeric score value.
+#' @return A formatted character string (e.g., "3.45" or "N/A").
+safe_print_score <- function(score) {
+  # This logic is identical to the ifelse() statements used in your original, working code.
+  if (is.na(score) || is.null(score) || !is.numeric(score)) {
+    return("N/A")
+  }
+  return(sprintf("%.2f", score))
+}
+convert_to_numeric_simple <- function(x) {
+  x_char <- as.character(x)
+  # Unify all common missing/invalid formats to NA
+  x_char <- ifelse(tolower(trimws(x_char)) %in% c("?", "", " ", "n/a", "na", "n.a.", "nan"), NA_character_, x_char)
+  # Convert comma decimal separator to period and suppress warnings for NAs
+  suppressWarnings(as.numeric(str_replace(x_char, ",", ".")))
+}
+```
+
 
 ```{r setup, include=FALSE}
 library(readr)
@@ -183,7 +215,8 @@ if(nrow(df_company_numeric) >= 1) {
 
 # Executive Summary
 
-This Strategic Resilience and Financial Performance Profile, prepared by the Supply Chain Finance Lectoraat at Hogeschool Windesheim, provides **`r params$company`** with a rigorous, data-driven analysis of its supply chain resilience. In an increasingly interconnected and unpredictable global economy, the capacity to anticipate, withstand, and adapt to disruptions is not merely an operational advantage but a critical determinant of financial stability and long-term market leadership for logistics providers. This report translates resilience metrics into actionable strategic insights, enabling **`r params$company`** to make informed decisions.
+This Strategic Resilience and Financial Performance Profile provides **`r params$company`** with a rigorous, data-driven analysis of its supply chain resilience. In an increasingly turbulent global economy, the capacity to anticipate, withstand, and adapt to disruptions is a critical determinant of financial stability and long-term market leadership. This report translates resilience metrics into actionable strategic insights.
+
 
 **Overall Supply Chain Resilience Score (SCRES) for `r params$company`:** **`r if(exists("df_company_numeric") && nrow(df_company_numeric) > 0 && "overall_scres" %in% names(df_company_numeric) && !is.na(df_company_numeric$overall_scres[1])) sprintf("%.2f / 5.00", df_company_numeric$overall_scres[1]) else "N/A"`**
 
@@ -358,6 +391,8 @@ The overall SCRES of **`r if(exists("df_company_numeric") && "overall_scres" %in
 
 **Operational Efficiency and Cost Management:**
 Areas where **`r params$company`** demonstrates high resilience scores, particularly in dimensions like *Connectivity*, *Visibility*, and *Agility*, are likely contributing to optimized resource utilization, reduced error rates, and lower operational costs. For instance, strong *Internal Visibility* (score: **`r if(exists("data_in_radar") && !is.null(data_in_radar) && is.data.frame(data_in_radar) && "Visibility" %in% colnames(data_in_radar) && !is.na(data_in_radar[3, "Visibility"])) sprintf("%.2f", data_in_radar[3, "Visibility"]) else "N/A"`**) can minimize idle assets and optimize inventory, directly impacting holding costs and working capital. Conversely, lower scores, perhaps in *Upstream Resilience* (pillar score: **`r if(exists("df_company_numeric") && "up_pillar_score" %in% names(df_company_numeric) && !is.na(df_company_numeric$up_pillar_score[1])) sprintf("%.2f", df_company_numeric$up_pillar_score[1]) else "N/A"`**), might indicate inefficiencies leading to higher expediting fees, buffer stock requirements, or penalties for delays.
+
+
 
 **Risk Exposure and Financial Stability:**
 The *Financial* dimension scores across pillars (Upstream: **`r if(exists("data_up_radar") && !is.null(data_up_radar) && is.data.frame(data_up_radar) && "Financial" %in% colnames(data_up_radar) && !is.na(data_up_radar[3, "Financial"])) sprintf("%.2f", data_up_radar[3, "Financial"]) else "N/A"`**; Internal: **`r if(exists("data_in_radar") && !is.null(data_in_radar) && is.data.frame(data_in_radar) && "Financial" %in% colnames(data_in_radar) && !is.na(data_in_radar[3, "Financial"])) sprintf("%.2f", data_in_radar[3, "Financial"]) else "N/A"`**; Downstream: **`r if(exists("data_do_radar") && !is.null(data_do_radar) && is.data.frame(data_do_radar) && "Financial" %in% colnames(data_do_radar) && !is.na(data_do_radar[3, "Financial"])) sprintf("%.2f", data_do_radar[3, "Financial"]) else "N/A"`**) directly reflect **`r params$company`**'s capacity to absorb financial shocks. Lower scores may signal a heightened vulnerability to cash flow disruptions during crises. Furthermore, operational risks identified through low scores in other dimensions (e.g., poor *Connectivity* leading to order fulfillment errors) often translate into direct financial losses or increased insurance premiums. A demonstrably resilient operation can enhance **`r params$company`**'s attractiveness to lenders and investors, potentially improving access to capital and favorable financing terms.
