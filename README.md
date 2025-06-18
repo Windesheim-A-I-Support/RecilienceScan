@@ -6,6 +6,10 @@ and then
 
 pip install win32
 
+python -m venv venv
+venv\Scripts\activate
+
+
 
 
 Cleandata fix Masterdatabase naar CSV gaat toch niet goed

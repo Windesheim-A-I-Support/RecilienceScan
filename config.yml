@@ -1,0 +1,39 @@
+# --- config.yml ---
+
+# --- File Paths (relative to project root) ---
+data_directory: "data"
+output_directory: "reports"
+template_file: "example_3.qmd"
+cleaned_data_filename: "cleaned_master.csv"
+log_file: "pipeline.log"
+
+# --- Schema Mapping & Validation ---
+# Maps the script's internal names to potential names in the source file.
+# The FIRST match found in the source file's columns will be used.
+column_mapping:
+  company: # Internal name
+    - "company_name" # Primary search term
+    - "company"
+    - "organization"
+  contact_name:
+    - "name"
+    - "contact_person"
+    - "contact"
+  contact_email:
+    - "email_address"
+    - "email"
+
+# Columns that MUST exist in the final cleaned data for the pipeline to proceed.
+required_columns:
+  - "company"
+  - "contact_email"
+
+# --- Data Cleaning Rules ---
+cleaning_rules:
+  # Clean all columns of type 'object' (i.e., strings)
+  all_string_columns:
+    - "strip_whitespace" # Remove leading/trailing spaces
+  # Specific rules for certain columns
+  specific_columns:
+    contact_email:
+      - "to_lower" # Ensure emails are lowercase
