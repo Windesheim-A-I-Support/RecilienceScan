@@ -4,12 +4,15 @@ and then
 
 python -m venv venv
 venv\Scripts\activate
-pip install -r requirements.txt
+
+.\venv\Scripts\Activate.ps1
+pip cache purge
+pip install --upgrade pip setuptools wheel
+pip install numpy --force-reinstall --no-cache-dir
+pip install -r requirements.txt --force-reinstall --no-cache-dir
 
 
-
-Cleandata fix Masterdatabase naar CSV gaat toch niet goed
-
+quarto install extension nmfs-opensci/quarto_titlepages
 
 
 
