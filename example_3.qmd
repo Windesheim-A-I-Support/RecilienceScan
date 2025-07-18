@@ -102,8 +102,6 @@ if (quarto_path == "") {
   message("📦 Installing Quarto extension: nmfs-opensci/quarto_titlepages (no prompt, no docs)...")
   system2(quarto_path, args = c("install", "extension", "nmfs-opensci/quarto_titlepages", "--no-prompt", "--no-open"))
 }
-
-
 ```
 
 ```{r helpers, include=FALSE}

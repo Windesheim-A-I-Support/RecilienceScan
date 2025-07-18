@@ -1,10 +1,10 @@
 Set-ExecutionPolicy Bypass -Scope Process -Force
 
-and then
+Sometimes R is struggleing with just installing packages. Very frustrating. 
+Then you must make the files Readable and editable in your package.
+
 
 python -m venv venv
-venv\Scripts\activate
-
 .\venv\Scripts\Activate.ps1
 pip cache purge
 pip install --upgrade pip setuptools wheel
