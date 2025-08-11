@@ -1,0 +1,70 @@
+---
+title: "`r params$company`"
+author: "`r params$address`"
+format:
+  pdf:
+    documentclass: article
+    number-sections: false
+    toc: false
+    geometry: margin=1in
+params:
+  company: "Teco CDC B.V."
+  address: "123 Example Street, City, Country"
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(fmsb)
+library(scales)
+library(janitor)
+library(gridExtra)
+
+# Read data
+data <- read_csv("data/cleaned_master.csv") %>% clean_names()
+
+# Filter company row
+this <- data %>%
+  filter(tolower(company_name) == tolower(params$company)) %>%
+  slice(1)
+
+# Safe get helper
+safe_get <- function(df, col) {
+  if (col %in% names(df) && !is.null(df[[col]]) && length(df[[col]]) > 0) {
+    return(as.numeric(df[[col]]))
+  } else {
+    return(NA_real_)
+  }
+}
+
+# Radar function (returns a plot object)
+radar_plot <- function(df, title, prefix = "") {
+  dims <- c("redundancy", "collaboration", "flexibility", "visibility", "agility")
+  values <- map_dbl(dims, ~ safe_get(df, paste0(prefix, .x)))
+  
+  radar_df <- rbind(rep(5, length(dims)), rep(0, length(dims)), values)
+  colnames(radar_df) <- str_to_title(dims)
+  
+  op <- par(mar = c(1, 1, 3, 1))
+  radarchart(
+    radar_df,
+    axistype = 1,
+    pcol = "#1f77b4", pfcol = alpha("#1f77b4", 0.3), plwd = 2,
+    cglcol = "grey", cglty = 1, axislabcol = "grey", caxislabels = 0:5, cglwd = 0.8,
+    vlcex = 0.9, title = title
+  )
+  par(op)
+}
+
+```
+
+```{r radar-plots, fig.width=8, fig.height=8}
+par(mfrow = c(2, 2)) # 2x2 grid
+radar_plot(this, "Overall Capability Profile")
+radar_plot(this, "Upstream Capability Profile", "upstream_")
+radar_plot(this, "Internal Capability Profile", "internal_")
+radar_plot(this, "Downstream Capability Profile", "downstream_")
+```

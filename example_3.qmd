@@ -3,66 +3,92 @@ title: "`r params$company`"
 format:
   pdf:
     documentclass: article
-    number-sections: false
-    toc: false
     geometry: margin=1in
-params:
-  company: "Scania Logistics NL"
 execute:
   echo: false
   warning: false
   message: false
+params:
+  company: "Placeholder Company"
 ---
 
 ```{r setup, include=FALSE}
-library(tidyverse)
+library(readr)
+library(dplyr)
+library(stringr)
 library(fmsb)
 library(scales)
-library(janitor)
 
-# Read data
-data <- read_csv("data/cleaned_master.csv") %>% clean_names()
+# Load the dataset
+df_full <- read_csv("data/cleaned_master.csv", show_col_types = FALSE)
+colnames(df_full) <- tolower(trimws(colnames(df_full)))
 
-# Filter for company
-this <- data %>%
-  filter(tolower(company_name) == tolower(params$company)) %>%
-  slice(1)
+# Filter for selected company
+df_company <- df_full %>%
+  filter(tolower(company_name) == tolower(params$company))
 
-# Radar plot function with safe fallback
-radar_plot <- function(df, title, prefix = "") {
-  dims <- c("redundancy", "collaboration", "flexibility", "visibility", "agility")
-  
-  # Extract values safely, default to 0 if missing
-  values <- map_dbl(dims, ~ {
-    colname <- paste0(prefix, .x)
-    if (colname %in% names(df)) {
-      val <- suppressWarnings(as.numeric(df[[colname]]))
-      ifelse(is.na(val), 0, val)
-    } else {
-      0
-    }
-  })
-  
-  # Always create valid 3-row dataframe
-  radar_df <- data.frame(rbind(rep(5, length(dims)), rep(0, length(dims)), values))
-  colnames(radar_df) <- str_to_title(dims)
-  
-  op <- par(mar = c(1, 1, 3, 1))
-  radarchart(
-    radar_df,
-    axistype = 1,
-    pcol = "#1f77b4", pfcol = alpha("#1f77b4", 0.3), plwd = 2,
-    cglcol = "grey", cglty = 1, axislabcol = "grey", caxislabels = 0:5, cglwd = 0.8,
-    vlcex = 0.9, title = title
-  )
-  par(op)
+if (nrow(df_company) == 0) {
+  stop(paste("No data found for", params$company))
 }
+
+# Function to safely convert to numeric
+convert_to_numeric <- function(x) {
+  x <- ifelse(tolower(trimws(as.character(x))) %in% c("?", "", " ", "n/a", "na", "n.a.", "nan"), NA, x)
+  suppressWarnings(as.numeric(str_replace(as.character(x), ",", ".")))
+}
+
+# Define column groups
+up_cols <- c("up__r", "up__c", "up__f", "up__v", "up__a")
+in_cols <- c("in__r", "in__c", "in__f", "in__v", "in__a")
+do_cols <- c("do__r", "do__c", "do__f", "do__v", "do__a")
+dims <- c("Resilience", "Connectivity", "Financial", "Visibility", "Agility")
+
+max_score <- 5
+min_score <- 0
+
+# Function to prepare radar data
+make_radar_data <- function(cols) {
+  if (!all(cols %in% names(df_company))) return(NULL)
+  vals <- df_company %>% select(all_of(cols)) %>% mutate(across(everything(), convert_to_numeric))
+  if (any(is.na(vals[1,]))) return(NULL)
+  data.frame(rbind(rep(max_score, length(cols)),
+                   rep(min_score, length(cols)),
+                   as.numeric(vals[1,]))) %>%
+    setNames(dims)
+}
+
+# Create datasets for each radar
+data_up <- make_radar_data(up_cols)
+data_in <- make_radar_data(in_cols)
+data_do <- make_radar_data(do_cols)
 ```
 
-```{r radar-plots, fig.width=8, fig.height=8}
-par(mfrow = c(2, 2)) # 2x2 layout
-radar_plot(this, "Overall Capability Profile")
-radar_plot(this, "Upstream Capability Profile", "upstream_")
-radar_plot(this, "Internal Capability Profile", "internal_")
-radar_plot(this, "Downstream Capability Profile", "downstream_")
+# `r params$company`
+
+```{r radar-plots, fig.width=9, fig.height=4}
+par(mfrow=c(1,3), mar=c(1,1,2,1))
+
+if (!is.null(data_up)) {
+  radarchart(data_up, axistype=1,
+             pcol="#0277BD", pfcol=alpha("#0277BD", 0.5), plwd=2,
+             cglcol="grey", cglty=1, axislabcol="grey40",
+             caxislabels=seq(min_score, max_score, 1), cglwd=0.8,
+             vlcex=0.8, title="Upstream")
+} else { plot.new(); title("Upstream"); text(0.5,0.5,"No Data") }
+
+if (!is.null(data_in)) {
+  radarchart(data_in, axistype=1,
+             pcol="#FF8F00", pfcol=alpha("#FF8F00", 0.5), plwd=2,
+             cglcol="grey", cglty=1, axislabcol="grey40",
+             caxislabels=seq(min_score, max_score, 1), cglwd=0.8,
+             vlcex=0.8, title="Internal")
+} else { plot.new(); title("Internal"); text(0.5,0.5,"No Data") }
+
+if (!is.null(data_do)) {
+  radarchart(data_do, axistype=1,
+             pcol="#2E7D32", pfcol=alpha("#2E7D32", 0.5), plwd=2,
+             cglcol="grey", cglty=1, axislabcol="grey40",
+             caxislabels=seq(min_score, max_score, 1), cglwd=0.8,
+             vlcex=0.8, title="Downstream")
+} else { plot.new(); title("Downstream"); text(0.5,0.5,"No Data") }
 ```
