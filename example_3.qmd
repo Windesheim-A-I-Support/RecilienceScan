@@ -1,110 +1,68 @@
 ---
-title: "Radar Charts Only – `r params$company`"
+title: "`r params$company`"
 format:
   pdf:
-    documentclass: scrartcl
-    toc: false
+    documentclass: article
     number-sections: false
+    toc: false
     geometry: margin=1in
 params:
-  company: "Teco CDC B.V"
+  company: "Scania Logistics NL"
+execute:
+  echo: false
+  warning: false
+  message: false
 ---
 
 ```{r setup, include=FALSE}
-library(readr)
-library(dplyr)
-library(stringr)
-library(janitor)
+library(tidyverse)
 library(fmsb)
 library(scales)
+library(janitor)
 
-convert_to_numeric_simple <- function(x) {
-  x_char <- as.character(x)
-  x_char <- ifelse(tolower(trimws(x_char)) %in% c("?", "", " ", "n/a", "na", "n.a.", "nan"), NA_character_, x_char)
-  suppressWarnings(as.numeric(str_replace(x_char, ",", ".")))
-}
+# Read data
+data <- read_csv("data/cleaned_master.csv") %>% clean_names()
 
-df_full <- read_csv("data/cleaned_master.csv", col_types = cols(.default = "c"))
-colnames(df_full) <- tolower(trimws(colnames(df_full)))
+# Filter for company
+this <- data %>%
+  filter(tolower(company_name) == tolower(params$company)) %>%
+  slice(1)
 
-df_company_raw <- df_full %>% 
-  filter(tolower(company_name) == tolower(params$company))
-
-up_cols <- c("up__r", "up__c", "up__f", "up__v", "up__a")
-in_cols <- c("in__r", "in__c", "in__f", "in__v", "in__a")
-do_cols <- c("do__r", "do__c", "do__f", "do__v", "do__a")
-dimension_labels <- c("Resilience", "Connectivity", "Financial", "Visibility", "Agility")
-max_score <- 5 
-min_score <- 0 
-
-df_company_numeric <- df_company_raw
-actual_score_columns <- intersect(c(up_cols, in_cols, do_cols), names(df_company_numeric))
-if (length(actual_score_columns) > 0) {
-  df_company_numeric <- df_company_numeric %>%
-    mutate(across(all_of(actual_score_columns), convert_to_numeric_simple))
-}
-
-# Prepare radar data
-data_up_radar <- NULL
-data_in_radar <- NULL
-data_do_radar <- NULL
-
-if(nrow(df_company_numeric) >= 1) {
-  df_company_numeric <- df_company_numeric[1, , drop = FALSE] 
-
-  if(all(up_cols %in% names(df_company_numeric))) {
-    radar_data <- df_company_numeric %>% slice(1) %>% select(all_of(up_cols))
-    if(ncol(radar_data) == 5 && !all(is.na(as.numeric(radar_data[1,])))) {
-        data_up_radar <- data.frame(rbind(rep(max_score, 5), rep(min_score, 5), as.numeric(radar_data[1,])))
-        colnames(data_up_radar) <- dimension_labels
+# Radar plot function with safe fallback
+radar_plot <- function(df, title, prefix = "") {
+  dims <- c("redundancy", "collaboration", "flexibility", "visibility", "agility")
+  
+  # Extract values safely, default to 0 if missing
+  values <- map_dbl(dims, ~ {
+    colname <- paste0(prefix, .x)
+    if (colname %in% names(df)) {
+      val <- suppressWarnings(as.numeric(df[[colname]]))
+      ifelse(is.na(val), 0, val)
+    } else {
+      0
     }
-  }
-
-  if(all(in_cols %in% names(df_company_numeric))) {
-    radar_data <- df_company_numeric %>% slice(1) %>% select(all_of(in_cols))
-    if(ncol(radar_data) == 5 && !all(is.na(as.numeric(radar_data[1,])))) {
-        data_in_radar <- data.frame(rbind(rep(max_score, 5), rep(min_score, 5), as.numeric(radar_data[1,])))
-        colnames(data_in_radar) <- dimension_labels
-    }
-  }
-
-  if(all(do_cols %in% names(df_company_numeric))) {
-    radar_data <- df_company_numeric %>% slice(1) %>% select(all_of(do_cols))
-    if(ncol(radar_data) == 5 && !all(is.na(as.numeric(radar_data[1,])))) {
-        data_do_radar <- data.frame(rbind(rep(max_score, 5), rep(min_score, 5), as.numeric(radar_data[1,])))
-        colnames(data_do_radar) <- dimension_labels
-    }
-  }
+  })
+  
+  # Always create valid 3-row dataframe
+  radar_df <- data.frame(rbind(rep(5, length(dims)), rep(0, length(dims)), values))
+  colnames(radar_df) <- str_to_title(dims)
+  
+  op <- par(mar = c(1, 1, 3, 1))
+  radarchart(
+    radar_df,
+    axistype = 1,
+    pcol = "#1f77b4", pfcol = alpha("#1f77b4", 0.3), plwd = 2,
+    cglcol = "grey", cglty = 1, axislabcol = "grey", caxislabels = 0:5, cglwd = 0.8,
+    vlcex = 0.9, title = title
+  )
+  par(op)
 }
 ```
 
-```{r, fig.cap="Upstream", fig.asp=0.9, out.width="90%", fig.align="center"}
-if (exists("data_up_radar") && !is.null(data_up_radar)) {
-  radarchart(data_up_radar, axistype = 1, 
-             pcol = "#0277BD", pfcol = alpha("#0277BD", 0.5), plwd = 2,
-             cglcol = "grey", cglty = 1, axislabcol = "grey40", 
-             caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)), 
-             cglwd = 0.8, vlcex = 0.9, centerzero = TRUE)
-}
+```{r radar-plots, fig.width=8, fig.height=8}
+par(mfrow = c(2, 2)) # 2x2 layout
+radar_plot(this, "Overall Capability Profile")
+radar_plot(this, "Upstream Capability Profile", "upstream_")
+radar_plot(this, "Internal Capability Profile", "internal_")
+radar_plot(this, "Downstream Capability Profile", "downstream_")
 ```
-
-```{r, fig.cap="Internal", fig.asp=0.9, out.width="90%", fig.align="center"}
-if (exists("data_in_radar") && !is.null(data_in_radar)) {
-  radarchart(data_in_radar, axistype = 1, 
-             pcol = "#FF8F00", pfcol = alpha("#FF8F00", 0.5), plwd = 2,
-             cglcol = "grey", cglty = 1, axislabcol = "grey40", 
-             caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)), 
-             cglwd = 0.8, vlcex = 0.9, centerzero = TRUE)
-}
-```
-
-```{r, fig.cap="Downstream", fig.asp=0.9, out.width="90%", fig.align="center"}
-if (exists("data_do_radar") && !is.null(data_do_radar)) {
-  radarchart(data_do_radar, axistype = 1, 
-             pcol = "#2E7D32", pfcol = alpha("#2E7D32", 0.5), plwd = 2,
-             cglcol = "grey", cglty = 1, axislabcol = "grey40", 
-             caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)), 
-             cglwd = 0.8, vlcex = 0.9, centerzero = TRUE)
-}
-```
-
