@@ -278,8 +278,8 @@ if (has_up || has_in || has_do) {
 op <- par(no.readonly = TRUE)
 on.exit(par(op), add = TRUE)
 
-# Compact margins and 2 rows x 3 columns
-par(mfrow = c(2, 3), mar = c(1.2, 2, 2, 1))
+# Make panels physically bigger: full text width + taller device + tiny margins
+par(mfrow = c(2, 3), mar = c(0.2, 0.35, 1.0, 0.2), oma = c(0, 0, 0, 0), cex = 1.0)
 
 # 1) Overall
 if (!is.null(data_overall_radar)) {
@@ -288,7 +288,7 @@ if (!is.null(data_overall_radar)) {
     pcol = "#6A1B9A", pfcol = scales::alpha("#6A1B9A", 0.4), plwd = 2, plty = 1,
     cglcol = "grey80", cglty = 1, axislabcol = "grey40",
     caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-    cglwd = 0.8, vlcex = 0.85, centerzero = TRUE, title = "Overall"
+    cglwd = 0.8, vlcex = 0.95, centerzero = TRUE, title = "Overall"
   )
 } else {
   plot.new(); title("Overall\n(no data)")
@@ -301,7 +301,7 @@ if (has_up) {
     pcol = "#0277BD", pfcol = scales::alpha("#0277BD", 0.45), plwd = 2, plty = 1,
     cglcol = "grey80", cglty = 1, axislabcol = "grey40",
     caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-    cglwd = 0.8, vlcex = 0.85, centerzero = TRUE, title = "Upstream"
+    cglwd = 0.8, vlcex = 0.95, centerzero = TRUE, title = "Upstream"
   )
 } else {
   plot.new(); title("Upstream\n(no data)")
@@ -314,7 +314,7 @@ if (has_in) {
     pcol = "#FF8F00", pfcol = scales::alpha("#FF8F00", 0.45), plwd = 2, plty = 1,
     cglcol = "grey80", cglty = 1, axislabcol = "grey40",
     caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-    cglwd = 0.8, vlcex = 0.85, centerzero = TRUE, title = "Internal"
+    cglwd = 0.8, vlcex = 0.95, centerzero = TRUE, title = "Internal"
   )
 } else {
   plot.new(); title("Internal\n(no data)")
@@ -327,7 +327,7 @@ if (has_do) {
     pcol = "#2E7D32", pfcol = scales::alpha("#2E7D32", 0.45), plwd = 2, plty = 1,
     cglcol = "grey80", cglty = 1, axislabcol = "grey40",
     caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-    cglwd = 0.8, vlcex = 0.85, centerzero = TRUE, title = "Downstream"
+    cglwd = 0.8, vlcex = 0.95, centerzero = TRUE, title = "Downstream"
   )
 } else {
   plot.new(); title("Downstream\n(no data)")
@@ -335,7 +335,6 @@ if (has_do) {
 
 # 5) Overlay (Up vs In vs Down)
 if (!is.null(overlay_data)) {
-  # pick index of each series (after max/min): 3=Up, 4=In, 5=Down (depending on availability)
   n_series <- nrow(overlay_data) - 2
   cols <- c("#0277BD", "#FF8F00", "#2E7D32")[seq_len(n_series)]
   fcols <- sapply(cols, function(z) scales::alpha(z, 0.25))
@@ -344,20 +343,19 @@ if (!is.null(overlay_data)) {
     pcol = cols, pfcol = fcols, plwd = 2, plty = 1,
     cglcol = "grey80", cglty = 1, axislabcol = "grey40",
     caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-    cglwd = 0.8, vlcex = 0.85, centerzero = TRUE, title = "Overlay: Up / In / Down"
+    cglwd = 0.8, vlcex = 0.95, centerzero = TRUE, title = "Overlay: Up / In / Down"
   )
   legend("bottomleft",
          legend = c(if (has_up) "Upstream" else NULL,
                     if (has_in) "Internal" else NULL,
                     if (has_do) "Downstream" else NULL),
-         bty = "n", cex = 0.8, text.col = "grey20")
+         bty = "n", cex = 0.9, text.col = "grey20")
 } else {
   plot.new(); title("Overlay\n(no data)")
 }
 
 # 6) leave the last cell blank for clean spacing
 plot.new(); title("")
-
 
 
 ```

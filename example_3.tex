@@ -2,12 +2,12 @@
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
 \documentclass[
-]{article}
+  oneside,
+  open=any,
+  fontsize=11pt]{scrbook}
 \usepackage{xcolor}
-\usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
@@ -150,27 +150,34 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Corbion (1)},
-  colorlinks=true,
-  linkcolor={blue},
-  filecolor={Maroon},
-  citecolor={Blue},
-  urlcolor={Blue},
+  pdftitle={Strategic Resilience and Financial Performance Profile for The Coca-Cola Company},
+  pdfauthor={Ronald de Boer},
+  hidelinks,
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Corbion (1)}
-\author{}
+\title{Strategic Resilience and Financial Performance Profile for The
+Coca-Cola Company}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{An In-depth Analysis by the Supply Chain Finance Lectoraat,
+Hogeschool Windesheim}
+\author{Ronald de Boer}
 \date{}
 \begin{document}
+\frontmatter
 \maketitle
 
 
-\section{Corbion (1)}\label{corbion-1}
+\mainmatter
+\pandocbounded{\includegraphics[keepaspectratio]{example_3_files/figure-pdf/unnamed-chunk-1-1.pdf}}
 
-\pandocbounded{\includegraphics[keepaspectratio]{example_3_files/figure-pdf/radar-plots-1.pdf}}
 
-
+\backmatter
 
 
 \end{document}
