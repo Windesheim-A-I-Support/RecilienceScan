@@ -1,7 +1,39 @@
+- [] Attach the PDF - from Excel from Ronald to the flow
+- [ ] Test the flow
+
+
+Wat we moeten automatiseren
+We moeten naar de website toe, Wordpress om we kijken of er een nieuw bestandje is.
+(has there been a change) and download this one.
+Zorg dat dat bestandje in de juiste folder komt 
+Powerautomate 
+Pakt de nieuwe regels
+Stop in recielience, dashboard..
+
+
+
 Set-ExecutionPolicy Bypass -Scope Process -Force
 
 Sometimes R is struggleing with just installing packages. Very frustrating. 
 Then you must make the files Readable and editable in your package.
+
+If you have the R-Packages problem 
+Open Powershell
+Execute
+& "C:\Program Files\R\R-4.4.2\bin\R.exe"
+install.packages(c(
+  # Data Wrangling
+  "tidyverse", "data.table", "janitor", "lubridate", "stringr", "readxl", "writexl", "openxlsx",
+
+  # Visualization
+  "ggplot2", "plotly", "lattice", "ggthemes", "RColorBrewer", "ggraph", "patchwork",
+
+  # Modeling & ML
+  "caret", "randomForest", "xgboost", "e1071", "glmnet", "mlr3", "tidymodels",
+
+  # Reporting & Markdown
+  "rmarkdown", "knitr", "quarto", "bookdown", "pagedown", "flexdashboard"
+), dependencies = TRUE, repos = "https://cloud.r-project.org")
 
 
 python -m venv venv
