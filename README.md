@@ -225,8 +225,6 @@ The project follows a **milestone-driven roadmap**, moving from manual reproduci
 ---
 
 ## 🏗️ Architecture Overview
-<!-- High-level system diagram (Mermaid, ASCII, image). Major components: ingestion, validation, reporting, delivery, storage, orchestration. -->
-## 🏗️ Architecture Overview
 
 > High-level view of how data flows from source → validation → reporting → delivery → archival.  
 > (Adjust nodes as the project evolves.)
@@ -259,37 +257,7 @@ flowchart LR
 ```
 
 ## 🗂️ Directory Structure
-## 🏗️ Architecture Overview
 
-> High-level view of how data flows from source → validation → reporting → delivery → archival.  
-> (Adjust nodes as the project evolves.)
-
-```mermaid
-flowchart LR
-  subgraph Source
-    WP[Website / Export (WordPress, Power BI/Excel)]
-    CSV[Cleaned CSV]
-  end
-
-  subgraph Pipeline
-    VAL[Validate (schema + rules)]
-    QMD[Render (Quarto + LaTeX)]
-    PKG[Package (per-recipient PDFs)]
-    MAIL[Deliver (Outlook / n8n)]
-  end
-
-  subgraph Storage
-    LOGS[Logs & Status]
-    AR[Archive (reports, inputs)]
-    DB[(Future: DB/Object Store)]
-  end
-
-  WP --> CSV --> VAL --> QMD --> PKG --> MAIL
-  VAL --> LOGS
-  QMD --> AR
-  MAIL --> LOGS
-  AR --> DB
-```
 
 ### Components (Summary)
 - **Ingestion (Current → Future):**  
@@ -497,5 +465,6 @@ flowchart LR
 
 
 ```
+
 
 
