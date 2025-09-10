@@ -10,7 +10,7 @@ author:
 bibliography: references.bib
 format: 
   pdf:
-    documentclass: scrbook
+    documentclass: article
     classoption: ["oneside", "open=any", "fontsize=11pt"]
     link-citations: false
     number-sections: false
@@ -50,10 +50,6 @@ format:
       header-style: "none"
       date-style: "none"
     keep-tex: true
-    # Temporarily remove complex header-includes for stability
-    # header-includes: |
-    #   \usepackage{fancyhdr}
-    #   ... (rest of fancyhdr setup) ...
 execute:
   echo: false
   warning: false
@@ -62,13 +58,11 @@ params:
   company: "Placeholder Company"
 ---
 
-
-
 ```{r package-installer, include=FALSE}
 # Define required R packages
 required_packages <- c(
   "readr", "dplyr", "stringr", "tidyr", "ggplot2", 
-  "fmsb", "scales", "janitor",
+  "fmsb", "scales", "janitor", "png",
   "rmarkdown", "knitr", "bookdown", "tinytex", "quarto"
 )
 
@@ -97,42 +91,78 @@ if (quarto_path == "") {
   warning("❌ Quarto CLI is not installed! Please install it from https://quarto.org/download/ before continuing.")
 } else {
   message("✅ Quarto CLI detected at: ", quarto_path)
-  
-
 }
 ```
 
 ```{r helpers, include=FALSE}
-# This chunk defines reusable helper functions to keep the main setup chunk clean.
-# It makes the report logic easier to understand and debug.
-
-#' Convert a value to numeric, robustly handling common non-numeric entries.
-#'
-#' @param x The input value (can be a character or factor).
-#' @return A numeric value or NA.
-#' 
-#' 
-# Add this function to your 'helpers' R chunk
-#' Safely format a score for printing, returning "N/A" if the score is missing.
-#'
-#' @param score The numeric score value.
-#' @return A formatted character string (e.g., "3.45" or "N/A").
 safe_print_score <- function(score) {
-  # This logic is identical to the ifelse() statements used in your original, working code.
   if (is.na(score) || is.null(score) || !is.numeric(score)) {
     return("N/A")
   }
   return(sprintf("%.2f", score))
 }
+
 convert_to_numeric_simple <- function(x) {
   x_char <- as.character(x)
-  # Unify all common missing/invalid formats to NA
   x_char <- ifelse(tolower(trimws(x_char)) %in% c("?", "", " ", "n/a", "na", "n.a.", "nan"), NA_character_, x_char)
-  # Convert comma decimal separator to period and suppress warnings for NAs
   suppressWarnings(as.numeric(str_replace(x_char, ",", ".")))
 }
-```
 
+# Business insight generator function
+get_segment_insight <- function(segment_data, segment_type) {
+  if(is.null(segment_data) || nrow(segment_data) < 3) {
+    return(list(main = "Geen data beschikbaar", secondary = ""))
+  }
+  
+  scores <- as.numeric(segment_data[3,])
+  if(all(is.na(scores))) {
+    return(list(main = "Geen geldige data", secondary = ""))
+  }
+  
+  dimension_labels <- c("Redundancy", "Collaboration", "Flexibility", "Transparency", "Agility")
+  names(scores) <- dimension_labels
+  
+  # Find strongest and weakest dimensions
+  valid_scores <- scores[!is.na(scores)]
+  if(length(valid_scores) == 0) {
+    return(list(main = "Geen geldige scores", secondary = ""))
+  }
+  
+  strongest_dim <- names(valid_scores)[which.max(valid_scores)]
+  weakest_dim <- names(valid_scores)[which.min(valid_scores)]
+  avg_score <- mean(valid_scores, na.rm = TRUE)
+  
+  # Generate insights based on segment type and performance
+  if(segment_type == "upstream") {
+    if(avg_score >= 4) {
+      main_insight <- paste("LEVERANCIERSBASIS STERK -", strongest_dim, "uitstekend")
+    } else if(avg_score >= 3) {
+      main_insight <- paste("RISICOMANAGEMENT:", weakest_dim, "verbeteren")
+    } else {
+      main_insight <- "SUPPLIER DIVERSIFICATIE NODIG"
+    }
+  } else if(segment_type == "internal") {
+    if(avg_score >= 4) {
+      main_insight <- paste("OPERATIES ROBUUST -", strongest_dim, "is troef")
+    } else if(avg_score >= 3) {
+      main_insight <- paste("FOCUS OP:", weakest_dim, "versterken")
+    } else {
+      main_insight <- "OPERATIONELE KWETSBAARHEID"
+    }
+  } else { # downstream
+    if(avg_score >= 4) {
+      main_insight <- paste("MARKTPOSITIE STERK -", strongest_dim, "voorop")
+    } else if(avg_score >= 3) {
+      main_insight <- paste("KLANTSERVICE:", weakest_dim, "optimaliseren")
+    } else {
+      main_insight <- "DISTRIBUTIERISICO'S AANWEZIG"
+    }
+  }
+  
+  secondary_info <- paste("Gemiddeld:", sprintf("%.1f", avg_score))
+  return(list(main = main_insight, secondary = secondary_info))
+}
+```
 
 ```{r setup, include=FALSE}
 library(readr)
@@ -141,43 +171,51 @@ library(stringr)
 library(tidyr)
 library(ggplot2)
 library(fmsb)
-library(scales) 
+library(scales)
+library(png)
 
-convert_to_numeric_simple <- function(x) {
-  x_char <- as.character(x)
-  x_char <- ifelse(tolower(trimws(x_char)) %in% c("?", "", " ", "n/a", "na", "n.a.", "nan"), NA_character_, x_char)
-  suppressWarnings(as.numeric(str_replace(x_char, ",", ".")))
-}
+# Load data with error handling
+tryCatch({
+  df_full <- read_csv("data/cleaned_master.csv", col_types = cols(.default = "c"))
+  colnames(df_full) <- tolower(trimws(colnames(df_full)))
+}, error = function(e) {
+  stop("Error loading data file: ", e$message)
+})
 
-df_full <- read_csv("data/cleaned_master.csv", col_types = cols(.default = "c"))
-colnames(df_full) <- tolower(trimws(colnames(df_full)))
-
+# Filter company data
 df_company_raw <- df_full %>% 
   filter(tolower(company_name) == tolower(params$company))
 
-# Define only the columns absolutely needed for conversion for the main scores
-# This reduces the chance of an odd column name causing issues in 'across'
+if(nrow(df_company_raw) == 0) {
+  stop(paste("No data found for company:", params$company))
+}
+
+# Define score columns
 score_columns_to_convert <- c(
   "up__r", "up__c", "up__f", "up__v", "up__a",
   "in__r", "in__c", "in__f", "in__v", "in__a",
   "do__r", "do__c", "do__f", "do__v", "do__a",
   "overall_scres"
 )
-# Add other informational columns that might be used directly if they don't need conversion for scores
-info_cols_to_keep <- c("company_name", "sector", "size_number_of_employees") # Add others if used directly
 
-# Ensure only existing columns are processed
+info_cols_to_keep <- c("company_name", "sector", "size_number_of_employees")
+
 actual_score_columns_to_convert <- intersect(score_columns_to_convert, names(df_company_raw))
-actual_info_cols_to_keep <- intersect(info_cols_to_keep, names(df_company_raw))
+df_company_numeric <- df_company_raw
 
-df_company_numeric <- df_company_raw # Start with the raw filtered data
-
+# Convert numeric columns
 if (length(actual_score_columns_to_convert) > 0) {
-    df_company_numeric <- df_company_numeric %>%
-      mutate(across(all_of(actual_score_columns_to_convert), convert_to_numeric_simple))
+  df_company_numeric <- df_company_numeric %>%
+    mutate(across(all_of(actual_score_columns_to_convert), convert_to_numeric_simple))
 }
 
+# Use first row if multiple found
+if(nrow(df_company_numeric) > 1) {
+  warning(paste("Multiple rows found for company:", params$company, ". Using the first row only."))
+  df_company_numeric <- df_company_numeric[1, , drop = FALSE] 
+}
 
+# Define column groups
 up_cols <- c("up__r", "up__c", "up__f", "up__v", "up__a")
 in_cols <- c("in__r", "in__c", "in__f", "in__v", "in__a")
 do_cols <- c("do__r", "do__c", "do__f", "do__v", "do__a")
@@ -185,175 +223,441 @@ max_score <- 5
 min_score <- 0 
 dimension_labels <- c("Redundancy", "Collaboration", "Flexibility", "Transparency", "Agility")
 
+# Initialize variables
 data_up_radar <- NULL
 data_in_radar <- NULL
 data_do_radar <- NULL
 company_sector <- "Not Specified" 
 company_size <- "Not Specified"   
 
-if(nrow(df_company_numeric) >= 1) {
-  if(nrow(df_company_numeric) > 1) {
-    warning(paste("Multiple rows found for company:", params$company, ". Using the first row only."))
-    df_company_numeric <- df_company_numeric[1, , drop = FALSE] 
-  }
-  
-  # Safely get sector and size
-  company_sector <- if("sector" %in% names(df_company_numeric) && !is.na(df_company_numeric$sector) && df_company_numeric$sector != "") df_company_numeric$sector else "Not Specified"
-  company_size <- if("size_number_of_employees" %in% names(df_company_numeric) && !is.na(df_company_numeric$size_number_of_employees) && df_company_numeric$size_number_of_employees != "") df_company_numeric$size_number_of_employees else "Not Specified"
-
-  # Calculate pillar scores directly
-  if(all(up_cols %in% names(df_company_numeric))) {
-    df_company_numeric$up_pillar_score <- rowMeans(select(df_company_numeric, all_of(up_cols)), na.rm = TRUE)
-    # Prepare radar data
-    radar_data <- df_company_numeric %>% slice(1) %>% select(all_of(up_cols))
-    if(ncol(radar_data) == 5 && !all(is.na(as.numeric(radar_data[1,])))) {
-        data_up_radar <- data.frame(rbind(rep(max_score, 5), rep(min_score, 5), as.numeric(radar_data[1,])))
-        colnames(data_up_radar) <- dimension_labels
-    } else { warning(paste("Upstream radar data for", params$company, "could not be prepared."))}
-  } else { df_company_numeric$up_pillar_score <- NA }
-
-  if(all(in_cols %in% names(df_company_numeric))) {
-    df_company_numeric$in_pillar_score <- rowMeans(select(df_company_numeric, all_of(in_cols)), na.rm = TRUE)
-    radar_data <- df_company_numeric %>% slice(1) %>% select(all_of(in_cols))
-    if(ncol(radar_data) == 5 && !all(is.na(as.numeric(radar_data[1,])))) {
-        data_in_radar <- data.frame(rbind(rep(max_score, 5), rep(min_score, 5), as.numeric(radar_data[1,])))
-        colnames(data_in_radar) <- dimension_labels
-    } else { warning(paste("Internal radar data for", params$company, "could not be prepared."))}
-  } else { df_company_numeric$in_pillar_score <- NA }
-
-  if(all(do_cols %in% names(df_company_numeric))) {
-    df_company_numeric$do_pillar_score <- rowMeans(select(df_company_numeric, all_of(do_cols)), na.rm = TRUE)
-    radar_data <- df_company_numeric %>% slice(1) %>% select(all_of(do_cols))
-    if(ncol(radar_data) == 5 && !all(is.na(as.numeric(radar_data[1,])))) {
-        data_do_radar <- data.frame(rbind(rep(max_score, 5), rep(min_score, 5), as.numeric(radar_data[1,])))
-        colnames(data_do_radar) <- dimension_labels
-    } else { warning(paste("Downstream radar data for", params$company, "could not be prepared."))}
-  } else { df_company_numeric$do_pillar_score <- NA }
-
-} else if (nrow(df_company_numeric) == 0) {
-  stop(paste("No data found for company:", params$company, ". Halting report generation."))
+# Set company info safely
+if("sector" %in% names(df_company_numeric) && 
+   !is.na(df_company_numeric$sector) && 
+   df_company_numeric$sector != "") {
+  company_sector <- as.character(df_company_numeric$sector)
 }
-```
 
-```{r}
-# --- Prepare "overall" radar (mean of each dimension across Upstream/Internal/Downstream) ---
-has_up <- exists("data_up_radar") && is.data.frame(data_up_radar) && nrow(data_up_radar) == 3 && ncol(data_up_radar) == 5 && all(sapply(data_up_radar, is.numeric)) && !all(is.na(data_up_radar[3, , drop=FALSE]))
-has_in <- exists("data_in_radar") && is.data.frame(data_in_radar) && nrow(data_in_radar) == 3 && ncol(data_in_radar) == 5 && all(sapply(data_in_radar, is.numeric)) && !all(is.na(data_in_radar[3, , drop=FALSE]))
-has_do <- exists("data_do_radar") && is.data.frame(data_do_radar) && nrow(data_do_radar) == 3 && ncol(data_do_radar) == 5 && all(sapply(data_do_radar, is.numeric)) && !all(is.na(data_do_radar[3, , drop=FALSE]))
+if("size_number_of_employees" %in% names(df_company_numeric) && 
+   !is.na(df_company_numeric$size_number_of_employees) && 
+   df_company_numeric$size_number_of_employees != "") {
+  company_size <- as.character(df_company_numeric$size_number_of_employees)
+}
 
+# Create radar data for each segment
+create_radar_data <- function(cols, data, pillar_name) {
+  if(all(cols %in% names(data))) {
+    pillar_score <- rowMeans(select(data, all_of(cols)), na.rm = TRUE)
+    radar_values <- data %>% slice(1) %>% select(all_of(cols))
+    
+    if(ncol(radar_values) == 5 && !all(is.na(as.numeric(radar_values[1,])))) {
+      radar_data <- data.frame(rbind(
+        rep(max_score, 5), 
+        rep(min_score, 5), 
+        as.numeric(radar_values[1,])
+      ))
+      colnames(radar_data) <- dimension_labels
+      return(list(data = radar_data, score = pillar_score))
+    }
+  }
+  return(list(data = NULL, score = NA))
+}
+
+# Create radar data
+up_result <- create_radar_data(up_cols, df_company_numeric, "upstream")
+data_up_radar <- up_result$data
+df_company_numeric$up_pillar_score <- up_result$score
+
+in_result <- create_radar_data(in_cols, df_company_numeric, "internal")  
+data_in_radar <- in_result$data
+df_company_numeric$in_pillar_score <- in_result$score
+
+do_result <- create_radar_data(do_cols, df_company_numeric, "downstream")
+data_do_radar <- do_result$data
+df_company_numeric$do_pillar_score <- do_result$score
+
+# Check data availability
+has_up <- !is.null(data_up_radar) && is.data.frame(data_up_radar) && nrow(data_up_radar) == 3
+has_in <- !is.null(data_in_radar) && is.data.frame(data_in_radar) && nrow(data_in_radar) == 3
+has_do <- !is.null(data_do_radar) && is.data.frame(data_do_radar) && nrow(data_do_radar) == 3
+
+# Create overall radar data
+data_overall_radar <- NULL
 if (has_up || has_in || has_do) {
-  # Build an overall row by averaging available segment rows (3rd row of each dataset)
   available_rows <- list()
   if (has_up) available_rows <- append(available_rows, list(as.numeric(data_up_radar[3,])))
   if (has_in) available_rows <- append(available_rows, list(as.numeric(data_in_radar[3,])))
   if (has_do) available_rows <- append(available_rows, list(as.numeric(data_do_radar[3,])))
 
-  overall_vec <- Reduce("+", available_rows) / length(available_rows)
-  data_overall_radar <- data.frame(rbind(
-    rep(max_score, 5),
-    rep(min_score, 5),
-    overall_vec
-  ))
-  colnames(data_overall_radar) <- dimension_labels
-} else {
-  data_overall_radar <- NULL
+  if(length(available_rows) > 0) {
+    overall_vec <- Reduce("+", available_rows) / length(available_rows)
+    data_overall_radar <- data.frame(rbind(
+      rep(max_score, 5),
+      rep(min_score, 5),
+      overall_vec
+    ))
+    colnames(data_overall_radar) <- dimension_labels
+  }
 }
 
-# --- Overlay dataset: Up vs In vs Down on one radar (optional fifth chart) ---
+# Create overlay data
 overlay_data <- NULL
 if (has_up || has_in || has_do) {
-  # Start with max/min
   overlay_data <- rbind(rep(max_score, 5), rep(min_score, 5))
-  # Append available segments in consistent order Redundancy..Agility
   if (has_up) overlay_data <- rbind(overlay_data, as.numeric(data_up_radar[3,]))
   if (has_in) overlay_data <- rbind(overlay_data, as.numeric(data_in_radar[3,]))
   if (has_do) overlay_data <- rbind(overlay_data, as.numeric(data_do_radar[3,]))
   overlay_data <- as.data.frame(overlay_data)
   colnames(overlay_data) <- dimension_labels
 }
+```
 
-# --- Draw 5 radars on one page (2x3 grid) ---
+```{r dashboard-radars, fig.width=16, fig.height=26}
+# Dashboard layout with company introduction and radar charts
 op <- par(no.readonly = TRUE)
 on.exit(par(op), add = TRUE)
 
-# Make panels physically bigger: full text width + taller device + tiny margins
-par(mfrow = c(2, 3), mar = c(0.2, 0.35, 1.0, 0.2), oma = c(0, 0, 0, 0), cex = 1.0)
+# Set up layout
+layout_matrix <- matrix(c(
+  1, 1,  # Company introduction spans 2 columns
+  2, 3,  # Overall and Comparative 
+  4, 5,  # Upstream and Internal
+  6, 7,  # Downstream and Summary
+  8, 9   # Strategic insights
+), nrow = 5, byrow = TRUE)
 
-# 1) Overall
+layout(layout_matrix, heights = c(0.15, 0.22, 0.22, 0.22, 0.19))
+par(oma = c(2, 2, 4, 2))
+
+# Panel 1: Company Introduction
+par(mar = c(2, 3, 3, 3))
+plot.new()
+rect(0.02, 0.1, 0.98, 0.9, col = "#f8f9fa", border = "#dee2e6", lwd = 2)
+
+# Try to load logo
+logo_path <- "img/logo.png"
+if (file.exists(logo_path)) {
+  tryCatch({
+    if (requireNamespace("png", quietly = TRUE)) {
+      logo_img <- png::readPNG(logo_path)
+      rasterImage(logo_img, 0.05, 0.65, 0.25, 0.85)
+    }
+  }, error = function(e) {
+    rect(0.05, 0.65, 0.25, 0.85, col = "lightgrey", border = "grey")
+    text(0.15, 0.75, "LOGO", cex = 0.8, col = "grey40")
+  })
+} else {
+  rect(0.05, 0.65, 0.25, 0.85, col = "lightgrey", border = "grey")
+  text(0.15, 0.75, "LOGO", cex = 0.8, col = "grey40")
+}
+
+# Company information
+company_name_safe <- as.character(params$company)
+text(0.6, 0.8, company_name_safe, cex = 1.8, font = 2, col = "#2c3e50")
+text(0.6, 0.7, paste("Sector:", company_sector, "| Size:", company_size), cex = 1.0, col = "#6c757d")
+
+text(0.5, 0.5, "Supply Chain Resilience Assessment", cex = 1.2, font = 2, col = "#495057")
+text(0.5, 0.4, "Analysis across 5 key dimensions:", cex = 1.0, col = "#495057")
+text(0.5, 0.3, "Redundancy • Collaboration • Flexibility • Transparency • Agility", 
+     cex = 1.0, font = 2, col = "#6a1b9a")
+
+# Panel 2: Overall Resilience
+par(mar = c(5, 2, 3, 2))
 if (!is.null(data_overall_radar)) {
   fmsb::radarchart(
     data_overall_radar, axistype = 1,
-    pcol = "#6A1B9A", pfcol = scales::alpha("#6A1B9A", 0.4), plwd = 2, plty = 1,
+    pcol = "#6A1B9A", pfcol = scales::alpha("#6A1B9A", 0.4), plwd = 3, plty = 1,
     cglcol = "grey80", cglty = 1, axislabcol = "grey40",
     caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-    cglwd = 0.8, vlcex = 0.95, centerzero = TRUE, title = "Overall"
+    cglwd = 1.2, vlcex = 1.2, centerzero = TRUE, title = "Overall Resilience"
   )
+  
+  # Calculate overall performance
+  overall_score <- mean(as.numeric(data_overall_radar[3,]), na.rm = TRUE)
+  if(!is.na(overall_score)) {
+    if(overall_score >= 4) {
+      text(0.5, -0.2, "STERKE VEERKRACHT", cex = 1.2, col = "#27ae60", font = 2, xpd = TRUE)
+    } else if(overall_score >= 3) {
+      text(0.5, -0.2, "GOEDE BASIS VOOR GROEI", cex = 1.2, col = "#f39c12", font = 2, xpd = TRUE)
+    } else {
+      text(0.5, -0.2, "RISICO'S AANWEZIG", cex = 1.2, col = "#e74c3c", font = 2, xpd = TRUE)
+    }
+  }
+  text(0.5, -0.3, "Totaalscore over alle gebieden", cex = 1.0, col = "grey30", xpd = TRUE)
 } else {
-  plot.new(); title("Overall\n(no data)")
+  plot.new()
+  title("Overall Resilience", cex.main = 1.2)
+  text(0.5, 0.5, "Geen data beschikbaar", cex = 1.2, col = "grey50")
 }
 
-# 2) Upstream
-if (has_up) {
-  fmsb::radarchart(
-    data_up_radar, axistype = 1,
-    pcol = "#0277BD", pfcol = scales::alpha("#0277BD", 0.45), plwd = 2, plty = 1,
-    cglcol = "grey80", cglty = 1, axislabcol = "grey40",
-    caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-    cglwd = 0.8, vlcex = 0.95, centerzero = TRUE, title = "Upstream"
-  )
-} else {
-  plot.new(); title("Upstream\n(no data)")
-}
-
-# 3) Internal
-if (has_in) {
-  fmsb::radarchart(
-    data_in_radar, axistype = 1,
-    pcol = "#FF8F00", pfcol = scales::alpha("#FF8F00", 0.45), plwd = 2, plty = 1,
-    cglcol = "grey80", cglty = 1, axislabcol = "grey40",
-    caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-    cglwd = 0.8, vlcex = 0.95, centerzero = TRUE, title = "Internal"
-  )
-} else {
-  plot.new(); title("Internal\n(no data)")
-}
-
-# 4) Downstream
-if (has_do) {
-  fmsb::radarchart(
-    data_do_radar, axistype = 1,
-    pcol = "#2E7D32", pfcol = scales::alpha("#2E7D32", 0.45), plwd = 2, plty = 1,
-    cglcol = "grey80", cglty = 1, axislabcol = "grey40",
-    caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-    cglwd = 0.8, vlcex = 0.95, centerzero = TRUE, title = "Downstream"
-  )
-} else {
-  plot.new(); title("Downstream\n(no data)")
-}
-
-# 5) Overlay (Up vs In vs Down)
+# Panel 3: Comparative Analysis
+par(mar = c(5, 2, 3, 2))
 if (!is.null(overlay_data)) {
   n_series <- nrow(overlay_data) - 2
   cols <- c("#0277BD", "#FF8F00", "#2E7D32")[seq_len(n_series)]
   fcols <- sapply(cols, function(z) scales::alpha(z, 0.25))
   fmsb::radarchart(
     overlay_data, axistype = 1,
-    pcol = cols, pfcol = fcols, plwd = 2, plty = 1,
+    pcol = cols, pfcol = fcols, plwd = 3, plty = 1,
     cglcol = "grey80", cglty = 1, axislabcol = "grey40",
     caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-    cglwd = 0.8, vlcex = 0.95, centerzero = TRUE, title = "Overlay: Up / In / Down"
+    cglwd = 1.2, vlcex = 1.2, centerzero = TRUE, title = "Comparative Analysis"
   )
-  legend("bottomleft",
-         legend = c(if (has_up) "Upstream" else NULL,
-                    if (has_in) "Internal" else NULL,
-                    if (has_do) "Downstream" else NULL),
-         bty = "n", cex = 0.9, text.col = "grey20")
+  legend("bottomright",
+    legend = c(if (has_up) "Upstream" else NULL,
+               if (has_in) "Internal" else NULL,
+               if (has_do) "Downstream" else NULL),
+    col = cols[1:n_series],
+    lty = 1, lwd = 2, bty = "n", cex = 0.9, text.col = "grey20")
+  
+  # Find strongest segment
+  segment_scores <- c()
+  segment_names <- c()
+  if(has_up) {
+    segment_scores <- c(segment_scores, mean(as.numeric(data_up_radar[3,]), na.rm = TRUE))
+    segment_names <- c(segment_names, "UPSTREAM")
+  }
+  if(has_in) {
+    segment_scores <- c(segment_scores, mean(as.numeric(data_in_radar[3,]), na.rm = TRUE))
+    segment_names <- c(segment_names, "INTERNAL")
+  }
+  if(has_do) {
+    segment_scores <- c(segment_scores, mean(as.numeric(data_do_radar[3,]), na.rm = TRUE))
+    segment_names <- c(segment_names, "DOWNSTREAM")
+  }
+  
+  if(length(segment_scores) > 0) {
+    strongest_idx <- which.max(segment_scores)
+    strongest_segment <- segment_names[strongest_idx]
+    text(0.5, -0.2, paste("STERKST:", strongest_segment), cex = 1.2, col = "#27ae60", font = 2, xpd = TRUE)
+  }
+  text(0.5, -0.3, "Vergelijking tussen ketensegmenten", cex = 1.0, col = "grey30", xpd = TRUE)
 } else {
-  plot.new(); title("Overlay\n(no data)")
+  plot.new()
+  title("Comparative Analysis", cex.main = 1.2)
+  text(0.5, 0.5, "Geen data beschikbaar", cex = 1.2, col = "grey50")
 }
 
-# 6) leave the last cell blank for clean spacing
-plot.new(); title("")
+# Panels 4-6: Individual segments
+segments_info <- list(
+  list(data = data_up_radar, title = "Upstream Supply Chain", color = "#0277BD", type = "upstream"),
+  list(data = data_in_radar, title = "Internal Operations", color = "#FF8F00", type = "internal"),
+  list(data = data_do_radar, title = "Downstream Distribution", color = "#2E7D32", type = "downstream")
+)
 
+for(i in 1:3) {
+  par(mar = c(5, 2, 3, 2))
+  segment <- segments_info[[i]]
+  
+  if (!is.null(segment$data)) {
+    fmsb::radarchart(
+      segment$data, axistype = 1,
+      pcol = segment$color, pfcol = scales::alpha(segment$color, 0.45), 
+      plwd = 3, plty = 1,
+      cglcol = "grey80", cglty = 1, axislabcol = "grey40",
+      caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
+      cglwd = 1.2, vlcex = 1.2, centerzero = TRUE, title = segment$title
+    )
+    
+    # Add strategic insight
+    insight <- get_segment_insight(segment$data, segment$type)
+    text(0.5, -0.2, insight$main, cex = 1.1, col = segment$color, font = 2, xpd = TRUE)
+    text(0.5, -0.3, insight$secondary, cex = 1.0, col = "grey30", xpd = TRUE)
+    
+  } else {
+    plot.new()
+    title(segment$title, cex.main = 1.2)
+    text(0.5, 0.5, "Geen data beschikbaar", cex = 1.2, col = "grey50")
+  }
+}
 
+# Panel 7: Performance Summary
+par(mar = c(2, 2, 3, 2))
+plot.new()
+rect(0.05, 0.05, 0.95, 0.95, col = "#f8f9fa", border = "grey70", lwd = 2)
+
+text(0.5, 0.9, "PRESTATIE OVERZICHT", cex = 1.1, font = 2, col = "#2c3e50")
+segments(0.1, 0.85, 0.9, 0.85, col = "grey60", lwd = 1)
+
+y_positions <- c(0.75, 0.65, 0.55, 0.45)
+labels <- c("TOTAAL", "Upstream", "Internal", "Downstream")
+scores <- c(
+  safe_print_score(df_company_numeric$overall_scres),
+  safe_print_score(df_company_numeric$up_pillar_score),
+  safe_print_score(df_company_numeric$in_pillar_score),
+  safe_print_score(df_company_numeric$do_pillar_score)
+)
+
+for (i in 1:4) {
+  text(0.15, y_positions[i], labels[i], cex = 0.9, font = ifelse(i==1, 2, 1), 
+       adj = c(0, 0.5), col = "grey30")
+  
+  score_val <- scores[i]
+  if (score_val != "N/A" && !is.na(as.numeric(score_val))) {
+    score_num <- as.numeric(score_val)
+    bg_color <- if (score_num >= 4) "#27ae60" else if (score_num >= 3) "#f39c12" else "#e74c3c"
+    
+    rect(0.65, y_positions[i] - 0.025, 0.85, y_positions[i] + 0.025, 
+         col = bg_color, border = NA)
+    text(0.75, y_positions[i], score_val, cex = 1.0, font = 2, col = "white")
+  } else {
+    text(0.75, y_positions[i], score_val, cex = 0.9, font = 1, col = "grey50")
+  }
+}
+
+# Interpretation guide
+text(0.5, 0.32, "INTERPRETATIE:", cex = 0.9, font = 2, col = "grey30")
+text(0.5, 0.26, "4.0-5.0: Uitstekend", cex = 0.75, col = "#27ae60", font = 2)
+text(0.5, 0.22, "3.0-3.9: Goed", cex = 0.75, col = "#f39c12", font = 2)
+text(0.5, 0.18, "0.0-2.9: Verbetering nodig", cex = 0.75, col = "#e74c3c", font = 2)
+
+# Quick insight based on overall score
+overall_score_val <- df_company_numeric$overall_scres
+if(!is.na(overall_score_val) && is.numeric(overall_score_val)) {
+  if(overall_score_val >= 4) {
+    insight_text <- "Sterke veerkracht"
+  } else if(overall_score_val >= 3) {
+    insight_text <- "Goede basis"
+  } else {
+    insight_text <- "Focus op verbetering"
+  }
+  text(0.5, 0.10, insight_text, cex = 0.8, col = "grey30", font = 2)
+}
+
+# Panel 8: Strategic Insights
+par(mar = c(2, 2, 3, 2))
+plot.new()
+rect(0.02, 0.02, 0.98, 0.98, col = "#f8f9fa", border = "grey70", lwd = 2)
+
+text(0.5, 0.93, "STRATEGISCHE INZICHTEN", cex = 1.3, font = 2, col = "#2c3e50")
+segments(0.08, 0.89, 0.92, 0.89, col = "grey60", lwd = 1)
+
+# Generate insights if data available
+if(!is.null(data_overall_radar)) {
+  dimension_scores <- as.numeric(data_overall_radar[3,])
+  names(dimension_scores) <- dimension_labels
+  
+  valid_scores <- dimension_scores[!is.na(dimension_scores)]
+  if(length(valid_scores) > 0) {
+    highest_idx <- which.max(valid_scores)
+    lowest_idx <- which.min(valid_scores)
+    
+    strongest_dim <- names(valid_scores)[highest_idx]
+    weakest_dim <- names(valid_scores)[lowest_idx]
+    
+    # Key strength
+    text(0.08, 0.82, "KERNKRACHT:", cex = 1.1, font = 2, adj = c(0, 0.5), col = "#27ae60")
+    strength_text <- switch(strongest_dim,
+      "Redundancy" = "Sterke back-up systemen reduceren uitvalrisico's",
+      "Collaboration" = "Uitstekende partnerships versterken de keten", 
+      "Flexibility" = "Snelle aanpassingen mogelijk bij verstoringen",
+      "Transparency" = "Goede zichtbaarheid ondersteunt besluitvorming",
+      "Agility" = "Wendbare organisatie reageert snel op kansen",
+      "Geen specifieke sterkte geïdentificeerd"
+    )
+    text(0.08, 0.75, strength_text, cex = 1.0, adj = c(0, 0.5), col = "grey30")
+    
+    # Priority area
+    text(0.08, 0.65, "PRIORITEIT:", cex = 1.1, font = 2, adj = c(0, 0.5), col = "#e74c3c")
+    priority_text <- switch(weakest_dim,
+      "Redundancy" = "Investeer in alternatieve leveranciers en routes",
+      "Collaboration" = "Versterk partnerships en informatiedeling",
+      "Flexibility" = "Ontwikkel capaciteit voor snelle omschakeling", 
+      "Transparency" = "Verbeter data-uitwisseling en monitoring",
+      "Agility" = "Verkort besluitvormingsprocessen en reactietijd",
+      "Focus op algemene supply chain versterking"
+    )
+    text(0.08, 0.58, priority_text, cex = 1.0, adj = c(0, 0.5), col = "grey30")
+    
+    # Business impact
+    text(0.08, 0.48, "BUSINESS IMPACT:", cex = 1.1, font = 2, adj = c(0, 0.5), col = "#6A1B9A")
+    overall_avg <- mean(valid_scores, na.rm = TRUE)
+    if(overall_avg >= 4) {
+      impact_text <- "Sterke positie voor groei en marktexpansie"
+    } else if(overall_avg >= 3) {
+      impact_text <- "Solide basis, focus op zwakste schakels"
+    } else {
+      impact_text <- "Verhoogd risico op supply chain verstoringen"
+    }
+    text(0.08, 0.41, impact_text, cex = 1.0, adj = c(0, 0.5), col = "grey30")
+    
+    # Risk assessment
+    text(0.08, 0.31, "RISICOANALYSE:", cex = 1.1, font = 2, adj = c(0, 0.5), col = "#FF8F00")
+    low_scores <- sum(valid_scores < 3, na.rm = TRUE)
+    if(low_scores >= 3) {
+      risk_text <- "Hoog risicoprofiel - directe actie vereist"
+    } else if(low_scores >= 1) {
+      risk_text <- "Gematigd risico - monitor kritieke gebieden"  
+    } else {
+      risk_text <- "Laag risicoprofiel - behoud huidige niveau"
+    }
+    text(0.08, 0.24, risk_text, cex = 1.0, adj = c(0, 0.5), col = "grey30")
+  }
+} else {
+  text(0.5, 0.5, "Onvoldoende data voor strategische analyse", cex = 1.0, col = "grey50")
+}
+
+# Panel 9: Action Roadmap
+par(mar = c(2, 2, 3, 2))
+plot.new()
+rect(0.02, 0.02, 0.98, 0.98, col = "#f8f9fa", border = "grey70", lwd = 2)
+
+text(0.5, 0.93, "ACTIEPLAN", cex = 1.3, font = 2, col = "#2c3e50")
+segments(0.08, 0.89, 0.92, 0.89, col = "grey60", lwd = 1)
+
+# Generate roadmap based on overall performance
+if(!is.null(data_overall_radar)) {
+  dimension_scores <- as.numeric(data_overall_radar[3,])
+  valid_scores <- dimension_scores[!is.na(dimension_scores)]
+  
+  if(length(valid_scores) > 0) {
+    overall_avg <- mean(valid_scores, na.rm = TRUE)
+    min_score_val <- min(valid_scores, na.rm = TRUE)
+    max_score_val <- max(valid_scores, na.rm = TRUE)
+    
+    # Short term (3 months)
+    text(0.08, 0.82, "KORTE TERMIJN (3 maanden):", cex = 1.1, font = 2, adj = c(0, 0.5), col = "#e74c3c")
+    if(min_score_val < 2.5) {
+      short_term <- "Crisis management: versterk zwakste schakel"
+    } else if(min_score_val < 3.0) {
+      short_term <- "Risk mitigation: focus op scores onder 3.0"
+    } else {
+      short_term <- "Performance optimization: fine-tune processen"
+    }
+    text(0.08, 0.75, short_term, cex = 1.0, adj = c(0, 0.5), col = "grey30")
+    
+    # Medium term (6-12 months)  
+    text(0.08, 0.65, "MIDDELLANGE TERMIJN (6-12 mnd):", cex = 1.1, font = 2, adj = c(0, 0.5), col = "#f39c12")
+    if(overall_avg < 3.0) {
+      medium_term <- "Systematische versterking supply chain basis"
+    } else {
+      medium_term <- "Strategische partnerships en innovatie"
+    }
+    text(0.08, 0.58, medium_term, cex = 1.0, adj = c(0, 0.5), col = "grey30")
+    
+    # Long term (1-2 years)
+    text(0.08, 0.48, "LANGE TERMIJN (1-2 jaar):", cex = 1.1, font = 2, adj = c(0, 0.5), col = "#27ae60")
+    if(max_score_val >= 4.0) {
+      long_term <- "Marktleiderschap en best practice sharing"
+    } else {
+      long_term <- "Transform naar resilient supply chain"
+    }
+    text(0.08, 0.41, long_term, cex = 1.0, adj = c(0, 0.5), col = "grey30")
+    
+    # Success metrics
+    text(0.08, 0.31, "SUCCES INDICATOREN:", cex = 1.1, font = 2, adj = c(0, 0.5), col = "#6A1B9A")
+    text(0.08, 0.24, "• Alle scores > 3.0", cex = 0.9, adj = c(0, 0.5), col = "grey30")
+    text(0.08, 0.20, "• Verbeterde crisis response tijd", cex = 0.9, adj = c(0, 0.5), col = "grey30")
+    text(0.08, 0.16, "• Verhoogde klant tevredenheid", cex = 0.9, adj = c(0, 0.5), col = "grey30")
+    text(0.08, 0.12, "• Kostenreductie door efficiëntie", cex = 0.9, adj = c(0, 0.5), col = "grey30")
+  }
+} else {
+  text(0.5, 0.5, "Actieplan vereist meer data", cex = 1.0, col = "grey50")
+}
+
+# Add main title
+mtext("Supply Chain Resilience Dashboard", 
+      outer = TRUE, cex = 1.6, font = 2, line = 1)
+
+# Reset graphics parameters
+par(op)
 ```

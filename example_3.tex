@@ -2,11 +2,12 @@
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
 \documentclass[
   oneside,
   open=any,
-  fontsize=11pt]{scrbook}
+  fontsize=11pt]{article}
 \usepackage{xcolor}
 \usepackage{amsmath,amssymb}
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
@@ -150,14 +151,18 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Strategic Resilience and Financial Performance Profile for Livin' Spas},
+  pdftitle={Strategic Resilience and Financial Performance Profile for ME-AT Leeuwarden B.V.},
   pdfauthor={Ronald de Boer},
-  hidelinks,
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Strategic Resilience and Financial Performance Profile for Livin'
-Spas}
+\title{Strategic Resilience and Financial Performance Profile for ME-AT
+Leeuwarden B.V.}
 \usepackage{etoolbox}
 \makeatletter
 \providecommand{\subtitle}[1]{% add subtitle to \maketitle
@@ -169,15 +174,12 @@ Hogeschool Windesheim}
 \author{Ronald de Boer}
 \date{}
 \begin{document}
-\frontmatter
 \maketitle
 
 
-\mainmatter
-\pandocbounded{\includegraphics[keepaspectratio]{example_3_files/figure-pdf/unnamed-chunk-1-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{example_3_files/figure-pdf/dashboard-radars-1.pdf}}
 
 
-\backmatter
 
 
 \end{document}

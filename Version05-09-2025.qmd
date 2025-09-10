@@ -98,43 +98,24 @@ if (quarto_path == "") {
 } else {
   message("✅ Quarto CLI detected at: ", quarto_path)
   
-  # Install Quarto extension WITHOUT prompt, WITHOUT opening docs
-  message("📦 Installing Quarto extension: nmfs-opensci/quarto_titlepages (no prompt, no docs)...")
-  system2(quarto_path, args = c("install", "extension", "nmfs-opensci/quarto_titlepages", "--no-prompt", "--no-open"))
+
 }
 ```
-
 ```{r helpers, include=FALSE}
-# This chunk defines reusable helper functions to keep the main setup chunk clean.
-# It makes the report logic easier to understand and debug.
-
-#' Convert a value to numeric, robustly handling common non-numeric entries.
-#'
-#' @param x The input value (can be a character or factor).
-#' @return A numeric value or NA.
-#' 
-#' 
-# Add this function to your 'helpers' R chunk
-#' Safely format a score for printing, returning "N/A" if the score is missing.
-#'
-#' @param score The numeric score value.
-#' @return A formatted character string (e.g., "3.45" or "N/A").
+# Helper functions
 safe_print_score <- function(score) {
-  # This logic is identical to the ifelse() statements used in your original, working code.
   if (is.na(score) || is.null(score) || !is.numeric(score)) {
     return("N/A")
   }
   return(sprintf("%.2f", score))
 }
+
 convert_to_numeric_simple <- function(x) {
   x_char <- as.character(x)
-  # Unify all common missing/invalid formats to NA
   x_char <- ifelse(tolower(trimws(x_char)) %in% c("?", "", " ", "n/a", "na", "n.a.", "nan"), NA_character_, x_char)
-  # Convert comma decimal separator to period and suppress warnings for NAs
   suppressWarnings(as.numeric(str_replace(x_char, ",", ".")))
 }
 ```
-
 
 ```{r setup, include=FALSE}
 library(readr)
@@ -145,47 +126,38 @@ library(ggplot2)
 library(fmsb)
 library(scales) 
 
-convert_to_numeric_simple <- function(x) {
-  x_char <- as.character(x)
-  x_char <- ifelse(tolower(trimws(x_char)) %in% c("?", "", " ", "n/a", "na", "n.a.", "nan"), NA_character_, x_char)
-  suppressWarnings(as.numeric(str_replace(x_char, ",", ".")))
-}
-
 df_full <- read_csv("data/cleaned_master.csv", col_types = cols(.default = "c"))
 colnames(df_full) <- tolower(trimws(colnames(df_full)))
 
 df_company_raw <- df_full %>% 
   filter(tolower(company_name) == tolower(params$company))
 
-# Define only the columns absolutely needed for conversion for the main scores
-# This reduces the chance of an odd column name causing issues in 'across'
 score_columns_to_convert <- c(
   "up__r", "up__c", "up__f", "up__v", "up__a",
   "in__r", "in__c", "in__f", "in__v", "in__a",
   "do__r", "do__c", "do__f", "do__v", "do__a",
   "overall_scres"
 )
-# Add other informational columns that might be used directly if they don't need conversion for scores
-info_cols_to_keep <- c("company_name", "sector", "size_number_of_employees") # Add others if used directly
 
-# Ensure only existing columns are processed
+info_cols_to_keep <- c("company_name", "sector", "size_number_of_employees")
+
 actual_score_columns_to_convert <- intersect(score_columns_to_convert, names(df_company_raw))
 actual_info_cols_to_keep <- intersect(info_cols_to_keep, names(df_company_raw))
 
-df_company_numeric <- df_company_raw # Start with the raw filtered data
+df_company_numeric <- df_company_raw
 
+# Convert numeric columns using the function from helpers chunk
 if (length(actual_score_columns_to_convert) > 0) {
     df_company_numeric <- df_company_numeric %>%
       mutate(across(all_of(actual_score_columns_to_convert), convert_to_numeric_simple))
 }
-
 
 up_cols <- c("up__r", "up__c", "up__f", "up__v", "up__a")
 in_cols <- c("in__r", "in__c", "in__f", "in__v", "in__a")
 do_cols <- c("do__r", "do__c", "do__f", "do__v", "do__a")
 max_score <- 5 
 min_score <- 0 
-dimension_labels <- c("Resilience", "Connectivity", "Financial", "Visibility", "Agility")
+dimension_labels <- c("Redundancy", "Collaboration", "Flexibility", "Transparency", "Agility")
 
 data_up_radar <- NULL
 data_in_radar <- NULL
@@ -199,14 +171,11 @@ if(nrow(df_company_numeric) >= 1) {
     df_company_numeric <- df_company_numeric[1, , drop = FALSE] 
   }
   
-  # Safely get sector and size
   company_sector <- if("sector" %in% names(df_company_numeric) && !is.na(df_company_numeric$sector) && df_company_numeric$sector != "") df_company_numeric$sector else "Not Specified"
   company_size <- if("size_number_of_employees" %in% names(df_company_numeric) && !is.na(df_company_numeric$size_number_of_employees) && df_company_numeric$size_number_of_employees != "") df_company_numeric$size_number_of_employees else "Not Specified"
 
-  # Calculate pillar scores directly
   if(all(up_cols %in% names(df_company_numeric))) {
     df_company_numeric$up_pillar_score <- rowMeans(select(df_company_numeric, all_of(up_cols)), na.rm = TRUE)
-    # Prepare radar data
     radar_data <- df_company_numeric %>% slice(1) %>% select(all_of(up_cols))
     if(ncol(radar_data) == 5 && !all(is.na(as.numeric(radar_data[1,])))) {
         data_up_radar <- data.frame(rbind(rep(max_score, 5), rep(min_score, 5), as.numeric(radar_data[1,])))
@@ -235,102 +204,188 @@ if(nrow(df_company_numeric) >= 1) {
 } else if (nrow(df_company_numeric) == 0) {
   stop(paste("No data found for company:", params$company, ". Halting report generation."))
 }
+
+# Prepare overlay and overall data
+has_up <- exists("data_up_radar") && is.data.frame(data_up_radar) && nrow(data_up_radar) == 3 && ncol(data_up_radar) == 5 && all(sapply(data_up_radar, is.numeric)) && !all(is.na(data_up_radar[3, , drop=FALSE]))
+has_in <- exists("data_in_radar") && is.data.frame(data_in_radar) && nrow(data_in_radar) == 3 && ncol(data_in_radar) == 5 && all(sapply(data_in_radar, is.numeric)) && !all(is.na(data_in_radar[3, , drop=FALSE]))
+has_do <- exists("data_do_radar") && is.data.frame(data_do_radar) && nrow(data_do_radar) == 3 && ncol(data_do_radar) == 5 && all(sapply(data_do_radar, is.numeric)) && !all(is.na(data_do_radar[3, , drop=FALSE]))
+
+if (has_up || has_in || has_do) {
+  available_rows <- list()
+  if (has_up) available_rows <- append(available_rows, list(as.numeric(data_up_radar[3,])))
+  if (has_in) available_rows <- append(available_rows, list(as.numeric(data_in_radar[3,])))
+  if (has_do) available_rows <- append(available_rows, list(as.numeric(data_do_radar[3,])))
+
+  overall_vec <- Reduce("+", available_rows) / length(available_rows)
+  data_overall_radar <- data.frame(rbind(
+    rep(max_score, 5),
+    rep(min_score, 5),
+    overall_vec
+  ))
+  colnames(data_overall_radar) <- dimension_labels
+} else {
+  data_overall_radar <- NULL
+}
+
+overlay_data <- NULL
+if (has_up || has_in || has_do) {
+  overlay_data <- rbind(rep(max_score, 5), rep(min_score, 5))
+  if (has_up) overlay_data <- rbind(overlay_data, as.numeric(data_up_radar[3,]))
+  if (has_in) overlay_data <- rbind(overlay_data, as.numeric(data_in_radar[3,]))
+  if (has_do) overlay_data <- rbind(overlay_data, as.numeric(data_do_radar[3,]))
+  overlay_data <- as.data.frame(overlay_data)
+  colnames(overlay_data) <- dimension_labels
+}
 ```
 
+```{r dashboard-radars, fig.width=16, fig.height=20}
+# Dashboard layout with all radar charts - optimized for A4
+op <- par(no.readonly = TRUE)
+on.exit(par(op), add = TRUE)
 
-```{r pillar-scores-chart, fig.cap=paste("Average Resilience Pillar Scores for", params$company), fig.asp=0.6, out.width="100%"}
-if (exists("df_company_numeric") && nrow(df_company_numeric) > 0 &&
-    all(c("up_pillar_score", "in_pillar_score", "do_pillar_score") %in% names(df_company_numeric))) {
-      
-  pillar_data_scores <- c(df_company_numeric$up_pillar_score, 
-                          df_company_numeric$in_pillar_score, 
-                          df_company_numeric$do_pillar_score)
+# Set up 3x2 grid layout (3 rows, 2 columns) with generous spacing
+par(mfrow = c(3, 2), oma = c(3, 3, 5, 3))
+
+# Chart 1: Overall (larger, top-left)
+if (!is.null(data_overall_radar)) {
+  par(mar = c(3, 3, 4, 3))
+  fmsb::radarchart(
+    data_overall_radar, axistype = 1,
+    pcol = "#6A1B9A", pfcol = scales::alpha("#6A1B9A", 0.4), plwd = 3, plty = 1,
+    cglcol = "grey80", cglty = 1, axislabcol = "grey40",
+    caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
+    cglwd = 1.2, vlcex = 1.2, centerzero = TRUE, title = "Overall Resilience"
+  )
+} else {
+  plot.new()
+  title("Overall Resilience\n(no data available)", cex.main = 1.2)
+}
+
+# Chart 2: Comparative Overlay (top-right)
+if (!is.null(overlay_data)) {
+  n_series <- nrow(overlay_data) - 2
+  cols <- c("#0277BD", "#FF8F00", "#2E7D32")[seq_len(n_series)]
+  fcols <- sapply(cols, function(z) scales::alpha(z, 0.25))
+  par(mar = c(3, 3, 4, 3))
+  fmsb::radarchart(
+    overlay_data, axistype = 1,
+    pcol = cols, pfcol = fcols, plwd = 3, plty = 1,
+    cglcol = "grey80", cglty = 1, axislabcol = "grey40",
+    caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
+    cglwd = 1.2, vlcex = 1.2, centerzero = TRUE, title = "Comparative Analysis"
+  )
+  legend("bottomright",
+    legend = c(if (has_up) "Upstream" else NULL,
+               if (has_in) "Internal" else NULL,
+               if (has_do) "Downstream" else NULL),
+    col = cols[1:n_series],
+    lty = 1, lwd = 3, bty = "n", cex = 1.0, text.col = "grey20")
+} else {
+  plot.new()
+  title("Comparative Analysis\n(no data available)", cex.main = 1.2)
+}
+
+# Chart 3: Upstream (middle-left)
+if (has_up) {
+  par(mar = c(3, 3, 4, 3))
+  fmsb::radarchart(
+    data_up_radar, axistype = 1,
+    pcol = "#0277BD", pfcol = scales::alpha("#0277BD", 0.45), plwd = 3, plty = 1,
+    cglcol = "grey80", cglty = 1, axislabcol = "grey40",
+    caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
+    cglwd = 1.2, vlcex = 1.2, centerzero = TRUE, title = "Upstream Supply Chain"
+  )
+} else {
+  plot.new()
+  title("Upstream Supply Chain\n(no data available)", cex.main = 1.2)
+}
+
+# Chart 4: Internal (middle-right)
+if (has_in) {
+  par(mar = c(3, 3, 4, 3))
+  fmsb::radarchart(
+    data_in_radar, axistype = 1,
+    pcol = "#FF8F00", pfcol = scales::alpha("#FF8F00", 0.45), plwd = 3, plty = 1,
+    cglcol = "grey80", cglty = 1, axislabcol = "grey40",
+    caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
+    cglwd = 1.2, vlcex = 1.2, centerzero = TRUE, title = "Internal Operations"
+  )
+} else {
+  plot.new()
+  title("Internal Operations\n(no data available)", cex.main = 1.2)
+}
+
+# Chart 5: Downstream (bottom-left)
+if (has_do) {
+  par(mar = c(3, 3, 4, 3))
+  fmsb::radarchart(
+    data_do_radar, axistype = 1,
+    pcol = "#2E7D32", pfcol = scales::alpha("#2E7D32", 0.45), plwd = 3, plty = 1,
+    cglcol = "grey80", cglty = 1, axislabcol = "grey40",
+    caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
+    cglwd = 1.2, vlcex = 1.2, centerzero = TRUE, title = "Downstream Distribution"
+  )
+} else {
+  plot.new()
+  title("Downstream Distribution\n(no data available)", cex.main = 1.2)
+}
+
+# Chart 6: Summary Statistics (bottom-right)
+par(mar = c(3, 3, 4, 3))
+plot.new()
+
+# Create a more readable summary with better formatting
+rect(0.05, 0.05, 0.95, 0.95, col = "#f8f9fa", border = "grey70", lwd = 2)
+
+# Company header
+text(0.5, 0.85, params$company, cex = 1.6, font = 2, col = "#2c3e50")
+text(0.5, 0.78, paste("Sector:", company_sector), cex = 1.1, col = "grey40")
+text(0.5, 0.72, paste("Size:", company_size), cex = 1.1, col = "grey40")
+
+# Horizontal line
+segments(0.15, 0.67, 0.85, 0.67, col = "grey60", lwd = 2)
+
+# Pillar scores with color coding
+y_positions <- c(0.58, 0.50, 0.42, 0.34, 0.26)
+labels <- c("OVERALL RESILIENCE", "Upstream Pillar", "Internal Pillar", "Downstream Pillar", "")
+scores <- c(
+  safe_print_score(df_company_numeric$overall_scres),
+  safe_print_score(df_company_numeric$up_pillar_score),
+  safe_print_score(df_company_numeric$in_pillar_score),
+  safe_print_score(df_company_numeric$do_pillar_score),
+  ""
+)
+colors <- c("#6A1B9A", "#0277BD", "#FF8F00", "#2E7D32", "black")
+
+for (i in 1:4) {
+  # Score label
+  text(0.25, y_positions[i], labels[i], cex = 1.2, font = ifelse(i==1, 2, 1), 
+       adj = c(0, 0.5), col = "grey30")
   
-  if(any(!is.na(pillar_data_scores))) {
-    pillar_data_df <- data.frame(
-      Pillar = c("Upstream", "Internal", "Downstream"),
-      Score = pillar_data_scores
-    )
-    pillar_data_df$Pillar <- factor(pillar_data_df$Pillar, levels = c("Upstream", "Internal", "Downstream"))
-
-    ggplot(pillar_data_df, aes(x = Pillar, y = Score, fill = Pillar)) +
-      geom_bar(stat = "identity", width = 0.7, show.legend = FALSE, alpha=0.9) +
-      geom_text(aes(label = ifelse(is.na(Score), "N/A", sprintf("%.2f", Score))), 
-                vjust = -0.7, size = 4, na.rm = TRUE, fontface="bold") +
-      scale_fill_manual(values = c("Upstream" = "#0277BD", "Internal" = "#FF8F00", "Downstream" = "#2E7D32")) +
-      labs(title = paste("Resilience Pillar Scores for", params$company),
-           y = "Average Score (0-5)", x = "") +
-      theme_minimal(base_size = 11) +
-      theme(plot.title = element_text(hjust = 0.5, size=14, face="bold"),
-            axis.title.y = element_text(size=10, face="bold"),
-            axis.text.x = element_text(size=10, face="bold"),
-            axis.text.y = element_text(size=9),
-            panel.grid.major.x = element_blank(),
-            panel.grid.minor.y = element_blank()) +
-      ylim(0, max_score + 0.5) 
+  # Score value with background
+  score_val <- scores[i]
+  if (score_val != "N/A" && !is.na(as.numeric(score_val))) {
+    score_num <- as.numeric(score_val)
+    bg_color <- if (score_num >= 4) "#27ae60" else if (score_num >= 3) "#f39c12" else "#e74c3c"
+    
+    rect(0.65, y_positions[i] - 0.025, 0.85, y_positions[i] + 0.025, 
+         col = bg_color, border = NA)
+    text(0.75, y_positions[i], score_val, cex = 1.4, font = 2, col = "white")
   } else {
-    cat(paste0("Pillar scores for ", params$company, " are all NA or data is unavailable for the pillar scores chart."))
+    text(0.75, y_positions[i], score_val, cex = 1.2, font = 1, col = "grey50")
   }
-} else {
-  cat(paste0("Pillar score data frame (`df_company_numeric`) not available for ", params$company, " or key columns missing for plotting."))
 }
-```
 
-```{r upstream-radar-chart, fig.cap=paste("Upstream Resilience Dimensions for", params$company), fig.asp=0.8, out.width="80%", fig.align="center"}
-if (exists("data_up_radar") && 
-    !is.null(data_up_radar) && 
-    is.data.frame(data_up_radar) && 
-    nrow(data_up_radar) == 3 && 
-    ncol(data_up_radar) == 5 && 
-    all(sapply(data_up_radar, is.numeric)) &&
-    !all(is.na(data_up_radar[3, , drop=FALSE])) ) {
-  radarchart(data_up_radar, axistype = 1, 
-             pcol = "#0277BD", pfcol = scales::alpha("#0277BD", 0.5), plwd = 2, plty=1,
-             cglcol = "grey", cglty = 1, axislabcol = "grey40", 
-             caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)), 
-             cglwd = 0.8, vlcex = 0.9, centerzero = TRUE,
-             title = "") 
-} else {
-  cat(paste0("Data for upstream radar chart for ", params$company, " is not available, not fully numeric, incorrectly formatted, or all values are NA."))
-}
-```
+# Scale information
+text(0.5, 0.18, "PERFORMANCE SCALE", cex = 1.0, font = 2, col = "grey30")
+text(0.5, 0.12, "0.0 - 2.9: Needs Improvement", cex = 0.9, col = "#e74c3c")
+text(0.5, 0.08, "3.0 - 3.9: Good Performance", cex = 0.9, col = "#f39c12")
+text(0.5, 0.04, "4.0 - 5.0: Excellence", cex = 0.9, col = "#27ae60")
 
+# Add main title
+mtext(paste("Supply Chain Resilience Dashboard"), 
+      outer = TRUE, cex = 2.0, font = 2, line = 2)
 
-```{r internal-radar-chart, fig.cap=paste("Internal Operational Resilience Dimensions for", params$company), fig.asp=0.8, out.width="80%", fig.align="center"}
-if (exists("data_in_radar") && 
-    !is.null(data_in_radar) && 
-    is.data.frame(data_in_radar) && 
-    nrow(data_in_radar) == 3 && 
-    ncol(data_in_radar) == 5 && 
-    all(sapply(data_in_radar, is.numeric)) &&
-    !all(is.na(data_in_radar[3, , drop=FALSE])) ) {
-  radarchart(data_in_radar, axistype = 1,
-             pcol = "#FF8F00", pfcol = scales::alpha("#FF8F00", 0.5), plwd = 2, plty=1,
-             cglcol = "grey", cglty = 1, axislabcol = "grey40",
-             caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)),
-             cglwd = 0.8, vlcex = 0.9, centerzero = TRUE,
-             title = "")
-} else {
-  cat(paste0("Data for internal radar chart for ", params$company, " is not available, not fully numeric, incorrectly formatted, or all values are NA."))
-}
-```
-
-
-```{r downstream-radar-chart, fig.cap=paste("Downstream Resilience Dimensions for", params$company), fig.asp=0.8, out.width="80%", fig.align="center"}
-if (exists("data_do_radar") && 
-    !is.null(data_do_radar) && 
-    is.data.frame(data_do_radar) && 
-    nrow(data_do_radar) == 3 && 
-    ncol(data_do_radar) == 5 && 
-    all(sapply(data_do_radar, is.numeric)) &&
-    !all(is.na(data_do_radar[3, , drop=FALSE])) ) {
-  radarchart(data_do_radar, axistype = 1,
-             pcol = "#2E7D32", pfcol = scales::alpha("#2E7D32", 0.5), plwd = 2, plty=1,
-             cglcol = "grey", cglty = 1, axislabcol = "grey40",
-             caxislabels = sprintf("%.1f", seq(min_score, max_score, length.out = 6)), 
-             cglwd = 0.8, vlcex = 0.9, centerzero = TRUE,
-             title = "")
-} else {
-  cat(paste0("Data for downstream radar chart for ", params$company, " is not available, not fully numeric, incorrectly formatted, or all values are NA."))
-}
+# Reset graphics parameters
+par(op)
 ```
