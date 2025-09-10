@@ -41,8 +41,6 @@
 ---
 
 ## 📌 Objective
-<!-- Brief, outcome-focused statement describing the current deliverable and long-term vision. -->
-## 📌 Objective
 
 The **Resilience Report Automation & Open-Source Survey Pipeline** project exists to reduce the manual burden of producing, validating, and distributing survey-based reports.  
 
@@ -513,5 +511,6 @@ flowchart LR
 
 ## 📦 Release Checklist
 <!-- Pre-release verification items. -->
+
 
 ```
