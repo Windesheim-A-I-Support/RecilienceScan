@@ -316,7 +316,6 @@ flowchart LR
 ---
 
 ## ⚙️ Technical Proposal
-## ⚙️ Technical Proposal
 
 ### Ingestion
 - **Current (M1):**  
@@ -498,4 +497,5 @@ flowchart LR
 
 
 ```
+
 
