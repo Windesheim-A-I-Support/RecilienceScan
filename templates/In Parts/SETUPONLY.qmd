@@ -1,0 +1,140 @@
+
+```{r dashboard-setup, echo=FALSE}
+# ========================================================================
+# BULLETPROOF SETUP WITH GUARANTEED DEBUG OUTPUT
+# ========================================================================
+
+# DIRECT DEBUG CHECK (bulletproof)
+debug_on <- FALSE
+tryCatch({
+  debug_on <- exists("params") && !is.null(params$debug_mode) && params$debug_mode == TRUE
+}, error = function(e) {
+  debug_on <<- FALSE
+})
+
+# FORCE DEBUG OUTPUT FOR TESTING
+if (debug_on) {
+  cat("DEBUG MODE IS ACTIVE - YOU SHOULD SEE THIS MESSAGE\n")
+  cat("Testing params access...\n")
+  if (exists("params")) {
+    cat("params object exists\n")
+    cat("debug_mode =", params$debug_mode, "\n")
+    cat("diagnostic_mode =", params$diagnostic_mode, "\n")
+  } else {
+    cat("params object does NOT exist\n")
+  }
+}
+
+# Essential packages for dashboard
+essential_pkgs <- c(
+  "readr", "dplyr", "stringr", "tidyr", "ggplot2", "knitr"
+)
+
+# Advanced packages
+advanced_pkgs <- c(
+  "fmsb", "scales", "viridis", "patchwork", "RColorBrewer", 
+  "gridExtra", "png", "lubridate", "kableExtra"
+)
+
+# Package loading function
+load_pkg <- function(pkg) {
+  if (debug_on) cat("Loading", pkg, "...")
+  
+  success <- tryCatch({
+    library(pkg, character.only = TRUE, quietly = !debug_on, warn.conflicts = FALSE)
+    if (debug_on) cat(" SUCCESS\n")
+    TRUE
+  }, error = function(e) {
+    if (debug_on) cat(" FAILED\n")
+    FALSE
+  })
+  
+  return(success)
+}
+
+# Package installation function  
+install_pkg <- function(pkg) {
+  if (debug_on) cat("Installing", pkg, "...")
+  
+  success <- tryCatch({
+    install.packages(pkg, quiet = !debug_on, dependencies = TRUE)
+    if (debug_on) cat(" INSTALLED\n")
+    TRUE
+  }, error = function(e) {
+    if (debug_on) cat(" INSTALL FAILED:", e$message, "\n")
+    FALSE
+  })
+  
+  return(success)
+}
+
+# Try to load or install packages
+loaded_packages <- character(0)
+failed_packages <- character(0)
+
+if (debug_on) cat("\n=== PROCESSING ESSENTIAL PACKAGES ===\n")
+
+for (pkg in essential_pkgs) {
+  # Try loading first
+  if (load_pkg(pkg)) {
+    loaded_packages <- c(loaded_packages, pkg)
+  } else {
+    # Try installing then loading
+    if (install_pkg(pkg) && load_pkg(pkg)) {
+      loaded_packages <- c(loaded_packages, pkg)
+    } else {
+      failed_packages <- c(failed_packages, pkg)
+    }
+  }
+}
+
+if (debug_on) cat("\n=== PROCESSING ADVANCED PACKAGES ===\n")
+
+for (pkg in advanced_pkgs) {
+  # Try loading first
+  if (load_pkg(pkg)) {
+    loaded_packages <- c(loaded_packages, pkg)
+  } else {
+    # Try installing then loading
+    if (install_pkg(pkg) && load_pkg(pkg)) {
+      loaded_packages <- c(loaded_packages, pkg)
+    } else {
+      failed_packages <- c(failed_packages, pkg)
+      # Don't stop for advanced packages
+    }
+  }
+}
+
+# FINAL RESULTS
+if (debug_on) {
+  cat("\n=== SETUP COMPLETE ===\n")
+  cat("Successfully loaded:", length(loaded_packages), "packages\n")
+  cat("Loaded packages:", paste(loaded_packages, collapse = ", "), "\n")
+  
+  if (length(failed_packages) > 0) {
+    cat("Failed packages:", paste(failed_packages, collapse = ", "), "\n")
+  }
+  
+  cat("R version:", R.version.string, "\n")
+  cat("Graphics available:", capabilities("png"), "\n")
+}
+
+# Check critical packages
+missing_critical <- setdiff(essential_pkgs, loaded_packages)
+if (length(missing_critical) > 0) {
+  stop("CRITICAL FAILURE: Missing essential packages: ", paste(missing_critical, collapse = ", "))
+}
+
+# Store results globally
+assign("loaded_packages", loaded_packages, envir = .GlobalEnv)
+assign("setup_complete", TRUE, envir = .GlobalEnv)
+assign("debug_mode_active", debug_on, envir = .GlobalEnv)
+
+# Basic options
+options(scipen = 999, digits = 3)
+
+if (debug_on) {
+  cat("SETUP FINISHED - DEBUG MODE WAS ACTIVE\n")
+  cat("You should see all the messages above if debug is working\n")
+}
+```

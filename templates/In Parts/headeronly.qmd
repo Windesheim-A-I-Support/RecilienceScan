@@ -1,0 +1,83 @@
+---
+title: "Strategic Resilience and Financial Performance Profile for `r params$company`"
+subtitle: "An In-depth Analysis by the Supply Chain Finance Lectoraat, Hogeschool Windesheim"
+author:
+  - name: Ronald de Boer 
+    affiliations:
+      - name: Supply Chain Finance Lectoraat
+      - name: Hogeschool Windesheim
+        address: Campus 2, Zwolle
+bibliography: references.bib
+format: 
+  pdf:
+    documentclass: article
+    classoption: ["oneside", "open=any", "fontsize=11pt"]
+    link-citations: false
+    number-sections: false
+    toc: false
+    lof: false
+    lot: false
+    titlepage: "bg-image"
+    titlepage-bg-image: "img/corner-bg.png"
+    titlepage-logo: "img/logo.png" 
+    titlepage-header: "Resilience Scan | NEXT GEN Logistics Initiative"
+    titlepage-footer: |
+      Supply Chain Finance Lectoraat, Hogeschool Windesheim\
+      https://resiliencescan.org/ | https://www.windesheim.com/research/professorships/supply-chain-finance
+    coverpage-include-file:
+      - tex/copyright.tex
+    titlepage-include-file:
+      - tex/dedication.tex
+    titlepage-theme:
+      vrule-color: "004D40" 
+      vrule-width: "10pt"
+    coverpage: otter 
+    coverpage-bg-image: "img/otter-bar.jpeg"
+    coverpage-title: "resiliencescan" 
+    coverpage-author: ["Supply Chain Finance Lectoraat, Hogeschool Windesheim", "NEXT GEN Logistics"] 
+    coverpage-theme:
+      title-color: "white"
+      title-fontfamily: "QTDublinIrish.otf" 
+      title-fontsize: 70
+      author-style: "plain"
+      author-sep: "newline"
+      author-fontstyle: ["textbf", "textsc"]
+      author-fontsize: 24
+      author-color: "4CAF50" 
+      author-align: "right"
+      author-bottom: "1.5in"
+      footer-style: "none"
+      header-style: "none"
+      date-style: "none"
+    keep-tex: true
+    header-includes: |
+      \usepackage{geometry}
+      \usepackage{pdflscape}
+      \usepackage{afterpage}
+      \usepackage{graphicx}
+      \usepackage{float}
+      \usepackage{array}
+      \usepackage{booktabs}
+      \usepackage{longtable}
+      \usepackage{multirow}
+      \usepackage{wrapfig}
+      \usepackage{colortbl}
+      \usepackage{pdflscape}
+      \usepackage{tabu}
+      \usepackage{threeparttable}
+      \usepackage{threeparttablex}
+      \usepackage[normalem]{ulem}
+      \usepackage{makecell}
+      \usepackage{xcolor}
+execute:
+  echo: false
+  warning: false
+  message: false
+  cache: false
+  freeze: false
+params:
+  company: "Placeholder Company"
+  diagnostic_mode: false
+  debug_mode: false
+  data_guide_mode: false
+---

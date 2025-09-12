@@ -233,8 +233,6 @@ The project follows a **milestone-driven roadmap**, moving from manual reproduci
 ---
 
 ## 🏗️ Architecture Overview
-<!-- High-level system diagram (Mermaid, ASCII, image). Major components: ingestion, validation, reporting, delivery, storage, orchestration. -->
-## 🏗️ Architecture Overview
 
 > High-level view of how data flows from source → validation → reporting → delivery → archival.  
 > (Adjust nodes as the project evolves.)
@@ -265,40 +263,6 @@ flowchart LR
   MAIL --> LOGS
   AR --> DB
 ```
----
-
-## 🗂️ Directory Structure
-## 🏗️ Architecture Overview
-
-> High-level view of how data flows from source → validation → reporting → delivery → archival.  
-> (Adjust nodes as the project evolves.)
-
-\\```mermaid
-flowchart LR
-  subgraph Source
-    WP[Website / Export (WordPress, Power BI/Excel)]
-    CSV[Cleaned CSV]
-  end
-
-  subgraph Pipeline
-    VAL[Validate (schema + rules)]
-    QMD[Render (Quarto + LaTeX)]
-    PKG[Package (per-recipient PDFs)]
-    MAIL[Deliver (Outlook / n8n)]
-  end
-
-  subgraph Storage
-    LOGS[Logs & Status]
-    AR[Archive (reports, inputs)]
-    DB[(Future: DB/Object Store)]
-  end
-
-  WP --> CSV --> VAL --> QMD --> PKG --> MAIL
-  VAL --> LOGS
-  QMD --> AR
-  MAIL --> LOGS
-  AR --> DB
-\\```
 
 ### Components (Summary)
 - **Ingestion (Current → Future):**  
@@ -324,7 +288,6 @@ flowchart LR
 
 ---
 
-## ⚙️ Technical Proposal
 ## ⚙️ Technical Proposal
 
 ### Ingestion
@@ -397,62 +360,239 @@ flowchart LR
 ---
 
 ## 🚀 Getting Started
+
+Follow these steps to set up the project on a clean environment.  
+*(Adjust commands for Windows/Linux as needed — the goal is reproducibility across systems.)*
+
+---
+
 ### Prerequisites
-<!-- OS, runtimes, dependencies. -->
+- **Operating System:** Windows VM recommended (for Outlook integration).  
+- **Installed Tools:**  
+  - [Quarto CLI](https://quarto.org/docs/get-started/)  
+  - [TinyTeX](https://yihui.org/tinytex/) (installer script provided)  
+  - [Python 3.11+](https://www.python.org/downloads/)  
+  - R (optional, for data validation scripts if using R-based tooling)  
+- **Email:** Outlook desktop client with an active account.  
+- **Git:** for cloning and version control.  
+
+---
+
 ### Installation
-<!-- Steps/scripts for setup. -->
+1. Clone the repository:  
+   \\```bash
+   git clone https://github.com/<your-org>/<your-repo>.git
+   cd <your-repo>
+   \\```
+
+2. Run the installer script to set up Quarto, TinyTeX, required fonts, and Python dependencies:  
+   \\```bash
+   scripts/install.bat   # Windows
+   # or
+   bash scripts/install.sh  # Linux/macOS
+   \\```
+
+3. Verify installation:  
+   \\```bash
+   quarto check
+   python --version
+   \\```
+
+---
+
 ### First Run
-<!-- Minimal steps to execute. Include sample outputs/screenshots/gifs. -->
+1. Place your **cleaned CSV** file into the `data/` folder:  
+   \\```
+   data/input.csv
+   \\```
+
+2. Validate the CSV:  
+   \\```bash
+   python scripts/validate_csv.py data/input.csv
+   \\```  
+   - ✅ Success → proceed to rendering.  
+   - ❌ Failure → see error messages in `logs/validation.log` and fix input.
+
+3. Render the report:  
+   \\```bash
+   quarto render reports/template.qmd --to pdf
+   \\```  
+   - Output saved in `reports/`.
+
+4. Send the report via Outlook:  
+   \\```bash
+   python scripts/send_email.py --map config/recipients.csv --src reports/
+   \\```  
+   - Delivery log appended to `logs/email_log.csv`.  
+
+---
+
+### Example Outputs
+- **PDF Report:** `reports/2025Q3_example_company.pdf`  
+- **Validation Log:** `logs/validation.log`  
+- **Email Log:** `logs/email_log.csv`  
+
+---
+
+📌 **Next Step:** See [Configuration](#configuration) for details on customizing recipients, validation rules, and branding.
 
 ---
 
 ## 🔧 Configuration
-<!-- Configuration files, env variables, directory notes. -->
+
+The project relies on a small number of configuration files and environment settings to remain flexible and reproducible.
 
 ---
 
-## ✅ Validation Spec
-<!-- Schema or data requirements, business rules, expected error messages. -->
+### Directory Structure
+\\```
+.
+├── config/                 # Configuration files
+│   ├── recipients.csv      # Mapping of company → email
+│   ├── schema.json         # Schema for validation
+│   ├── rules.yml           # Business rules for validation
+│
+├── data/                   # Input data
+│   └── input.csv           # Cleaned CSV placed here
+│
+├── reports/                # Generated reports
+│   └── <period>_<company>.pdf
+│
+├── logs/                   # Logs and audit trails
+│   ├── validation.log
+│   ├── email_log.csv
+│   └── run_log.csv
+│
+├── scripts/                # Helper scripts
+│   ├── install.*           # Installer (Windows/Linux)
+│   ├── validate_csv.*      # Validation script
+│   └── send_email.py       # Outlook delivery script
+│
+├── docs/                   # Documentation
+│   └── data_dictionary.md
+│
+└── tests/                  # Unit and acceptance tests
+\\```
 
 ---
 
-## 📊 Logging & Audit
-<!-- Logging routines, locations, contents, audit trails. -->
+### Recipients Mapping (`config/recipients.csv`)
+\\```
+company,email
+Acme Ltd,reports@acme.com
+Beta BV,ops@beta.example
+Gamma GmbH,info@gamma.de
+\\```
+
+- Used by `send_email.py` to route the correct report to the correct recipient.  
+- Each row must correspond to a company present in the CSV data.
 
 ---
 
-## 🧪 Testing Strategy
-<!-- How to run tests, CI/CD, automated acceptance tests. -->
+### Validation Schema (`config/schema.json`)
+Defines required columns and expected types. Example:  
+\\```json
+{
+  "columns": {
+    "company": "string",
+    "period": "string",
+    "score_total": "number",
+    "n_responses": "integer"
+  },
+  "constraints": {
+    "score_total": {"min": 0, "max": 100},
+    "n_responses": {"min": 5}
+  }
+}
+\\```
 
 ---
 
-## ⚠️ Known Limitations & Future Work
-<!-- Bugs, roadmap items, not-yet-working elements. -->
+### Business Rules (`config/rules.yml`)
+Captures additional checks not enforced by schema. Example:  
+\\```yaml
+rules:
+  - name: "Minimum responses per company"
+    field: "n_responses"
+    condition: ">= 5"
+    message: "At least 5 responses required per company."
+  - name: "Score within range"
+    field: "score_total"
+    condition: "0 <= value <= 100"
+    message: "Score must be between 0 and 100."
+\\```
 
 ---
 
-## 🧭 Design Decisions
-<!-- Tradeoffs, tool choices, rationale. -->
+### Environment Variables
+- `OUTLOOK_PROFILE`: Outlook profile to use for sending emails.  
+- `REPORT_PERIOD`: Optional override for the reporting period label.  
+- `DATA_PATH`: Location of input data file (defaults to `data/input.csv`).  
 
 ---
 
-## 📦 Dependencies
-<!-- Explicit list of required software, libraries, versions. -->
+### Branding & Templates
+- **Quarto templates** are stored in `reports/` and include:  
+  - `template.qmd` for report structure.  
+  - `titlepage.tex` for LaTeX title page customization.  
+  - Fonts embedded via TinyTeX installation.  
 
----
-
-## ⚙️ Code/Data Provenance
-<!-- Outline data/code origins, acquisition/curation, and any pre-processing or validation. References to original sources. -->
-
----
-
-## 🏷️ Standardization Notice
-<!-- List standardized terms, date formats (ISO 8601), and discipline-specific vocabularies used. -->
-
----
 
 ## 👩‍🔬 Researcher/End-User Acceptance Test
 <!-- Checklist or template for testing by non-developers. -->
+## 👩‍🔬 Researcher/End-User Acceptance Test
+
+The **Researcher Acceptance Test (RAT)** ensures that the pipeline can be executed successfully by a non-developer, using only the provided documentation.
+
+---
+
+### Test Environment
+- **VM / Machine Name:** _____________________  
+- **Operating System:** _____________________  
+- **Date:** _____________________  
+- **Researcher Name:** _____________________  
+
+---
+
+### Checklist
+
+1. **Setup & Installation**
+   - [ ] Clone repository successfully.  
+   - [ ] Run installer script without errors.  
+   - [ ] Quarto, TinyTeX, and Python confirmed working.  
+
+2. **Input Preparation**
+   - [ ] Place cleaned CSV into `data/`.  
+   - [ ] Confirm file is correctly named (`input.csv` or configured name).  
+
+3. **Validation**
+   - [ ] Run `validate_csv` script.  
+   - [ ] Invalid CSV → clear error message shown.  
+   - [ ] Valid CSV → success message shown.  
+
+4. **Report Generation**
+   - [ ] Run Quarto render command.  
+   - [ ] PDF produced in `reports/` folder.  
+   - [ ] Branding and layout match expectations (title page, fonts, logos).  
+
+5. **Email Delivery**
+   - [ ] Run email script with `recipients.csv` mapping.  
+   - [ ] Correct PDF sent to correct recipient.  
+   - [ ] Confirmation in `logs/email_log.csv`.  
+
+6. **Logging & Traceability**
+   - [ ] `validation.log` created/updated.  
+   - [ ] `email_log.csv` updated with timestamp and result.  
+
+---
+
+### Outcome
+- **Pass / Fail:** _____________________  
+- **Notes / Gotchas:**  
+  - ________________________________________________________  
+  - ________________________________________________________  
+
+- **Signature:** _____________________  
 
 ---
 
