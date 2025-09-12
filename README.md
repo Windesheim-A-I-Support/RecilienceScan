@@ -41,8 +41,6 @@
 ---
 
 ## 📌 Objective
-<!-- Brief, outcome-focused statement describing the current deliverable and long-term vision. -->
-## 📌 Objective
 
 The **Resilience Report Automation & Open-Source Survey Pipeline** project exists to reduce the manual burden of producing, validating, and distributing survey-based reports.  
 
@@ -176,13 +174,11 @@ The long-term goal is a **fully open-source survey pipeline**:
 - **Survey tool integration:** No direct integration yet with open-source survey platforms (Formbricks, LimeSurvey, etc.).  
 - **Advanced analytics:** Focus is on report reproducibility, not extended dashboards or statistical modeling.  
 
----
 
 ## 📈 Roadmap (Milestones)
 
 The project follows a **milestone-driven roadmap**, moving from manual reproducibility → automation → full open-source survey pipelines.
 
----
 
 ### **M1 — Feature Release One (Current)**
 - Researcher-runnable workflow.  
@@ -193,21 +189,18 @@ The project follows a **milestone-driven roadmap**, moving from manual reproduci
 - Logs capture validation and delivery events.  
 - Tested on a clean VM + Researcher Acceptance Test.  
 
----
 
 ### **M2 — Semi-Automated Local Flow**
 - Replace manual Excel cleaning with scripted data transformation.  
 - One command validates → renders → delivers reports.  
 - Installer and documentation updated.  
 
----
 
 ### **M3 — CI/CD Integration**
 - GitHub Actions pipeline builds reports from a sample CSV.  
 - Ensures reproducibility and provides acceptance artifacts.  
 - Optionally caches TinyTeX for faster builds.  
 
----
 
 ### **M4 — Automated Delivery**
 - Event-driven or scheduled pipelines.  
@@ -215,7 +208,6 @@ The project follows a **milestone-driven roadmap**, moving from manual reproduci
 - Auto-download and trigger report workflow.  
 - Delivery status updated automatically.  
 
----
 
 ### **M5 — Open-Source Survey Integration**
 - Transition from Power BI/Excel to open-source survey platforms (e.g., Formbricks, LimeSurvey).  
@@ -264,6 +256,9 @@ flowchart LR
   AR --> DB
 ```
 
+## 🗂️ Directory Structure
+
+
 ### Components (Summary)
 - **Ingestion (Current → Future):**  
   Manual placement of a **cleaned CSV** (M1) → WordPress watcher / scripted download (M4) → direct open-source survey ingest (M5–M6).
@@ -298,7 +293,6 @@ flowchart LR
 - **Long-Term (M5–M6):**  
   Direct integration with open-source survey platforms (e.g., Formbricks, LimeSurvey) feeding responses into structured storage.
 
----
 
 ### Validation & Transformation
 - **Schema Validation:**  
@@ -307,8 +301,6 @@ flowchart LR
   Additional checks (e.g., minimum sample size, plausible value ranges, trend sanity checks).  
 - **Error Handling:**  
   Fail-fast with clear messages and “how to fix” guidance. Validation log stored in `logs/`.
-
----
 
 ### Reporting
 - **Renderer:** Quarto CLI with TinyTeX installed locally.  
@@ -319,7 +311,6 @@ flowchart LR
 - **Packaging:**  
   Naming conventions ensure per-recipient reports are identifiable (e.g., `reports/2025Q3_companyname.pdf`).
 
----
 
 ### Delivery
 - **Current (M1):**  
@@ -329,7 +320,6 @@ flowchart LR
   - Delivery confirmation and retry logic.  
   - Optional multiple channels (e.g., Teams, Slack, or secure links).
 
----
 
 ### Storage & Archival
 - **Current:**  
@@ -339,8 +329,6 @@ flowchart LR
   - Database (Postgres + Supabase) or object storage (S3/MinIO) for durability and long-term analysis.  
   - Metadata (input hash → report hash → delivery log) enables traceability.
 
----
-
 ### Orchestration
 - **Current (M1):**  
   Step-by-step execution documented in README (`validate → render → send`).  
@@ -349,7 +337,6 @@ flowchart LR
   - GitHub Actions to run acceptance tests on a sample CSV and store a test PDF as artifact.  
   - Scheduling (cron/n8n) for periodic runs or event-driven triggers.  
 
----
 
 ### Guiding Principles
 - **Reproducibility:** Entire pipeline must work on a clean VM with no hidden dependencies.  
@@ -357,7 +344,6 @@ flowchart LR
 - **Researcher-Friendly:** Simple commands, installer scripts, and documentation.  
 - **Traceability:** Every report linked back to its source data, with logs for audit.  
 
----
 
 ## 🚀 Getting Started
 
@@ -654,4 +640,8 @@ The **Researcher Acceptance Test (RAT)** ensures that the pipeline can be execut
 ## 📦 Release Checklist
 <!-- Pre-release verification items. -->
 
+
 ```
+
+
+
