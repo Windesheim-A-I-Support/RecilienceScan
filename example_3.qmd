@@ -77,13 +77,13 @@ execute:
   freeze: false
 params:
   company: "Placeholder Company"
-  diagnostic_mode: true
-  debug_mode: true
-  data_guide_mode: true
+  diagnostic_mode: false
+  debug_mode: false
+  data_guide_mode: false
 ---
 
 
-```{r dashboard-setup, echo=FALSE}
+```{r package-setup, echo=FALSE}
 # ========================================================================
 # BULLETPROOF SETUP WITH GUARANTEED DEBUG OUTPUT
 # ========================================================================
@@ -1298,4 +1298,347 @@ tryCatch({
 
 cat("\n---\n")
 cat("*End of Validation Debug Summary*\n")
+```
+
+# PART 5 - STRATEGIC RESILIENCE DASHBOARD
+
+```{r dashboard-setup, echo=FALSE, include=FALSE}
+# ========================================================================
+# DASHBOARD DATA PREPARATION & SETUP
+# ========================================================================
+
+# Extract company and person information
+company_name <- params$company
+person_name <- if(!is.null(params$person)) params$person else ""
+
+# Initialize dashboard data
+dashboard_data <- NULL
+data_source <- "synthetic"
+
+# Try to use real data first
+tryCatch({
+  if (exists("company_data_extracted") && !is.null(company_data_extracted)) {
+    dashboard_data <- company_data_extracted
+    data_source <- "real"
+  } else if (exists("df_raw_validated") && !is.null(df_raw_validated)) {
+    # Extract from validated data
+    company_cols <- colnames(df_raw_validated)[grepl("company|name", tolower(colnames(df_raw_validated)))]
+    if (length(company_cols) > 0) {
+      matches <- which(tolower(trimws(df_raw_validated[[company_cols[1]]])) == tolower(trimws(company_name)))
+      if (length(matches) > 0) {
+        dashboard_data <- df_raw_validated[matches[1], , drop = FALSE]
+        data_source <- "real"
+      }
+    }
+  }
+}, error = function(e) {})
+
+# Generate synthetic data if needed
+if (is.null(dashboard_data)) {
+  set.seed(abs(sum(utf8ToInt(company_name))))
+  base_score <- runif(1, 2.2, 4.3)
+  variations <- runif(15, -0.9, 0.9)
+  scores <- pmax(0.5, pmin(4.8, base_score + variations))
+  
+  dashboard_data <- data.frame(
+    company_name = company_name,
+    up__r = scores[1], up__c = scores[2], up__f = scores[3], up__v = scores[4], up__a = scores[5],
+    in__r = scores[6], in__c = scores[7], in__f = scores[8], in__v = scores[9], in__a = scores[10],
+    do__r = scores[11], do__c = scores[12], do__f = scores[13], do__v = scores[14], do__a = scores[15],
+    overall_scres = mean(scores),
+    stringsAsFactors = FALSE
+  )
+  data_source <- "synthetic"
+}
+
+# Ensure numeric conversion and valid ranges
+score_cols <- c("up__r", "up__c", "up__f", "up__v", "up__a", 
+                "in__r", "in__c", "in__f", "in__v", "in__a", 
+                "do__r", "do__c", "do__f", "do__v", "do__a")
+
+for (col in score_cols) {
+  if (col %in% colnames(dashboard_data)) {
+    dashboard_data[[col]] <- as.numeric(gsub(",", ".", as.character(dashboard_data[[col]])))
+    dashboard_data[[col]] <- pmax(0, pmin(5, dashboard_data[[col]]))
+  }
+}
+
+# Calculate pillar averages
+upstream_avg <- mean(c(dashboard_data$up__r, dashboard_data$up__c, dashboard_data$up__f, dashboard_data$up__v, dashboard_data$up__a), na.rm = TRUE)
+internal_avg <- mean(c(dashboard_data$in__r, dashboard_data$in__c, dashboard_data$in__f, dashboard_data$in__v, dashboard_data$in__a), na.rm = TRUE)
+downstream_avg <- mean(c(dashboard_data$do__r, dashboard_data$do__c, dashboard_data$do__f, dashboard_data$do__v, dashboard_data$do__a), na.rm = TRUE)
+overall_score <- mean(c(upstream_avg, internal_avg, downstream_avg), na.rm = TRUE)
+
+# Dutch analysis function
+analyze_pillar <- function(prefix) {
+  dims <- c("Redundancy", "Collaboration", "Flexibility", "Visibility", "Agility")
+  codes <- c("r", "c", "f", "v", "a")
+  scores <- numeric(5)
+  
+  for (i in 1:5) {
+    col <- paste0(prefix, "__", codes[i])
+    scores[i] <- if (col %in% colnames(dashboard_data)) dashboard_data[[col]][1] else NA
+  }
+  names(scores) <- dims
+  valid_scores <- scores[!is.na(scores)]
+  
+  if (length(valid_scores) < 2) return(list(text = "Onvoldoende data", highest = "", lowest = ""))
+  
+  sorted <- sort(valid_scores, decreasing = TRUE)
+  highest <- names(sorted)[1:min(2, length(sorted))]
+  lowest <- names(sorted)[max(1, length(sorted)-1):length(sorted)]
+  
+  list(
+    text = paste0("Hoogste scores bij ", paste(highest, collapse = ", "), 
+                  "; laagste scores bij ", paste(lowest, collapse = ", ")),
+    highest = highest,
+    lowest = lowest
+  )
+}
+
+up_analysis <- analyze_pillar("up")
+in_analysis <- analyze_pillar("in") 
+do_analysis <- analyze_pillar("do")
+```
+
+```{r page-layout-setup, echo=FALSE, results='asis'}
+# ========================================================================
+# PAGE LAYOUT AND HEADER
+# ========================================================================
+
+cat("\\newgeometry{left=1cm,right=1cm,top=1.5cm,bottom=1cm}\n")
+cat("\\thispagestyle{empty}\n\n")
+
+# Header with company branding
+cat("\\begin{center}\n")
+cat("\\Large\\textbf{Strategic Supply Chain Resilience Assessment}\\\\\n")
+cat("\\large\\textbf{", company_name, "}\\\\\n")
+if (person_name != "") {
+  cat("\\normalsize Contact: ", person_name, "\\\\\n")
+}
+cat("\\small Generated: ", format(Sys.Date(), "%B %d, %Y"), 
+    " | SCRES: \\textbf{", sprintf("%.2f", overall_score), "/5.00}\\\\\n")
+cat("\\footnotesize Partnership: NextGenResilience • RUG • Windesheim • Involvation\\\\\n")
+cat("\\end{center}\n\n")
+
+cat("\\vspace{0.3cm}\n\n")
+```
+
+```{r main-dashboard-content, echo=FALSE, fig.height=9, fig.width=13, results='asis'}
+# ========================================================================
+# MAIN DASHBOARD WITH 4 RADAR CHARTS AND ANALYSIS
+# ========================================================================
+
+# Create comprehensive dashboard layout
+tryCatch({
+  if ("fmsb" %in% loaded_packages) {
+    
+    # Set up 2x2 layout for radar charts
+    layout_matrix <- matrix(c(1,2,3,4), nrow=2, ncol=2, byrow=TRUE)
+    layout(layout_matrix, widths=c(1,1), heights=c(1,1))
+    par(mar = c(2, 1, 4, 1))
+    
+    # Function to create radar data
+    create_radar <- function(prefix, title, color) {
+      scores <- c(
+        dashboard_data[[paste0(prefix, "__r")]][1],
+        dashboard_data[[paste0(prefix, "__c")]][1],
+        dashboard_data[[paste0(prefix, "__f")]][1], 
+        dashboard_data[[paste0(prefix, "__v")]][1],
+        dashboard_data[[paste0(prefix, "__a")]][1]
+      )
+      scores[is.na(scores)] <- 2.5
+      
+      radar_data <- data.frame(
+        Redundancy = c(5, 0, scores[1]),
+        Collaboration = c(5, 0, scores[2]), 
+        Flexibility = c(5, 0, scores[3]),
+        Visibility = c(5, 0, scores[4]),
+        Agility = c(5, 0, scores[5])
+      )
+      
+      fmsb::radarchart(radar_data,
+                       axistype = 2,
+                       pcol = color,
+                       pfcol = scales::alpha(color, 0.25),
+                       plwd = 2.5,
+                       cglcol = "grey70",
+                       cglty = 1,
+                       axislabcol = "grey40",
+                       caxislabels = seq(0, 5, 1),
+                       title = title)
+    }
+    
+    # Create all 4 radar charts
+    create_radar("up", paste0("Upstream Resilience\n(μ=", sprintf("%.1f", upstream_avg), ")"), "#0277BD")
+    create_radar("in", paste0("Internal Resilience\n(μ=", sprintf("%.1f", internal_avg), ")"), "#FF8F00") 
+    create_radar("do", paste0("Downstream Resilience\n(μ=", sprintf("%.1f", downstream_avg), ")"), "#2E7D32")
+    
+    # Overall radar with combined scores
+    overall_scores <- c(
+      mean(c(dashboard_data$up__r[1], dashboard_data$in__r[1], dashboard_data$do__r[1]), na.rm=TRUE),
+      mean(c(dashboard_data$up__c[1], dashboard_data$in__c[1], dashboard_data$do__c[1]), na.rm=TRUE),
+      mean(c(dashboard_data$up__f[1], dashboard_data$in__f[1], dashboard_data$do__f[1]), na.rm=TRUE),
+      mean(c(dashboard_data$up__v[1], dashboard_data$in__v[1], dashboard_data$do__v[1]), na.rm=TRUE),
+      mean(c(dashboard_data$up__a[1], dashboard_data$in__a[1], dashboard_data$do__a[1]), na.rm=TRUE)
+    )
+    
+    overall_radar <- data.frame(
+      Redundancy = c(5, 0, overall_scores[1]),
+      Collaboration = c(5, 0, overall_scores[2]),
+      Flexibility = c(5, 0, overall_scores[3]), 
+      Visibility = c(5, 0, overall_scores[4]),
+      Agility = c(5, 0, overall_scores[5])
+    )
+    
+    fmsb::radarchart(overall_radar,
+                     axistype = 2,
+                     pcol = "#e74c3c", 
+                     pfcol = scales::alpha("#e74c3c", 0.25),
+                     plwd = 3,
+                     cglcol = "grey70",
+                     cglty = 1,
+                     axislabcol = "grey40",
+                     caxislabels = seq(0, 5, 1),
+                     title = paste0("Overall SCRES: ", sprintf("%.2f", overall_score), "\n(Comprehensive Resilience)"))
+    
+    # Reset layout
+    par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
+    
+  } else {
+    cat("\\textbf{Radar visualization unavailable - package missing}\n\n")
+  }
+  
+}, error = function(e) {
+  par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
+  cat("\\textbf{Visualization error - showing text summary}\n\n")
+})
+```
+
+```{r comprehensive-analysis, echo=FALSE, results='asis'}
+# ========================================================================
+# COMPREHENSIVE BUSINESS ANALYSIS & RECOMMENDATIONS
+# ========================================================================
+
+cat("\\vspace{0.4cm}\n\n")
+
+# Performance assessment
+performance_level <- if (overall_score >= 4.0) {
+  "Excellent"
+} else if (overall_score >= 3.5) {
+  "Good"
+} else if (overall_score >= 3.0) {
+  "Average"
+} else if (overall_score >= 2.5) {
+  "Below Average"
+} else {
+  "Needs Improvement"
+}
+
+cat("\\begin{minipage}[t]{0.48\\textwidth}\n")
+cat("\\textbf{\\large Executive Summary}\\\\\n")
+cat("\\textbf{Overall Performance:} ", performance_level, " (", sprintf("%.2f", overall_score), "/5.00)\\\\\n")
+cat("\\textbf{Strongest Pillar:} ")
+pillars <- c("Upstream" = upstream_avg, "Internal" = internal_avg, "Downstream" = downstream_avg)
+strongest <- names(pillars)[which.max(pillars)]
+weakest <- names(pillars)[which.min(pillars)]
+cat(strongest, " (", sprintf("%.2f", max(pillars)), ")\\\\\n")
+cat("\\textbf{Development Area:} ", weakest, " (", sprintf("%.2f", min(pillars)), ")\\\\\n")
+cat("\\textbf{Performance Spread:} ", sprintf("%.2f", max(pillars) - min(pillars)), " points\\\\\n")
+
+if (data_source == "synthetic") {
+  cat("\\footnotesize\\textit{Note: Using deterministic synthetic baseline for demonstration}\\\\\n")
+}
+
+cat("\\end{minipage}\\hfill\n")
+cat("\\begin{minipage}[t]{0.48\\textwidth}\n")
+cat("\\textbf{\\large Dutch Language Analysis}\\\\\n")
+cat("\\textbf{Upstream:} ", up_analysis$text, "\\\\\n")
+cat("\\textbf{Internal:} ", in_analysis$text, "\\\\\n") 
+cat("\\textbf{Downstream:} ", do_analysis$text, "\\\\\n")
+cat("\\end{minipage}\n\n")
+
+cat("\\vspace{0.4cm}\n\n")
+
+# Business context explanations
+cat("\\begin{minipage}[t]{0.32\\textwidth}\n")
+cat("\\textbf{\\large Upstream Resilience}\\\\\n")
+cat("\\textbf{Focus:} Supplier ecosystem management\\\\\n")
+cat("\\textbf{Key Capabilities:} Supplier diversification, contract flexibility, supply risk monitoring, vendor qualification processes. Critical for maintaining input continuity during supplier disruptions.\\\\\n")
+cat("\\end{minipage}\\hfill\n")
+
+cat("\\begin{minipage}[t]{0.32\\textwidth}\n") 
+cat("\\textbf{\\large Internal Resilience}\\\\\n")
+cat("\\textbf{Focus:} Core operational adaptability\\\\\n")
+cat("\\textbf{Key Capabilities:} Process flexibility, workforce cross-training, buffer capacity, operational visibility, rapid decision-making. Determines speed of operational adaptation to changing conditions.\\\\\n")
+cat("\\end{minipage}\\hfill\n")
+
+cat("\\begin{minipage}[t]{0.32\\textwidth}\n")
+cat("\\textbf{\\large Downstream Resilience}\\\\\n")
+cat("\\textbf{Focus:} Customer service continuity\\\\\n")
+cat("\\textbf{Key Capabilities:} Distribution flexibility, delivery options, customer communication, demand sensing, service recovery. Protects revenue and customer relationships during disruptions.\\\\\n")
+cat("\\end{minipage}\n\n")
+
+cat("\\vspace{0.4cm}\n\n")
+
+# Strategic recommendations based on lowest scores
+all_scores <- c(
+  "Upstream Redundancy" = dashboard_data$up__r[1],
+  "Upstream Collaboration" = dashboard_data$up__c[1],
+  "Upstream Flexibility" = dashboard_data$up__f[1], 
+  "Upstream Visibility" = dashboard_data$up__v[1],
+  "Upstream Agility" = dashboard_data$up__a[1],
+  "Internal Redundancy" = dashboard_data$in__r[1],
+  "Internal Collaboration" = dashboard_data$in__c[1],
+  "Internal Flexibility" = dashboard_data$in__f[1],
+  "Internal Visibility" = dashboard_data$in__v[1], 
+  "Internal Agility" = dashboard_data$in__a[1],
+  "Downstream Redundancy" = dashboard_data$do__r[1],
+  "Downstream Collaboration" = dashboard_data$do__c[1],
+  "Downstream Flexibility" = dashboard_data$do__f[1],
+  "Downstream Visibility" = dashboard_data$do__v[1],
+  "Downstream Agility" = dashboard_data$do__a[1]
+)
+
+all_scores <- all_scores[!is.na(all_scores)]
+lowest_areas <- names(sort(all_scores))[1:3]
+
+# Compact layout for recommendations and financial impact
+cat("\\begin{minipage}[t]{0.58\\textwidth}\n")
+cat("\\textbf{Strategic Recommendations}\\\\\n")
+cat("\\footnotesize\\textbf{Priority Enhancement Areas:}\\\\\n")
+
+for (area in lowest_areas) {
+  score <- all_scores[area]
+  cat("\\textbullet\\ \\textbf{", area, " (", sprintf("%.1f", score), "):} ")
+  
+  if (grepl("Redundancy", area)) {
+    cat("Backup suppliers, buffer inventory, alternative routes\\\\\n")
+  } else if (grepl("Collaboration", area)) {
+    cat("Enhanced information sharing, joint planning, communication systems\\\\\n")
+  } else if (grepl("Flexibility", area)) {
+    cat("Flexible contracts, modular processes, cross-training\\\\\n")
+  } else if (grepl("Visibility", area)) {
+    cat("Monitoring systems, analytics, end-to-end transparency\\\\\n")
+  } else if (grepl("Agility", area)) {
+    cat("Streamlined decisions, response protocols, change management\\\\\n")
+  }
+}
+
+cat("\\end{minipage}\\hfill\n")
+cat("\\begin{minipage}[t]{0.38\\textwidth}\n")
+cat("\\textbf{Financial Impact}\\\\\n")
+cat("\\footnotesize\\textbf{Risk Mitigation Value:}\\\\\n")
+cat("\\textbullet\\ Reduced disruption costs\\\\\n")
+cat("\\textbullet\\ Lower expediting fees\\\\\n") 
+cat("\\textbullet\\ Improved delivery performance\\\\\n")
+cat("\\textbullet\\ Enhanced customer retention\\\\\n")
+cat("\\textbullet\\ Optimized working capital\\\\\n")
+cat("\\textbullet\\ Competitive reliability advantage\\\\\n")
+cat("\\end{minipage}\n\n")
+
+cat("\\vfill\n")
+cat("\\begin{center}\n")
+cat("\\footnotesize\\textit{Assessment conducted using the Supply Chain Resilience Framework - Supply Chain Finance Lectoraat, Hogeschool Windesheim}\n")
+cat("\\end{center}\n")
 ```
