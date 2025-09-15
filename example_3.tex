@@ -139,6 +139,22 @@
 \usepackage{makecell}
 \usepackage{xcolor}
 \makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\definecolor{quarto-callout-color}{HTML}{909090}
+\definecolor{quarto-callout-note-color}{HTML}{0758E5}
+\definecolor{quarto-callout-important-color}{HTML}{CC1914}
+\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
+\definecolor{quarto-callout-tip-color}{HTML}{00A047}
+\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
+\definecolor{quarto-callout-color-frame}{HTML}{acacac}
+\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
+\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
+\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
+\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
+\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
@@ -183,7 +199,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={Strategic Resilience and Financial Performance Profile for Nexperia Germany},
+  pdftitle={Strategic Resilience and Financial Performance Profile for ESKA BV},
   pdfauthor={Ronald de Boer},
   colorlinks=true,
   linkcolor={blue},
@@ -193,8 +209,8 @@
   pdfcreator={LaTeX via pandoc}}
 
 
-\title{Strategic Resilience and Financial Performance Profile for
-Nexperia Germany}
+\title{Strategic Resilience and Financial Performance Profile for ESKA
+BV}
 \usepackage{etoolbox}
 \makeatletter
 \providecommand{\subtitle}[1]{% add subtitle to \maketitle
@@ -212,79 +228,84 @@ Hogeschool Windesheim}
 \section{PART 5 - STRATEGIC RESILIENCE
 DASHBOARD}\label{part-5---strategic-resilience-dashboard}
 
-\newgeometry{left=1cm,right=1cm,top=1.5cm,bottom=1cm}
+\section{PART 5 - STRATEGIC RESILIENCE
+DASHBOARD}\label{part-5---strategic-resilience-dashboard-1}
+
+\newgeometry{left=0.8cm,right=0.8cm,top=1.0cm,bottom=0.8cm}
 \thispagestyle{empty}
 
-\begin{center}
-\Large\textbf{Strategic Supply Chain Resilience Assessment}\\
-\large\textbf{ Nexperia Germany }\\
-\small Generated:  September 14, 2025  | SCRES: \textbf{ 2.70 /5.00}\\
-\footnotesize Partnership: NextGenResilience • RUG • Windesheim • Involvation\\
-\end{center}
+\subsection*{Strategic Supply Chain Resilience
+Analysis}\label{strategic-supply-chain-resilience-analysis}
+\addcontentsline{toc}{subsection}{Strategic Supply Chain Resilience
+Analysis}
 
-\vspace{0.3cm}
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, colframe=quarto-callout-note-color-frame, opacityback=0, left=2mm, breakable, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, leftrule=.75mm, colback=white]
+
+\vspace{-3mm}\textbf{\textbf{ESKA BV} - SCRES: \textbf{3.02}/5.00}\vspace{3mm}
+
+\emph{NextGenResilience • RUG • Windesheim • Involvation}
+
+\end{tcolorbox}
 
 \pandocbounded{\includegraphics[keepaspectratio]{example_3_files/figure-pdf/main-dashboard-content-1.pdf}}
 
-\vspace{0.4cm}
+\begin{tcolorbox}[enhanced jigsaw, toprule=.15mm, colframe=quarto-callout-warning-color-frame, opacityback=0, left=2mm, breakable, arc=.35mm, rightrule=.15mm, bottomrule=.15mm, leftrule=.75mm, colback=white]
+\begin{minipage}[t]{5.5mm}
+\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}
+\end{minipage}%
+\begin{minipage}[t]{\textwidth - 5.5mm}
 
-\begin{minipage}[t]{0.48\textwidth}
-\textbf{\large Executive Summary}\\
-\textbf{Overall Performance:}  Below Average  ( 2.70 /5.00)\\
-\textbf{Strongest Pillar:} Downstream  ( 2.82 )\\
-\textbf{Development Area:}  Upstream  ( 2.54 )\\
-\textbf{Performance Spread:}  0.28  points\\
-\footnotesize\textit{Note: Using deterministic synthetic baseline for demonstration}\\
-\end{minipage}\hfill
-\begin{minipage}[t]{0.48\textwidth}
-\textbf{\large Dutch Language Analysis}\\
-\textbf{Upstream:}  Hoogste scores bij Agility, Flexibility; laagste scores bij Redundancy, Visibility \\
-\textbf{Internal:}  Hoogste scores bij Collaboration, Agility; laagste scores bij Visibility, Redundancy \\
-\textbf{Downstream:}  Hoogste scores bij Collaboration, Visibility; laagste scores bij Redundancy, Agility \\
-\end{minipage}
+\vspace{-3mm}\textbf{Executive Summary}\vspace{3mm}
 
-\vspace{0.4cm}
+\textbf{Performance: Average} (3.02/5.00)
 
-\begin{minipage}[t]{0.32\textwidth}
-\textbf{\large Upstream Resilience}\\
-\textbf{Focus:} Supplier ecosystem management\\
-\textbf{Key Capabilities:} Supplier diversification, contract flexibility, supply risk monitoring, vendor qualification processes. Critical for maintaining input continuity during supplier disruptions.\\
-\end{minipage}\hfill
-\begin{minipage}[t]{0.32\textwidth}
-\textbf{\large Internal Resilience}\\
-\textbf{Focus:} Core operational adaptability\\
-\textbf{Key Capabilities:} Process flexibility, workforce cross-training, buffer capacity, operational visibility, rapid decision-making. Determines speed of operational adaptation to changing conditions.\\
-\end{minipage}\hfill
-\begin{minipage}[t]{0.32\textwidth}
-\textbf{\large Downstream Resilience}\\
-\textbf{Focus:} Customer service continuity\\
-\textbf{Key Capabilities:} Distribution flexibility, delivery options, customer communication, demand sensing, service recovery. Protects revenue and customer relationships during disruptions.\\
-\end{minipage}
+\textbf{Strongest area:} Downstream (3.25)
 
-\vspace{0.4cm}
+\textbf{Focus area:} Upstream (2.82)
 
-\begin{minipage}[t]{0.58\textwidth}
-\textbf{Strategic Recommendations}\\
-\footnotesize\textbf{Priority Enhancement Areas:}\\
-\textbullet\ \textbf{ Upstream Visibility  ( 2.1 ):} Monitoring systems, analytics, end-to-end transparency\\
-\textbullet\ \textbf{ Upstream Redundancy  ( 2.2 ):} Backup suppliers, buffer inventory, alternative routes\\
-\textbullet\ \textbf{ Internal Redundancy  ( 2.2 ):} Backup suppliers, buffer inventory, alternative routes\\
-\end{minipage}\hfill
-\begin{minipage}[t]{0.38\textwidth}
-\textbf{Financial Impact}\\
-\footnotesize\textbf{Risk Mitigation Value:}\\
-\textbullet\ Reduced disruption costs\\
-\textbullet\ Lower expediting fees\\
-\textbullet\ Improved delivery performance\\
-\textbullet\ Enhanced customer retention\\
-\textbullet\ Optimized working capital\\
-\textbullet\ Competitive reliability advantage\\
-\end{minipage}
+\end{minipage}%
+\end{tcolorbox}
 
-\vfill
-\begin{center}
-\footnotesize\textit{Assessment conducted using the Supply Chain Resilience Framework - Supply Chain Finance Lectoraat, Hogeschool Windesheim}
-\end{center}
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\subsection*{Detailed Gap Analysis}\label{detailed-gap-analysis}
+\addcontentsline{toc}{subsection}{Detailed Gap Analysis}
+
+\begin{figure}
+
+\begin{minipage}{0.33\linewidth}
+
+\subsubsection{🔵 Upstream}\label{upstream}
+
+\textbf{Gap:} Agility (2.3) vs Redundancy (3.3)\end{minipage}%
+%
+\begin{minipage}{0.33\linewidth}
+\textbf{Hoog:} Multiple suppliers contracted for critical components\\
+\textbf{Laag:} Slow response to supplier disruptions\end{minipage}%
+%
+\begin{minipage}{0.33\linewidth}
+
+\subsubsection{🟡 Internal}\label{internal}
+
+\textbf{Gap:} Flexibility (2.5) vs Collaboration (3.9)\end{minipage}%
+\newline
+\begin{minipage}{0.33\linewidth}
+\textbf{Hoog:} Weekly planning sessions with key suppliers\\
+\textbf{Laag:} Rigid contract terms without flexibility\end{minipage}%
+%
+\begin{minipage}{0.33\linewidth}
+
+\subsubsection{🟢 Downstream}\label{downstream}
+
+\textbf{Gap:} Visibility (2.5) vs Redundancy (3.6)\end{minipage}%
+%
+\begin{minipage}{0.33\linewidth}
+\textbf{Hoog:} Multiple suppliers contracted for critical components\\
+\textbf{Laag:} Limited insight into supplier processes\end{minipage}%
+
+\end{figure}%
+
+\restoregeometry
 
 
 

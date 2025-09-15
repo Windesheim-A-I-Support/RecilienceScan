@@ -1299,6 +1299,7 @@ tryCatch({
 cat("\n---\n")
 cat("*End of Validation Debug Summary*\n")
 ```
+# PART 5 - STRATEGIC RESILIENCE DASHBOARD
 
 # PART 5 - STRATEGIC RESILIENCE DASHBOARD
 
@@ -1369,64 +1370,137 @@ internal_avg <- mean(c(dashboard_data$in__r, dashboard_data$in__c, dashboard_dat
 downstream_avg <- mean(c(dashboard_data$do__r, dashboard_data$do__c, dashboard_data$do__f, dashboard_data$do__v, dashboard_data$do__a), na.rm = TRUE)
 overall_score <- mean(c(upstream_avg, internal_avg, downstream_avg), na.rm = TRUE)
 
-# Dutch analysis function
-analyze_pillar <- function(prefix) {
-  dims <- c("Redundancy", "Collaboration", "Flexibility", "Visibility", "Agility")
+# Language detection
+detected_language <- "english"
+if (!is.null(dashboard_data) && "language" %in% colnames(dashboard_data)) {
+  lang_val <- as.character(dashboard_data$language[1])
+  if (!is.na(lang_val) && grepl("dutch|nl", tolower(lang_val))) {
+    detected_language <- "dutch"
+  }
+}
+
+# Dimension names based on language
+dimension_names <- if (detected_language == "dutch") {
+  c("Redundantie", "Samenwerking", "Flexibiliteit", "Transparantie", "Behendigheid")
+} else {
+  c("Redundancy", "Collaboration", "Flexibility", "Visibility", "Agility")
+}
+
+# IMPROVED gap analysis function with specific examples
+analyze_pillar_gap <- function(prefix) {
+  if (detected_language == "dutch") {
+    dims <- c("Redundantie", "Samenwerking", "Flexibiliteit", "Transparantie", "Behendigheid")
+  } else {
+    dims <- c("Redundancy", "Collaboration", "Flexibility", "Visibility", "Agility")
+  }
+  
   codes <- c("r", "c", "f", "v", "a")
   scores <- numeric(5)
   
   for (i in 1:5) {
     col <- paste0(prefix, "__", codes[i])
-    scores[i] <- if (col %in% colnames(dashboard_data)) dashboard_data[[col]][1] else NA
+    scores[i] <- if (col %in% colnames(dashboard_data)) dashboard_data[[col]][1] else 2.5
   }
   names(scores) <- dims
-  valid_scores <- scores[!is.na(scores)]
   
-  if (length(valid_scores) < 2) return(list(text = "Onvoldoende data", highest = "", lowest = ""))
+  # Find highest and lowest
+  max_idx <- which.max(scores)
+  min_idx <- which.min(scores)
   
-  sorted <- sort(valid_scores, decreasing = TRUE)
-  highest <- names(sorted)[1:min(2, length(sorted))]
-  lowest <- names(sorted)[max(1, length(sorted)-1):length(sorted)]
+  highest_dim <- names(scores)[max_idx]
+  lowest_dim <- names(scores)[min_idx]
+  highest_score <- scores[max_idx]
+  lowest_score <- scores[min_idx]
+  
+  # Get examples based on dimension
+  get_examples <- function(dimension, is_high) {
+    if (detected_language == "dutch") {
+      examples <- list(
+        Redundantie = list(
+          high = c("Meerdere leveranciers gecontracteerd voor kritieke onderdelen", "Strategische veiligheidsvoorraden onderhouden"),
+          low = c("Afhankelijkheid van enkele kritieke leveranciers", "Minimale voorraadbuffers in productieketen")
+        ),
+        Samenwerking = list(
+          high = c("Wekelijkse planningsessies met kernleveranciers", "Gezamenlijke vraagvoorspelling en capaciteitsplanning"),
+          low = c("Beperkte communicatie met leveranciers", "Geen gezamenlijke probleemoplossing geïmplementeerd")
+        ),
+        Flexibiliteit = list(
+          high = c("Contracten bevatten volumeflexibiliteit en aanpassingen", "Leveranciers kunnen snel schakelen tussen varianten"),
+          low = c("Rigide contractvoorwaarden zonder flexibiliteit", "Vaste productiecycli zonder aanpassingsmogelijkheid")
+        ),
+        Transparantie = list(
+          high = c("Real-time inzicht in leveranciervoorraden", "Leveranciers delen productieplanning voor 4+ weken"),
+          low = c("Beperkt inzicht in leverancierprocessen", "Geen gedeelde systemen voor planning")
+        ),
+        Behendigheid = list(
+          high = c("Snelle escalatieprocedures voor issues geïmplementeerd", "Geautomatiseerde waarschuwingssystemen actief"),
+          low = c("Trage reactie op leverancierverstoringen", "Handmatige processen voor issue management")
+        )
+      )
+    } else {
+      examples <- list(
+        Redundancy = list(
+          high = c("Multiple suppliers contracted for critical components", "Strategic safety stock maintained"),
+          low = c("Dependency on few critical suppliers", "Minimal inventory buffers in production chain")
+        ),
+        Collaboration = list(
+          high = c("Weekly planning sessions with key suppliers", "Joint demand forecasting and capacity planning"),
+          low = c("Limited communication with suppliers", "No joint problem-solving implemented")
+        ),
+        Flexibility = list(
+          high = c("Contracts include volume flexibility and adaptations", "Suppliers can quickly switch between variants"),
+          low = c("Rigid contract terms without flexibility", "Fixed production cycles without adaptation options")
+        ),
+        Visibility = list(
+          high = c("Real-time insight into supplier inventory", "Suppliers share production planning for 4+ weeks"),
+          low = c("Limited insight into supplier processes", "No shared systems for planning")
+        ),
+        Agility = list(
+          high = c("Fast escalation procedures for issues implemented", "Automated warning systems active"),
+          low = c("Slow response to supplier disruptions", "Manual processes for issue management")
+        )
+      )
+    }
+    
+    if (is_high) examples[[dimension]]$high else examples[[dimension]]$low
+  }
+  
+  high_examples <- get_examples(highest_dim, TRUE)
+  low_examples <- get_examples(lowest_dim, FALSE)
   
   list(
-    text = paste0("Hoogste scores bij ", paste(highest, collapse = ", "), 
-                  "; laagste scores bij ", paste(lowest, collapse = ", ")),
-    highest = highest,
-    lowest = lowest
+    highest_dim = highest_dim,
+    lowest_dim = lowest_dim,
+    highest_score = highest_score,
+    lowest_score = lowest_score,
+    high_examples = high_examples,
+    low_examples = low_examples
   )
 }
 
-up_analysis <- analyze_pillar("up")
-in_analysis <- analyze_pillar("in") 
-do_analysis <- analyze_pillar("do")
+up_analysis <- analyze_pillar_gap("up")
+in_analysis <- analyze_pillar_gap("in") 
+do_analysis <- analyze_pillar_gap("do")
 ```
 
-```{r page-layout-setup, echo=FALSE, results='asis'}
+::: {.content-visible when-format="pdf"}
+\newgeometry{left=0.8cm,right=0.8cm,top=1.0cm,bottom=0.8cm}
+\thispagestyle{empty}
+:::
+
+## `r if (detected_language == "dutch") "Supply Chain Resilience Analyse" else "Strategic Supply Chain Resilience Analysis"` {.unnumbered}
+
+::: {.callout-note appearance="simple" icon="false"}
+### **`r company_name`** - SCRES: **`r sprintf("%.2f", overall_score)`**/5.00
+
+`r if (nchar(person_name) > 0) paste("Contact:", person_name)`
+
+*NextGenResilience • RUG • Windesheim • Involvation*
+:::
+
+```{r main-dashboard-content, echo=FALSE, fig.height=9, fig.width=13}
 # ========================================================================
-# PAGE LAYOUT AND HEADER
-# ========================================================================
-
-cat("\\newgeometry{left=1cm,right=1cm,top=1.5cm,bottom=1cm}\n")
-cat("\\thispagestyle{empty}\n\n")
-
-# Header with company branding
-cat("\\begin{center}\n")
-cat("\\Large\\textbf{Strategic Supply Chain Resilience Assessment}\\\\\n")
-cat("\\large\\textbf{", company_name, "}\\\\\n")
-if (person_name != "") {
-  cat("\\normalsize Contact: ", person_name, "\\\\\n")
-}
-cat("\\small Generated: ", format(Sys.Date(), "%B %d, %Y"), 
-    " | SCRES: \\textbf{", sprintf("%.2f", overall_score), "/5.00}\\\\\n")
-cat("\\footnotesize Partnership: NextGenResilience • RUG • Windesheim • Involvation\\\\\n")
-cat("\\end{center}\n\n")
-
-cat("\\vspace{0.3cm}\n\n")
-```
-
-```{r main-dashboard-content, echo=FALSE, fig.height=9, fig.width=13, results='asis'}
-# ========================================================================
-# MAIN DASHBOARD WITH 4 RADAR CHARTS AND ANALYSIS
+# MAIN DASHBOARD WITH 4 RADAR CHARTS
 # ========================================================================
 
 # Create comprehensive dashboard layout
@@ -1506,139 +1580,117 @@ tryCatch({
     par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
     
   } else {
-    cat("\\textbf{Radar visualization unavailable - package missing}\n\n")
+    plot.new()
+    text(0.5, 0.5, "Radar visualization requires fmsb package", cex = 1.5, col = "red")
   }
   
 }, error = function(e) {
   par(mfrow = c(1, 1), mar = c(5, 4, 4, 2))
-  cat("\\textbf{Visualization error - showing text summary}\n\n")
+  plot.new()
+  text(0.5, 0.5, "Visualization error", cex = 1.5, col = "red")
 })
 ```
 
-```{r comprehensive-analysis, echo=FALSE, results='asis'}
-# ========================================================================
-# COMPREHENSIVE BUSINESS ANALYSIS & RECOMMENDATIONS
-# ========================================================================
-
-cat("\\vspace{0.4cm}\n\n")
-
-# Performance assessment
+```{r performance-summary, echo=FALSE}
+# Calculate performance assessment
 performance_level <- if (overall_score >= 4.0) {
-  "Excellent"
+  if (detected_language == "dutch") "Uitstekend" else "Excellent"
 } else if (overall_score >= 3.5) {
-  "Good"
+  if (detected_language == "dutch") "Goed" else "Good"
 } else if (overall_score >= 3.0) {
-  "Average"
+  if (detected_language == "dutch") "Gemiddeld" else "Average"
 } else if (overall_score >= 2.5) {
-  "Below Average"
+  if (detected_language == "dutch") "Onder gemiddeld" else "Below Average"
 } else {
-  "Needs Improvement"
+  if (detected_language == "dutch") "Verbetering nodig" else "Needs Improvement"
 }
 
-cat("\\begin{minipage}[t]{0.48\\textwidth}\n")
-cat("\\textbf{\\large Executive Summary}\\\\\n")
-cat("\\textbf{Overall Performance:} ", performance_level, " (", sprintf("%.2f", overall_score), "/5.00)\\\\\n")
-cat("\\textbf{Strongest Pillar:} ")
+# Determine callout type based on performance
+callout_type <- if (overall_score >= 4.0) {
+  "tip"
+} else if (overall_score >= 3.5) {
+  "note"
+} else if (overall_score >= 3.0) {
+  "warning"
+} else {
+  "important"
+}
+
 pillars <- c("Upstream" = upstream_avg, "Internal" = internal_avg, "Downstream" = downstream_avg)
 strongest <- names(pillars)[which.max(pillars)]
 weakest <- names(pillars)[which.min(pillars)]
-cat(strongest, " (", sprintf("%.2f", max(pillars)), ")\\\\\n")
-cat("\\textbf{Development Area:} ", weakest, " (", sprintf("%.2f", min(pillars)), ")\\\\\n")
-cat("\\textbf{Performance Spread:} ", sprintf("%.2f", max(pillars) - min(pillars)), " points\\\\\n")
-
-if (data_source == "synthetic") {
-  cat("\\footnotesize\\textit{Note: Using deterministic synthetic baseline for demonstration}\\\\\n")
-}
-
-cat("\\end{minipage}\\hfill\n")
-cat("\\begin{minipage}[t]{0.48\\textwidth}\n")
-cat("\\textbf{\\large Dutch Language Analysis}\\\\\n")
-cat("\\textbf{Upstream:} ", up_analysis$text, "\\\\\n")
-cat("\\textbf{Internal:} ", in_analysis$text, "\\\\\n") 
-cat("\\textbf{Downstream:} ", do_analysis$text, "\\\\\n")
-cat("\\end{minipage}\n\n")
-
-cat("\\vspace{0.4cm}\n\n")
-
-# Business context explanations
-cat("\\begin{minipage}[t]{0.32\\textwidth}\n")
-cat("\\textbf{\\large Upstream Resilience}\\\\\n")
-cat("\\textbf{Focus:} Supplier ecosystem management\\\\\n")
-cat("\\textbf{Key Capabilities:} Supplier diversification, contract flexibility, supply risk monitoring, vendor qualification processes. Critical for maintaining input continuity during supplier disruptions.\\\\\n")
-cat("\\end{minipage}\\hfill\n")
-
-cat("\\begin{minipage}[t]{0.32\\textwidth}\n") 
-cat("\\textbf{\\large Internal Resilience}\\\\\n")
-cat("\\textbf{Focus:} Core operational adaptability\\\\\n")
-cat("\\textbf{Key Capabilities:} Process flexibility, workforce cross-training, buffer capacity, operational visibility, rapid decision-making. Determines speed of operational adaptation to changing conditions.\\\\\n")
-cat("\\end{minipage}\\hfill\n")
-
-cat("\\begin{minipage}[t]{0.32\\textwidth}\n")
-cat("\\textbf{\\large Downstream Resilience}\\\\\n")
-cat("\\textbf{Focus:} Customer service continuity\\\\\n")
-cat("\\textbf{Key Capabilities:} Distribution flexibility, delivery options, customer communication, demand sensing, service recovery. Protects revenue and customer relationships during disruptions.\\\\\n")
-cat("\\end{minipage}\n\n")
-
-cat("\\vspace{0.4cm}\n\n")
-
-# Strategic recommendations based on lowest scores
-all_scores <- c(
-  "Upstream Redundancy" = dashboard_data$up__r[1],
-  "Upstream Collaboration" = dashboard_data$up__c[1],
-  "Upstream Flexibility" = dashboard_data$up__f[1], 
-  "Upstream Visibility" = dashboard_data$up__v[1],
-  "Upstream Agility" = dashboard_data$up__a[1],
-  "Internal Redundancy" = dashboard_data$in__r[1],
-  "Internal Collaboration" = dashboard_data$in__c[1],
-  "Internal Flexibility" = dashboard_data$in__f[1],
-  "Internal Visibility" = dashboard_data$in__v[1], 
-  "Internal Agility" = dashboard_data$in__a[1],
-  "Downstream Redundancy" = dashboard_data$do__r[1],
-  "Downstream Collaboration" = dashboard_data$do__c[1],
-  "Downstream Flexibility" = dashboard_data$do__f[1],
-  "Downstream Visibility" = dashboard_data$do__v[1],
-  "Downstream Agility" = dashboard_data$do__a[1]
-)
-
-all_scores <- all_scores[!is.na(all_scores)]
-lowest_areas <- names(sort(all_scores))[1:3]
-
-# Compact layout for recommendations and financial impact
-cat("\\begin{minipage}[t]{0.58\\textwidth}\n")
-cat("\\textbf{Strategic Recommendations}\\\\\n")
-cat("\\footnotesize\\textbf{Priority Enhancement Areas:}\\\\\n")
-
-for (area in lowest_areas) {
-  score <- all_scores[area]
-  cat("\\textbullet\\ \\textbf{", area, " (", sprintf("%.1f", score), "):} ")
-  
-  if (grepl("Redundancy", area)) {
-    cat("Backup suppliers, buffer inventory, alternative routes\\\\\n")
-  } else if (grepl("Collaboration", area)) {
-    cat("Enhanced information sharing, joint planning, communication systems\\\\\n")
-  } else if (grepl("Flexibility", area)) {
-    cat("Flexible contracts, modular processes, cross-training\\\\\n")
-  } else if (grepl("Visibility", area)) {
-    cat("Monitoring systems, analytics, end-to-end transparency\\\\\n")
-  } else if (grepl("Agility", area)) {
-    cat("Streamlined decisions, response protocols, change management\\\\\n")
-  }
-}
-
-cat("\\end{minipage}\\hfill\n")
-cat("\\begin{minipage}[t]{0.38\\textwidth}\n")
-cat("\\textbf{Financial Impact}\\\\\n")
-cat("\\footnotesize\\textbf{Risk Mitigation Value:}\\\\\n")
-cat("\\textbullet\\ Reduced disruption costs\\\\\n")
-cat("\\textbullet\\ Lower expediting fees\\\\\n") 
-cat("\\textbullet\\ Improved delivery performance\\\\\n")
-cat("\\textbullet\\ Enhanced customer retention\\\\\n")
-cat("\\textbullet\\ Optimized working capital\\\\\n")
-cat("\\textbullet\\ Competitive reliability advantage\\\\\n")
-cat("\\end{minipage}\n\n")
-
-cat("\\vfill\n")
-cat("\\begin{center}\n")
-cat("\\footnotesize\\textit{Assessment conducted using the Supply Chain Resilience Framework - Supply Chain Finance Lectoraat, Hogeschool Windesheim}\n")
-cat("\\end{center}\n")
 ```
+
+::: {.callout-`r callout_type` appearance="simple"}
+### `r if (detected_language == "dutch") "Managementsamenvatting" else "Executive Summary"`
+
+**`r if (detected_language == "dutch") "Prestatie:" else "Performance:"` `r performance_level`** (`r sprintf("%.2f", overall_score)`/5.00)
+
+`r if (detected_language == "dutch") paste("**Sterkste gebied:**", if(strongest == "Internal") "Intern" else strongest, paste0("(", sprintf("%.2f", max(pillars)), ")")) else paste("**Strongest area:**", strongest, paste0("(", sprintf("%.2f", max(pillars)), ")"))`
+
+`r if (detected_language == "dutch") paste("**Aandachtsgebied:**", if(weakest == "Internal") "Intern" else weakest, paste0("(", sprintf("%.2f", min(pillars)), ")")) else paste("**Focus area:**", weakest, paste0("(", sprintf("%.2f", min(pillars)), ")"))`
+:::
+
+---
+
+## `r if (detected_language == "dutch") "Gedetailleerde Gap Analyse" else "Detailed Gap Analysis"` {.unnumbered}
+
+::: {layout-ncol=3}
+
+::: {.card}
+### `r if (detected_language == "dutch") "🔵 Upstream Resilientie" else "🔵 Upstream Resilience"`
+
+::: {.callout-warning appearance="minimal"}
+**`r if (detected_language == "dutch") "Grootste verschil tussen" else "Largest gap between"`** `r up_analysis$lowest_dim` (`r sprintf("%.1f", up_analysis$lowest_score)`) **`r if (detected_language == "dutch") "en" else "and"`** `r up_analysis$highest_dim` (`r sprintf("%.1f", up_analysis$highest_score)`)
+:::
+
+**`r if (detected_language == "dutch") paste("✅ Hoog niveau", up_analysis$highest_dim) else paste("✅ High", up_analysis$highest_dim)`:**
+
+- `r up_analysis$high_examples[1]`
+- `r up_analysis$high_examples[2]`
+
+**`r if (detected_language == "dutch") paste("⚠️ Lager niveau", up_analysis$lowest_dim) else paste("⚠️ Lower", up_analysis$lowest_dim)`:**
+
+- `r up_analysis$low_examples[1]`
+- `r up_analysis$low_examples[2]`
+:::
+
+::: {.card}
+### `r if (detected_language == "dutch") "🟡 Interne Resilientie" else "🟡 Internal Resilience"`
+
+::: {.callout-warning appearance="minimal"}
+**`r if (detected_language == "dutch") "Grootste verschil tussen" else "Largest gap between"`** `r in_analysis$lowest_dim` (`r sprintf("%.1f", in_analysis$lowest_score)`) **`r if (detected_language == "dutch") "en" else "and"`** `r in_analysis$highest_dim` (`r sprintf("%.1f", in_analysis$highest_score)`)
+:::
+
+**`r if (detected_language == "dutch") paste("✅ Hoog niveau", in_analysis$highest_dim) else paste("✅ High", in_analysis$highest_dim)`:**
+
+- `r in_analysis$high_examples[1]`
+- `r in_analysis$high_examples[2]`
+
+**`r if (detected_language == "dutch") paste("⚠️ Lager niveau", in_analysis$lowest_dim) else paste("⚠️ Lower", in_analysis$lowest_dim)`:**
+
+- `r in_analysis$low_examples[1]`
+- `r in_analysis$low_examples[2]`
+:::
+
+::: {.card}
+### `r if (detected_language == "dutch") "🟢 Downstream Resilientie" else "🟢 Downstream Resilience"`
+
+::: {.callout-warning appearance="minimal"}
+**`r if (detected_language == "dutch") "Grootste verschil tussen" else "Largest gap between"`** `r do_analysis$lowest_dim` (`r sprintf("%.1f", do_analysis$lowest_score)`) **`r if (detected_language == "dutch") "en" else "and"`** `r do_analysis$highest_dim` (`r sprintf("%.1f", do_analysis$highest_score)`)
+:::
+
+**`r if (detected_language == "dutch") paste("✅ Hoog niveau", do_analysis$highest_dim) else paste("✅ High", do_analysis$highest_dim)`:**
+- `r do_analysis$high_examples[1]`
+- `r do_analysis$high_examples[2]`
+
+**`r if (detected_language == "dutch") paste("⚠️ Lager niveau", do_analysis$lowest_dim) else paste("⚠️ Lower", do_analysis$lowest_dim)`:**
+- `r do_analysis$low_examples[1]`
+- `r do_analysis$low_examples[2]`
+:::
+
+:::
+
+::: {.content-visible when-format="pdf"}
+\restoregeometry
+:::
