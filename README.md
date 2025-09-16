@@ -40,7 +40,10 @@
 
 ---
 
-## Problems To debugg
+## Frequent Problems
+
+It says it cannot find the packages: But R is installed: Then you might need to install the packages manually; Please open an eleveted Administrator prompt
+Make sure you have execution rights and 
 
 ```
 Rscript -e "install.packages(c('readr', 'dplyr', 'stringr', 'tidyr', 'ggplot2', 'knitr', 'fmsb', 'scales', 'viridis', 'patchwork', 'RColorBrewer', 'gridExtra', 'png', 'lubridate', 'kableExtra'), repos = 'https://cloud.r-project.org')"
@@ -648,6 +651,7 @@ The **Researcher Acceptance Test (RAT)** ensures that the pipeline can be execut
 
 
 ```
+
 
 
 
