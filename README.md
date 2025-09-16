@@ -40,6 +40,12 @@
 
 ---
 
+## Problems To debugg
+
+```
+Rscript -e "install.packages(c('readr', 'dplyr', 'stringr', 'tidyr', 'ggplot2', 'knitr', 'fmsb', 'scales', 'viridis', 'patchwork', 'RColorBrewer', 'gridExtra', 'png', 'lubridate', 'kableExtra'), repos = 'https://cloud.r-project.org')"
+```
+
 ## 📌 Objective
 
 The **Resilience Report Automation & Open-Source Survey Pipeline** project exists to reduce the manual burden of producing, validating, and distributing survey-based reports.  
@@ -642,6 +648,7 @@ The **Researcher Acceptance Test (RAT)** ensures that the pipeline can be execut
 
 
 ```
+
 
 
 
