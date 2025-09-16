@@ -49,6 +49,18 @@ Make sure you have execution rights and
 Rscript -e "install.packages(c('readr', 'dplyr', 'stringr', 'tidyr', 'ggplot2', 'knitr', 'fmsb', 'scales', 'viridis', 'patchwork', 'RColorBrewer', 'gridExtra', 'png', 'lubridate', 'kableExtra'), repos = 'https://cloud.r-project.org')"
 ```
 
+### Send_email doesnt work
+```
+ IDispatch = pythoncom.connect(IDispatch)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pywintypes.com_error: (-2147221005, 'Invalid class string', None, None)
+
+During handling of the above exception, another exception occurred:
+```
+
+Your Outlook is not correctly configured!
+
+
 ## 📌 Objective
 
 The **Resilience Report Automation & Open-Source Survey Pipeline** project exists to reduce the manual burden of producing, validating, and distributing survey-based reports.  
@@ -651,6 +663,7 @@ The **Researcher Acceptance Test (RAT)** ensures that the pipeline can be execut
 
 
 ```
+
 
 
 
