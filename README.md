@@ -49,6 +49,7 @@ Make sure you have execution rights and
 Rscript -e "install.packages(c('readr', 'dplyr', 'stringr', 'tidyr', 'ggplot2', 'knitr', 'fmsb', 'scales', 'viridis', 'patchwork', 'RColorBrewer', 'gridExtra', 'png', 'lubridate', 'kableExtra'), repos = 'https://cloud.r-project.org')"
 ```
 
+
 ### Send_email doesnt work
 ```
  IDispatch = pythoncom.connect(IDispatch)
