@@ -1,5 +1,63 @@
 # PART 5 - STRATEGIC RESILIENCE DASHBOARD
 
+```{r load-real-data-unconditional, echo=FALSE, include=FALSE}
+# ========================================================================
+# UNCONDITIONAL DATA LOADING FOR DASHBOARD
+# This runs ALWAYS (not just in guide mode) to ensure real data is used
+# ========================================================================
+
+# Initialize variables
+df_master <- NULL
+company_data_extracted <- NULL
+
+# Define data file path
+data_file <- "data/cleaned_master.csv"
+
+# Try to load the cleaned master data
+if (file.exists(data_file)) {
+  tryCatch({
+    # Try multiple loading strategies
+    df_master <- tryCatch({
+      readr::read_csv(data_file, show_col_types = FALSE)
+    }, error = function(e) {
+      read.csv(data_file, stringsAsFactors = FALSE, check.names = FALSE)
+    })
+
+    # Clean column names to match expected format (lowercase, no special chars)
+    colnames(df_master) <- tolower(trimws(colnames(df_master)))
+
+    # Store for use in guide mode sections
+    df_raw_validated <- df_master
+
+    # Extract company-specific data
+    company_target <- params$company
+
+    # Find company column
+    company_cols <- colnames(df_master)[grepl("company", colnames(df_master))]
+
+    if (length(company_cols) > 0) {
+      company_col <- company_cols[1]
+
+      # Try exact match first
+      exact_matches <- which(tolower(trimws(df_master[[company_col]])) == tolower(trimws(company_target)))
+
+      if (length(exact_matches) > 0) {
+        company_data_extracted <- df_master[exact_matches[1], , drop = FALSE]
+      } else {
+        # Try partial match
+        partial_matches <- which(grepl(tolower(trimws(company_target)), tolower(trimws(df_master[[company_col]])), fixed = TRUE))
+        if (length(partial_matches) > 0) {
+          company_data_extracted <- df_master[partial_matches[1], , drop = FALSE]
+        }
+      }
+    }
+
+  }, error = function(e) {
+    # Silent fail - will use synthetic data as fallback
+  })
+}
+```
+
 ```{r dashboard-setup, echo=FALSE, include=FALSE}
 # ========================================================================
 # DASHBOARD DATA PREPARATION & SETUP
