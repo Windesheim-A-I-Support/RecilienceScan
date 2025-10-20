@@ -1909,6 +1909,74 @@ weakest <- names(pillars)[which.min(pillars)]
 `r if (detected_language == "dutch") paste("**Aandachtsgebied:**", if(weakest == "Internal") "Intern" else weakest, paste0("(", sprintf("%.2f", min(pillars)), ")")) else paste("**Focus area:**", weakest, paste0("(", sprintf("%.2f", min(pillars)), ")"))`
 :::
 
+## `r if (detected_language == "dutch") "Gedetailleerde Analyse per Pijler" else "Detailed Analysis by Pillar"`
+
+```{r detailed-pillar-analysis, echo=FALSE, results='asis'}
+# Function to get top 2 and bottom 2 scores for a pillar
+analyze_pillar_detailed <- function(prefix, pillar_name_nl, pillar_name_en) {
+  pillar_name <- if (detected_language == "dutch") pillar_name_nl else pillar_name_en
+
+  # Get dimension names
+  if (detected_language == "dutch") {
+    dims <- c("Redundantie", "Samenwerking", "Flexibiliteit", "Transparantie", "Behendigheid")
+  } else {
+    dims <- c("Redundancy", "Collaboration", "Flexibility", "Visibility", "Agility")
+  }
+
+  codes <- c("r", "c", "f", "v", "a")
+  scores <- numeric(5)
+
+  # Extract scores
+  for (i in 1:5) {
+    col <- paste0(prefix, "__", codes[i])
+    scores[i] <- if (col %in% colnames(dashboard_data)) dashboard_data[[col]][1] else 2.5
+  }
+  names(scores) <- dims
+
+  # Sort scores to find highest and lowest
+  sorted_scores <- sort(scores, decreasing = TRUE)
+  top_2 <- sorted_scores[1:2]
+  bottom_2 <- sorted_scores[4:5]
+
+  # Calculate range
+  score_range <- max(scores) - min(scores)
+
+  # Generate output text
+  if (detected_language == "dutch") {
+    cat(sprintf("\n### %s (gemiddelde: %.2f)\n\n", pillar_name, mean(scores)))
+    cat(sprintf("Het grootste verschil in %s zit tussen **%s** (%.2f) en **%s** (%.2f), een verschil van %.2f punten.\n\n",
+                pillar_name,
+                names(top_2)[1], top_2[1],
+                names(bottom_2)[2], bottom_2[2],
+                score_range))
+    cat(sprintf("**Hoogste scores (top 2):**\n\n"))
+    cat(sprintf("1. **%s**: %.2f/5.00\n", names(top_2)[1], top_2[1]))
+    cat(sprintf("2. **%s**: %.2f/5.00\n\n", names(top_2)[2], top_2[2]))
+    cat(sprintf("**Laagste scores (bottom 2):**\n\n"))
+    cat(sprintf("1. **%s**: %.2f/5.00\n", names(bottom_2)[1], bottom_2[1]))
+    cat(sprintf("2. **%s**: %.2f/5.00\n\n", names(bottom_2)[2], bottom_2[2]))
+  } else {
+    cat(sprintf("\n### %s (average: %.2f)\n\n", pillar_name, mean(scores)))
+    cat(sprintf("The largest gap in %s is between **%s** (%.2f) and **%s** (%.2f), a difference of %.2f points.\n\n",
+                pillar_name,
+                names(top_2)[1], top_2[1],
+                names(bottom_2)[2], bottom_2[2],
+                score_range))
+    cat(sprintf("**Highest scores (top 2):**\n\n"))
+    cat(sprintf("1. **%s**: %.2f/5.00\n", names(top_2)[1], top_2[1]))
+    cat(sprintf("2. **%s**: %.2f/5.00\n\n", names(top_2)[2], top_2[2]))
+    cat(sprintf("**Lowest scores (bottom 2):**\n\n"))
+    cat(sprintf("1. **%s**: %.2f/5.00\n", names(bottom_2)[1], bottom_2[1]))
+    cat(sprintf("2. **%s**: %.2f/5.00\n\n", names(bottom_2)[2], bottom_2[2]))
+  }
+}
+
+# Analyze each pillar
+analyze_pillar_detailed("up", "Upstream", "Upstream")
+analyze_pillar_detailed("in", "Intern", "Internal")
+analyze_pillar_detailed("do", "Downstream", "Downstream")
+```
+
 ::: {.content-visible when-format="pdf"}
 \restoregeometry
 :::

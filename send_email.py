@@ -1,6 +1,9 @@
 import os
 import pandas as pd
 import win32com.client as win32
+from datetime import datetime
+from pathlib import Path
+import glob
 
 # ✅ CONFIGURATION
 CSV_PATH = "data/cleaned_master.csv"
@@ -8,8 +11,47 @@ REPORTS_FOLDER = "reports"
 TEST_MODE = True
 TEST_EMAIL = "cg.verhoef@windesheim.nl"  # <- Change this to your address
 
-def safe_filename(name):
-    return "".join(c if c.isalnum() else "_" for c in str(name))
+def safe_display_name(name):
+    """Sanitize name for display in filename (keep spaces and hyphens, replace slashes)"""
+    if pd.isna(name) or name == "":
+        return "Unknown"
+    # Replace forward slash with dash, keep other safe characters
+    name_str = str(name).strip()
+    # Replace problematic characters but keep it readable
+    name_str = name_str.replace("/", "-")
+    name_str = name_str.replace("\\", "-")
+    name_str = name_str.replace(":", "-")
+    name_str = name_str.replace("*", "")
+    name_str = name_str.replace("?", "")
+    name_str = name_str.replace('"', "'")
+    name_str = name_str.replace("<", "(")
+    name_str = name_str.replace(">", ")")
+    name_str = name_str.replace("|", "-")
+    return name_str
+
+def find_report_file(company, person, reports_folder):
+    """Find report file matching the new naming format: YYYYMMDD ResilienceScanReport (Company - Person).pdf"""
+    # Sanitize names to match filename
+    display_company = safe_display_name(company)
+    display_person = safe_display_name(person)
+
+    # Try to find file with today's date
+    date_str = datetime.now().strftime("%Y%m%d")
+    expected_filename = f"{date_str} ResilienceScanReport ({display_company} - {display_person}).pdf"
+    expected_path = Path(reports_folder) / expected_filename
+
+    if expected_path.exists():
+        return str(expected_path)
+
+    # Try to find file with any date (most recent)
+    pattern = f"*ResilienceScanReport ({display_company} - {display_person}).pdf"
+    matches = glob.glob(str(Path(reports_folder) / pattern))
+
+    if matches:
+        # Return most recent file
+        return max(matches, key=os.path.getmtime)
+
+    return None
 
 def send_emails():
     df = pd.read_csv(CSV_PATH)
@@ -32,11 +74,12 @@ def send_emails():
             print(f"⚠️ Skipping {company} — invalid email")
             continue
 
-        report_filename = safe_filename(company) + ".pdf"
-        attachment_path = os.path.join(REPORTS_FOLDER, report_filename)
+        # Find report file using new naming format
+        attachment_path = find_report_file(company, name, REPORTS_FOLDER)
 
-        if not os.path.exists(attachment_path):
-            print(f"❌ Report not found for {company}: {attachment_path}")
+        if not attachment_path:
+            print(f"❌ Report not found for {company} - {name}")
+            print(f"   Expected format: YYYYMMDD ResilienceScanReport ({safe_display_name(company)} - {safe_display_name(name)}).pdf")
             continue
 
         if TEST_MODE:

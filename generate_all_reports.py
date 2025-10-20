@@ -7,7 +7,7 @@ from datetime import datetime
 
 # ✅ CONFIGURATION
 ROOT = Path(__file__).resolve().parent
-TEMPLATE = ROOT / "example_3.qmd"
+TEMPLATE = ROOT / "ResilienceReport.qmd"
 DATA = ROOT / "data" / "cleaned_master.csv"
 OUTPUT_DIR = ROOT / "reports"
 COLUMN_MATCH_COMPANY = "company_name"
@@ -36,6 +36,24 @@ def safe_filename(name):
     if pd.isna(name) or name == "":
         return "Unknown"
     return "".join(c if c.isalnum() or c in [' ', '-'] else "_" for c in str(name)).replace(" ", "_")
+
+def safe_display_name(name):
+    """Sanitize name for display in filename (keep spaces and hyphens, replace slashes)"""
+    if pd.isna(name) or name == "":
+        return "Unknown"
+    # Replace forward slash with dash, keep other safe characters
+    name_str = str(name).strip()
+    # Replace problematic characters but keep it readable
+    name_str = name_str.replace("/", "-")
+    name_str = name_str.replace("\\", "-")
+    name_str = name_str.replace(":", "-")
+    name_str = name_str.replace("*", "")
+    name_str = name_str.replace("?", "")
+    name_str = name_str.replace('"', "'")
+    name_str = name_str.replace("<", "(")
+    name_str = name_str.replace(">", ")")
+    name_str = name_str.replace("|", "-")
+    return name_str
 
 def generate_reports():
     """Generate individual PDF reports for each person/company entry"""
@@ -87,12 +105,16 @@ def generate_reports():
         else:
             person = "Unknown"
 
-        # Create safe filenames
+        # Create safe filenames for temp file (underscore-based)
         safe_company = safe_filename(company)
         safe_person = safe_filename(person)
 
+        # Create safe display names for final filename (readable but safe)
+        display_company = safe_display_name(company)
+        display_person = safe_display_name(person)
+
         # New naming format: YYYYMMDD ResilienceScanReport (COMPANY NAME - Firstname Lastname).pdf
-        output_filename = f"{date_str} ResilienceScanReport ({company} - {person}).pdf"
+        output_filename = f"{date_str} ResilienceScanReport ({display_company} - {display_person}).pdf"
         output_file = OUTPUT_DIR / output_filename
 
         # Check if already exists

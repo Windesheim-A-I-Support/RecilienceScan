@@ -3,7 +3,7 @@
 # --- File Paths (relative to project root) ---
 data_directory: "data"
 output_directory: "reports"
-template_file: "example_3.qmd"
+template_file: "ResilienceReport.qmd"
 cleaned_data_filename: "cleaned_master.csv"
 log_file: "pipeline.log"
 

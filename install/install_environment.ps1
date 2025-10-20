@@ -28,7 +28,7 @@ $possibleRoots = @(
 
 foreach ($root in $possibleRoots) {
     # Look for key project files to identify root
-    $keyFiles = @("example_3.qmd", "clean_data.py", "generate_reports.py")
+    $keyFiles = @("ResilienceReport.qmd", "clean_data.py", "generate_reports.py")
     $foundFiles = 0
     
     foreach ($file in $keyFiles) {
@@ -48,7 +48,7 @@ foreach ($root in $possibleRoots) {
 if (-not $projectRoot) {
     Write-Warning "Could not auto-detect project root directory."
     Write-Info "Script location: $scriptDir"
-    Write-Info "Looking for project files (example_3.qmd, clean_data.py, generate_reports.py)"
+    Write-Info "Looking for project files (ResilienceReport.qmd, clean_data.py, generate_reports.py)"
     
     # Default to parent directory of script
     $projectRoot = Split-Path -Parent $scriptDir
@@ -689,7 +689,7 @@ foreach ($dir in $requiredDirs) {
 }
 
 # Check for critical files
-$criticalFiles = @("example_3.qmd", "clean_data.py", "generate_reports.py", "send_emails.py")
+$criticalFiles = @("ResilienceReport.qmd", "clean_data.py", "generate_reports.py", "send_emails.py")
 $missingFiles = @()
 foreach ($file in $criticalFiles) {
     if (Test-Path $file) {

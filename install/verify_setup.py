@@ -16,7 +16,7 @@ def find_project_root():
     current_dir = Path(__file__).parent.absolute()
     
     # Key files that indicate project root
-    key_files = ["example_3.qmd", "clean_data.py", "generate_reports.py"]
+    key_files = ["ResilienceReport.qmd", "clean_data.py", "generate_reports.py"]
     
     # Search current dir and parent directories
     search_dirs = [
@@ -150,7 +150,7 @@ def check_file_structure():
         ("img/", "Images directory"),
         ("tex/", "LaTeX files directory"),
         ("fonts/", "Fonts directory"),
-        ("example_3.qmd", "Quarto template"),
+        ("ResilienceReport.qmd", "Quarto template"),
         ("clean_data.py", "Data cleaning script"),
         ("generate_reports.py", "Report generation script"),
         ("send_emails.py", "Email sending script"),
