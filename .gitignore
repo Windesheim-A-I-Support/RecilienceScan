@@ -38,6 +38,8 @@ templates/*_backup.qmd
 .quarto/
 *_cache/
 *_files/
+example_3_files/
+ResilienceReport_files/
 
 # R
 .Rproj.user
@@ -63,4 +65,19 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
-/.luarc.json
+.luarc.json
+
+# Duplicate/backup directories
+images/
+data Example/
+cls/
+
+# Unrelated projects
+formbricks*
+*formbricks*
+
+# Development artifacts
+SystemTest.qmd
+TEMP.qmd
+TemplateReadme.md
+comprehensive_cleanup.md
