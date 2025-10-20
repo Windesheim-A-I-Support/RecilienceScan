@@ -26,10 +26,13 @@ videos/
 # Generated output files
 *.pdf
 *.tex
+*.tex.old
 example_3_files/
 *_files/
 reports/*.pdf
+reports/test*/
 templates/*.pdf
+templates/*_backup.qmd
 
 # Quarto cache
 .quarto/
@@ -45,6 +48,11 @@ templates/*.pdf
 # Logs
 *.log
 email_log.txt
+
+# Test files
+test_*.py
+test_*.pdf
+test_output.*
 
 # OS
 .DS_Store
