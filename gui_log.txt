@@ -1,0 +1,14 @@
+[2025-10-21 15:06:48] Loading data from: /home/chris/Documents/github/RecilienceScan/data/cleaned_master.csv
+[2025-10-21 15:06:48] ✅ Data loaded: 507 respondents, 323 companies
+[2025-10-21 15:06:53] Loading data from: /home/chris/Documents/github/RecilienceScan/data/cleaned_master.csv
+[2025-10-21 15:06:53] ✅ Data loaded: 507 respondents, 323 companies
+[2025-10-21 15:07:57] ⚠️ Test mode disabled - emails will go to real recipients!
+[2025-10-21 15:07:57] ℹ️ Test mode enabled - emails will only go to test address
+[2025-10-21 17:04:26] Loading data from: /home/chris/Documents/github/RecilienceScan/data/cleaned_master.csv
+[2025-10-21 17:04:26] Importing email tracking data...
+[2025-10-21 17:04:26] ✅ Email tracker: 0 imported, 507 skipped
+[2025-10-21 17:04:26] ❌ Error loading data: 'sent'
+[2025-10-21 17:05:15] Loading data from: /home/chris/Documents/github/RecilienceScan/data/cleaned_master.csv
+[2025-10-21 17:05:15] Importing email tracking data...
+[2025-10-21 17:05:15] ✅ Email tracker: 0 imported, 507 skipped
+[2025-10-21 17:05:15] ✅ Data loaded: 507 respondents, 323 companies
