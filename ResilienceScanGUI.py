@@ -25,6 +25,12 @@ import sys
 # Import email tracking system
 from email_tracker import EmailTracker
 
+# Import system checker
+from gui_system_check import SystemChecker
+
+# Import dependency manager
+from dependency_manager import DependencyManager
+
 # Configuration
 ROOT_DIR = Path(__file__).resolve().parent
 DATA_FILE = ROOT_DIR / "data" / "cleaned_master.csv"
@@ -194,6 +200,27 @@ class ResilienceScanGUI:
             width=20
         ).grid(row=0, column=3, padx=5, pady=5)
 
+        ttk.Button(
+            actions_frame,
+            text="🔧 Check System",
+            command=self.run_system_check,
+            width=20
+        ).grid(row=1, column=0, padx=5, pady=5)
+
+        ttk.Button(
+            actions_frame,
+            text="🪟 Install Dependencies (Windows)",
+            command=self.install_windows_dependencies,
+            width=25
+        ).grid(row=1, column=1, columnspan=2, padx=5, pady=5)
+
+        ttk.Button(
+            actions_frame,
+            text="🐧 Install Dependencies (Linux)",
+            command=self.install_linux_dependencies,
+            width=25
+        ).grid(row=1, column=3, padx=5, pady=5)
+
         # Statistics overview
         stats_frame = ttk.LabelFrame(dashboard, text="Statistics Overview", padding=10)
         stats_frame.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
@@ -213,11 +240,11 @@ class ResilienceScanGUI:
         dashboard.rowconfigure(1, weight=1)
 
     def create_data_tab(self):
-        """Create data viewing and processing tab"""
+        """Create data viewing and processing tab with analysis features"""
         data_tab = ttk.Frame(self.notebook)
         self.notebook.add(data_tab, text="📁 Data")
 
-        # Controls
+        # Top controls
         controls_frame = ttk.Frame(data_tab)
         controls_frame.grid(row=0, column=0, sticky=(tk.W, tk.E), padx=10, pady=10)
 
@@ -243,34 +270,130 @@ class ResilienceScanGUI:
 
         controls_frame.columnconfigure(1, weight=1)
 
+        # Search and Filter Frame
+        filter_frame = ttk.LabelFrame(data_tab, text="Search & Filter", padding=10)
+        filter_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), padx=10, pady=10)
+
+        # Search box
+        ttk.Label(filter_frame, text="Search:").grid(row=0, column=0, sticky=tk.W, padx=5)
+        self.data_search_var = tk.StringVar()
+        self.data_search_var.trace('w', lambda *args: self.filter_data())
+        search_entry = ttk.Entry(filter_frame, textvariable=self.data_search_var, width=40)
+        search_entry.grid(row=0, column=1, sticky=(tk.W, tk.E), padx=5)
+
+        ttk.Button(
+            filter_frame,
+            text="Clear",
+            command=lambda: self.data_search_var.set(''),
+            width=8
+        ).grid(row=0, column=2, padx=5)
+
+        # Filter options
+        ttk.Label(filter_frame, text="Show:").grid(row=0, column=3, sticky=tk.W, padx=(20, 5))
+
+        self.show_all_var = tk.BooleanVar(value=True)
+        self.show_no_email_var = tk.BooleanVar(value=False)
+        self.show_duplicates_var = tk.BooleanVar(value=False)
+
+        ttk.Checkbutton(filter_frame, text="All", variable=self.show_all_var,
+                       command=self.filter_data).grid(row=0, column=4, padx=5)
+        ttk.Checkbutton(filter_frame, text="Missing Email", variable=self.show_no_email_var,
+                       command=self.filter_data).grid(row=0, column=5, padx=5)
+        ttk.Checkbutton(filter_frame, text="Duplicates", variable=self.show_duplicates_var,
+                       command=self.filter_data).grid(row=0, column=6, padx=5)
+
+        # Column selector
+        ttk.Label(filter_frame, text="Columns:").grid(row=1, column=0, sticky=tk.W, padx=5, pady=(10, 0))
+
+        columns_btn_frame = ttk.Frame(filter_frame)
+        columns_btn_frame.grid(row=1, column=1, columnspan=6, sticky=tk.W, pady=(10, 0))
+
+        ttk.Button(
+            columns_btn_frame,
+            text="Select Columns...",
+            command=self.show_column_selector,
+            width=15
+        ).pack(side=tk.LEFT, padx=5)
+
+        ttk.Button(
+            columns_btn_frame,
+            text="Reset View",
+            command=self.reset_column_selection,
+            width=12
+        ).pack(side=tk.LEFT, padx=5)
+
+        self.selected_columns_label = ttk.Label(
+            columns_btn_frame,
+            text="Showing: company_name, name, email_address, submitdate",
+            font=('Arial', 8),
+            foreground='gray'
+        )
+        self.selected_columns_label.pack(side=tk.LEFT, padx=10)
+
+        filter_frame.columnconfigure(1, weight=1)
+
+        # Data quality frame
+        quality_frame = ttk.LabelFrame(data_tab, text="Data Quality Analysis", padding=10)
+        quality_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), padx=10, pady=10)
+
+        self.quality_text = tk.Text(quality_frame, height=4, font=('Courier', 9), wrap=tk.WORD)
+        self.quality_text.grid(row=0, column=0, sticky=(tk.W, tk.E))
+
+        quality_frame.columnconfigure(0, weight=1)
+
         # Data preview
         preview_frame = ttk.LabelFrame(data_tab, text="Data Preview", padding=10)
-        preview_frame.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
+        preview_frame.grid(row=3, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
+
+        # Scrollbars
+        tree_scroll_y = ttk.Scrollbar(preview_frame, orient=tk.VERTICAL)
+        tree_scroll_y.grid(row=0, column=1, sticky=(tk.N, tk.S))
+
+        tree_scroll_x = ttk.Scrollbar(preview_frame, orient=tk.HORIZONTAL)
+        tree_scroll_x.grid(row=1, column=0, sticky=(tk.W, tk.E))
 
         # Treeview for data
-        tree_scroll = ttk.Scrollbar(preview_frame)
-        tree_scroll.grid(row=0, column=1, sticky=(tk.N, tk.S))
-
         self.data_tree = ttk.Treeview(
             preview_frame,
-            yscrollcommand=tree_scroll.set,
+            yscrollcommand=tree_scroll_y.set,
+            xscrollcommand=tree_scroll_x.set,
             height=15
         )
         self.data_tree.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
-        tree_scroll.config(command=self.data_tree.yview)
+        tree_scroll_y.config(command=self.data_tree.yview)
+        tree_scroll_x.config(command=self.data_tree.xview)
+
+        # Bind double-click to show row details
+        self.data_tree.bind('<Double-Button-1>', self.show_row_details)
 
         preview_frame.columnconfigure(0, weight=1)
         preview_frame.rowconfigure(0, weight=1)
 
-        # Data info
-        info_frame = ttk.LabelFrame(data_tab, text="Data Information", padding=10)
-        info_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), padx=10, pady=10)
+        # Data info and actions
+        info_frame = ttk.Frame(data_tab)
+        info_frame.grid(row=4, column=0, sticky=(tk.W, tk.E), padx=10, pady=10)
 
         self.data_info_label = ttk.Label(info_frame, text="No data loaded", font=('Arial', 9))
-        self.data_info_label.grid(row=0, column=0, sticky=tk.W)
+        self.data_info_label.pack(side=tk.LEFT)
+
+        ttk.Button(
+            info_frame,
+            text="Export Filtered Data",
+            command=self.export_filtered_data
+        ).pack(side=tk.RIGHT, padx=5)
+
+        ttk.Button(
+            info_frame,
+            text="Find Duplicates",
+            command=self.analyze_duplicates
+        ).pack(side=tk.RIGHT, padx=5)
 
         data_tab.columnconfigure(0, weight=1)
-        data_tab.rowconfigure(1, weight=1)
+        data_tab.rowconfigure(3, weight=1)
+
+        # Store for filtering
+        self.filtered_df = None
+        self.visible_columns = ['company_name', 'name', 'email_address', 'submitdate']
 
     def create_generation_tab(self):
         """Create PDF generation tab"""
@@ -348,8 +471,7 @@ class ResilienceScanGUI:
         self.gen_progress = ttk.Progressbar(
             progress_frame,
             orient=tk.HORIZONTAL,
-            mode='determinate',
-            length=800
+            mode='determinate'
         )
         self.gen_progress.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=5)
 
@@ -387,8 +509,131 @@ class ResilienceScanGUI:
         email_tab = ttk.Frame(self.notebook)
         self.notebook.add(email_tab, text="📧 Email")
 
-        # Email Status Section (NEW)
-        status_frame = ttk.LabelFrame(email_tab, text="Email Status Overview", padding=10)
+        # Create notebook for email tab sections
+        email_notebook = ttk.Notebook(email_tab)
+        email_notebook.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=5, pady=5)
+
+        # Email Template Tab
+        template_tab = ttk.Frame(email_notebook)
+        email_notebook.add(template_tab, text="✉️ Template")
+
+        # Email Sending Tab
+        sending_tab = ttk.Frame(email_notebook)
+        email_notebook.add(sending_tab, text="📤 Send Emails")
+
+        email_tab.columnconfigure(0, weight=1)
+        email_tab.rowconfigure(0, weight=1)
+
+        # Build template tab
+        self.create_email_template_tab(template_tab)
+
+        # Build sending tab (move existing content here)
+        self.create_email_sending_tab(sending_tab)
+
+    def create_email_template_tab(self, parent):
+        """Create email template editing tab"""
+        # Template editor frame
+        editor_frame = ttk.LabelFrame(parent, text="Email Template Editor", padding=10)
+        editor_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N), padx=10, pady=10)
+
+        # Subject line
+        ttk.Label(editor_frame, text="Subject:").grid(row=0, column=0, sticky=tk.W, pady=5)
+        self.email_subject_var = tk.StringVar(value="Your Resilience Scan Report – {company}")
+        ttk.Entry(
+            editor_frame,
+            textvariable=self.email_subject_var,
+            width=60
+        ).grid(row=0, column=1, sticky=(tk.W, tk.E), padx=10, pady=5)
+
+        # Template help
+        help_text = "Available placeholders: {name}, {company}, {date}"
+        ttk.Label(editor_frame, text=help_text, font=('Arial', 8), foreground='gray').grid(
+            row=1, column=0, columnspan=2, sticky=tk.W, pady=5
+        )
+
+        # Body editor
+        ttk.Label(editor_frame, text="Email Body:").grid(row=2, column=0, sticky=(tk.W, tk.N), pady=5)
+
+        body_scroll = ttk.Scrollbar(editor_frame)
+        body_scroll.grid(row=2, column=2, sticky=(tk.N, tk.S), pady=5)
+
+        self.email_body_text = scrolledtext.ScrolledText(
+            editor_frame,
+            wrap=tk.WORD,
+            width=70,
+            height=12,
+            font=('Arial', 10),
+            yscrollcommand=body_scroll.set
+        )
+        self.email_body_text.grid(row=2, column=1, sticky=(tk.W, tk.E), padx=10, pady=5)
+        body_scroll.config(command=self.email_body_text.yview)
+
+        # Default template
+        default_body = (
+            "Dear {name},\n\n"
+            "Please find attached your resilience scan report for {company}.\n\n"
+            "If you have any questions, feel free to reach out.\n\n"
+            "Best regards,\n\n"
+            "Christiaan Verhoef\n"
+            "Windesheim | Value Chain Hackers"
+        )
+        self.email_body_text.insert('1.0', default_body)
+
+        # Buttons
+        btn_frame = ttk.Frame(editor_frame)
+        btn_frame.grid(row=3, column=0, columnspan=3, pady=10)
+
+        ttk.Button(
+            btn_frame,
+            text="💾 Save Template",
+            command=self.save_email_template,
+            width=15
+        ).grid(row=0, column=0, padx=5)
+
+        ttk.Button(
+            btn_frame,
+            text="🔄 Reset to Default",
+            command=self.reset_email_template,
+            width=18
+        ).grid(row=0, column=1, padx=5)
+
+        ttk.Button(
+            btn_frame,
+            text="👁️ Preview Email",
+            command=self.preview_email,
+            width=15
+        ).grid(row=0, column=2, padx=5)
+
+        editor_frame.columnconfigure(1, weight=1)
+
+        # Preview frame
+        preview_frame = ttk.LabelFrame(parent, text="Email Preview", padding=10)
+        preview_frame.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
+
+        self.email_preview_text = scrolledtext.ScrolledText(
+            preview_frame,
+            wrap=tk.WORD,
+            width=80,
+            height=15,
+            font=('Courier', 9),
+            state=tk.DISABLED
+        )
+        self.email_preview_text.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
+        preview_frame.columnconfigure(0, weight=1)
+        preview_frame.rowconfigure(0, weight=1)
+
+        parent.columnconfigure(0, weight=1)
+        parent.rowconfigure(1, weight=1)
+
+        # Load saved template if exists
+        self.load_email_template()
+
+    def create_email_sending_tab(self, parent):
+        """Create email sending tab (original email tab content)"""
+
+        # Email Status Section
+        status_frame = ttk.LabelFrame(parent, text="Email Status Overview", padding=10)
         status_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N), padx=10, pady=10)
 
         # Statistics labels
@@ -467,7 +712,7 @@ class ResilienceScanGUI:
         status_frame.rowconfigure(2, weight=1)
 
         # Controls
-        controls_frame = ttk.LabelFrame(email_tab, text="Email Controls", padding=10)
+        controls_frame = ttk.LabelFrame(parent, text="Email Controls", padding=10)
         controls_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), padx=10, pady=10)
 
         # Test mode
@@ -512,7 +757,7 @@ class ResilienceScanGUI:
         self.email_stop_btn.grid(row=0, column=1, padx=5)
 
         # Progress
-        progress_frame = ttk.LabelFrame(email_tab, text="Email Progress", padding=10)
+        progress_frame = ttk.LabelFrame(parent, text="Email Progress", padding=10)
         progress_frame.grid(row=2, column=0, sticky=(tk.W, tk.E), padx=10, pady=10)
 
         self.email_progress_label = ttk.Label(progress_frame, text="Ready")
@@ -521,8 +766,7 @@ class ResilienceScanGUI:
         self.email_progress = ttk.Progressbar(
             progress_frame,
             orient=tk.HORIZONTAL,
-            mode='determinate',
-            length=800
+            mode='determinate'
         )
         self.email_progress.grid(row=1, column=0, sticky=(tk.W, tk.E), pady=5)
 
@@ -537,7 +781,7 @@ class ResilienceScanGUI:
         progress_frame.columnconfigure(0, weight=1)
 
         # Email log
-        log_frame = ttk.LabelFrame(email_tab, text="Email Log", padding=10)
+        log_frame = ttk.LabelFrame(parent, text="Email Log", padding=10)
         log_frame.grid(row=3, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), padx=10, pady=10)
 
         self.email_log = scrolledtext.ScrolledText(
@@ -552,8 +796,8 @@ class ResilienceScanGUI:
         log_frame.columnconfigure(0, weight=1)
         log_frame.rowconfigure(0, weight=1)
 
-        email_tab.columnconfigure(0, weight=1)
-        email_tab.rowconfigure(3, weight=1)
+        parent.columnconfigure(0, weight=1)
+        parent.rowconfigure(3, weight=1)
 
     def create_logs_tab(self):
         """Create system logs tab"""
@@ -690,33 +934,15 @@ class ResilienceScanGUI:
                 messagebox.showerror("Error", f"Failed to load file:\n{e}")
 
     def update_data_preview(self):
-        """Update data preview treeview"""
+        """Update data preview treeview with current filter"""
         if self.df is None:
             return
 
-        # Clear existing
-        for item in self.data_tree.get_children():
-            self.data_tree.delete(item)
+        # Apply current filter
+        self.filter_data()
 
-        # Setup columns
-        columns = ['company_name', 'name', 'email_address', 'submitdate']
-        display_columns = [col for col in columns if col in self.df.columns]
-
-        self.data_tree['columns'] = display_columns
-        self.data_tree['show'] = 'headings'
-
-        for col in display_columns:
-            self.data_tree.heading(col, text=col.replace('_', ' ').title())
-            self.data_tree.column(col, width=150)
-
-        # Add data (first 100 rows)
-        for idx, row in self.df.head(100).iterrows():
-            values = [str(row.get(col, '')) for col in display_columns]
-            self.data_tree.insert('', tk.END, values=values)
-
-        # Update info
-        info_text = f"Showing {min(100, len(self.df))} of {len(self.df)} total records"
-        self.data_info_label.config(text=info_text)
+        # Run data quality analysis
+        self.analyze_data_quality()
 
     def update_stats_text(self):
         """Update statistics overview text"""
@@ -753,6 +979,348 @@ TOP 10 MOST ENGAGED COMPANIES:
             stats_info += f"\n\nREPORTS GENERATED:\n  Total PDF files:         {len(reports):>6}\n"
 
         self.stats_text.insert('1.0', stats_info)
+
+    # ==================== Data Analysis Methods ====================
+
+    def filter_data(self):
+        """Filter data based on search and filter options"""
+        if self.df is None:
+            return
+
+        df_filtered = self.df.copy()
+
+        # Apply search filter
+        search_term = self.data_search_var.get().lower()
+        if search_term:
+            mask = df_filtered.astype(str).apply(
+                lambda row: row.str.lower().str.contains(search_term, na=False).any(),
+                axis=1
+            )
+            df_filtered = df_filtered[mask]
+
+        # Apply checkbox filters
+        if self.show_no_email_var.get() and not self.show_all_var.get():
+            # Show only missing emails
+            df_filtered = df_filtered[
+                df_filtered['email_address'].isna() |
+                ~df_filtered['email_address'].str.contains('@', na=False)
+            ]
+        elif self.show_duplicates_var.get() and not self.show_all_var.get():
+            # Show only duplicates
+            df_filtered = df_filtered[
+                df_filtered.duplicated(subset=['company_name', 'name', 'email_address'], keep=False)
+            ]
+
+        self.filtered_df = df_filtered
+
+        # Update treeview
+        self.refresh_data_tree()
+
+    def refresh_data_tree(self):
+        """Refresh treeview with filtered data"""
+        if self.filtered_df is None:
+            return
+
+        # Clear existing
+        for item in self.data_tree.get_children():
+            self.data_tree.delete(item)
+
+        # Setup columns
+        display_columns = [col for col in self.visible_columns if col in self.filtered_df.columns]
+
+        self.data_tree['columns'] = display_columns
+        self.data_tree['show'] = 'headings'
+
+        for col in display_columns:
+            self.data_tree.heading(col, text=col.replace('_', ' ').title(),
+                                  command=lambda c=col: self.sort_by_column(c))
+            self.data_tree.column(col, width=150)
+
+        # Add data (show ALL rows, not just 100)
+        for idx, row in self.filtered_df.iterrows():
+            values = [str(row.get(col, '')) for col in display_columns]
+
+            # Tag duplicates and missing emails for highlighting
+            tags = []
+            if pd.isna(row.get('email_address')) or '@' not in str(row.get('email_address', '')):
+                tags.append('no_email')
+            if self.filtered_df.duplicated(subset=['company_name', 'name', 'email_address'], keep=False).iloc[
+                self.filtered_df.index.get_loc(idx)]:
+                tags.append('duplicate')
+
+            self.data_tree.insert('', tk.END, values=values, tags=tuple(tags))
+
+        # Configure tag colors
+        self.data_tree.tag_configure('no_email', background='#ffebee')  # Light red
+        self.data_tree.tag_configure('duplicate', background='#fff3e0')  # Light orange
+
+        # Update info
+        total_rows = len(self.filtered_df)
+        all_rows = len(self.df) if self.df is not None else 0
+        info_text = f"Showing {total_rows} of {all_rows} total records"
+        if total_rows < all_rows:
+            info_text += f" (filtered)"
+        self.data_info_label.config(text=info_text)
+
+    def sort_by_column(self, col):
+        """Sort data by column"""
+        if self.filtered_df is None:
+            return
+
+        # Toggle sort order
+        if not hasattr(self, 'sort_column') or self.sort_column != col:
+            self.sort_ascending = True
+        else:
+            self.sort_ascending = not self.sort_ascending
+
+        self.sort_column = col
+
+        # Sort filtered data
+        self.filtered_df = self.filtered_df.sort_values(
+            by=col,
+            ascending=self.sort_ascending,
+            na_position='last'
+        )
+
+        # Refresh display
+        self.refresh_data_tree()
+
+    def show_column_selector(self):
+        """Show dialog to select visible columns"""
+        if self.df is None:
+            messagebox.showwarning("No Data", "Please load data first")
+            return
+
+        # Create dialog
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Select Columns")
+        dialog.geometry("400x500")
+        dialog.transient(self.root)
+        dialog.grab_set()
+
+        # Instructions
+        ttk.Label(
+            dialog,
+            text="Select columns to display in the data view:",
+            font=('Arial', 10, 'bold')
+        ).pack(padx=10, pady=10)
+
+        # Scrollable frame for checkboxes
+        canvas = tk.Canvas(dialog)
+        scrollbar = ttk.Scrollbar(dialog, orient="vertical", command=canvas.yview)
+        scrollable_frame = ttk.Frame(canvas)
+
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        # Column checkboxes
+        column_vars = {}
+        for col in self.df.columns:
+            var = tk.BooleanVar(value=col in self.visible_columns)
+            column_vars[col] = var
+            ttk.Checkbutton(
+                scrollable_frame,
+                text=col,
+                variable=var
+            ).pack(anchor=tk.W, padx=20, pady=2)
+
+        canvas.pack(side="left", fill="both", expand=True, padx=10, pady=10)
+        scrollbar.pack(side="right", fill="y")
+
+        # Buttons
+        btn_frame = ttk.Frame(dialog)
+        btn_frame.pack(fill=tk.X, padx=10, pady=10)
+
+        def apply_selection():
+            self.visible_columns = [col for col, var in column_vars.items() if var.get()]
+            if not self.visible_columns:
+                messagebox.showwarning("No Columns", "Please select at least one column")
+                return
+            self.selected_columns_label.config(text=f"Showing: {', '.join(self.visible_columns[:3])}{'...' if len(self.visible_columns) > 3 else ''}")
+            self.refresh_data_tree()
+            dialog.destroy()
+
+        def select_all():
+            for var in column_vars.values():
+                var.set(True)
+
+        def select_none():
+            for var in column_vars.values():
+                var.set(False)
+
+        ttk.Button(btn_frame, text="Select All", command=select_all).pack(side=tk.LEFT, padx=5)
+        ttk.Button(btn_frame, text="Select None", command=select_none).pack(side=tk.LEFT, padx=5)
+        ttk.Button(btn_frame, text="Apply", command=apply_selection).pack(side=tk.RIGHT, padx=5)
+        ttk.Button(btn_frame, text="Cancel", command=dialog.destroy).pack(side=tk.RIGHT, padx=5)
+
+    def reset_column_selection(self):
+        """Reset to default columns"""
+        self.visible_columns = ['company_name', 'name', 'email_address', 'submitdate']
+        self.selected_columns_label.config(text=f"Showing: {', '.join(self.visible_columns)}")
+        self.refresh_data_tree()
+
+    def analyze_data_quality(self):
+        """Analyze data quality and show summary"""
+        if self.df is None:
+            return
+
+        # Calculate statistics
+        total_records = len(self.df)
+        missing_email = self.df['email_address'].isna().sum()
+        invalid_email = (~self.df['email_address'].str.contains('@', na=False)).sum() - missing_email
+        duplicates = self.df.duplicated(subset=['company_name', 'name', 'email_address']).sum()
+        unique_companies = self.df['company_name'].nunique()
+
+        # Build quality report
+        report = f"Total: {total_records} records | "
+        report += f"Companies: {unique_companies} | "
+        report += f"Missing email: {missing_email} | "
+        report += f"Invalid email: {invalid_email} | "
+        report += f"Duplicates: {duplicates}"
+
+        # Update quality text
+        self.quality_text.delete('1.0', tk.END)
+        self.quality_text.insert('1.0', report)
+
+        # Highlight issues
+        if missing_email > 0 or invalid_email > 0 or duplicates > 0:
+            self.quality_text.config(bg='#fff3cd')  # Warning yellow
+        else:
+            self.quality_text.config(bg='#d4edda')  # Success green
+
+    def analyze_duplicates(self):
+        """Show detailed duplicate analysis"""
+        if self.df is None:
+            messagebox.showwarning("No Data", "Please load data first")
+            return
+
+        # Find duplicates
+        duplicates = self.df[self.df.duplicated(subset=['company_name', 'name', 'email_address'], keep=False)]
+
+        if len(duplicates) == 0:
+            messagebox.showinfo("No Duplicates", "No duplicate records found!")
+            return
+
+        # Create dialog
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Duplicate Records Analysis")
+        dialog.geometry("800x600")
+
+        # Summary
+        summary = f"Found {len(duplicates)} duplicate records ({len(duplicates)//2} pairs)\n\n"
+        summary += "Duplicates based on: company_name + name + email_address"
+
+        ttk.Label(dialog, text=summary, font=('Arial', 10)).pack(padx=10, pady=10)
+
+        # Treeview for duplicates
+        tree_frame = ttk.Frame(dialog)
+        tree_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+        tree_scroll = ttk.Scrollbar(tree_frame)
+        tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+
+        dup_tree = ttk.Treeview(
+            tree_frame,
+            columns=('Company', 'Name', 'Email', 'Submit Date'),
+            show='headings',
+            yscrollcommand=tree_scroll.set
+        )
+        tree_scroll.config(command=dup_tree.yview)
+
+        dup_tree.heading('Company', text='Company')
+        dup_tree.heading('Name', text='Name')
+        dup_tree.heading('Email', text='Email')
+        dup_tree.heading('Submit Date', text='Submit Date')
+
+        for col in ('Company', 'Name', 'Email', 'Submit Date'):
+            dup_tree.column(col, width=150)
+
+        # Add duplicates
+        for idx, row in duplicates.iterrows():
+            dup_tree.insert('', tk.END, values=(
+                row.get('company_name', ''),
+                row.get('name', ''),
+                row.get('email_address', ''),
+                row.get('submitdate', '')
+            ))
+
+        dup_tree.pack(fill=tk.BOTH, expand=True)
+
+        # Close button
+        ttk.Button(dialog, text="Close", command=dialog.destroy).pack(pady=10)
+
+    def export_filtered_data(self):
+        """Export currently filtered data to CSV"""
+        if self.filtered_df is None or len(self.filtered_df) == 0:
+            messagebox.showwarning("No Data", "No data to export")
+            return
+
+        # Ask for filename
+        filename = filedialog.asksaveasfilename(
+            title="Export Filtered Data",
+            defaultextension=".csv",
+            filetypes=[("CSV files", "*.csv"), ("All files", "*.*")],
+            initialfile=f"filtered_data_{datetime.now().strftime('%Y%m%d_%H%M')}.csv"
+        )
+
+        if filename:
+            try:
+                self.filtered_df.to_csv(filename, index=False)
+                messagebox.showinfo("Success", f"Exported {len(self.filtered_df)} records to:\n{filename}")
+                self.log(f"✅ Exported {len(self.filtered_df)} records to {filename}")
+            except Exception as e:
+                messagebox.showerror("Error", f"Failed to export data:\n{e}")
+                self.log(f"❌ Export failed: {e}")
+
+    def show_row_details(self, event):
+        """Show detailed view of selected row on double-click"""
+        selection = self.data_tree.selection()
+        if not selection or self.filtered_df is None:
+            return
+
+        # Get row index
+        item = selection[0]
+        row_values = self.data_tree.item(item)['values']
+
+        # Find matching row in dataframe
+        for idx, row in self.filtered_df.iterrows():
+            if all(str(row.get(col, '')) == str(val) for col, val in zip(self.visible_columns, row_values)):
+                # Create detail dialog
+                dialog = tk.Toplevel(self.root)
+                dialog.title("Record Details")
+                dialog.geometry("600x700")
+
+                # Scrollable text
+                text_frame = ttk.Frame(dialog)
+                text_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+                scroll = ttk.Scrollbar(text_frame)
+                scroll.pack(side=tk.RIGHT, fill=tk.Y)
+
+                detail_text = tk.Text(text_frame, wrap=tk.WORD, yscrollcommand=scroll.set, font=('Courier', 10))
+                detail_text.pack(fill=tk.BOTH, expand=True)
+                scroll.config(command=detail_text.yview)
+
+                # Add all fields
+                details = "=" * 60 + "\n"
+                details += "RECORD DETAILS\n"
+                details += "=" * 60 + "\n\n"
+
+                for col in self.df.columns:
+                    value = row.get(col, '')
+                    details += f"{col}:\n  {value}\n\n"
+
+                detail_text.insert('1.0', details)
+                detail_text.config(state=tk.DISABLED)
+
+                # Close button
+                ttk.Button(dialog, text="Close", command=dialog.destroy).pack(pady=10)
+                break
 
     # ==================== Generation Methods ====================
 
@@ -876,6 +1444,391 @@ TOP 10 MOST ENGAGED COMPANIES:
             messagebox.showerror("Error", f"Failed to generate dashboard:\n{e}")
         finally:
             self.status_label.config(text="Ready")
+
+    def run_system_check(self):
+        """Run system check and display results"""
+        self.log("Running system check...")
+        self.status_label.config(text="Checking system...")
+
+        try:
+            # Run system check
+            checker = SystemChecker(ROOT_DIR)
+            all_ok = checker.check_all()
+
+            # Clear stats text and show results
+            self.stats_text.delete('1.0', tk.END)
+
+            # Build report
+            report = "=" * 70 + "\n"
+            report += "SYSTEM CHECK REPORT\n"
+            report += "=" * 70 + "\n"
+            report += f"Checked at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            report += "=" * 70 + "\n\n"
+
+            # Summary
+            total_checks = len(checker.checks)
+            errors = len(checker.errors)
+            warnings = len(checker.warnings)
+            successes = total_checks - errors - warnings
+
+            if all_ok:
+                report += "🎉 SYSTEM STATUS: ALL CHECKS PASSED\n\n"
+            else:
+                report += f"⚠️  SYSTEM STATUS: {errors} ERROR(S), {warnings} WARNING(S)\n\n"
+
+            report += f"Summary: {successes} OK | {warnings} Warnings | {errors} Errors\n"
+            report += "=" * 70 + "\n\n"
+
+            # Detailed results
+            for check in checker.checks:
+                icon = check['item'].split()[0]
+                item = ' '.join(check['item'].split()[1:])
+                report += f"{icon} {item:<40} {check['status']:<20}\n"
+                if check['description']:
+                    report += f"   → {check['description']}\n"
+                report += "\n"
+
+            # Show errors and warnings
+            if checker.errors:
+                report += "\n" + "=" * 70 + "\n"
+                report += "ERRORS FOUND:\n"
+                report += "=" * 70 + "\n"
+                for error in checker.errors:
+                    report += f"❌ {error}\n"
+
+            if checker.warnings:
+                report += "\n" + "=" * 70 + "\n"
+                report += "WARNINGS:\n"
+                report += "=" * 70 + "\n"
+                for warning in checker.warnings:
+                    report += f"⚠️  {warning}\n"
+
+            # Display in stats text
+            self.stats_text.insert('1.0', report)
+
+            # Log summary
+            self.log(f"✅ System check complete: {successes} OK, {warnings} warnings, {errors} errors")
+
+            # Show summary dialog
+            if all_ok:
+                messagebox.showinfo(
+                    "System Check Complete",
+                    f"✅ All checks passed!\n\n{total_checks} checks completed successfully."
+                )
+            else:
+                messagebox.showwarning(
+                    "System Check Complete",
+                    f"⚠️ Found {errors} error(s) and {warnings} warning(s)\n\nSee Dashboard for details."
+                )
+
+        except Exception as e:
+            self.log(f"❌ Error running system check: {e}")
+            messagebox.showerror("Error", f"Failed to run system check:\n{e}")
+        finally:
+            self.status_label.config(text="Ready")
+
+    def install_windows_dependencies(self):
+        """Install dependencies on Windows"""
+        import platform
+        if platform.system() != 'Windows':
+            messagebox.showwarning(
+                "Wrong Platform",
+                "This option is for Windows systems.\n\nYou are running on: " + platform.system()
+            )
+            return
+
+        self.log("Starting Windows dependency installation...")
+        self.status_label.config(text="Installing dependencies...")
+
+        try:
+            manager = DependencyManager()
+            checks = manager.check_all()
+
+            # Clear stats text and show installation guide
+            self.stats_text.delete('1.0', tk.END)
+
+            report = "=" * 70 + "\n"
+            report += "WINDOWS DEPENDENCY INSTALLATION GUIDE\n"
+            report += "=" * 70 + "\n\n"
+
+            # Auto-install Python packages
+            python_packages_installed = 0
+            python_packages_failed = 0
+
+            for check in checks:
+                if check['category'] == 'Python Packages' and not check['installed']:
+                    package_name = check['name'].replace('Python Package: ', '')
+                    self.log(f"Installing Python package: {package_name}")
+                    report += f"Installing {package_name}...\n"
+
+                    result = manager.install_package(package_name)
+                    if result['success']:
+                        report += f"  ✅ {package_name} installed successfully\n\n"
+                        python_packages_installed += 1
+                    else:
+                        report += f"  ❌ Failed to install {package_name}\n"
+                        report += f"  Error: {result['error']}\n\n"
+                        python_packages_failed += 1
+
+            # Manual installation instructions for R and Quarto
+            report += "\n" + "=" * 70 + "\n"
+            report += "MANUAL INSTALLATION REQUIRED\n"
+            report += "=" * 70 + "\n\n"
+
+            for check in checks:
+                if not check['installed'] and check['category'] in ['R', 'Quarto']:
+                    install_cmd = manager.get_install_command(check['name'])
+                    report += f"📦 {check['name']}\n"
+                    if 'manual' in install_cmd:
+                        report += f"  → Download from: {install_cmd['manual']}\n"
+                        if 'installer_url' in install_cmd:
+                            report += f"  → Direct link: {install_cmd['installer_url']}\n"
+                    report += "\n"
+
+            # Summary
+            report += "\n" + "=" * 70 + "\n"
+            report += "INSTALLATION SUMMARY\n"
+            report += "=" * 70 + "\n"
+            report += f"Python packages installed: {python_packages_installed}\n"
+            report += f"Python packages failed: {python_packages_failed}\n"
+            report += f"\nPlease install R and Quarto manually using the links above.\n"
+            report += f"Then click 'Check System' to verify installation.\n"
+
+            self.stats_text.insert('1.0', report)
+            self.log(f"✅ Windows installation complete: {python_packages_installed} packages installed")
+
+            messagebox.showinfo(
+                "Installation Complete",
+                f"✅ Installed {python_packages_installed} Python package(s)\n\n"
+                f"Please install R and Quarto manually.\nSee Dashboard for links."
+            )
+
+        except Exception as e:
+            self.log(f"❌ Error installing dependencies: {e}")
+            messagebox.showerror("Error", f"Failed to install dependencies:\n{e}")
+        finally:
+            self.status_label.config(text="Ready")
+
+    def install_linux_dependencies(self):
+        """Install dependencies on Linux"""
+        import platform
+        if platform.system() != 'Linux':
+            messagebox.showwarning(
+                "Wrong Platform",
+                "This option is for Linux systems.\n\nYou are running on: " + platform.system()
+            )
+            return
+
+        self.log("Starting Linux dependency installation...")
+        self.status_label.config(text="Installing dependencies...")
+
+        try:
+            manager = DependencyManager()
+            checks = manager.check_all()
+
+            # Clear stats text and show installation commands
+            self.stats_text.delete('1.0', tk.END)
+
+            report = "=" * 70 + "\n"
+            report += "LINUX DEPENDENCY INSTALLATION GUIDE\n"
+            report += "=" * 70 + "\n\n"
+
+            # Auto-install Python packages
+            python_packages_installed = 0
+            python_packages_failed = 0
+
+            for check in checks:
+                if check['category'] == 'Python Packages' and not check['installed']:
+                    package_name = check['name'].replace('Python Package: ', '')
+                    self.log(f"Installing Python package: {package_name}")
+                    report += f"Installing {package_name}...\n"
+
+                    result = manager.install_package(package_name)
+                    if result['success']:
+                        report += f"  ✅ {package_name} installed successfully\n\n"
+                        python_packages_installed += 1
+                    else:
+                        report += f"  ❌ Failed to install {package_name}\n"
+                        report += f"  Error: {result['error']}\n\n"
+                        python_packages_failed += 1
+
+            # Installation commands for R and Quarto
+            report += "\n" + "=" * 70 + "\n"
+            report += "SYSTEM PACKAGE INSTALLATION COMMANDS\n"
+            report += "=" * 70 + "\n\n"
+
+            report += "Copy and run these commands in your terminal:\n\n"
+
+            for check in checks:
+                if not check['installed'] and check['category'] in ['R', 'Quarto']:
+                    install_cmd = manager.get_install_command(check['name'])
+                    report += f"# Install {check['name']}\n"
+                    if 'command' in install_cmd:
+                        report += f"{install_cmd['command']}\n\n"
+
+            # Summary
+            report += "\n" + "=" * 70 + "\n"
+            report += "INSTALLATION SUMMARY\n"
+            report += "=" * 70 + "\n"
+            report += f"Python packages installed: {python_packages_installed}\n"
+            report += f"Python packages failed: {python_packages_failed}\n"
+            report += f"\nRun the commands above to install R and Quarto.\n"
+            report += f"Then click 'Check System' to verify installation.\n"
+
+            self.stats_text.insert('1.0', report)
+            self.log(f"✅ Linux installation guide displayed: {python_packages_installed} packages installed")
+
+            messagebox.showinfo(
+                "Installation Guide",
+                f"✅ Installed {python_packages_installed} Python package(s)\n\n"
+                f"See Dashboard for commands to install R and Quarto."
+            )
+
+        except Exception as e:
+            self.log(f"❌ Error installing dependencies: {e}")
+            messagebox.showerror("Error", f"Failed to install dependencies:\n{e}")
+        finally:
+            self.status_label.config(text="Ready")
+
+    # ==================== Email Template Methods ====================
+
+    def save_email_template(self):
+        """Save email template to file"""
+        try:
+            template_data = {
+                'subject': self.email_subject_var.get(),
+                'body': self.email_body_text.get('1.0', tk.END).strip()
+            }
+
+            template_file = ROOT_DIR / "email_template.json"
+            with open(template_file, 'w') as f:
+                json.dump(template_data, f, indent=2)
+
+            self.log("✅ Email template saved")
+            messagebox.showinfo("Success", "Email template saved successfully!")
+
+        except Exception as e:
+            self.log(f"❌ Error saving template: {e}")
+            messagebox.showerror("Error", f"Failed to save template:\n{e}")
+
+    def load_email_template(self):
+        """Load email template from file"""
+        try:
+            template_file = ROOT_DIR / "email_template.json"
+            if template_file.exists():
+                with open(template_file, 'r') as f:
+                    template_data = json.load(f)
+
+                self.email_subject_var.set(template_data.get('subject', 'Your Resilience Scan Report – {company}'))
+                self.email_body_text.delete('1.0', tk.END)
+                self.email_body_text.insert('1.0', template_data.get('body', ''))
+
+                self.log("✅ Email template loaded")
+        except Exception as e:
+            self.log(f"⚠️ Could not load template: {e}")
+
+    def reset_email_template(self):
+        """Reset to default template"""
+        default_subject = "Your Resilience Scan Report – {company}"
+        default_body = (
+            "Dear {name},\n\n"
+            "Please find attached your resilience scan report for {company}.\n\n"
+            "If you have any questions, feel free to reach out.\n\n"
+            "Best regards,\n\n"
+            "Christiaan Verhoef\n"
+            "Windesheim | Value Chain Hackers"
+        )
+
+        self.email_subject_var.set(default_subject)
+        self.email_body_text.delete('1.0', tk.END)
+        self.email_body_text.insert('1.0', default_body)
+
+        self.log("🔄 Email template reset to default")
+        messagebox.showinfo("Reset", "Template reset to default!")
+
+    def preview_email(self):
+        """Preview email with sample data"""
+        if self.df is None or len(self.df) == 0:
+            messagebox.showwarning("No Data", "Please load data first to preview emails.")
+            return
+
+        # Get first row as sample
+        sample_row = self.df.iloc[0]
+        sample_company = sample_row.get('company_name', 'Example Company')
+        sample_name = sample_row.get('name', 'John Doe')
+        sample_email = sample_row.get('email_address', 'john.doe@example.com')
+
+        # Get template
+        subject_template = self.email_subject_var.get()
+        body_template = self.email_body_text.get('1.0', tk.END).strip()
+
+        # Replace placeholders
+        from datetime import datetime
+        sample_date = datetime.now().strftime('%Y-%m-%d')
+
+        subject = subject_template.format(
+            company=sample_company,
+            name=sample_name,
+            date=sample_date
+        )
+
+        body = body_template.format(
+            company=sample_company,
+            name=sample_name,
+            date=sample_date
+        )
+
+        # Find report file
+        from pathlib import Path
+        import glob
+
+        def safe_display_name(name):
+            if pd.isna(name) or name == "":
+                return "Unknown"
+            name_str = str(name).strip()
+            name_str = name_str.replace("/", "-")
+            name_str = name_str.replace("\\", "-")
+            name_str = name_str.replace(":", "-")
+            return name_str
+
+        display_company = safe_display_name(sample_company)
+        display_person = safe_display_name(sample_name)
+
+        # Look for report file
+        pattern = f"*ResilienceScanReport ({display_company} - {display_person}).pdf"
+        matches = glob.glob(str(REPORTS_DIR / pattern))
+
+        attachment_info = ""
+        if matches:
+            attachment_file = Path(matches[0])
+            file_size = attachment_file.stat().st_size / (1024 * 1024)  # MB
+            attachment_info = f"\n📎 Attachment: {attachment_file.name} ({file_size:.2f} MB)"
+        else:
+            attachment_info = f"\n⚠️ No report found for {display_company} - {display_person}"
+
+        # Build preview
+        preview = "=" * 70 + "\n"
+        preview += "EMAIL PREVIEW\n"
+        preview += "=" * 70 + "\n\n"
+        preview += f"To: {sample_email}\n"
+        preview += f"Subject: {subject}\n"
+        preview += attachment_info + "\n"
+        preview += "\n" + "-" * 70 + "\n"
+        preview += "MESSAGE BODY:\n"
+        preview += "-" * 70 + "\n\n"
+        preview += body
+        preview += "\n\n" + "=" * 70 + "\n"
+        preview += "This is a preview using the first record from your data.\n"
+        preview += f"Sample: {sample_company} - {sample_name}\n"
+        preview += "=" * 70
+
+        # Display preview
+        self.email_preview_text.config(state=tk.NORMAL)
+        self.email_preview_text.delete('1.0', tk.END)
+        self.email_preview_text.insert('1.0', preview)
+        self.email_preview_text.config(state=tk.DISABLED)
+
+        self.log("👁️ Email preview generated")
 
     # ==================== Email Methods ====================
 
@@ -1066,11 +2019,25 @@ TOP 10 MOST ENGAGED COMPANIES:
         skipped_count = 0
         failed_count = 0
 
-        self.email_progress['maximum'] = total
-        self.email_progress['value'] = 0
+        # Initialize Outlook connection
+        outlook = None
+        outlook_error = None
+
+        try:
+            import win32com.client as win32
+            outlook = win32.Dispatch("Outlook.Application")
+            self.log_email("✅ Outlook connection established")
+        except Exception as e:
+            outlook_error = str(e)
+            self.log_email(f"❌ Cannot connect to Outlook: {e}")
+            self.log_email("⚠️ Emails will be marked as failed")
+
+        # Get email template
+        subject_template = self.email_subject_var.get()
+        body_template = self.email_body_text.get('1.0', tk.END).strip()
 
         test_mode = self.test_mode_var.get()
-        test_email = self.test_email_var.get() if test_mode else None
+        test_email = self.email_test_var.get() if test_mode else None
 
         for idx, record in enumerate(pending_records):
             if not self.is_sending_emails:
@@ -1081,24 +2048,86 @@ TOP 10 MOST ENGAGED COMPANIES:
             person = record['person_name']
             email = record['email_address']
 
-            self.email_current_label.config(
-                text=f"Sending: {company} - {person}"
-            )
+            # Update current label
+            def update_current():
+                self.email_progress.configure(maximum=total)
+                self.email_current_label.config(text=f"Sending: {company} - {person}")
+            self.root.after(0, update_current)
 
-            try:
-                # Here you would call the actual email sending function
-                # For now, this is a placeholder
-                self.log_email(f"[{idx+1}/{total}] Sending to: {company} - {person}")
+            # Find report file
+            def safe_display_name(name):
+                if pd.isna(name) or name == "":
+                    return "Unknown"
+                name_str = str(name).strip()
+                name_str = name_str.replace("/", "-").replace("\\", "-").replace(":", "-")
+                name_str = name_str.replace("*", "").replace("?", "").replace('"', "'")
+                name_str = name_str.replace("<", "(").replace(">", ")").replace("|", "-")
+                return name_str
 
-                # Simulate email sending (replace with actual implementation)
-                import time
-                time.sleep(0.1)
+            display_company = safe_display_name(company)
+            display_person = safe_display_name(person)
 
-                # Mark as sent in tracker
-                report_filename = f"{company} - {person}.pdf"  # This should match actual filename
+            # Look for report file
+            import glob
+            pattern = f"*ResilienceScanReport ({display_company} - {display_person}).pdf"
+            matches = glob.glob(str(REPORTS_DIR / pattern))
+
+            if not matches:
+                failed_count += 1
+                error_msg = f"Report not found: {display_company} - {display_person}"
+                self.log_email(f"[{idx+1}/{total}] ❌ {error_msg}")
+
                 self.email_tracker.mark_as_sent(
                     company, person, email,
-                    report_filename=report_filename,
+                    report_filename="",
+                    test_mode=test_mode,
+                    error=error_msg
+                )
+                continue
+
+            attachment_path = Path(matches[0])
+
+            try:
+                # Check if Outlook is available
+                if outlook is None:
+                    raise Exception(f"Outlook not available: {outlook_error}")
+
+                self.log_email(f"[{idx+1}/{total}] Sending to: {company} - {person}")
+
+                # Format subject and body with template
+                subject = subject_template.format(
+                    company=company,
+                    name=person,
+                    date=datetime.now().strftime('%Y-%m-%d')
+                )
+
+                body = body_template.format(
+                    company=company,
+                    name=person,
+                    date=datetime.now().strftime('%Y-%m-%d')
+                )
+
+                # Create email
+                mail = outlook.CreateItem(0)
+
+                # Set recipient
+                if test_mode:
+                    mail.To = test_email
+                    body = f"[TEST MODE]\nOriginal recipient: {email}\n\n" + body
+                else:
+                    mail.To = email
+
+                mail.Subject = subject
+                mail.Body = body
+                mail.Attachments.Add(str(attachment_path.absolute()))
+
+                # Send email
+                mail.Send()
+
+                # Mark as sent in tracker
+                self.email_tracker.mark_as_sent(
+                    company, person, email,
+                    report_filename=attachment_path.name,
                     test_mode=test_mode
                 )
 
@@ -1107,35 +2136,46 @@ TOP 10 MOST ENGAGED COMPANIES:
 
             except Exception as e:
                 failed_count += 1
-                self.log_email(f"  ❌ Error: {e}")
+                error_msg = str(e)
+                self.log_email(f"  ❌ Error: {error_msg}")
 
                 # Mark as failed in tracker
                 self.email_tracker.mark_as_sent(
                     company, person, email,
-                    report_filename="",
+                    report_filename=str(attachment_path.name) if matches else "",
                     test_mode=test_mode,
-                    error=str(e)
+                    error=error_msg
                 )
 
-            self.email_progress['value'] = idx + 1
-            self.email_progress_label.config(
-                text=f"Progress: {idx+1}/{total} | Sent: {sent_count} | Failed: {failed_count}"
-            )
+            # Update progress
+            current_idx = idx + 1
+            def update_progress():
+                self.email_progress.configure(value=current_idx)
+                self.email_progress_label.config(
+                    text=f"Progress: {current_idx}/{total} | Sent: {sent_count} | Failed: {failed_count}"
+                )
+            self.root.after(0, update_progress)
 
-        self.is_sending_emails = False
-        self.email_start_btn.config(state=tk.NORMAL)
-        self.email_stop_btn.config(state=tk.DISABLED)
-        self.email_current_label.config(text="Email distribution complete")
+            # Update email status display every 10 emails
+            if (idx + 1) % 10 == 0 or (idx + 1) == total:
+                self.root.after(0, self.update_email_status_display)
 
-        # Update display
-        self.update_email_status_display()
+        # Final updates
+        def finalize():
+            self.is_sending_emails = False
+            self.email_start_btn.config(state=tk.NORMAL)
+            self.email_stop_btn.config(state=tk.DISABLED)
+            self.email_current_label.config(text="Email distribution complete")
+            self.update_email_status_display()
 
-        # Update statistics in header
-        email_stats = self.email_tracker.get_statistics()
-        self.stats['emails_sent'] = email_stats.get('sent', 0)
-        self.update_stats_display()
+            # Update statistics in header
+            email_stats = self.email_tracker.get_statistics()
+            self.stats['emails_sent'] = email_stats.get('sent', 0)
+            self.update_stats_display()
 
-        self.log_email(f"\n✅ Email distribution complete! Sent: {sent_count}, Failed: {failed_count}, Skipped: {skipped_count}")
+        self.root.after(0, finalize)
+
+        self.log_email(f"\n✅ Email distribution complete! Sent: {sent_count}, Failed: {failed_count}")
 
     def stop_email(self):
         """Stop email sending"""
@@ -1224,6 +2264,11 @@ TOP 10 MOST ENGAGED COMPANIES:
 
     def update_stats_display(self):
         """Update statistics in header"""
+        # Count actual reports in reports directory
+        if REPORTS_DIR.exists():
+            reports = list(REPORTS_DIR.glob("*.pdf"))
+            self.stats['reports_generated'] = len(reports)
+
         self.stats_labels['respondents'].config(text=str(self.stats['total_respondents']))
         self.stats_labels['companies'].config(text=str(self.stats['total_companies']))
         self.stats_labels['reports'].config(text=str(self.stats['reports_generated']))

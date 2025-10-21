@@ -8,20 +8,27 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime
 import json
+import threading
 
 
 class EmailTracker:
-    """Track email sending status in SQLite database"""
+    """Track email sending status in SQLite database (thread-safe)"""
 
     def __init__(self, db_path="email_tracking.db"):
         self.db_path = Path(db_path)
-        self.conn = None
+        self.thread_local = threading.local()
         self.init_database()
+
+    def get_connection(self):
+        """Get a thread-local database connection"""
+        if not hasattr(self.thread_local, 'conn') or self.thread_local.conn is None:
+            self.thread_local.conn = sqlite3.connect(str(self.db_path), check_same_thread=False)
+        return self.thread_local.conn
 
     def init_database(self):
         """Initialize the database"""
-        self.conn = sqlite3.connect(str(self.db_path))
-        cursor = self.conn.cursor()
+        conn = sqlite3.connect(str(self.db_path))
+        cursor = conn.cursor()
 
         # Create email tracking table
         cursor.execute('''
@@ -52,14 +59,16 @@ class EmailTracker:
             ON email_tracking(company_name)
         ''')
 
-        self.conn.commit()
+        conn.commit()
+        conn.close()
 
     def import_from_csv(self, csv_path):
         """Import records from cleaned_master.csv"""
         df = pd.read_csv(csv_path)
         df.columns = df.columns.str.lower().str.strip()
 
-        cursor = self.conn.cursor()
+        conn = self.get_connection()
+        cursor = conn.cursor()
         imported = 0
         skipped = 0
 
@@ -88,13 +97,13 @@ class EmailTracker:
                 print(f"Error importing {company} - {person}: {e}")
                 skipped += 1
 
-        self.conn.commit()
+        self.get_connection().commit()
         return imported, skipped
 
     def mark_as_sent(self, company, person, email, report_filename,
                      test_mode=False, error=None):
         """Mark an email as sent"""
-        cursor = self.conn.cursor()
+        cursor = self.get_connection().cursor()
 
         status = 'sent' if error is None else 'failed'
         sent_date = datetime.now().isoformat()
@@ -112,12 +121,12 @@ class EmailTracker:
         ''', (status, sent_date, report_filename, 1 if test_mode else 0,
               error, company, person, email))
 
-        self.conn.commit()
+        self.get_connection().commit()
         return cursor.rowcount > 0
 
     def manually_update_status(self, record_id, new_status, notes=""):
         """Manually update email status"""
-        cursor = self.conn.cursor()
+        cursor = self.get_connection().cursor()
 
         cursor.execute('''
             UPDATE email_tracking
@@ -128,12 +137,12 @@ class EmailTracker:
             WHERE id = ?
         ''', (new_status, notes, datetime.now().isoformat(), record_id))
 
-        self.conn.commit()
+        self.get_connection().commit()
         return cursor.rowcount > 0
 
     def check_if_sent(self, company, person, email):
         """Check if email has been sent"""
-        cursor = self.conn.cursor()
+        cursor = self.get_connection().cursor()
 
         cursor.execute('''
             SELECT sent_status, sent_date, test_mode, error_message
@@ -156,7 +165,7 @@ class EmailTracker:
 
     def get_pending_emails(self):
         """Get all pending emails"""
-        cursor = self.conn.cursor()
+        cursor = self.get_connection().cursor()
 
         cursor.execute('''
             SELECT id, company_name, person_name, email_address
@@ -169,7 +178,7 @@ class EmailTracker:
 
     def get_all_emails(self, status=None):
         """Get all emails, optionally filtered by status"""
-        cursor = self.conn.cursor()
+        cursor = self.get_connection().cursor()
 
         if status:
             cursor.execute('''
@@ -198,7 +207,7 @@ class EmailTracker:
 
     def get_all_records(self, status=None):
         """Get all email records as list of dictionaries"""
-        cursor = self.conn.cursor()
+        cursor = self.get_connection().cursor()
 
         if status:
             cursor.execute('''
@@ -230,7 +239,7 @@ class EmailTracker:
 
     def get_record_by_details(self, company_name, person_name, email_address):
         """Get a specific record by company, person, and email"""
-        cursor = self.conn.cursor()
+        cursor = self.get_connection().cursor()
 
         cursor.execute('''
             SELECT id, company_name, person_name, email_address,
@@ -250,7 +259,7 @@ class EmailTracker:
 
     def get_statistics(self):
         """Get email sending statistics"""
-        cursor = self.conn.cursor()
+        cursor = self.get_connection().cursor()
 
         # Initialize with defaults
         stats = {
@@ -303,7 +312,7 @@ class EmailTracker:
 
     def bulk_update_status(self, record_ids, new_status, notes=""):
         """Update multiple records at once"""
-        cursor = self.conn.cursor()
+        cursor = self.get_connection().cursor()
         updated = 0
 
         for record_id in record_ids:
@@ -317,7 +326,7 @@ class EmailTracker:
 
             updated += cursor.rowcount
 
-        self.conn.commit()
+        self.get_connection().commit()
         return updated
 
     def export_to_csv(self, output_path):
@@ -328,8 +337,9 @@ class EmailTracker:
 
     def close(self):
         """Close database connection"""
-        if self.conn:
-            self.conn.close()
+        if hasattr(self.thread_local, 'conn') and self.thread_local.conn:
+            self.thread_local.conn.close()
+            self.thread_local.conn = None
 
     def __del__(self):
         """Cleanup"""
