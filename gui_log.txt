@@ -1522,3 +1522,11 @@
 [2025-10-22 15:33:51] ⏹ Generation cancelled by user
 [2025-10-22 15:33:51] 
 ✅ Generation complete! Success: 47, Failed: 0
+[2025-10-24 22:00:58] Loading data from: /home/chris/Documents/github/RecilienceScan/data/cleaned_master.csv
+[2025-10-24 22:00:58] Importing email tracking data...
+[2025-10-24 22:00:58] ✅ Email tracker: 0 imported, 507 skipped
+[2025-10-24 22:00:58] ✅ Data loaded: 507 respondents, 323 companies
+[2025-10-24 22:01:05] Loading data from: /home/chris/Documents/github/RecilienceScan/data/cleaned_master.csv
+[2025-10-24 22:01:05] Importing email tracking data...
+[2025-10-24 22:01:05] ✅ Email tracker: 0 imported, 507 skipped
+[2025-10-24 22:01:05] ✅ Data loaded: 507 respondents, 323 companies
