@@ -1420,3 +1420,105 @@
 [2025-10-21 22:20:38] ⏹ Generation cancelled by user
 [2025-10-21 22:20:38] 
 ✅ Generation complete! Success: 66, Failed: 0
+[2025-10-22 15:32:24] Loading data from: /home/chris/Documents/github/RecilienceScan/data/cleaned_master.csv
+[2025-10-22 15:32:24] Importing email tracking data...
+[2025-10-22 15:32:24] ✅ Email tracker: 0 imported, 507 skipped
+[2025-10-22 15:32:24] ✅ Data loaded: 507 respondents, 323 companies
+[2025-10-22 15:33:46] 🚀 Starting batch report generation...
+[2025-10-22 15:33:46] [1/507] Generating: Vattenfall - Deurwaarder
+[2025-10-22 15:33:46]   ✅ Success
+[2025-10-22 15:33:46] [2/507] Generating: The Coca-Cola Company - TCCC SCR2 EMEA 2023 Team 3
+[2025-10-22 15:33:46]   ✅ Success
+[2025-10-22 15:33:46] [3/507] Generating: Suplacon - Pim Jansen
+[2025-10-22 15:33:46]   ✅ Success
+[2025-10-22 15:33:46] [4/507] Generating: Scania Logistics NL - Elbrich de Jong (0.1)
+[2025-10-22 15:33:46]   ✅ Success
+[2025-10-22 15:33:46] [5/507] Generating: Scania Logistics NL - Aafke Christenhusz
+[2025-10-22 15:33:47]   ✅ Success
+[2025-10-22 15:33:47] [6/507] Generating: Scania Logistics NL - Arjan Muntenga
+[2025-10-22 15:33:47]   ✅ Success
+[2025-10-22 15:33:47] [7/507] Generating: Scania Logistics NL - Jan Boersma
+[2025-10-22 15:33:47]   ✅ Success
+[2025-10-22 15:33:47] [8/507] Generating: Rituals - Remco de Marie (0.2)
+[2025-10-22 15:33:47]   ✅ Success
+[2025-10-22 15:33:47] [9/507] Generating: NEDTECH - Bas van Bree
+[2025-10-22 15:33:47]   ✅ Success
+[2025-10-22 15:33:47] [10/507] Generating: Livin' Spas - Henrick van de brug
+[2025-10-22 15:33:47]   ✅ Success
+[2025-10-22 15:33:47] [11/507] Generating: Corbion (1) - Koen Kummel (0.2)
+[2025-10-22 15:33:47]   ✅ Success
+[2025-10-22 15:33:47] [12/507] Generating: Broshuis B.V. - Jasper Luik (0.1)
+[2025-10-22 15:33:47]   ✅ Success
+[2025-10-22 15:33:47] [13/507] Generating: Brink Climate Systems - Susanne Westerdijk
+[2025-10-22 15:33:47]   ✅ Success
+[2025-10-22 15:33:47] [14/507] Generating: Bosch Thermotechniek B.V. - Rob ter Beek (0.2)
+[2025-10-22 15:33:47]   ✅ Success
+[2025-10-22 15:33:47] [15/507] Generating: Bidfood - Hessel de Keijzer (0.2)
+[2025-10-22 15:33:48]   ✅ Success
+[2025-10-22 15:33:48] [16/507] Generating: AVMC - Hans Veltman
+[2025-10-22 15:33:48]   ✅ Success
+[2025-10-22 15:33:48] [17/507] Generating: Avebe - Erik Pricker (0.2)
+[2025-10-22 15:33:48]   ✅ Success
+[2025-10-22 15:33:48] [18/507] Generating: Avebe - Laura Wessels
+[2025-10-22 15:33:48]   ✅ Success
+[2025-10-22 15:33:48] [19/507] Generating: Avebe - Saskia Vlap
+[2025-10-22 15:33:48]   ✅ Success
+[2025-10-22 15:33:48] [20/507] Generating: Ales Metaaltechniek - Dick de Leeuw
+[2025-10-22 15:33:48]   ✅ Success
+[2025-10-22 15:33:48] [21/507] Generating: Ales Metaaltechniek - Ruben Spansier
+[2025-10-22 15:33:48]   ✅ Success
+[2025-10-22 15:33:48] [22/507] Generating: Meubelgoedkoop - Gerard van de Bruinhorst
+[2025-10-22 15:33:48]   ✅ Success
+[2025-10-22 15:33:48] [23/507] Generating: Evofenedex - Nanne Schriek
+[2025-10-22 15:33:48]   ✅ Success
+[2025-10-22 15:33:48] [24/507] Generating: My-Max - -
+[2025-10-22 15:33:49]   ✅ Success
+[2025-10-22 15:33:49] [25/507] Generating: Livin' Spas - Henrick van de Brug (1.0)
+[2025-10-22 15:33:49]   ✅ Success
+[2025-10-22 15:33:49] [26/507] Generating: Mundo Recreatie - Arjan
+[2025-10-22 15:33:49]   ✅ Success
+[2025-10-22 15:33:49] [27/507] Generating: Jansen2wielers - Lars Koudijs
+[2025-10-22 15:33:49]   ✅ Success
+[2025-10-22 15:33:49] [28/507] Generating: AWL-Techniek - Stijn Kamps (1)
+[2025-10-22 15:33:49]   ✅ Success
+[2025-10-22 15:33:49] [29/507] Generating: Shangle - Trudy 
+[2025-10-22 15:33:49]   ✅ Success
+[2025-10-22 15:33:49] [30/507] Generating: Fonteyn Outdoor Living Mall - Janine
+[2025-10-22 15:33:49]   ✅ Success
+[2025-10-22 15:33:49] [31/507] Generating: Van Wolfswinkel wonen - Johan van Wolfswinkel
+[2025-10-22 15:33:49]   ✅ Success
+[2025-10-22 15:33:49] [32/507] Generating: Meubelcare.nl - Johan
+[2025-10-22 15:33:49]   ✅ Success
+[2025-10-22 15:33:49] [33/507] Generating: Bruinhorst Tegels Online - T. van Hierden
+[2025-10-22 15:33:49]   ✅ Success
+[2025-10-22 15:33:49] [34/507] Generating: Hermie.com - Pieter Hermie
+[2025-10-22 15:33:50]   ✅ Success
+[2025-10-22 15:33:50] [35/507] Generating: Norvixx - Jarno Copier
+[2025-10-22 15:33:50]   ✅ Success
+[2025-10-22 15:33:50] [36/507] Generating: Coltby - Baruch Colthof
+[2025-10-22 15:33:50]   ✅ Success
+[2025-10-22 15:33:50] [37/507] Generating: Blue Sky Inn - Baruch Colthof
+[2025-10-22 15:33:50]   ✅ Success
+[2025-10-22 15:33:50] [38/507] Generating: Kees Smit tuinmeubelen - Arnold van der Meer
+[2025-10-22 15:33:50]   ✅ Success
+[2025-10-22 15:33:50] [39/507] Generating: AP Nederland B.V. - Egbert Wendel
+[2025-10-22 15:33:50]   ✅ Success
+[2025-10-22 15:33:50] [40/507] Generating: Teijin Aramid - Boris Fenneman
+[2025-10-22 15:33:50]   ✅ Success
+[2025-10-22 15:33:50] [41/507] Generating: FrieslandCampina - Jaco van Burgsteden
+[2025-10-22 15:33:50]   ✅ Success
+[2025-10-22 15:33:50] [42/507] Generating: Rollecate B.V. - Luc van Zoolingen
+[2025-10-22 15:33:50]   ✅ Success
+[2025-10-22 15:33:50] [43/507] Generating: ME-AT Leeuwarden B.V. - Eline Ensing
+[2025-10-22 15:33:51]   ✅ Success
+[2025-10-22 15:33:51] [44/507] Generating: Hiab (Frameworks) - Niels Stoffers
+[2025-10-22 15:33:51]   ✅ Success
+[2025-10-22 15:33:51] [45/507] Generating: De Marnes Fabrieken B.V. - Paul de Vries
+[2025-10-22 15:33:51]   ✅ Success
+[2025-10-22 15:33:51] [46/507] Generating: Perfetti van Melle - Bart Vervaart
+[2025-10-22 15:33:51]   ✅ Success
+[2025-10-22 15:33:51] [47/507] Generating: Perfetti van Melle - Jos van Nijnanten
+[2025-10-22 15:33:51]   ✅ Success
+[2025-10-22 15:33:51] ⏹ Generation cancelled by user
+[2025-10-22 15:33:51] 
+✅ Generation complete! Success: 47, Failed: 0

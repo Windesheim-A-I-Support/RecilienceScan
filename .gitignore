@@ -81,3 +81,5 @@ SystemTest.qmd
 TEMP.qmd
 TemplateReadme.md
 comprehensive_cleanup.md
+
+/.luarc.json
