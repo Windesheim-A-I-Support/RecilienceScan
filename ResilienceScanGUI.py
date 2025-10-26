@@ -35,6 +35,7 @@ from dependency_manager import DependencyManager
 ROOT_DIR = Path(__file__).resolve().parent
 DATA_FILE = ROOT_DIR / "data" / "cleaned_master.csv"
 REPORTS_DIR = ROOT_DIR / "reports"
+TEMPLATE = ROOT_DIR / "ResilienceReport.qmd"
 CONFIG_FILE = ROOT_DIR / "config.yml"
 LOG_FILE = ROOT_DIR / "gui_log.txt"
 
@@ -603,6 +604,47 @@ class ResilienceScanGUI:
             command=self.preview_email,
             width=15
         ).grid(row=0, column=2, padx=5)
+
+        # SMTP Configuration Section
+        smtp_frame = ttk.LabelFrame(parent, text="SMTP Server Configuration", padding=10)
+        smtp_frame.grid(row=1, column=0, sticky=(tk.W, tk.E), padx=10, pady=10)
+
+        # SMTP Server
+        ttk.Label(smtp_frame, text="SMTP Server:").grid(row=0, column=0, sticky=tk.W, pady=5)
+        self.smtp_server_var = tk.StringVar(value="smtp.office365.com")
+        ttk.Entry(smtp_frame, textvariable=self.smtp_server_var, width=40).grid(row=0, column=1, sticky=(tk.W, tk.E), padx=10, pady=5)
+
+        # SMTP Port
+        ttk.Label(smtp_frame, text="SMTP Port:").grid(row=1, column=0, sticky=tk.W, pady=5)
+        self.smtp_port_var = tk.StringVar(value="587")
+        ttk.Entry(smtp_frame, textvariable=self.smtp_port_var, width=10).grid(row=1, column=1, sticky=tk.W, padx=10, pady=5)
+
+        # From Email
+        ttk.Label(smtp_frame, text="From Email:").grid(row=2, column=0, sticky=tk.W, pady=5)
+        self.smtp_from_var = tk.StringVar(value="")
+        ttk.Entry(smtp_frame, textvariable=self.smtp_from_var, width=40).grid(row=2, column=1, sticky=(tk.W, tk.E), padx=10, pady=5)
+
+        # SMTP Username
+        ttk.Label(smtp_frame, text="SMTP Username:").grid(row=3, column=0, sticky=tk.W, pady=5)
+        self.smtp_username_var = tk.StringVar(value="")
+        ttk.Entry(smtp_frame, textvariable=self.smtp_username_var, width=40).grid(row=3, column=1, sticky=(tk.W, tk.E), padx=10, pady=5)
+
+        # SMTP Password
+        ttk.Label(smtp_frame, text="SMTP Password:").grid(row=4, column=0, sticky=tk.W, pady=5)
+        self.smtp_password_var = tk.StringVar(value="")
+        ttk.Entry(smtp_frame, textvariable=self.smtp_password_var, width=40, show="*").grid(row=4, column=1, sticky=(tk.W, tk.E), padx=10, pady=5)
+
+        # Help text
+        help_text = (
+            "Gmail: smtp.gmail.com:587 (use app-specific password)\n"
+            "Office365: smtp.office365.com:587\n"
+            "Outlook.com: smtp-mail.outlook.com:587"
+        )
+        ttk.Label(smtp_frame, text=help_text, font=('Arial', 8), foreground='gray').grid(
+            row=5, column=0, columnspan=2, sticky=tk.W, pady=5
+        )
+
+        smtp_frame.columnconfigure(1, weight=1)
 
         editor_frame.columnconfigure(1, weight=1)
 
@@ -1376,17 +1418,80 @@ TOP 10 MOST ENGAGED COMPANIES:
             )
 
             try:
-                # Call generate script for this person
-                # This is simplified - you'd call the actual generation function
+                # Skip if missing company name
+                if pd.isna(company) or str(company).strip() in ['', '-', 'Unknown']:
+                    self.log_gen(f"[{idx+1}/{total}] ⏭ Skipping: No valid company name")
+                    continue
+
                 self.log_gen(f"[{idx+1}/{total}] Generating: {company} - {person}")
 
-                # Simulate generation (replace with actual call)
-                import time
-                time.sleep(0.1)  # Replace with actual generation
+                # Create safe filenames
+                def safe_filename(name):
+                    if pd.isna(name) or name == "":
+                        return "Unknown"
+                    return "".join(c if c.isalnum() or c in [' ', '-'] else "_" for c in str(name)).replace(" ", "_")
 
-                success += 1
-                self.log_gen(f"  ✅ Success")
+                def safe_display_name(name):
+                    if pd.isna(name) or name == "":
+                        return "Unknown"
+                    name_str = str(name).strip()
+                    name_str = name_str.replace("/", "-").replace("\\", "-").replace(":", "-")
+                    name_str = name_str.replace("*", "").replace("?", "").replace('"', "'")
+                    name_str = name_str.replace("<", "(").replace(">", ")").replace("|", "-")
+                    return name_str
 
+                safe_company = safe_filename(company)
+                safe_person = safe_filename(person)
+                display_company = safe_display_name(company)
+                display_person = safe_display_name(person)
+
+                # Output filename
+                from datetime import datetime
+                date_str = datetime.now().strftime("%Y%m%d")
+                output_filename = f"{date_str} ResilienceScanReport ({display_company} - {display_person}).pdf"
+                output_file = REPORTS_DIR / output_filename
+
+                # Check if already exists
+                if output_file.exists():
+                    self.log_gen(f"  🔁 Already exists, skipping")
+                    success += 1
+                    continue
+
+                # Build quarto command using selected template
+                selected_template = ROOT_DIR / self.template_var.get()
+                temp_output = f"temp_{safe_company}_{safe_person}.pdf"
+                cmd = [
+                    'quarto', 'render', str(selected_template),
+                    '-P', f'company={company}',
+                    '--to', 'pdf',
+                    '--output', temp_output,
+                    '--quiet'
+                ]
+
+                # Execute quarto render
+                result = subprocess.run(cmd, cwd=ROOT_DIR, capture_output=True, text=True, timeout=300)
+
+                if result.returncode == 0:
+                    temp_path = ROOT_DIR / temp_output
+                    if temp_path.exists():
+                        import shutil
+                        shutil.move(str(temp_path), str(output_file))
+                        self.log_gen(f"  ✅ Success: {output_filename}")
+                        success += 1
+                    else:
+                        self.log_gen(f"  ❌ Error: Output file not found")
+                        failed += 1
+                else:
+                    error_msg = result.stderr[:200] if result.stderr else f"Exit code: {result.returncode}"
+                    self.log_gen(f"  ❌ Error: {error_msg}")
+                    failed += 1
+
+            except FileNotFoundError as e:
+                failed += 1
+                self.log_gen(f"  ❌ Error: Quarto not found - please install from https://quarto.org")
+            except subprocess.TimeoutExpired:
+                failed += 1
+                self.log_gen(f"  ❌ Error: Generation timeout (>5 minutes)")
             except Exception as e:
                 failed += 1
                 self.log_gen(f"  ❌ Error: {e}")
@@ -1970,7 +2075,7 @@ TOP 10 MOST ENGAGED COMPANIES:
             self.log_email("⚠️ Test mode disabled - emails will go to real recipients!")
 
     def start_email_all(self):
-        """Start sending all emails"""
+        """Start sending all emails with prerequisite checks"""
         if self.df is None:
             messagebox.showwarning("Warning", "Please load data first")
             return
@@ -1979,23 +2084,74 @@ TOP 10 MOST ENGAGED COMPANIES:
             messagebox.showwarning("Warning", "Email sending already in progress")
             return
 
-        # Check how many are pending vs already sent
+        # ===== PREREQUISITE CHECKS (Issue #51 Fix) =====
+
+        # CHECK 1: SMTP Configuration available?
+        # No longer using Outlook COM - using SMTP instead
+        smtp_server = getattr(self, 'smtp_server_var', None)
+        if not smtp_server or not smtp_server.get():
+            messagebox.showerror(
+                "SMTP Not Configured",
+                "Email server (SMTP) is not configured.\n\n"
+                "Please configure SMTP settings in the Email tab:\n"
+                "- SMTP Server (e.g., smtp.gmail.com)\n"
+                "- SMTP Port (e.g., 587 for TLS)\n"
+                "- Username (your email address)\n"
+                "- Password (app password)\n\n"
+                "For Gmail: Use app-specific password\n"
+                "For Office365: smtp.office365.com port 587"
+            )
+            return  # STOP - don't proceed
+
+        # CHECK 2: Any reports exist?
+        pdf_files = list(REPORTS_DIR.glob('*.pdf'))
+        if len(pdf_files) == 0:
+            messagebox.showerror(
+                "No Reports Found",
+                "No PDF reports found in reports/ folder.\n\n"
+                "Please generate reports first (Generation tab)."
+            )
+            return  # STOP - don't proceed
+
+        # CHECK 3: Any pending emails?
         stats = self.email_tracker.get_statistics()
         pending = stats.get('pending', 0)
         already_sent = stats.get('sent', 0)
+
+        if pending == 0:
+            messagebox.showinfo(
+                "No Pending Emails",
+                "All emails have already been sent or failed.\n\n"
+                "Check email status table for details."
+            )
+            return  # STOP - nothing to do
+
+        # ===== ALL CHECKS PASSED - CONFIRM WITH USER =====
 
         # Warn if test mode is off
         if not self.test_mode_var.get():
             response = messagebox.askyesno(
                 "Confirm Live Sending",
-                f"⚠️ TEST MODE IS OFF!\n\nEmails will be sent to REAL recipients.\n\nPending: {pending}\nAlready sent: {already_sent}\n\nAre you sure?"
+                f"⚠️ TEST MODE IS OFF!\n\n"
+                f"Emails will be sent to REAL recipients.\n\n"
+                f"Pending: {pending}\n"
+                f"Already sent: {already_sent}\n"
+                f"Reports available: {len(pdf_files)}\n"
+                f"SMTP Server: {self.smtp_server_var.get()}:{self.smtp_port_var.get()}\n\n"
+                f"Are you sure?"
             )
             if not response:
                 return
         else:
             response = messagebox.askyesno(
                 "Confirm Email Sending",
-                f"Send emails in TEST mode?\n\nPending: {pending}\nAlready sent: {already_sent}\n\nEmails will go to: {self.test_email_var.get()}"
+                f"Ready to send {pending} pending emails.\n\n"
+                f"Reports available: {len(pdf_files)}\n"
+                f"SMTP Server: {self.smtp_server_var.get()}:{self.smtp_port_var.get()}\n"
+                f"Test mode: YES\n"
+                f"Test email: {self.test_email_var.get()}\n\n"
+                f"Already sent: {already_sent}\n\n"
+                f"Continue?"
             )
             if not response:
                 return
@@ -2013,31 +2169,87 @@ TOP 10 MOST ENGAGED COMPANIES:
         self.log_email("📧 Starting email distribution...")
 
         # Get pending emails only
-        pending_records = self.email_tracker.get_all_records(status='pending')
-        total = len(pending_records)
+        all_pending = self.email_tracker.get_all_records(status='pending')
+
+        # CRITICAL FIX: Only process emails that have matching reports!
+        # Build list of available reports
+        available_reports = {}
+        for pdf_file in REPORTS_DIR.glob('*.pdf'):
+            available_reports[pdf_file.name] = pdf_file
+
+        self.log_email(f"📁 Found {len(available_reports)} reports in reports/ folder")
+
+        # Filter pending emails to only those with reports
+        def safe_display_name(name):
+            if pd.isna(name) or name == "":
+                return "Unknown"
+            name_str = str(name).strip()
+            name_str = name_str.replace("/", "-").replace("\\", "-").replace(":", "-")
+            name_str = name_str.replace("*", "").replace("?", "").replace('"', "'")
+            name_str = name_str.replace("<", "(").replace(">", ")").replace("|", "-")
+            return name_str
+
+        # Find which pending emails have reports
+        pending_records = []
+        for record in all_pending:
+            company = record['company_name']
+            person = record['person_name']
+            display_company = safe_display_name(company)
+            display_person = safe_display_name(person)
+
+            # Look for matching report
+            import glob
+            pattern = f"*ResilienceScanReport ({display_company} - {display_person}).pdf"
+            matches = glob.glob(str(REPORTS_DIR / pattern))
+
+            if matches:
+                pending_records.append(record)
+
+        total_pending = len(all_pending)
+        total_with_reports = len(pending_records)
+        skipped_no_report = total_pending - total_with_reports
+
+        self.log_email(f"📊 Total pending: {total_pending}")
+        self.log_email(f"✅ With reports: {total_with_reports}")
+        self.log_email(f"⏭️  Skipped (no report): {skipped_no_report}")
+
+        if total_with_reports == 0:
+            self.log_email("⚠️ No pending emails have matching reports - nothing to send!")
+            def finalize_empty():
+                self.is_sending_emails = False
+                self.email_start_btn.config(state=tk.NORMAL)
+                self.email_stop_btn.config(state=tk.DISABLED)
+                messagebox.showinfo(
+                    "No Emails to Send",
+                    f"Total pending: {total_pending}\n"
+                    f"With reports: 0\n\n"
+                    f"Please generate reports first, then try sending emails."
+                )
+            self.root.after(0, finalize_empty)
+            return
+
+        total = total_with_reports
         sent_count = 0
-        skipped_count = 0
+        skipped_count = skipped_no_report
         failed_count = 0
 
-        # Initialize Outlook connection
-        outlook = None
-        outlook_error = None
+        # Initialize SMTP connection
+        smtp_server = self.smtp_server_var.get()
+        smtp_port = int(self.smtp_port_var.get())
+        smtp_username = self.smtp_username_var.get()
+        smtp_password = self.smtp_password_var.get()
+        smtp_from = self.smtp_from_var.get()
 
-        try:
-            import win32com.client as win32
-            outlook = win32.Dispatch("Outlook.Application")
-            self.log_email("✅ Outlook connection established")
-        except Exception as e:
-            outlook_error = str(e)
-            self.log_email(f"❌ Cannot connect to Outlook: {e}")
-            self.log_email("⚠️ Emails will be marked as failed")
+        self.log_email(f"📧 Connecting to SMTP server: {smtp_server}:{smtp_port}")
+
+        # Note: SMTP connection will be created per-email to avoid timeout issues
 
         # Get email template
         subject_template = self.email_subject_var.get()
         body_template = self.email_body_text.get('1.0', tk.END).strip()
 
         test_mode = self.test_mode_var.get()
-        test_email = self.email_test_var.get() if test_mode else None
+        test_email = self.test_email_var.get() if test_mode else None
 
         for idx, record in enumerate(pending_records):
             if not self.is_sending_emails:
@@ -2088,10 +2300,6 @@ TOP 10 MOST ENGAGED COMPANIES:
             attachment_path = Path(matches[0])
 
             try:
-                # Check if Outlook is available
-                if outlook is None:
-                    raise Exception(f"Outlook not available: {outlook_error}")
-
                 self.log_email(f"[{idx+1}/{total}] Sending to: {company} - {person}")
 
                 # Format subject and body with template
@@ -2107,22 +2315,41 @@ TOP 10 MOST ENGAGED COMPANIES:
                     date=datetime.now().strftime('%Y-%m-%d')
                 )
 
-                # Create email
-                mail = outlook.CreateItem(0)
-
-                # Set recipient
+                # Determine recipient
+                recipient = test_email if test_mode else email
                 if test_mode:
-                    mail.To = test_email
                     body = f"[TEST MODE]\nOriginal recipient: {email}\n\n" + body
-                else:
-                    mail.To = email
 
-                mail.Subject = subject
-                mail.Body = body
-                mail.Attachments.Add(str(attachment_path.absolute()))
+                # Send via SMTP
+                import smtplib
+                from email.mime.multipart import MIMEMultipart
+                from email.mime.text import MIMEText
+                from email.mime.base import MIMEBase
+                from email import encoders
 
-                # Send email
-                mail.Send()
+                # Create message
+                msg = MIMEMultipart()
+                msg['From'] = smtp_from
+                msg['To'] = recipient
+                msg['Subject'] = subject
+
+                # Add body
+                msg.attach(MIMEText(body, 'plain'))
+
+                # Add attachment
+                with open(attachment_path, 'rb') as f:
+                    part = MIMEBase('application', 'octet-stream')
+                    part.set_payload(f.read())
+                    encoders.encode_base64(part)
+                    part.add_header('Content-Disposition', f'attachment; filename={attachment_path.name}')
+                    msg.attach(part)
+
+                # Connect and send
+                server = smtplib.SMTP(smtp_server, smtp_port)
+                server.starttls()
+                server.login(smtp_username, smtp_password)
+                server.send_message(msg)
+                server.quit()
 
                 # Mark as sent in tracker
                 self.email_tracker.mark_as_sent(
@@ -2172,6 +2399,26 @@ TOP 10 MOST ENGAGED COMPANIES:
             email_stats = self.email_tracker.get_statistics()
             self.stats['emails_sent'] = email_stats.get('sent', 0)
             self.update_stats_display()
+
+            # Show final summary dialog (Issue #51 Fix)
+            summary_message = (
+                f"Successfully sent: {sent_count}\n"
+                f"Failed: {failed_count}\n"
+                f"Skipped: {skipped_count}\n"
+                f"Total processed: {total}\n\n"
+            )
+
+            if failed_count > 0:
+                summary_message += "Check log for error details."
+                messagebox.showwarning(
+                    "Email Sending Complete (with failures)",
+                    summary_message
+                )
+            else:
+                messagebox.showinfo(
+                    "Email Sending Complete",
+                    summary_message
+                )
 
         self.root.after(0, finalize)
 

@@ -51,6 +51,10 @@ ResilienceReport_files/
 *.log
 email_log.txt
 
+# Email tracking database (environment-specific, should not be version controlled)
+email_tracking.db
+*.db.backup*
+
 # Test files
 test_*.py
 test_*.pdf
