@@ -1633,8 +1633,10 @@ TOP 10 MOST ENGAGED COMPANIES:
             self.status_label.config(text="Ready")
 
     def install_windows_dependencies(self):
-        """Install dependencies on Windows"""
+        """Install dependencies on Windows - runs installation/install_dependencies_auto.py"""
         import platform
+        import subprocess
+
         if platform.system() != 'Windows':
             messagebox.showwarning(
                 "Wrong Platform",
@@ -1645,72 +1647,78 @@ TOP 10 MOST ENGAGED COMPANIES:
         self.log("Starting Windows dependency installation...")
         self.status_label.config(text="Installing dependencies...")
 
+        # Clear stats text
+        self.stats_text.delete('1.0', tk.END)
+
+        report = "=" * 70 + "\n"
+        report += "WINDOWS DEPENDENCY INSTALLATION\n"
+        report += "=" * 70 + "\n\n"
+        report += "Running installation/install_dependencies_auto.py...\n\n"
+
+        self.stats_text.insert('1.0', report)
+        self.stats_text.update()
+
         try:
-            manager = DependencyManager()
-            checks = manager.check_all()
+            # Run the installation script from the installation folder
+            install_script = ROOT_DIR / "installation" / "install_dependencies_auto.py"
 
-            # Clear stats text and show installation guide
-            self.stats_text.delete('1.0', tk.END)
+            if not install_script.exists():
+                raise FileNotFoundError(f"Installation script not found: {install_script}")
 
-            report = "=" * 70 + "\n"
-            report += "WINDOWS DEPENDENCY INSTALLATION GUIDE\n"
-            report += "=" * 70 + "\n\n"
-
-            # Auto-install Python packages
-            python_packages_installed = 0
-            python_packages_failed = 0
-
-            for check in checks:
-                if check['category'] == 'Python Packages' and not check['installed']:
-                    package_name = check['name'].replace('Python Package: ', '')
-                    self.log(f"Installing Python package: {package_name}")
-                    report += f"Installing {package_name}...\n"
-
-                    result = manager.install_package(package_name)
-                    if result['success']:
-                        report += f"  ✅ {package_name} installed successfully\n\n"
-                        python_packages_installed += 1
-                    else:
-                        report += f"  ❌ Failed to install {package_name}\n"
-                        report += f"  Error: {result['error']}\n\n"
-                        python_packages_failed += 1
-
-            # Manual installation instructions for R and Quarto
-            report += "\n" + "=" * 70 + "\n"
-            report += "MANUAL INSTALLATION REQUIRED\n"
-            report += "=" * 70 + "\n\n"
-
-            for check in checks:
-                if not check['installed'] and check['category'] in ['R', 'Quarto']:
-                    install_cmd = manager.get_install_command(check['name'])
-                    report += f"📦 {check['name']}\n"
-                    if 'manual' in install_cmd:
-                        report += f"  → Download from: {install_cmd['manual']}\n"
-                        if 'installer_url' in install_cmd:
-                            report += f"  → Direct link: {install_cmd['installer_url']}\n"
-                    report += "\n"
-
-            # Summary
-            report += "\n" + "=" * 70 + "\n"
-            report += "INSTALLATION SUMMARY\n"
-            report += "=" * 70 + "\n"
-            report += f"Python packages installed: {python_packages_installed}\n"
-            report += f"Python packages failed: {python_packages_failed}\n"
-            report += f"\nPlease install R and Quarto manually using the links above.\n"
-            report += f"Then click 'Check System' to verify installation.\n"
-
-            self.stats_text.insert('1.0', report)
-            self.log(f"✅ Windows installation complete: {python_packages_installed} packages installed")
-
-            messagebox.showinfo(
-                "Installation Complete",
-                f"✅ Installed {python_packages_installed} Python package(s)\n\n"
-                f"Please install R and Quarto manually.\nSee Dashboard for links."
+            # Run the script and capture output
+            result = subprocess.run(
+                [sys.executable, str(install_script)],
+                capture_output=True,
+                text=True,
+                cwd=ROOT_DIR,
+                timeout=300
             )
 
+            # Show the output
+            output = result.stdout if result.stdout else ""
+            if result.stderr:
+                output += "\n\nErrors:\n" + result.stderr
+
+            self.stats_text.insert(tk.END, output)
+
+            if result.returncode == 0:
+                self.log("Installation completed successfully")
+                messagebox.showinfo(
+                    "Installation Complete",
+                    "Python packages installed successfully!\n\n"
+                    "For R and Quarto, run PowerShell installer:\n"
+                    "installation/Install-ResilienceScan.ps1\n\n"
+                    "See installation/INSTALL.md for details."
+                )
+            else:
+                self.log(f"Installation completed with errors (exit code: {result.returncode})")
+                messagebox.showwarning(
+                    "Installation Completed with Errors",
+                    "Some packages may have failed to install.\n\n"
+                    "Check the Dashboard for details."
+                )
+
+        except FileNotFoundError as e:
+            self.log(f"Error: Installation script not found")
+            self.stats_text.insert(tk.END, f"\nERROR: {e}\n")
+            messagebox.showerror(
+                "Installation Script Not Found",
+                f"Could not find installation script:\n{e}\n\n"
+                "Please ensure installation/ folder exists."
+            )
+        except subprocess.TimeoutExpired:
+            self.log("Error: Installation timed out after 5 minutes")
+            messagebox.showerror(
+                "Installation Timeout",
+                "Installation took longer than 5 minutes and was cancelled."
+            )
         except Exception as e:
-            self.log(f"❌ Error installing dependencies: {e}")
-            messagebox.showerror("Error", f"Failed to install dependencies:\n{e}")
+            self.log(f"Error during installation: {e}")
+            self.stats_text.insert(tk.END, f"\nERROR: {e}\n")
+            import traceback
+            traceback_str = traceback.format_exc()
+            self.stats_text.insert(tk.END, f"\n{traceback_str}\n")
+            messagebox.showerror("Installation Error", f"Failed to install dependencies:\n\n{e}")
         finally:
             self.status_label.config(text="Ready")
 
