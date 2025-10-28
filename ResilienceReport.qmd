@@ -1597,12 +1597,30 @@ analyze_pillar_gap <- function(prefix) {
         )
       )
     }
-    
+
+    # Check if dimension exists in examples
+    if (!dimension %in% names(examples)) {
+      # Return generic fallback examples if dimension not found
+      if (is_high) {
+        return(c("Strong performance in this area", "Effective practices implemented"))
+      } else {
+        return(c("Room for improvement in this area", "Consider strengthening practices"))
+      }
+    }
+
     if (is_high) examples[[dimension]]$high else examples[[dimension]]$low
   }
-  
-  high_examples <- get_examples(highest_dim, TRUE)
-  low_examples <- get_examples(lowest_dim, FALSE)
+
+  # Use tryCatch to handle any errors gracefully
+  high_examples <- tryCatch(
+    get_examples(highest_dim, TRUE),
+    error = function(e) c("Strong performance area", "Effective practices")
+  )
+
+  low_examples <- tryCatch(
+    get_examples(lowest_dim, FALSE),
+    error = function(e) c("Area for improvement", "Consider development")
+  )
   
   list(
     highest_dim = highest_dim,
