@@ -2520,15 +2520,37 @@ TOP 10 MOST ENGAGED COMPANIES:
                         mail.Subject = subject
                         mail.Body = body
 
+                        # IMPORTANT: Set the sending account explicitly
+                        # This ensures emails go to the correct recipient
+                        # Try to get the account from SMTP username if configured
+                        try:
+                            if smtp_from and '@' in smtp_from:
+                                # Find matching account in Outlook
+                                for account in outlook.Session.Accounts:
+                                    if account.SmtpAddress.lower() == smtp_from.lower():
+                                        mail.SendUsingAccount = account
+                                        self.log_email(f"  Using account: {account.SmtpAddress}")
+                                        break
+                        except Exception as acc_ex:
+                            self.log_email(f"  ⚠️  Could not set specific account: {acc_ex}")
+
                         # Add attachment
                         self.log_email(f"  Attaching PDF: {attachment_path}...")
                         mail.Attachments.Add(str(attachment_path.absolute()))
+
+                        # VERIFICATION: Log the actual recipient before sending
+                        self.log_email(f"  ✅ Email configured - To: {mail.To}, Subject: {mail.Subject[:50]}...")
+
+                        # DEBUG: Uncomment the next two lines to display email instead of sending (for testing)
+                        # mail.Display()  # Opens email in Outlook for manual inspection
+                        # self.log_email(f"  📧 Email displayed for inspection (not sent)")
 
                         # Send
                         self.log_email(f"  Sending via Outlook...")
                         mail.Send()
 
-                        self.log_email(f"  ✅ Sent via Outlook!")
+                        # Verify after send - check if To field was modified
+                        self.log_email(f"  ✅ Sent via Outlook to: {mail.To}")
 
                     except Exception as outlook_ex:
                         outlook_error = str(outlook_ex)
