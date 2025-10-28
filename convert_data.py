@@ -27,7 +27,7 @@ def find_data_file():
     Returns the first matching file based on priority patterns.
     Excludes master_data.csv and cleaned_master.csv from search.
     """
-    print(f"🔍 Searching for Excel files in: {DATA_DIR}")
+    print(f"[SEARCH] Searching for Excel files in: {DATA_DIR}")
 
     for pattern in FILE_PATTERNS:
         search_path = os.path.join(DATA_DIR, pattern)
@@ -37,12 +37,12 @@ def find_data_file():
             # Sort by modification time (most recent first)
             matches.sort(key=os.path.getmtime, reverse=True)
             selected_file = matches[0]
-            print(f"✅ Found data file: {selected_file}")
+            print(f"[OK] Found data file: {selected_file}")
             if len(matches) > 1:
                 print(f"   (Found {len(matches)} files matching '{pattern}', using most recent)")
             return selected_file
 
-    print(f"❌ No Excel files found in {DATA_DIR}")
+    print(f"[ERROR] No Excel files found in {DATA_DIR}")
     return None
 
 
@@ -65,56 +65,56 @@ def load_excel_file(file_path):
                 with open(file_path, 'rb') as f:
                     f.read(1)
             except PermissionError:
-                print(f"   ❌ File is locked - please close it in Excel or other programs")
+                print(f"   [ERROR] File is locked - please close it in Excel or other programs")
                 return None
             except Exception as e:
-                print(f"   ❌ Cannot access file: {e}")
+                print(f"   [ERROR] Cannot access file: {e}")
                 return None
 
             # Try loading with appropriate engine
             if file_ext == '.xlsx':
                 try:
                     df = pd.read_excel(file_path, engine='openpyxl', header=None)
-                    print("   ✅ Loaded with openpyxl engine")
+                    print("   [OK] Loaded with openpyxl engine")
                 except ImportError:
-                    print("   ⚠️  openpyxl not installed, trying default engine...")
+                    print("   [WARNING]  openpyxl not installed, trying default engine...")
                     df = pd.read_excel(file_path, header=None)
-                    print("   ✅ Loaded with default engine")
+                    print("   [OK] Loaded with default engine")
             else:
                 try:
                     df = pd.read_excel(file_path, engine='xlrd', header=None)
-                    print("   ✅ Loaded with xlrd engine")
+                    print("   [OK] Loaded with xlrd engine")
                 except ImportError:
-                    print("   ⚠️  xlrd not installed, trying default engine...")
+                    print("   [WARNING]  xlrd not installed, trying default engine...")
                     df = pd.read_excel(file_path, header=None)
-                    print("   ✅ Loaded with default engine")
+                    print("   [OK] Loaded with default engine")
 
             # Validate loaded data
             if df is None or df.empty:
-                print("   ❌ File loaded but contains no data")
+                print("   [ERROR] File loaded but contains no data")
                 return None
 
             if df.shape[0] < 2:
-                print("   ❌ File must have at least 2 rows (header + data)")
+                print("   [ERROR] File must have at least 2 rows (header + data)")
                 return None
 
             if df.shape[1] < 3:
-                print("   ❌ File must have at least 3 columns")
+                print("   [ERROR] File must have at least 3 columns")
                 return None
 
         except FileNotFoundError:
-            print(f"   ❌ File not found: {file_path}")
+            print(f"   [ERROR] File not found: {file_path}")
             return None
         except PermissionError:
-            print(f"   ❌ Permission denied - file may be locked by another program")
+            print(f"   [ERROR] Permission denied - file may be locked by another program")
             return None
         except Exception as e:
-            print(f"   ❌ Excel load failed: {type(e).__name__}: {e}")
-            print(f"   💡 Tip: Make sure the file is a valid Excel file and not corrupted")
+            print(f"   [ERROR] Excel load failed: {type(e).__name__}: {e}")
+            print(f"   [TIP] Tip: Make sure the file is a valid Excel file and not corrupted")
             return None
     else:
-        print(f"   ⚠️  Unsupported file extension: {file_ext}")
-        print(f"   💡 Supported formats: .xlsx, .xls")
+        print(f"   [WARNING]  Unsupported file extension: {file_ext}")
+        print(f"   [TIP] Supported formats: .xlsx, .xls")
         return None
 
     return df
@@ -126,7 +126,7 @@ def detect_header_row(df, max_rows_to_check=10):
     Looks for rows with column-like content.
     More robust detection with multiple criteria.
     """
-    print("🔍 Detecting header row...")
+    print("[SEARCH] Detecting header row...")
 
     header_keywords = ['company', 'name', 'email', 'submitdate', 'up -', 'in -', 'do -']
 
@@ -155,19 +155,19 @@ def detect_header_row(df, max_rows_to_check=10):
             non_empty = sum(1 for s in row_strings if s)
 
             if keyword_matches >= 3:  # At least 3 header keywords found
-                print(f"✅ Detected header at row {idx + 1} (index {idx})")
+                print(f"[OK] Detected header at row {idx + 1} (index {idx})")
                 print(f"   Found {keyword_matches} header keywords, {non_empty}/{len(row_strings)} non-empty cells")
                 return idx
             elif text_count > len(row_strings) * 0.7 and non_empty > len(row_strings) * 0.5:
                 # Looks like a header (mostly text, mostly filled)
-                print(f"✅ Detected likely header at row {idx + 1} (index {idx})")
+                print(f"[OK] Detected likely header at row {idx + 1} (index {idx})")
                 print(f"   {text_count} text cells, {non_empty}/{len(row_strings)} non-empty cells")
                 return idx
         except Exception as e:
-            print(f"   ⚠️  Error checking row {idx}: {e}")
+            print(f"   [WARNING]  Error checking row {idx}: {e}")
             continue
 
-    print("⚠️  Using default header row (index 0)")
+    print("[WARNING]  Using default header row (index 0)")
     return 0
 
 
@@ -213,7 +213,7 @@ def clean_column_names(columns):
 
             cleaned.append(col_name)
         except Exception as e:
-            print(f"   ⚠️  Error cleaning column {i}: {e}, using default name")
+            print(f"   [WARNING]  Error cleaning column {i}: {e}, using default name")
             cleaned.append(f'column_{i+1}')
 
     # Handle duplicate column names
@@ -254,24 +254,24 @@ def merge_with_existing(new_df):
     More robust handling of edge cases and errors.
     """
     if not Path(OUTPUT_PATH).exists():
-        print("ℹ️  No existing cleaned_master.csv found - creating new file")
+        print("[INFO]  No existing cleaned_master.csv found - creating new file")
         # Add reportsent column as False for all new records
         if 'reportsent' not in new_df.columns:
             new_df['reportsent'] = False
         return new_df
 
-    print("\n🔄 Updating existing cleaned_master.csv...")
+    print("\n[UPDATE] Updating existing cleaned_master.csv...")
 
     try:
         # Load existing data with error handling
         try:
             existing_df = pd.read_csv(OUTPUT_PATH, encoding='utf-8')
         except UnicodeDecodeError:
-            print("   ⚠️  UTF-8 decode failed, trying latin-1 encoding...")
+            print("   [WARNING]  UTF-8 decode failed, trying latin-1 encoding...")
             existing_df = pd.read_csv(OUTPUT_PATH, encoding='latin-1')
         except Exception as e:
-            print(f"   ❌ Could not read existing file: {e}")
-            print("   ℹ️  Creating new file instead")
+            print(f"   [ERROR] Could not read existing file: {e}")
+            print("   [INFO]  Creating new file instead")
             new_df['reportsent'] = False
             return new_df
 
@@ -280,15 +280,15 @@ def merge_with_existing(new_df):
 
         # Validate existing data
         if existing_df.empty:
-            print("   ⚠️  Existing file is empty - creating new file")
+            print("   [WARNING]  Existing file is empty - creating new file")
             new_df['reportsent'] = False
             return new_df
 
         # Create backup before updating
         create_backup(OUTPUT_PATH)
     except Exception as e:
-        print(f"   ❌ Error processing existing file: {e}")
-        print("   ℹ️  Creating new file instead")
+        print(f"   [ERROR] Error processing existing file: {e}")
+        print("   [INFO]  Creating new file instead")
         new_df['reportsent'] = False
         return new_df
 
@@ -298,7 +298,7 @@ def merge_with_existing(new_df):
 
     # Check if reportsent column exists in old file
     if 'reportsent' not in existing_df.columns:
-        print("   ⚠️  No 'reportsent' column in existing file - creating new")
+        print("   [WARNING]  No 'reportsent' column in existing file - creating new")
         existing_df['reportsent'] = False
 
     # Identify key columns for matching
@@ -310,7 +310,7 @@ def merge_with_existing(new_df):
             key_columns.append(col)
 
     if not key_columns:
-        print("⚠️  No common key columns found - replacing entire file")
+        print("[WARNING]  No common key columns found - replacing entire file")
         new_df['reportsent'] = False
         return new_df
 
@@ -324,7 +324,7 @@ def merge_with_existing(new_df):
     reportsent_map = dict(zip(existing_df['_merge_key'], existing_df['reportsent']))
 
     # Update new_df with reportsent values from old file
-    print("   📧 Preserving email tracking status...")
+    print("   [EMAIL] Preserving email tracking status...")
     preserved_count = 0
     new_count = 0
 
@@ -342,7 +342,7 @@ def merge_with_existing(new_df):
     # Remove merge key
     new_df = new_df.drop('_merge_key', axis=1)
 
-    print(f"   📊 Update analysis:")
+    print(f"   [DATA] Update analysis:")
     print(f"      - Preserved 'reportsent' status: {preserved_count} records")
     print(f"      - New records (not sent): {new_count} records")
     print(f"      - Total records in updated file: {len(new_df)}")
@@ -355,23 +355,23 @@ def convert_and_save():
     Main function: Find Excel file, convert to CSV format, merge with existing data.
     """
     print("=" * 70)
-    print("📥 DATA CONVERSION - EXCEL TO CSV")
+    print("[IMPORT] DATA CONVERSION - EXCEL TO CSV")
     print("=" * 70)
 
     # Step 1: Find the Excel file
     source_file = find_data_file()
     if not source_file:
-        print("\n❌ FAILED: No Excel file found")
+        print("\n[ERROR] FAILED: No Excel file found")
         print(f"   Please place an Excel file (.xlsx or .xls) in: {DATA_DIR}")
         return False
 
     # Step 2: Load the Excel file
     df_raw = load_excel_file(source_file)
     if df_raw is None:
-        print("\n❌ FAILED: Could not load Excel file")
+        print("\n[ERROR] FAILED: Could not load Excel file")
         return False
 
-    print(f"\n📊 Raw data shape: {df_raw.shape[0]} rows × {df_raw.shape[1]} columns")
+    print(f"\n[DATA] Raw data shape: {df_raw.shape[0]} rows × {df_raw.shape[1]} columns")
 
     # Step 3: Detect header row
     header_row_idx = detect_header_row(df_raw)
@@ -380,18 +380,18 @@ def convert_and_save():
     header_row = df_raw.iloc[header_row_idx].tolist()
     data_rows = df_raw.iloc[header_row_idx + 1:]
 
-    print(f"📋 Using row {header_row_idx + 1} as header")
+    print(f"[SAMPLE] Using row {header_row_idx + 1} as header")
     print(f"📦 Data rows: {len(data_rows)}")
 
     # Step 5: Create dataframe with proper headers
     df_converted = pd.DataFrame(data_rows.values, columns=header_row)
 
     # Step 6: Clean column names
-    print("\n🧹 Cleaning column names...")
+    print("\n[CLEAN] Cleaning column names...")
     original_cols = df_converted.columns.tolist()
     cleaned_cols = clean_column_names(original_cols)
     df_converted.columns = cleaned_cols
-    print(f"   ✅ Cleaned {len(cleaned_cols)} column names")
+    print(f"   [OK] Cleaned {len(cleaned_cols)} column names")
 
     # Show sample transformations
     changed_cols = [(orig, clean) for orig, clean in zip(original_cols, cleaned_cols) if orig != clean]
@@ -421,11 +421,11 @@ def convert_and_save():
             try:
                 os.makedirs(output_dir, exist_ok=True)
             except PermissionError:
-                print(f"   ❌ Permission denied: Cannot create directory {output_dir}")
-                print(f"   💡 Tip: Check folder permissions or run as administrator")
+                print(f"   [ERROR] Permission denied: Cannot create directory {output_dir}")
+                print(f"   [TIP] Tip: Check folder permissions or run as administrator")
                 return False
             except Exception as e:
-                print(f"   ❌ Cannot create directory: {e}")
+                print(f"   [ERROR] Cannot create directory: {e}")
                 return False
 
         # Check if we can write to the output file
@@ -435,58 +435,58 @@ def convert_and_save():
                 with open(OUTPUT_PATH, 'a'):
                     pass
             except PermissionError:
-                print(f"   ❌ File is locked: {OUTPUT_PATH}")
-                print(f"   💡 Tip: Close the file if it's open in Excel or another program")
+                print(f"   [ERROR] File is locked: {OUTPUT_PATH}")
+                print(f"   [TIP] Tip: Close the file if it's open in Excel or another program")
                 return False
 
         # Validate dataframe before saving
         if df_final.empty:
-            print("   ⚠️  Warning: Dataframe is empty, but saving anyway")
+            print("   [WARNING]  Warning: Dataframe is empty, but saving anyway")
 
         # Save to CSV with error handling
         df_final.to_csv(OUTPUT_PATH, index=False, encoding='utf-8')
 
         # Verify the file was created and is readable
         if not Path(OUTPUT_PATH).exists():
-            print(f"   ❌ File was not created: {OUTPUT_PATH}")
+            print(f"   [ERROR] File was not created: {OUTPUT_PATH}")
             return False
 
         # Try to read it back to verify
         try:
             verification_df = pd.read_csv(OUTPUT_PATH, nrows=1)
             if verification_df.empty and not df_final.empty:
-                print(f"   ⚠️  Warning: File created but appears empty")
+                print(f"   [WARNING]  Warning: File created but appears empty")
         except Exception as e:
-            print(f"   ⚠️  Warning: Could not verify saved file: {e}")
+            print(f"   [WARNING]  Warning: Could not verify saved file: {e}")
 
-        print(f"   ✅ Saved successfully!")
-        print(f"   📊 Final shape: {df_final.shape[0]} rows × {df_final.shape[1]} columns")
+        print(f"   [OK] Saved successfully!")
+        print(f"   [DATA] Final shape: {df_final.shape[0]} rows × {df_final.shape[1]} columns")
 
         # Show sample of converted data (with error handling)
         try:
             if len(df_final) > 0 and len(df_final.columns) > 0:
-                print("\n📋 Sample of converted data (first 3 rows, first 5 columns):")
+                print("\n[SAMPLE] Sample of converted data (first 3 rows, first 5 columns):")
                 sample_cols = min(5, len(df_final.columns))
                 sample_rows = min(3, len(df_final))
                 print(df_final.iloc[:sample_rows, :sample_cols].to_string())
         except Exception as e:
-            print(f"   ⚠️  Could not display sample: {e}")
+            print(f"   [WARNING]  Could not display sample: {e}")
 
         print("\n" + "=" * 70)
-        print("✅ SUCCESS: Data converted to CSV!")
+        print("[OK] SUCCESS: Data converted to CSV!")
         print("=" * 70)
-        print("\nℹ️  Next step: Run 'Clean Data' to fix any data quality issues")
+        print("\n[INFO]  Next step: Run 'Clean Data' to fix any data quality issues")
 
         return True
 
     except PermissionError as e:
-        print(f"\n❌ FAILED to save: Permission denied")
-        print(f"   💡 Tip: Close {OUTPUT_PATH} if it's open in another program")
+        print(f"\n[ERROR] FAILED to save: Permission denied")
+        print(f"   [TIP] Tip: Close {OUTPUT_PATH} if it's open in another program")
         print(f"   Error details: {e}")
         return False
     except Exception as e:
-        print(f"\n❌ FAILED to save: {type(e).__name__}: {e}")
-        print(f"   💡 Tip: Check that you have write permissions to the /data folder")
+        print(f"\n[ERROR] FAILED to save: {type(e).__name__}: {e}")
+        print(f"   [TIP] Tip: Check that you have write permissions to the /data folder")
         return False
 
 

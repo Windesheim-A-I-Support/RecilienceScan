@@ -481,7 +481,7 @@ if __name__ == "__main__":
     checks = manager.check_all()
 
     for check in checks:
-        status = "✅" if check['installed'] else "❌"
+        status = "[OK]" if check['installed'] else "[ERROR]"
         required = "[REQUIRED]" if check['required'] else "[OPTIONAL]"
         print(f"{status} {check['name']:<30} {required}")
         print(f"   Version: {check['version']}")

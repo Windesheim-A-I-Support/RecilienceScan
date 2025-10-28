@@ -5,7 +5,7 @@ from pathlib import Path
 import shutil
 from datetime import datetime
 
-# ✅ CONFIGURATION
+# [OK] CONFIGURATION
 ROOT = Path(__file__).resolve().parent
 TEMPLATE = ROOT / "ResilienceReport.qmd"
 DATA = ROOT / "data" / "cleaned_master.csv"
@@ -22,14 +22,14 @@ def load_csv(path):
                 sample = f.read(2048)
                 try:
                     sep = csv.Sniffer().sniff(sample).delimiter
-                    print(f"✅ Delimiter '{sep}' with encoding '{enc}'")
+                    print(f"[OK] Delimiter '{sep}' with encoding '{enc}'")
                 except Exception:
                     sep = ","
-                    print(f"⚠️ Using fallback delimiter ',' with encoding '{enc}'")
+                    print(f"[WARNING] Using fallback delimiter ',' with encoding '{enc}'")
                 return pd.read_csv(path, encoding=enc, sep=sep)
         except Exception as e:
-            print(f"⚠️ Failed with encoding {enc}: {e}")
-    raise RuntimeError("❌ Could not read CSV.")
+            print(f"[WARNING] Failed with encoding {enc}: {e}")
+    raise RuntimeError("[ERROR] Could not read CSV.")
 
 def safe_filename(name):
     """Convert string to safe filename (alphanumeric + underscore)"""
@@ -59,7 +59,7 @@ def generate_reports():
     """Generate individual PDF reports for each person/company entry"""
 
     print("=" * 70)
-    print("📊 RESILIENCE SCAN REPORT GENERATOR")
+    print("[DATA] RESILIENCE SCAN REPORT GENERATOR")
     print("=" * 70)
 
     # Load data
@@ -71,9 +71,9 @@ def generate_reports():
     person_col = next((col for col in df.columns if COLUMN_MATCH_PERSON in col), None)
 
     if not company_col:
-        raise ValueError(f"❌ No column matching '{COLUMN_MATCH_COMPANY}'")
+        raise ValueError(f"[ERROR] No column matching '{COLUMN_MATCH_COMPANY}'")
 
-    print(f"\n📁 Found columns:")
+    print(f"\n[FOLDER] Found columns:")
     print(f"   Company: {company_col}")
     print(f"   Person: {person_col if person_col else 'Not found (will use Unknown)'}")
 
@@ -85,7 +85,7 @@ def generate_reports():
 
     # Count total and generate reports
     total_entries = len(df[df[company_col].notna()])
-    print(f"\n📝 Total entries to process: {total_entries}")
+    print(f"\n[OUTPUT] Total entries to process: {total_entries}")
     print("=" * 70)
 
     generated = 0
@@ -119,11 +119,11 @@ def generate_reports():
 
         # Check if already exists
         if output_file.exists():
-            print(f"🔁 Skipping {company} - {person} (already exists)")
+            print(f"[SKIP] Skipping {company} - {person} (already exists)")
             skipped += 1
             continue
 
-        print(f"\n📄 Generating report {generated + 1}/{total_entries}:")
+        print(f"\n[FILE] Generating report {generated + 1}/{total_entries}:")
         print(f"   Company: {company}")
         print(f"   Person: {person}")
         print(f"   Output: {output_filename}")
@@ -139,7 +139,7 @@ def generate_reports():
         )
 
         # Execute quarto render with verbose output
-        print(f"   🔧 Running: quarto render...")
+        print(f"   [FIX] Running: quarto render...")
         import subprocess
         try:
             result = subprocess.run(
@@ -153,16 +153,16 @@ def generate_reports():
             if result.returncode == 0:
                 if Path(temp_output).exists():
                     shutil.move(temp_output, output_file)
-                    print(f"   ✅ Saved: {output_file}")
+                    print(f"   [OK] Saved: {output_file}")
                     generated += 1
                 else:
-                    print(f"   ❌ Output file not found after successful render")
-                    print(f"   📋 stdout: {result.stdout[-500:]}" if result.stdout else "")
-                    print(f"   ⚠️  stderr: {result.stderr[-500:]}" if result.stderr else "")
+                    print(f"   [ERROR] Output file not found after successful render")
+                    print(f"   [SAMPLE] stdout: {result.stdout[-500:]}" if result.stdout else "")
+                    print(f"   [WARNING]  stderr: {result.stderr[-500:]}" if result.stderr else "")
                     failed += 1
             else:
-                print(f"   ❌ Failed (exit code: {result.returncode})")
-                print(f"   📋 Error output:")
+                print(f"   [ERROR] Failed (exit code: {result.returncode})")
+                print(f"   [SAMPLE] Error output:")
                 if result.stderr:
                     # Show last 1000 chars of error for readability
                     error_text = result.stderr[-1000:] if len(result.stderr) > 1000 else result.stderr
@@ -170,32 +170,32 @@ def generate_reports():
                 if result.stdout:
                     # Show last 500 chars of stdout if available
                     stdout_text = result.stdout[-500:] if len(result.stdout) > 500 else result.stdout
-                    print(f"   📝 Output: {stdout_text}")
+                    print(f"   [OUTPUT] Output: {stdout_text}")
                 failed += 1
 
         except subprocess.TimeoutExpired:
-            print(f"   ❌ Failed: Timeout after 120 seconds")
+            print(f"   [ERROR] Failed: Timeout after 120 seconds")
             failed += 1
         except Exception as e:
-            print(f"   ❌ Failed: {type(e).__name__}: {e}")
+            print(f"   [ERROR] Failed: {type(e).__name__}: {e}")
             failed += 1
 
     # Summary
     print("\n" + "=" * 70)
-    print("📊 GENERATION SUMMARY")
+    print("[DATA] GENERATION SUMMARY")
     print("=" * 70)
-    print(f"   ✅ Generated: {generated}")
-    print(f"   🔁 Skipped:   {skipped}")
-    print(f"   ❌ Failed:    {failed}")
-    print(f"   📁 Total:     {total_entries}")
+    print(f"   [OK] Generated: {generated}")
+    print(f"   [SKIP] Skipped:   {skipped}")
+    print(f"   [ERROR] Failed:    {failed}")
+    print(f"   [FOLDER] Total:     {total_entries}")
     print("=" * 70)
 
     if generated > 0:
-        print(f"\n✅ Reports saved to: {OUTPUT_DIR}")
+        print(f"\n[OK] Reports saved to: {OUTPUT_DIR}")
 
 if __name__ == "__main__":
     try:
         generate_reports()
     except Exception as e:
-        print(f"\n❌ ERROR: {e}")
+        print(f"\n[ERROR] ERROR: {e}")
         raise

@@ -47,11 +47,11 @@ def print_header(title):
 
 def print_success(message):
     """Print success message in green"""
-    print(f"✓ {message}")
+    print(f"[CHECK] {message}")
 
 def print_error(message):
     """Print error message in red"""
-    print(f"✗ {message}")
+    print(f"[CROSS] {message}")
 
 def print_warning(message):
     """Print warning message in yellow"""

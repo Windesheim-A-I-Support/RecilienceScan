@@ -9,7 +9,7 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
-# ✅ CONFIGURATION
+# [OK] CONFIGURATION
 CSV_PATH = "data/cleaned_master.csv"
 REPORTS_FOLDER = "reports"
 TEST_MODE = True
@@ -70,7 +70,7 @@ def send_emails():
 
     required_cols = {"company_name", "email_address", "name"}
     if not required_cols.issubset(df.columns):
-        print(f"❌ Missing one or more required columns: {required_cols}")
+        print(f"[ERROR] Missing one or more required columns: {required_cols}")
         return
 
     sent_count = 0

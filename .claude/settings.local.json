@@ -11,7 +11,15 @@
       "Bash(python clean_data.py:*)",
       "Bash(python:*)",
       "Bash(gh issue create:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(for file in create_test_pdfs.py dependency_manager.py email_tracker.py gui_system_check.py)",
+      "Bash(do)",
+      "Bash(if [ -f \"$file\" ])",
+      "Bash(then)",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(for file in *.py)",
+      "Bash(echo:*)"
     ],
     "deny": [],
     "ask": []

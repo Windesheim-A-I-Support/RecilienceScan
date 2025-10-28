@@ -39,9 +39,9 @@ class SystemChecker:
         """Check Python version"""
         version = sys.version_info
         if version.major >= 3 and version.minor >= 8:
-            self.add_check("✅ Python version", f"{version.major}.{version.minor}.{version.micro}", "OK")
+            self.add_check("[OK] Python version", f"{version.major}.{version.minor}.{version.micro}", "OK")
         else:
-            self.add_error("❌ Python version", f"{version.major}.{version.minor}.{version.micro}",
+            self.add_error("[ERROR] Python version", f"{version.major}.{version.minor}.{version.micro}",
                           "Python 3.8+ required")
 
     def check_python_packages(self):
@@ -59,9 +59,9 @@ class SystemChecker:
                     import tkinter
                 else:
                     __import__(package)
-                self.add_check(f"✅ Package: {package}", "Installed", "OK")
+                self.add_check(f"[OK] Package: {package}", "Installed", "OK")
             except ImportError:
-                self.add_error(f"❌ Package: {package}", "Not found",
+                self.add_error(f"[ERROR] Package: {package}", "Not found",
                               f"Install with: pip install {package}")
 
     def check_r_installation(self):
@@ -70,11 +70,11 @@ class SystemChecker:
             result = subprocess.run(['R', '--version'], capture_output=True, text=True, timeout=5)
             if result.returncode == 0:
                 version = result.stdout.split('\n')[0]
-                self.add_check("✅ R", version, "OK")
+                self.add_check("[OK] R", version, "OK")
             else:
-                self.add_warning("⚠️ R", "Not accessible", "R required for report generation")
+                self.add_warning("[WARNING] R", "Not accessible", "R required for report generation")
         except (FileNotFoundError, subprocess.TimeoutExpired):
-            self.add_warning("⚠️ R", "Not found", "Install R from https://www.r-project.org/")
+            self.add_warning("[WARNING] R", "Not found", "Install R from https://www.r-project.org/")
 
     def check_quarto_installation(self):
         """Check Quarto installation"""
@@ -82,7 +82,7 @@ class SystemChecker:
             result = subprocess.run(['quarto', '--version'], capture_output=True, text=True, timeout=5)
             if result.returncode == 0:
                 version = result.stdout.strip()
-                self.add_check(f"✅ Quarto", f"v{version}", "OK")
+                self.add_check(f"[OK] Quarto", f"v{version}", "OK")
 
                 # Check Quarto can render
                 result = subprocess.run(
@@ -92,13 +92,13 @@ class SystemChecker:
                     timeout=10
                 )
                 if result.returncode == 0:
-                    self.add_check("✅ Quarto check", "Passed", "OK")
+                    self.add_check("[OK] Quarto check", "Passed", "OK")
                 else:
-                    self.add_warning("⚠️ Quarto check", "Failed", "Run 'quarto check' manually")
+                    self.add_warning("[WARNING] Quarto check", "Failed", "Run 'quarto check' manually")
             else:
-                self.add_error("❌ Quarto", "Not working", "Reinstall Quarto")
+                self.add_error("[ERROR] Quarto", "Not working", "Reinstall Quarto")
         except (FileNotFoundError, subprocess.TimeoutExpired):
-            self.add_error("❌ Quarto", "Not found", "Install from https://quarto.org/")
+            self.add_error("[ERROR] Quarto", "Not found", "Install from https://quarto.org/")
 
     def check_files(self):
         """Check required files exist"""
@@ -114,9 +114,9 @@ class SystemChecker:
             filepath = self.root_dir / filename
             if filepath.exists():
                 size = filepath.stat().st_size / 1024  # KB
-                self.add_check(f"✅ File: {filename}", f"{size:.1f} KB", description)
+                self.add_check(f"[OK] File: {filename}", f"{size:.1f} KB", description)
             else:
-                self.add_error(f"❌ File: {filename}", "Not found", description)
+                self.add_error(f"[ERROR] File: {filename}", "Not found", description)
 
     def check_data(self):
         """Check data files"""
@@ -124,22 +124,22 @@ class SystemChecker:
         cleaned_master = data_dir / "cleaned_master.csv"
 
         if data_dir.exists():
-            self.add_check("✅ Data directory", "Exists", "OK")
+            self.add_check("[OK] Data directory", "Exists", "OK")
 
             if cleaned_master.exists():
                 try:
                     import pandas as pd
                     df = pd.read_csv(cleaned_master)
-                    self.add_check(f"✅ cleaned_master.csv",
+                    self.add_check(f"[OK] cleaned_master.csv",
                                   f"{len(df)} rows, {len(df.columns)} columns",
                                   "Ready for processing")
                 except Exception as e:
-                    self.add_error("❌ cleaned_master.csv", "Cannot read", str(e))
+                    self.add_error("[ERROR] cleaned_master.csv", "Cannot read", str(e))
             else:
-                self.add_warning("⚠️ cleaned_master.csv", "Not found",
+                self.add_warning("[WARNING] cleaned_master.csv", "Not found",
                                "Run clean_data.py first")
         else:
-            self.add_error("❌ Data directory", "Not found", "Create data/ folder")
+            self.add_error("[ERROR] Data directory", "Not found", "Create data/ folder")
 
     def check_directories(self):
         """Check required directories"""
@@ -154,9 +154,9 @@ class SystemChecker:
             dirpath = self.root_dir / dirname
             if dirpath.exists():
                 file_count = len(list(dirpath.glob('*')))
-                self.add_check(f"✅ Directory: {dirname}", f"{file_count} files", description)
+                self.add_check(f"[OK] Directory: {dirname}", f"{file_count} files", description)
             else:
-                self.add_warning(f"⚠️ Directory: {dirname}", "Not found", description)
+                self.add_warning(f"[WARNING] Directory: {dirname}", "Not found", description)
 
     def add_check(self, item, status, description):
         """Add successful check"""
@@ -206,12 +206,12 @@ class SystemChecker:
         report += "=" * 70 + "\n"
 
         if self.errors:
-            report += "\n⚠️ ERRORS FOUND:\n"
+            report += "\n[WARNING] ERRORS FOUND:\n"
             for error in self.errors:
                 report += f"  • {error}\n"
 
         if self.warnings:
-            report += "\n⚠️ WARNINGS:\n"
+            report += "\n[WARNING] WARNINGS:\n"
             for warning in self.warnings:
                 report += f"  • {warning}\n"
 

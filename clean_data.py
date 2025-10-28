@@ -36,7 +36,7 @@ def validate_required_columns(df, issues):
     Check if required columns exist in the dataframe.
     Returns True if all required columns are present.
     """
-    print("\n📋 Validating required columns...")
+    print("\n[SAMPLE] Validating required columns...")
 
     df_cols_lower = [col.lower() for col in df.columns]
     missing_required = []
@@ -46,22 +46,22 @@ def validate_required_columns(df, issues):
     for req_col in REQUIRED_COLUMNS:
         if req_col.lower() not in df_cols_lower:
             missing_required.append(req_col)
-            issues.append(f"❌ CRITICAL: Required column '{req_col}' not found")
+            issues.append(f"[ERROR] CRITICAL: Required column '{req_col}' not found")
 
     # Check recommended columns
     for rec_col in RECOMMENDED_COLUMNS:
         if rec_col.lower() not in df_cols_lower:
             missing_recommended.append(rec_col)
-            issues.append(f"⚠️  WARNING: Recommended column '{rec_col}' not found")
+            issues.append(f"[WARNING]  WARNING: Recommended column '{rec_col}' not found")
 
     if missing_required:
-        print(f"   ❌ Missing required columns: {', '.join(missing_required)}")
+        print(f"   [ERROR] Missing required columns: {', '.join(missing_required)}")
         return False
 
-    print(f"   ✅ All required columns present")
+    print(f"   [OK] All required columns present")
 
     if missing_recommended:
-        print(f"   ⚠️  Missing recommended columns: {', '.join(missing_recommended)}")
+        print(f"   [WARNING]  Missing recommended columns: {', '.join(missing_recommended)}")
 
     return True
 
@@ -70,10 +70,10 @@ def fix_company_names(df, issues):
     """
     Fix company name column - removes rows with invalid values.
     """
-    print("\n🏢 Cleaning company names...")
+    print("\n[COMPANY] Cleaning company names...")
 
     if 'company_name' not in df.columns:
-        issues.append("❌ Cannot clean company names - column not found")
+        issues.append("[ERROR] Cannot clean company names - column not found")
         return df
 
     initial_count = len(df)
@@ -90,10 +90,10 @@ def fix_company_names(df, issues):
     removed_count = initial_count - len(df)
 
     if removed_count > 0:
-        print(f"   🗑️  Removed {removed_count} rows with invalid company names")
+        print(f"   [REMOVE]  Removed {removed_count} rows with invalid company names")
         issues.append(f"Removed {removed_count} rows with invalid company names")
     else:
-        print(f"   ✅ All company names valid")
+        print(f"   [OK] All company names valid")
 
     return df
 
@@ -102,10 +102,10 @@ def fix_person_names(df, issues):
     """
     Fix person name column - trims whitespace.
     """
-    print("\n👤 Cleaning person names...")
+    print("\n[PERSON] Cleaning person names...")
 
     if 'name' not in df.columns:
-        issues.append("⚠️  Name column not found")
+        issues.append("[WARNING]  Name column not found")
         return df
 
     # Count empty/null values
@@ -113,13 +113,13 @@ def fix_person_names(df, issues):
     empty_count += (df['name'].astype(str).str.strip() == '').sum()
 
     if empty_count > 0:
-        print(f"   ⚠️  Found {empty_count} empty names (reports will use 'Unknown')")
+        print(f"   [WARNING]  Found {empty_count} empty names (reports will use 'Unknown')")
         issues.append(f"Found {empty_count} empty person names")
 
     # Trim whitespace for non-empty values
     df.loc[df['name'].notna(), 'name'] = df.loc[df['name'].notna(), 'name'].astype(str).str.strip()
 
-    print(f"   ✅ Person names cleaned")
+    print(f"   [OK] Person names cleaned")
 
     return df
 
@@ -128,10 +128,10 @@ def fix_email_addresses(df, issues):
     """
     Fix email addresses - trim whitespace and validate format.
     """
-    print("\n📧 Cleaning email addresses...")
+    print("\n[EMAIL] Cleaning email addresses...")
 
     if 'email_address' not in df.columns:
-        issues.append("⚠️  Email address column not found")
+        issues.append("[WARNING]  Email address column not found")
         return df
 
     # Basic email regex
@@ -149,10 +149,10 @@ def fix_email_addresses(df, issues):
                 invalid_emails += 1
 
     if invalid_emails > 0:
-        print(f"   ⚠️  Found {invalid_emails} potentially invalid email addresses")
+        print(f"   [WARNING]  Found {invalid_emails} potentially invalid email addresses")
         issues.append(f"Found {invalid_emails} potentially invalid email addresses")
     else:
-        print(f"   ✅ All email addresses valid")
+        print(f"   [OK] All email addresses valid")
 
     return df
 
@@ -171,7 +171,7 @@ def fix_numeric_columns(df, issues):
                      col.startswith('overall_')]
 
     if not score_columns:
-        print("   ℹ️  No score columns found")
+        print("   [INFO]  No score columns found")
         return df
 
     print(f"   Found {len(score_columns)} score columns")
@@ -188,10 +188,10 @@ def fix_numeric_columns(df, issues):
             total_fixed += fixed_count
 
     if total_fixed > 0:
-        print(f"   🔧 Fixed {total_fixed} non-numeric values (converted to NaN)")
+        print(f"   [FIX] Fixed {total_fixed} non-numeric values (converted to NaN)")
         issues.append(f"Fixed {total_fixed} non-numeric values in score columns")
     else:
-        print(f"   ✅ All score columns contain valid numeric values")
+        print(f"   [OK] All score columns contain valid numeric values")
 
     return df
 
@@ -200,7 +200,7 @@ def validate_data_sufficiency(df, issues):
     """
     Validate that companies have sufficient data for meaningful reports.
     """
-    print("\n📊 Validating data sufficiency...")
+    print("\n[DATA] Validating data sufficiency...")
 
     if 'company_name' not in df.columns:
         return
@@ -211,7 +211,7 @@ def validate_data_sufficiency(df, issues):
     # Check for companies with insufficient data
     single_respondent = company_counts[company_counts == 1]
     if len(single_respondent) > 0:
-        print(f"   ⚠️  WARNING: {len(single_respondent)} companies have only 1 respondent")
+        print(f"   [WARNING]  WARNING: {len(single_respondent)} companies have only 1 respondent")
         print(f"      These reports may have limited data/examples:")
         for company in single_respondent.head(5).index:
             print(f"      - {company}")
@@ -232,7 +232,7 @@ def validate_data_sufficiency(df, issues):
             missing_pct = company_data[score_columns].isna().sum().sum() / (len(company_data) * len(score_columns)) * 100
 
             if missing_pct > 50:
-                print(f"   ⚠️  {company}: {missing_pct:.0f}% of dimension data missing")
+                print(f"   [WARNING]  {company}: {missing_pct:.0f}% of dimension data missing")
                 issues.append(f"{company}: {missing_pct:.0f}% dimension data missing")
 
 
@@ -241,10 +241,10 @@ def generate_cleaning_report(df, issues, original_count):
     Generate a summary report of cleaning actions.
     """
     print("\n" + "=" * 70)
-    print("📊 DATA CLEANING REPORT")
+    print("[DATA] DATA CLEANING REPORT")
     print("=" * 70)
 
-    print(f"\n✅ CLEANED DATA:")
+    print(f"\n[OK] CLEANED DATA:")
     print(f"   - Original records: {original_count}")
     print(f"   - Final records: {len(df)} ({original_count - len(df)} removed)")
     print(f"   - Total columns: {len(df.columns)}")
@@ -264,11 +264,11 @@ def generate_cleaning_report(df, issues, original_count):
         print(f"   - Unique sectors: {df['sector'].nunique()}")
 
     if issues:
-        print(f"\n⚠️  ISSUES FOUND ({len(issues)}):")
+        print(f"\n[WARNING]  ISSUES FOUND ({len(issues)}):")
         for i, issue in enumerate(issues, 1):
             print(f"   {i}. {issue}")
     else:
-        print(f"\n✅ NO ISSUES FOUND - Data is clean and sufficient!")
+        print(f"\n[OK] NO ISSUES FOUND - Data is clean and sufficient!")
 
     print("=" * 70)
 
@@ -279,7 +279,7 @@ def clean_and_fix():
     Returns (success: bool, summary: str) tuple.
     """
     print("=" * 70)
-    print("🧹 DATA CLEANING - FIXING DATA QUALITY ISSUES")
+    print("[CLEAN] DATA CLEANING - FIXING DATA QUALITY ISSUES")
     print("=" * 70)
 
     issues = []
@@ -287,7 +287,7 @@ def clean_and_fix():
 
     # Step 1: Check if input file exists
     if not Path(INPUT_PATH).exists():
-        print(f"\n❌ FAILED: File not found: {INPUT_PATH}")
+        print(f"\n[ERROR] FAILED: File not found: {INPUT_PATH}")
         print(f"   Please run 'Convert Data' first to create cleaned_master.csv from your Excel file")
         return False, "File not found"
 
@@ -295,18 +295,18 @@ def clean_and_fix():
     create_backup(INPUT_PATH)
 
     # Step 3: Load the CSV
-    print(f"\n📂 Loading data from: {INPUT_PATH}")
+    print(f"\n[LOAD] Loading data from: {INPUT_PATH}")
     try:
         df = pd.read_csv(INPUT_PATH)
         original_count = len(df)
-        print(f"   ✅ Loaded: {len(df)} rows × {len(df.columns)} columns")
+        print(f"   [OK] Loaded: {len(df)} rows × {len(df.columns)} columns")
     except Exception as e:
-        print(f"   ❌ Failed to load: {e}")
+        print(f"   [ERROR] Failed to load: {e}")
         return False, f"Failed to load: {e}"
 
     # Step 4: Validate required columns
     if not validate_required_columns(df, issues):
-        print("\n❌ FAILED: Missing required columns")
+        print("\n[ERROR] FAILED: Missing required columns")
         return False, "Missing required columns"
 
     # Step 5: Fix company names (removes invalid rows)
@@ -340,23 +340,23 @@ def clean_and_fix():
     generate_cleaning_report(df, issues, original_count)
 
     # Step 10: Save cleaned data back to same file
-    print(f"\n💾 Saving cleaned data to: {INPUT_PATH}")
+    print(f"\n[SAVE] Saving cleaned data to: {INPUT_PATH}")
 
     try:
         df.to_csv(INPUT_PATH, index=False, encoding='utf-8')
 
-        print(f"   ✅ Saved successfully!")
-        print(f"   📊 Final shape: {df.shape[0]} rows × {df.shape[1]} columns")
+        print(f"   [OK] Saved successfully!")
+        print(f"   [DATA] Final shape: {df.shape[0]} rows × {df.shape[1]} columns")
 
         # Show sample of cleaned data
-        print("\n📋 Sample of cleaned data (first 3 rows, first 5 columns):")
+        print("\n[SAMPLE] Sample of cleaned data (first 3 rows, first 5 columns):")
         display_cols = min(5, len(df.columns))
         print(df.iloc[:3, :display_cols].to_string())
 
         print("\n" + "=" * 70)
-        print("✅ SUCCESS: Data cleaning completed!")
+        print("[OK] SUCCESS: Data cleaning completed!")
         print("=" * 70)
-        print("\nℹ️  Data is ready for report generation!")
+        print("\n[INFO]  Data is ready for report generation!")
 
         # Build summary for GUI
         if not summary_lines:
@@ -367,7 +367,7 @@ def clean_and_fix():
         return True, summary
 
     except Exception as e:
-        print(f"\n❌ FAILED to save: {e}")
+        print(f"\n[ERROR] FAILED to save: {e}")
         return False, f"Failed to save: {e}"
 
 
