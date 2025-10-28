@@ -2291,6 +2291,17 @@ TOP 10 MOST ENGAGED COMPANIES:
             )
             return  # STOP - nothing to do
 
+        # CHECK 4: If test mode is enabled, validate test email address
+        if self.test_mode_var.get():
+            test_email = self.test_email_var.get().strip()
+            if not test_email or '@' not in test_email:
+                messagebox.showerror(
+                    "Invalid Test Email",
+                    "Test mode is enabled but the test email address is invalid.\n\n"
+                    "Please enter a valid email address in the 'Test Email' field."
+                )
+                return  # STOP - invalid test email
+
         # ===== ALL CHECKS PASSED - CONFIRM WITH USER =====
 
         # Warn if test mode is off
@@ -2314,7 +2325,7 @@ TOP 10 MOST ENGAGED COMPANIES:
                 f"Reports available: {len(pdf_files)}\n"
                 f"SMTP Server: {self.smtp_server_var.get()}:{self.smtp_port_var.get()}\n"
                 f"Test mode: YES\n"
-                f"Test email: {self.test_email_var.get()}\n\n"
+                f"Test email: {self.test_email_var.get().strip()}\n\n"
                 f"Already sent: {already_sent}\n\n"
                 f"Continue?"
             )
@@ -2332,6 +2343,13 @@ TOP 10 MOST ENGAGED COMPANIES:
     def send_emails_thread(self):
         """Background thread for sending emails - works directly from PDF reports"""
         self.log_email("📧 Starting email distribution...")
+
+        # Log test mode status at the start
+        if self.test_mode_var.get():
+            test_email = self.test_email_var.get().strip()
+            self.log_email(f"🧪 TEST MODE ENABLED - All emails will be sent to: {test_email}")
+        else:
+            self.log_email("🚀 LIVE MODE - Emails will be sent to actual recipients")
 
         # Scan /reports folder for PDF files (same as display logic)
         import glob
@@ -2434,7 +2452,7 @@ TOP 10 MOST ENGAGED COMPANIES:
         body_template = self.email_body_text.get('1.0', tk.END).strip()
 
         test_mode = self.test_mode_var.get()
-        test_email = self.test_email_var.get() if test_mode else None
+        test_email = self.test_email_var.get().strip() if test_mode else None
 
         for idx, record in enumerate(pending_records):
             if not self.is_sending_emails:
@@ -2478,10 +2496,14 @@ TOP 10 MOST ENGAGED COMPANIES:
                 # Determine recipient
                 recipient = test_email if test_mode else email
                 if test_mode:
-                    self.log_email(f"  [TEST MODE] Sending to: {recipient}")
+                    self.log_email(f"  [TEST MODE] Sending to: {recipient} (original: {email})")
                     body = f"[TEST MODE]\nOriginal recipient: {email}\n\n" + body
                 else:
                     self.log_email(f"  [LIVE MODE] Sending to: {recipient}")
+
+                # Validate recipient before sending
+                if not recipient or '@' not in recipient:
+                    raise ValueError(f"Invalid recipient email address: {recipient}")
 
                 # Try Outlook first, fallback to SMTP
                 use_outlook = True
@@ -2497,6 +2519,7 @@ TOP 10 MOST ENGAGED COMPANIES:
                         mail = outlook.CreateItem(0)  # 0 = MailItem
 
                         # Set email properties
+                        self.log_email(f"  Setting recipient to: {recipient}")
                         mail.To = recipient
                         mail.Subject = subject
                         mail.Body = body
@@ -2525,6 +2548,7 @@ TOP 10 MOST ENGAGED COMPANIES:
 
                         # Create message
                         self.log_email(f"  Creating SMTP message...")
+                        self.log_email(f"  Setting recipient to: {recipient}")
                         msg = MIMEMultipart()
                         msg['From'] = smtp_from
                         msg['To'] = recipient
