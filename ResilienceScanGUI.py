@@ -2338,14 +2338,27 @@ TOP 10 MOST ENGAGED COMPANIES:
 
     def send_emails_thread(self):
         """Background thread for sending emails - works directly from PDF reports"""
-        self.log_email("📧 Starting email distribution...")
+        # Initialize COM for this thread (required for Outlook COM automation)
+        import pythoncom
+        pythoncom.CoInitialize()
 
-        # Log test mode status at the start
-        if self.test_mode_var.get():
-            test_email = self.test_email_var.get().strip()
-            self.log_email(f"🧪 TEST MODE ENABLED - All emails will be sent to: {test_email}")
-        else:
-            self.log_email("🚀 LIVE MODE - Emails will be sent to actual recipients")
+        try:
+            self.log_email("📧 Starting email distribution...")
+
+            # Log test mode status at the start
+            if self.test_mode_var.get():
+                test_email = self.test_email_var.get().strip()
+                self.log_email(f"🧪 TEST MODE ENABLED - All emails will be sent to: {test_email}")
+            else:
+                self.log_email("🚀 LIVE MODE - Emails will be sent to actual recipients")
+
+            self._send_emails_impl()
+        finally:
+            # Uninitialize COM when done
+            pythoncom.CoUninitialize()
+
+    def _send_emails_impl(self):
+        """Implementation of email sending - separated for COM initialization"""
 
         # Scan /reports folder for PDF files (same as display logic)
         import glob
@@ -2520,19 +2533,9 @@ TOP 10 MOST ENGAGED COMPANIES:
                         mail.Subject = subject
                         mail.Body = body
 
-                        # IMPORTANT: Set the sending account explicitly
-                        # This ensures emails go to the correct recipient
-                        # Try to get the account from SMTP username if configured
-                        try:
-                            if smtp_from and '@' in smtp_from:
-                                # Find matching account in Outlook
-                                for account in outlook.Session.Accounts:
-                                    if account.SmtpAddress.lower() == smtp_from.lower():
-                                        mail.SendUsingAccount = account
-                                        self.log_email(f"  Using account: {account.SmtpAddress}")
-                                        break
-                        except Exception as acc_ex:
-                            self.log_email(f"  ⚠️  Could not set specific account: {acc_ex}")
+                        # Use the default Outlook account (whatever is currently logged in)
+                        # No need to set SendUsingAccount - it will use the default
+                        self.log_email(f"  Using default Outlook account (currently logged in)")
 
                         # Add attachment
                         self.log_email(f"  Attaching PDF: {attachment_path}...")
@@ -2541,9 +2544,23 @@ TOP 10 MOST ENGAGED COMPANIES:
                         # VERIFICATION: Log the actual recipient before sending
                         self.log_email(f"  ✅ Email configured:")
                         self.log_email(f"     To: {mail.To}")
-                        self.log_email(f"     CC: {mail.CC if hasattr(mail, 'CC') and mail.CC else '(none)'}")
-                        self.log_email(f"     BCC: {mail.BCC if hasattr(mail, 'BCC') and mail.BCC else '(none)'}")
-                        self.log_email(f"     From Account: {mail.SendUsingAccount.SmtpAddress if hasattr(mail, 'SendUsingAccount') and mail.SendUsingAccount else '(default)'}")
+                        self.log_email(f"     CC: {mail.CC if mail.CC else '(none)'}")
+                        self.log_email(f"     BCC: {mail.BCC if mail.BCC else '(none)'}")
+
+                        # Try to get the account that will be used
+                        try:
+                            if mail.SendUsingAccount:
+                                self.log_email(f"     From Account: {mail.SendUsingAccount.SmtpAddress}")
+                            else:
+                                # Get default account
+                                default_account = outlook.Session.Accounts[0] if outlook.Session.Accounts.Count > 0 else None
+                                if default_account:
+                                    self.log_email(f"     From Account: {default_account.SmtpAddress} (default)")
+                                else:
+                                    self.log_email(f"     From Account: (default - unknown)")
+                        except:
+                            self.log_email(f"     From Account: (could not determine)")
+
                         self.log_email(f"     Subject: {mail.Subject[:50]}...")
 
                         # DEBUG MODE: Display email instead of sending (for testing)
