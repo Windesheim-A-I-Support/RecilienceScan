@@ -265,9 +265,21 @@ class ResilienceScanGUI:
 
         ttk.Button(
             controls_frame,
+            text="📥 Convert Data",
+            command=self.run_convert_data
+        ).grid(row=0, column=3, padx=5)
+
+        ttk.Button(
+            controls_frame,
+            text="🧹 Clean Data",
+            command=self.run_clean_data
+        ).grid(row=0, column=4, padx=5)
+
+        ttk.Button(
+            controls_frame,
             text="Refresh",
             command=self.load_initial_data
-        ).grid(row=0, column=3, padx=5)
+        ).grid(row=0, column=5, padx=5)
 
         controls_frame.columnconfigure(1, weight=1)
 
@@ -943,7 +955,17 @@ class ResilienceScanGUI:
                 self.status_label.config(text=f"Data loaded: {len(self.df)} records")
             else:
                 self.log(f"❌ Data file not found: {DATA_FILE}")
-                messagebox.showerror("Error", f"Data file not found:\n{DATA_FILE}")
+                self.log("ℹ️  First time setup: Place your Excel database in the 'data' folder")
+                messagebox.showwarning(
+                    "Data File Missing",
+                    f"Data file not found: {DATA_FILE}\n\n"
+                    "FIRST TIME SETUP (2 steps):\n"
+                    "1. Place your master database Excel file in the 'data' folder\n"
+                    "2. Go to 'Data' tab → Click 'Convert Data' button\n"
+                    "3. Then click 'Clean Data' button to validate and prepare data\n"
+                    "4. Finally click 'Refresh' to load the cleaned data\n\n"
+                    "See data/README.md for more information."
+                )
         except Exception as e:
             self.log(f"❌ Error loading data: {e}")
             messagebox.showerror("Error", f"Failed to load data:\n{e}")
@@ -974,6 +996,90 @@ class ResilienceScanGUI:
             except Exception as e:
                 self.log(f"❌ Error loading file: {e}")
                 messagebox.showerror("Error", f"Failed to load file:\n{e}")
+
+    def run_convert_data(self):
+        """Run the data conversion script to convert Excel files to CSV format"""
+        self.log("📥 Starting data conversion process...")
+        self.status_label.config(text="Converting data...")
+
+        try:
+            # Import and run the convert_data module
+            import convert_data
+
+            # Run the conversion function
+            self.log("Looking for Excel files in /data folder...")
+            success = convert_data.convert_and_save()
+
+            if success:
+                self.log("✅ Data conversion completed!")
+                messagebox.showinfo(
+                    "Success",
+                    "Excel file converted to CSV!\n\n"
+                    "The cleaned_master.csv file has been created/updated.\n"
+                    "Email tracking status (reportsent) has been preserved.\n\n"
+                    "Next step: Click 'Clean Data' to fix any data quality issues,\n"
+                    "then 'Refresh' to load the data."
+                )
+                self.status_label.config(text="Data converted - run Clean Data next")
+            else:
+                self.log("❌ Data conversion failed - check logs for details")
+                messagebox.showerror(
+                    "Conversion Failed",
+                    "Data conversion failed.\n\n"
+                    "Please ensure:\n"
+                    "1. Your Excel file (.xlsx or .xls) is in the 'data' folder\n"
+                    "2. The file is not open in another program\n"
+                    "3. The file contains valid data\n"
+                    "4. Check the logs for more details"
+                )
+                self.status_label.config(text="Data conversion failed")
+
+        except Exception as e:
+            self.log(f"❌ Error during data conversion: {e}")
+            messagebox.showerror("Error", f"Failed to run data conversion:\n{e}")
+            self.status_label.config(text="Error")
+
+    def run_clean_data(self):
+        """Run the data cleaning script to fix data quality issues"""
+        self.log("🧹 Starting data cleaning...")
+        self.status_label.config(text="Cleaning data...")
+
+        try:
+            # Import and run the clean_data module
+            import clean_data
+
+            # Run the cleaning function
+            self.log("Loading cleaned_master.csv for cleaning...")
+            success, summary = clean_data.clean_and_fix()
+
+            if success:
+                self.log("✅ Data cleaning completed!")
+                self.log(f"Summary: {summary}")
+                messagebox.showinfo(
+                    "Data Cleaned Successfully",
+                    f"Data cleaning completed!\n\n"
+                    f"What was done:\n{summary}\n\n"
+                    f"Data is now ready for report generation.\n\n"
+                    f"Click 'Refresh' to load the cleaned data."
+                )
+                self.status_label.config(text="Data cleaned - click Refresh to load")
+            else:
+                self.log("❌ Data cleaning failed - check logs for details")
+                messagebox.showerror(
+                    "Cleaning Failed",
+                    "Data cleaning failed.\n\n"
+                    "Please ensure:\n"
+                    "1. You have run 'Convert Data' first\n"
+                    "2. The cleaned_master.csv file exists\n"
+                    "3. The data contains required columns (company_name, name)\n"
+                    "4. Check the logs for more details"
+                )
+                self.status_label.config(text="Data cleaning failed")
+
+        except Exception as e:
+            self.log(f"❌ Error during data cleaning: {e}")
+            messagebox.showerror("Error", f"Failed to run data cleaning:\n{e}")
+            self.status_label.config(text="Error")
 
     def update_data_preview(self):
         """Update data preview treeview with current filter"""
@@ -1946,67 +2052,131 @@ TOP 10 MOST ENGAGED COMPANIES:
     # ==================== Email Methods ====================
 
     def update_email_status_display(self):
-        """Update email status treeview with current data"""
+        """Update email status treeview - ONLY shows companies with generated PDF reports"""
         # Clear existing items
         for item in self.email_status_tree.get_children():
             self.email_status_tree.delete(item)
 
-        # Get statistics
-        stats = self.email_tracker.get_statistics()
+        # Scan /reports folder for PDF files
+        import glob
+        report_files = glob.glob(str(REPORTS_DIR / "*.pdf"))
 
-        # Update statistics label
+        if not report_files:
+            self.log_email("ℹ️  No PDF reports found in /reports folder")
+            self.email_stats_label.config(text="No PDF reports found - generate reports first")
+            return
+
+        # Parse PDF filenames to extract company and person info
+        # Format: YYYYMMDD ResilienceScanReport (COMPANY - PERSON).pdf
+        reports_ready = []
+
+        for pdf_path in report_files:
+            filename = Path(pdf_path).name
+
+            # Extract company and person from filename
+            # Format: YYYYMMDD ResilienceScanReport (COMPANY NAME - Firstname Lastname).pdf
+            try:
+                if "ResilienceScanReport (" in filename and ").pdf" in filename:
+                    # Extract the part between parentheses
+                    content = filename.split("ResilienceScanReport (")[1].split(").pdf")[0]
+
+                    # Split by " - " to get company and person
+                    if " - " in content:
+                        company, person = content.rsplit(" - ", 1)
+
+                        # Look up email address from CSV data
+                        email = ""
+                        if self.df is not None:
+                            # Find matching record
+                            matches = self.df[
+                                (self.df['company_name'].str.strip() == company.strip()) &
+                                (self.df['name'].str.strip() == person.strip())
+                            ]
+                            if not matches.empty:
+                                email = matches.iloc[0].get('email_address', '')
+
+                        # Check if already sent (from CSV reportsent column)
+                        sent_status = "pending"
+                        if self.df is not None:
+                            matches = self.df[
+                                (self.df['company_name'].str.strip() == company.strip()) &
+                                (self.df['name'].str.strip() == person.strip())
+                            ]
+                            if not matches.empty and 'reportsent' in self.df.columns:
+                                is_sent = matches.iloc[0].get('reportsent', False)
+                                if is_sent:
+                                    sent_status = "sent"
+
+                        reports_ready.append({
+                            'company': company,
+                            'person': person,
+                            'email': email,
+                            'status': sent_status,
+                            'pdf_path': pdf_path
+                        })
+            except Exception as e:
+                self.log_email(f"⚠️  Could not parse filename: {filename} - {e}")
+                continue
+
+        # Update statistics
+        total = len(reports_ready)
+        pending = sum(1 for r in reports_ready if r['status'] == 'pending')
+        sent = sum(1 for r in reports_ready if r['status'] == 'sent')
+
         self.email_stats_label.config(
-            text=f"Total: {stats['total']} | Pending: {stats['pending']} | Sent: {stats['sent']} | Failed: {stats['failed']}"
+            text=f"Reports Ready: {total} | Pending: {pending} | Sent: {sent}"
         )
 
         # Get filter value
         filter_status = self.email_filter_var.get()
 
-        # Get all records and filter
-        all_records = self.email_tracker.get_all_records()
-
-        for record in all_records:
+        # Display reports
+        for report in reports_ready:
             # Apply filter
-            if filter_status != "all" and record['sent_status'] != filter_status:
+            if filter_status != "all" and report['status'] != filter_status:
                 continue
-
-            # Format date
-            date_str = record.get('sent_date', '')
-            if date_str:
-                try:
-                    from datetime import datetime
-                    dt = datetime.fromisoformat(date_str.replace('Z', '+00:00'))
-                    date_str = dt.strftime('%Y-%m-%d %H:%M')
-                except:
-                    pass
-
-            # Mode
-            mode = "TEST" if record.get('test_mode', 1) else "LIVE"
 
             # Insert into tree with tag for color coding
             values = (
-                record['company_name'],
-                record['person_name'],
-                record['email_address'],
-                record['sent_status'].upper(),
-                date_str,
-                mode
+                report['company'],
+                report['person'],
+                report['email'] if report['email'] else "NO EMAIL",
+                report['status'].upper(),
+                "",  # No date for pending
+                ""   # No mode needed
             )
 
             item = self.email_status_tree.insert('', tk.END, values=values)
 
             # Color code by status
-            if record['sent_status'] == 'sent':
+            if report['status'] == 'sent':
                 self.email_status_tree.item(item, tags=('sent',))
-            elif record['sent_status'] == 'failed':
-                self.email_status_tree.item(item, tags=('failed',))
-            elif record['sent_status'] == 'pending':
+            else:
                 self.email_status_tree.item(item, tags=('pending',))
 
         # Configure tag colors
         self.email_status_tree.tag_configure('sent', foreground='green')
-        self.email_status_tree.tag_configure('failed', foreground='red')
-        self.email_status_tree.tag_configure('pending', foreground='gray')
+        self.email_status_tree.tag_configure('pending', foreground='orange')
+
+    def mark_as_sent_in_csv(self, company, person):
+        """Mark a report as sent in the CSV file"""
+        try:
+            # Update in-memory dataframe
+            if self.df is not None and 'reportsent' in self.df.columns:
+                mask = (self.df['company_name'].str.strip() == company.strip()) & \
+                       (self.df['name'].str.strip() == person.strip())
+                self.df.loc[mask, 'reportsent'] = True
+
+                # Save back to CSV file
+                self.df.to_csv(DATA_FILE, index=False)
+
+                # Reload the CSV to ensure we have the latest data
+                self.df = pd.read_csv(DATA_FILE)
+                self.df.columns = self.df.columns.str.lower().str.strip()
+
+                self.log_email(f"  📝 Updated CSV: {company} - {person} marked as sent")
+        except Exception as e:
+            self.log_email(f"  ⚠️  Could not update CSV: {e}")
 
     def mark_selected_as_sent(self):
         """Mark selected email as sent"""
@@ -2019,39 +2189,22 @@ TOP 10 MOST ENGAGED COMPANIES:
             values = self.email_status_tree.item(item)['values']
             company, person, email = values[0], values[1], values[2]
 
-            # Update in database
-            record = self.email_tracker.get_record_by_details(company, person, email)
-            if record:
-                self.email_tracker.manually_update_status(
-                    record['id'],
-                    'sent',
-                    notes="Manually marked as sent via GUI"
-                )
+            # Update in CSV
+            self.mark_as_sent_in_csv(company, person)
 
         self.update_email_status_display()
         self.log_email(f"✅ Marked {len(selection)} record(s) as sent")
 
     def mark_selected_as_failed(self):
-        """Mark selected email as failed"""
+        """Mark selected email as failed (doesn't actually update CSV - just for tracking)"""
         selection = self.email_status_tree.selection()
         if not selection:
             messagebox.showwarning("Warning", "Please select an email record first")
             return
 
-        for item in selection:
-            values = self.email_status_tree.item(item)['values']
-            company, person, email = values[0], values[1], values[2]
-
-            record = self.email_tracker.get_record_by_details(company, person, email)
-            if record:
-                self.email_tracker.manually_update_status(
-                    record['id'],
-                    'failed',
-                    notes="Manually marked as failed via GUI"
-                )
-
-        self.update_email_status_display()
-        self.log_email(f"❌ Marked {len(selection)} record(s) as failed")
+        # Note: We don't track "failed" in CSV, only "sent" status matters
+        self.log_email(f"ℹ️  Note: 'Failed' status is not stored in CSV")
+        self.log_email(f"   Failed emails can be retried by clicking 'Send All Emails' again")
 
     def mark_selected_as_pending(self):
         """Reset selected email to pending"""
@@ -2064,13 +2217,17 @@ TOP 10 MOST ENGAGED COMPANIES:
             values = self.email_status_tree.item(item)['values']
             company, person, email = values[0], values[1], values[2]
 
-            record = self.email_tracker.get_record_by_details(company, person, email)
-            if record:
-                self.email_tracker.manually_update_status(
-                    record['id'],
-                    'pending',
-                    notes="Reset to pending via GUI"
-                )
+            # Reset in CSV by setting reportsent to False
+            try:
+                if self.df is not None and 'reportsent' in self.df.columns:
+                    mask = (self.df['company_name'].str.strip() == company.strip()) & \
+                           (self.df['name'].str.strip() == person.strip())
+                    self.df.loc[mask, 'reportsent'] = False
+
+                    # Save back to CSV file
+                    self.df.to_csv(DATA_FILE, index=False)
+            except Exception as e:
+                self.log_email(f"⚠️  Could not update CSV: {e}")
 
         self.update_email_status_display()
         self.log_email(f"🔄 Reset {len(selection)} record(s) to pending")
@@ -2173,72 +2330,92 @@ TOP 10 MOST ENGAGED COMPANIES:
         thread.start()
 
     def send_emails_thread(self):
-        """Background thread for sending emails"""
+        """Background thread for sending emails - works directly from PDF reports"""
         self.log_email("📧 Starting email distribution...")
 
-        # Get pending emails only
-        all_pending = self.email_tracker.get_all_records(status='pending')
+        # Scan /reports folder for PDF files (same as display logic)
+        import glob
+        report_files = glob.glob(str(REPORTS_DIR / "*.pdf"))
 
-        # CRITICAL FIX: Only process emails that have matching reports!
-        # Build list of available reports
-        available_reports = {}
-        for pdf_file in REPORTS_DIR.glob('*.pdf'):
-            available_reports[pdf_file.name] = pdf_file
+        if not report_files:
+            self.log_email("❌ No PDF reports found in /reports folder")
+            def finalize_empty():
+                self.is_sending_emails = False
+                self.email_start_btn.config(state=tk.NORMAL)
+                self.email_stop_btn.config(state=tk.DISABLED)
+                messagebox.showwarning(
+                    "No Reports Found",
+                    "No PDF reports found in /reports folder.\n\n"
+                    "Please generate reports first, then try sending emails."
+                )
+            self.root.after(0, finalize_empty)
+            return
 
-        self.log_email(f"📁 Found {len(available_reports)} reports in reports/ folder")
-
-        # Filter pending emails to only those with reports
-        def safe_display_name(name):
-            if pd.isna(name) or name == "":
-                return "Unknown"
-            name_str = str(name).strip()
-            name_str = name_str.replace("/", "-").replace("\\", "-").replace(":", "-")
-            name_str = name_str.replace("*", "").replace("?", "").replace('"', "'")
-            name_str = name_str.replace("<", "(").replace(">", ")").replace("|", "-")
-            return name_str
-
-        # Find which pending emails have reports
+        # Parse PDF filenames and build list of reports to send
         pending_records = []
-        for record in all_pending:
-            company = record['company_name']
-            person = record['person_name']
-            display_company = safe_display_name(company)
-            display_person = safe_display_name(person)
 
-            # Look for matching report
-            import glob
-            pattern = f"*ResilienceScanReport ({display_company} - {display_person}).pdf"
-            matches = glob.glob(str(REPORTS_DIR / pattern))
+        for pdf_path in report_files:
+            filename = Path(pdf_path).name
 
-            if matches:
-                pending_records.append(record)
+            # Extract company and person from filename
+            # Format: YYYYMMDD ResilienceScanReport (COMPANY NAME - Firstname Lastname).pdf
+            try:
+                if "ResilienceScanReport (" in filename and ").pdf" in filename:
+                    content = filename.split("ResilienceScanReport (")[1].split(").pdf")[0]
 
-        total_pending = len(all_pending)
-        total_with_reports = len(pending_records)
-        skipped_no_report = total_pending - total_with_reports
+                    if " - " in content:
+                        company, person = content.rsplit(" - ", 1)
 
-        self.log_email(f"📊 Total pending: {total_pending}")
-        self.log_email(f"✅ With reports: {total_with_reports}")
-        self.log_email(f"⏭️  Skipped (no report): {skipped_no_report}")
+                        # Look up email address from CSV data
+                        email = ""
+                        if self.df is not None:
+                            matches = self.df[
+                                (self.df['company_name'].str.strip() == company.strip()) &
+                                (self.df['name'].str.strip() == person.strip())
+                            ]
+                            if not matches.empty:
+                                email = matches.iloc[0].get('email_address', '')
 
-        if total_with_reports == 0:
-            self.log_email("⚠️ No pending emails have matching reports - nothing to send!")
+                        # Check if already sent (from CSV reportsent column)
+                        is_sent = False
+                        if self.df is not None and 'reportsent' in self.df.columns:
+                            matches = self.df[
+                                (self.df['company_name'].str.strip() == company.strip()) &
+                                (self.df['name'].str.strip() == person.strip())
+                            ]
+                            if not matches.empty:
+                                is_sent = matches.iloc[0].get('reportsent', False)
+
+                        # Only add if not sent yet
+                        if not is_sent:
+                            pending_records.append({
+                                'company': company,
+                                'person': person,
+                                'email': email,
+                                'pdf_path': pdf_path
+                            })
+            except Exception as e:
+                self.log_email(f"⚠️  Could not parse filename: {filename} - {e}")
+                continue
+
+        total = len(pending_records)
+        self.log_email(f"📊 Total reports ready to send: {total}")
+
+        if total == 0:
+            self.log_email("ℹ️  All reports have already been sent!")
             def finalize_empty():
                 self.is_sending_emails = False
                 self.email_start_btn.config(state=tk.NORMAL)
                 self.email_stop_btn.config(state=tk.DISABLED)
                 messagebox.showinfo(
-                    "No Emails to Send",
-                    f"Total pending: {total_pending}\n"
-                    f"With reports: 0\n\n"
-                    f"Please generate reports first, then try sending emails."
+                    "No Pending Emails",
+                    "All reports have already been sent.\n\n"
+                    "Check the email status table for details."
                 )
             self.root.after(0, finalize_empty)
             return
 
-        total = total_with_reports
         sent_count = 0
-        skipped_count = skipped_no_report
         failed_count = 0
 
         # Initialize SMTP connection
@@ -2264,9 +2441,10 @@ TOP 10 MOST ENGAGED COMPANIES:
                 self.log_email("⏹ Email sending stopped by user")
                 break
 
-            company = record['company_name']
-            person = record['person_name']
-            email = record['email_address']
+            company = record['company']
+            person = record['person']
+            email = record['email']
+            attachment_path = Path(record['pdf_path'])
 
             # Update current label
             def update_current():
@@ -2274,43 +2452,17 @@ TOP 10 MOST ENGAGED COMPANIES:
                 self.email_current_label.config(text=f"Sending: {company} - {person}")
             self.root.after(0, update_current)
 
-            # Find report file
-            def safe_display_name(name):
-                if pd.isna(name) or name == "":
-                    return "Unknown"
-                name_str = str(name).strip()
-                name_str = name_str.replace("/", "-").replace("\\", "-").replace(":", "-")
-                name_str = name_str.replace("*", "").replace("?", "").replace('"', "'")
-                name_str = name_str.replace("<", "(").replace(">", ")").replace("|", "-")
-                return name_str
-
-            display_company = safe_display_name(company)
-            display_person = safe_display_name(person)
-
-            # Look for report file
-            import glob
-            pattern = f"*ResilienceScanReport ({display_company} - {display_person}).pdf"
-            matches = glob.glob(str(REPORTS_DIR / pattern))
-
-            if not matches:
-                failed_count += 1
-                error_msg = f"Report not found: {display_company} - {display_person}"
-                self.log_email(f"[{idx+1}/{total}] ❌ {error_msg}")
-
-                self.email_tracker.mark_as_sent(
-                    company, person, email,
-                    report_filename="",
-                    test_mode=test_mode,
-                    error=error_msg
-                )
-                continue
-
-            attachment_path = Path(matches[0])
-
             try:
-                self.log_email(f"[{idx+1}/{total}] Sending to: {company} - {person}")
+                self.log_email(f"[{idx+1}/{total}] 📧 Sending to: {company} - {person}")
+                self.log_email(f"  Email address: {email if email else 'NO EMAIL FOUND'}")
+                self.log_email(f"  PDF: {attachment_path.name}")
+
+                # Check if email exists
+                if not email or email.strip() == "" or email == "NO EMAIL":
+                    raise ValueError(f"No email address found for {company} - {person}")
 
                 # Format subject and body with template
+                self.log_email(f"  Formatting email...")
                 subject = subject_template.format(
                     company=company,
                     name=person,
@@ -2326,61 +2478,133 @@ TOP 10 MOST ENGAGED COMPANIES:
                 # Determine recipient
                 recipient = test_email if test_mode else email
                 if test_mode:
+                    self.log_email(f"  [TEST MODE] Sending to: {recipient}")
                     body = f"[TEST MODE]\nOriginal recipient: {email}\n\n" + body
+                else:
+                    self.log_email(f"  [LIVE MODE] Sending to: {recipient}")
 
-                # Send via SMTP
-                import smtplib
-                from email.mime.multipart import MIMEMultipart
-                from email.mime.text import MIMEText
-                from email.mime.base import MIMEBase
-                from email import encoders
+                # Try Outlook first, fallback to SMTP
+                use_outlook = True
+                outlook_error = None
 
-                # Create message
-                msg = MIMEMultipart()
-                msg['From'] = smtp_from
-                msg['To'] = recipient
-                msg['Subject'] = subject
+                if use_outlook:
+                    try:
+                        self.log_email(f"  📮 Using Outlook to send email...")
+                        import win32com.client
 
-                # Add body
-                msg.attach(MIMEText(body, 'plain'))
+                        # Create Outlook instance
+                        outlook = win32com.client.Dispatch('Outlook.Application')
+                        mail = outlook.CreateItem(0)  # 0 = MailItem
 
-                # Add attachment
-                with open(attachment_path, 'rb') as f:
-                    part = MIMEBase('application', 'octet-stream')
-                    part.set_payload(f.read())
-                    encoders.encode_base64(part)
-                    part.add_header('Content-Disposition', f'attachment; filename={attachment_path.name}')
-                    msg.attach(part)
+                        # Set email properties
+                        mail.To = recipient
+                        mail.Subject = subject
+                        mail.Body = body
 
-                # Connect and send
-                server = smtplib.SMTP(smtp_server, smtp_port)
-                server.starttls()
-                server.login(smtp_username, smtp_password)
-                server.send_message(msg)
-                server.quit()
+                        # Add attachment
+                        self.log_email(f"  Attaching PDF: {attachment_path}...")
+                        mail.Attachments.Add(str(attachment_path.absolute()))
 
-                # Mark as sent in tracker
-                self.email_tracker.mark_as_sent(
-                    company, person, email,
-                    report_filename=attachment_path.name,
-                    test_mode=test_mode
-                )
+                        # Send
+                        self.log_email(f"  Sending via Outlook...")
+                        mail.Send()
+
+                        self.log_email(f"  ✅ Sent via Outlook!")
+
+                    except Exception as outlook_ex:
+                        outlook_error = str(outlook_ex)
+                        self.log_email(f"  ⚠️  Outlook failed: {outlook_error}")
+                        self.log_email(f"  Falling back to SMTP...")
+
+                        # Fallback to SMTP
+                        import smtplib
+                        from email.mime.multipart import MIMEMultipart
+                        from email.mime.text import MIMEText
+                        from email.mime.base import MIMEBase
+                        from email import encoders
+
+                        # Create message
+                        self.log_email(f"  Creating SMTP message...")
+                        msg = MIMEMultipart()
+                        msg['From'] = smtp_from
+                        msg['To'] = recipient
+                        msg['Subject'] = subject
+
+                        # Add body
+                        msg.attach(MIMEText(body, 'plain'))
+
+                        # Add attachment
+                        self.log_email(f"  Attaching PDF...")
+                        with open(attachment_path, 'rb') as f:
+                            part = MIMEBase('application', 'octet-stream')
+                            part.set_payload(f.read())
+                            encoders.encode_base64(part)
+                            part.add_header('Content-Disposition', f'attachment; filename={attachment_path.name}')
+                            msg.attach(part)
+
+                        # Connect and send
+                        self.log_email(f"  Connecting to SMTP: {smtp_server}:{smtp_port}...")
+                        server = smtplib.SMTP(smtp_server, smtp_port)
+
+                        self.log_email(f"  Starting TLS...")
+                        server.starttls()
+
+                        self.log_email(f"  Logging in as: {smtp_username}...")
+                        server.login(smtp_username, smtp_password)
+
+                        self.log_email(f"  Sending message...")
+                        server.send_message(msg)
+
+                        self.log_email(f"  Closing connection...")
+                        server.quit()
+
+                        self.log_email(f"  ✅ Sent via SMTP (fallback)!")
+                else:
+                    # Direct SMTP if Outlook disabled
+                    import smtplib
+                    from email.mime.multipart import MIMEMultipart
+                    from email.mime.text import MIMEText
+                    from email.mime.base import MIMEBase
+                    from email import encoders
+
+                    msg = MIMEMultipart()
+                    msg['From'] = smtp_from
+                    msg['To'] = recipient
+                    msg['Subject'] = subject
+                    msg.attach(MIMEText(body, 'plain'))
+
+                    with open(attachment_path, 'rb') as f:
+                        part = MIMEBase('application', 'octet-stream')
+                        part.set_payload(f.read())
+                        encoders.encode_base64(part)
+                        part.add_header('Content-Disposition', f'attachment; filename={attachment_path.name}')
+                        msg.attach(part)
+
+                    server = smtplib.SMTP(smtp_server, smtp_port)
+                    server.starttls()
+                    server.login(smtp_username, smtp_password)
+                    server.send_message(msg)
+                    server.quit()
+
+                # Mark as sent in CSV (ONLY if not in test mode)
+                if not test_mode:
+                    self.mark_as_sent_in_csv(company, person)
+                    self.log_email(f"  Updated CSV: marked as sent")
+                else:
+                    self.log_email(f"  Test mode: NOT updating CSV")
 
                 sent_count += 1
-                self.log_email(f"  ✅ Sent successfully")
+                self.log_email(f"  ✅ SUCCESS: Email sent!")
 
             except Exception as e:
                 failed_count += 1
                 error_msg = str(e)
-                self.log_email(f"  ❌ Error: {error_msg}")
+                self.log_email(f"  ❌ FAILED: {error_msg}")
+                self.log_email(f"  Error type: {type(e).__name__}")
 
-                # Mark as failed in tracker
-                self.email_tracker.mark_as_sent(
-                    company, person, email,
-                    report_filename=str(attachment_path.name) if matches else "",
-                    test_mode=test_mode,
-                    error=error_msg
-                )
+                # Log more details for common errors
+                import traceback
+                self.log_email(f"  Full error:\n{traceback.format_exc()}")
 
             # Update progress
             current_idx = idx + 1
@@ -2391,8 +2615,8 @@ TOP 10 MOST ENGAGED COMPANIES:
                 )
             self.root.after(0, update_progress)
 
-            # Update email status display every 10 emails
-            if (idx + 1) % 10 == 0 or (idx + 1) == total:
+            # Update email status display after EVERY email (so you see it change in real-time)
+            if not test_mode:  # Only if we're actually updating the CSV
                 self.root.after(0, self.update_email_status_display)
 
         # Final updates
@@ -2401,23 +2625,37 @@ TOP 10 MOST ENGAGED COMPANIES:
             self.email_start_btn.config(state=tk.NORMAL)
             self.email_stop_btn.config(state=tk.DISABLED)
             self.email_current_label.config(text="Email distribution complete")
+
+            # Reload data to get latest sent status
+            try:
+                self.df = pd.read_csv(DATA_FILE)
+                self.df.columns = self.df.columns.str.lower().str.strip()
+            except Exception as e:
+                self.log_email(f"⚠️  Could not reload CSV: {e}")
+
+            # Update email status display
             self.update_email_status_display()
 
             # Update statistics in header
-            email_stats = self.email_tracker.get_statistics()
-            self.stats['emails_sent'] = email_stats.get('sent', 0)
+            if 'reportsent' in self.df.columns:
+                self.stats['emails_sent'] = self.df['reportsent'].sum()
             self.update_stats_display()
 
-            # Show final summary dialog (Issue #51 Fix)
+            # Show final summary dialog
+            test_mode_str = " [TEST MODE]" if test_mode else ""
             summary_message = (
-                f"Successfully sent: {sent_count}\n"
-                f"Failed: {failed_count}\n"
-                f"Skipped: {skipped_count}\n"
-                f"Total processed: {total}\n\n"
+                f"Email Distribution Complete{test_mode_str}\n\n"
+                f"✅ Successfully sent: {sent_count}\n"
+                f"❌ Failed: {failed_count}\n"
+                f"📊 Total processed: {total}\n\n"
             )
 
+            if test_mode:
+                summary_message += "⚠️  Test mode was enabled - CSV not updated.\n"
+                summary_message += "All emails were sent to test address.\n\n"
+
             if failed_count > 0:
-                summary_message += "Check log for error details."
+                summary_message += "Check Email Log tab for error details."
                 messagebox.showwarning(
                     "Email Sending Complete (with failures)",
                     summary_message

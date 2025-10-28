@@ -8,13 +8,13 @@ __pycache__/
 env/
 ENV/
 
-# Data files
-data/
+# Data files - ignore sensitive data but keep folder structure
+data/*.csv
+data/*.xlsx
+data/*.xls
+data/*.parquet
+data/backups/
 data Example/
-*.csv
-*.xlsx
-*.xls
-*.parquet
 
 # Videos and large media
 videos/
