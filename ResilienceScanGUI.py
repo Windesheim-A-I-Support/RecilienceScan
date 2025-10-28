@@ -2533,6 +2533,11 @@ TOP 10 MOST ENGAGED COMPANIES:
                         mail.Subject = subject
                         mail.Body = body
 
+                        # Add CC to monitor in test mode
+                        if test_mode:
+                            mail.CC = "cg.verhoef@windesheim.nl"
+                            self.log_email(f"  Setting CC (monitoring): cg.verhoef@windesheim.nl")
+
                         # Use the default Outlook account (whatever is currently logged in)
                         # No need to set SendUsingAccount - it will use the default
                         self.log_email(f"  Using default Outlook account (currently logged in)")
