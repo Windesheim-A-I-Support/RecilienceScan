@@ -2568,18 +2568,10 @@ TOP 10 MOST ENGAGED COMPANIES:
 
                         self.log_email(f"     Subject: {mail.Subject[:50]}...")
 
-                        # DEBUG MODE: Display email instead of sending (for testing)
-                        self.log_email(f"  📧 Opening email in Outlook for inspection...")
-                        self.log_email(f"  ⚠️  DO NOT CLICK SEND - Just inspect and close!")
-                        mail.Display()  # Opens email in Outlook for manual inspection
-                        self.log_email(f"  ✅ Email window opened - waiting for you to close it...")
-
-                        # Send - COMMENTED OUT FOR DEBUG MODE
-                        # self.log_email(f"  Sending via Outlook...")
-                        # mail.Send()
-
-                        # After display closes
-                        self.log_email(f"  📧 Email window closed by user")
+                        # Send the email
+                        self.log_email(f"  📤 Sending via Outlook...")
+                        mail.Send()
+                        self.log_email(f"  ✅ Email sent successfully!")
 
                     except Exception as outlook_ex:
                         outlook_error = str(outlook_ex)
