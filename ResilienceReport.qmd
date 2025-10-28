@@ -1958,33 +1958,25 @@ analyze_pillar_detailed <- function(prefix, pillar_name_nl, pillar_name_en) {
   # Calculate range
   score_range <- max(scores) - min(scores)
 
-  # Generate output text
+  # Generate output text - more concise format
   if (detected_language == "dutch") {
     cat(sprintf("\n### %s (gemiddelde: %.2f)\n\n", pillar_name, mean(scores)))
-    cat(sprintf("Het grootste verschil in %s zit tussen **%s** (%.2f) en **%s** (%.2f), een verschil van %.2f punten.\n\n",
-                pillar_name,
+    cat(sprintf("**Sterkste:** %s (%.2f) | **Zwakste:** %s (%.2f) | **Verschil:** %.2f punten\n\n",
                 names(top_2)[1], top_2[1],
                 names(bottom_2)[2], bottom_2[2],
                 score_range))
-    cat(sprintf("**Hoogste scores (top 2):**\n\n"))
-    cat(sprintf("1. **%s**: %.2f/5.00\n", names(top_2)[1], top_2[1]))
-    cat(sprintf("2. **%s**: %.2f/5.00\n\n", names(top_2)[2], top_2[2]))
-    cat(sprintf("**Laagste scores (bottom 2):**\n\n"))
-    cat(sprintf("1. **%s**: %.2f/5.00\n", names(bottom_2)[1], bottom_2[1]))
-    cat(sprintf("2. **%s**: %.2f/5.00\n\n", names(bottom_2)[2], bottom_2[2]))
+    cat(sprintf("**Top 2:** %s (%.2f), %s (%.2f) • **Bottom 2:** %s (%.2f), %s (%.2f)\n\n",
+                names(top_2)[1], top_2[1], names(top_2)[2], top_2[2],
+                names(bottom_2)[1], bottom_2[1], names(bottom_2)[2], bottom_2[2]))
   } else {
     cat(sprintf("\n### %s (average: %.2f)\n\n", pillar_name, mean(scores)))
-    cat(sprintf("The largest gap in %s is between **%s** (%.2f) and **%s** (%.2f), a difference of %.2f points.\n\n",
-                pillar_name,
+    cat(sprintf("**Strongest:** %s (%.2f) | **Weakest:** %s (%.2f) | **Gap:** %.2f points\n\n",
                 names(top_2)[1], top_2[1],
                 names(bottom_2)[2], bottom_2[2],
                 score_range))
-    cat(sprintf("**Highest scores (top 2):**\n\n"))
-    cat(sprintf("1. **%s**: %.2f/5.00\n", names(top_2)[1], top_2[1]))
-    cat(sprintf("2. **%s**: %.2f/5.00\n\n", names(top_2)[2], top_2[2]))
-    cat(sprintf("**Lowest scores (bottom 2):**\n\n"))
-    cat(sprintf("1. **%s**: %.2f/5.00\n", names(bottom_2)[1], bottom_2[1]))
-    cat(sprintf("2. **%s**: %.2f/5.00\n\n", names(bottom_2)[2], bottom_2[2]))
+    cat(sprintf("**Top 2:** %s (%.2f), %s (%.2f) • **Bottom 2:** %s (%.2f), %s (%.2f)\n\n",
+                names(top_2)[1], top_2[1], names(top_2)[2], top_2[2],
+                names(bottom_2)[1], bottom_2[1], names(bottom_2)[2], bottom_2[2]))
   }
 }
 
