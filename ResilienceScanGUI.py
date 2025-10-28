@@ -954,18 +954,14 @@ class ResilienceScanGUI:
                 self.log(f"✅ Data loaded: {len(self.df)} respondents, {self.stats['total_companies']} companies")
                 self.status_label.config(text=f"Data loaded: {len(self.df)} records")
             else:
-                self.log(f"❌ Data file not found: {DATA_FILE}")
-                self.log("ℹ️  First time setup: Place your Excel database in the 'data' folder")
-                messagebox.showwarning(
-                    "Data File Missing",
-                    f"Data file not found: {DATA_FILE}\n\n"
-                    "FIRST TIME SETUP (2 steps):\n"
-                    "1. Place your master database Excel file in the 'data' folder\n"
-                    "2. Go to 'Data' tab → Click 'Convert Data' button\n"
-                    "3. Then click 'Clean Data' button to validate and prepare data\n"
-                    "4. Finally click 'Refresh' to load the cleaned data\n\n"
-                    "See data/README.md for more information."
-                )
+                self.log("ℹ️  No data loaded - cleaned_master.csv not found")
+                self.log("ℹ️  First time setup: Use 'Data' tab to import and clean your data")
+                self.status_label.config(text="No data loaded - use Data tab to import and clean data")
+                # Initialize with empty stats
+                self.stats['total_respondents'] = 0
+                self.stats['total_companies'] = 0
+                self.stats['emails_sent'] = 0
+                self.update_stats_display()
         except Exception as e:
             self.log(f"❌ Error loading data: {e}")
             messagebox.showerror("Error", f"Failed to load data:\n{e}")
