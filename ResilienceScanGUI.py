@@ -1566,8 +1566,8 @@ TOP 10 MOST ENGAGED COMPANIES:
                     'quarto', 'render', str(selected_template),
                     '-P', f'company={company}',
                     '--to', 'pdf',
-                    '--output', temp_output,
-                    '--quiet'
+                    '--output', temp_output
+                    # Removed --quiet to capture error details
                 ]
 
                 # Execute quarto render
@@ -1589,17 +1589,29 @@ TOP 10 MOST ENGAGED COMPANIES:
                         failed += 1
                 else:
                     self.log_gen(f"  ❌ Error: Exit code {result.returncode}")
+
                     # Show stderr (last 800 chars for readability)
-                    if result.stderr:
+                    error_shown = False
+                    if result.stderr and result.stderr.strip():
                         error_text = result.stderr[-800:] if len(result.stderr) > 800 else result.stderr
                         # Split into lines and indent
                         for line in error_text.strip().split('\n'):
                             if line.strip():
                                 self.log_gen(f"     {line}")
+                                error_shown = True
+
                     # Show stdout if stderr is empty or short
-                    if result.stdout and (not result.stderr or len(result.stderr) < 100):
-                        stdout_text = result.stdout[-500:] if len(result.stdout) > 500 else result.stdout
-                        self.log_gen(f"     stdout: {stdout_text}")
+                    if result.stdout and result.stdout.strip():
+                        if not result.stderr or len(result.stderr) < 100:
+                            stdout_text = result.stdout[-500:] if len(result.stdout) > 500 else result.stdout
+                            self.log_gen(f"     stdout: {stdout_text}")
+                            error_shown = True
+
+                    # If no error details were shown, mention that
+                    if not error_shown:
+                        self.log_gen(f"     No error details available from quarto")
+                        self.log_gen(f"     Company: {company}, Person: {person}")
+
                     failed += 1
 
             except FileNotFoundError as e:
