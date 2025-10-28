@@ -3079,3 +3079,312 @@ Fixed 6252 non-numeric value(s) in score columns
 [2025-10-28 16:19:09] [3/506] Generating: Aako B.V. - Frank Mooij
 [2025-10-28 16:19:09] [4/506] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
 [2025-10-28 16:19:09] [5/506] Generating: AB - Anne
+[2025-10-28 17:29:52] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-28 17:29:58] Looking for Excel files in /data folder...
+[2025-10-28 17:30:02] Looking for Excel files in /data folder...
+[2025-10-28 17:31:23] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-28 17:31:23] Importing email tracking data...
+[2025-10-28 17:31:27] Looking for Excel files in /data folder...
+[2025-10-28 17:31:37] Looking for Excel files in /data folder...
+[2025-10-28 17:32:08] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-28 17:32:11] Looking for Excel files in /data folder...
+[2025-10-28 18:16:53] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-28 18:16:53] Importing email tracking data...
+[2025-10-28 18:17:07]   Email address: casper@24ice.com
+[2025-10-28 18:17:07]   PDF: 20251028 ResilienceScanReport (24 ICE - Casper Hondema).pdf
+[2025-10-28 18:17:07]   Formatting email...
+[2025-10-28 18:17:07]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: casper@24ice.com)
+[2025-10-28 18:17:08]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (24 ICE - Casper Hondema).pdf...
+[2025-10-28 18:17:09]   Test mode: NOT updating CSV
+[2025-10-28 18:17:09]   Email address: f.mooij@aako.nl
+[2025-10-28 18:17:09]   PDF: 20251028 ResilienceScanReport (Aako B.V. - Frank Mooij).pdf
+[2025-10-28 18:17:09]   Formatting email...
+[2025-10-28 18:17:09]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: f.mooij@aako.nl)
+[2025-10-28 18:17:10]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:10]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Aako B.V. - Frank Mooij).pdf...
+[2025-10-28 18:17:10]   Test mode: NOT updating CSV
+[2025-10-28 18:17:10]   Email address: jop@aarnink.nl
+[2025-10-28 18:17:10]   PDF: 20251028 ResilienceScanReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf
+[2025-10-28 18:17:10]   Formatting email...
+[2025-10-28 18:17:10]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: jop@aarnink.nl)
+[2025-10-28 18:17:10]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:10]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf...
+[2025-10-28 18:17:10]   Test mode: NOT updating CSV
+[2025-10-28 18:17:10]   Email address: asbabirye@yahoo.com
+[2025-10-28 18:17:10]   PDF: 20251028 ResilienceScanReport (AB - Anne).pdf
+[2025-10-28 18:17:10]   Formatting email...
+[2025-10-28 18:17:10]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: asbabirye@yahoo.com)
+[2025-10-28 18:17:10]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:10]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AB - Anne).pdf...
+[2025-10-28 18:17:11]   Test mode: NOT updating CSV
+[2025-10-28 18:17:11]   Email address: lisa.daly@abbott.com
+[2025-10-28 18:17:11]   PDF: 20251028 ResilienceScanReport (Abbott - Lisa Daly).pdf
+[2025-10-28 18:17:11]   Formatting email...
+[2025-10-28 18:17:11]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: lisa.daly@abbott.com)
+[2025-10-28 18:17:11]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:11]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Abbott - Lisa Daly).pdf...
+[2025-10-28 18:17:11]   Test mode: NOT updating CSV
+[2025-10-28 18:17:11]   Email address: robert.smelt@abbott.com
+[2025-10-28 18:17:11]   PDF: 20251028 ResilienceScanReport (Abbott - Robert Smelt).pdf
+[2025-10-28 18:17:11]   Formatting email...
+[2025-10-28 18:17:11]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: robert.smelt@abbott.com)
+[2025-10-28 18:17:11]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:11]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Abbott - Robert Smelt).pdf...
+[2025-10-28 18:17:12]   Test mode: NOT updating CSV
+[2025-10-28 18:17:12]   Email address: timothy.katanik@abbott.com
+[2025-10-28 18:17:12]   PDF: 20251028 ResilienceScanReport (Abbott labs - Tim Katanik).pdf
+[2025-10-28 18:17:12]   Formatting email...
+[2025-10-28 18:17:12]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: timothy.katanik@abbott.com)
+[2025-10-28 18:17:12]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:12]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Abbott labs - Tim Katanik).pdf...
+[2025-10-28 18:17:12]   Test mode: NOT updating CSV
+[2025-10-28 18:17:12]   Email address: bas.groenwold@abbvie.com
+[2025-10-28 18:17:12]   PDF: 20251028 ResilienceScanReport (AbbVie - Bas Groenwold).pdf
+[2025-10-28 18:17:12]   Formatting email...
+[2025-10-28 18:17:12]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: bas.groenwold@abbvie.com)
+[2025-10-28 18:17:12]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:12]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Bas Groenwold).pdf...
+[2025-10-28 18:17:12]   Test mode: NOT updating CSV
+[2025-10-28 18:17:12]   Email address: henny.landkroon@abbvie.com
+[2025-10-28 18:17:12]   PDF: 20251028 ResilienceScanReport (AbbVie - Henny Landkroon).pdf
+[2025-10-28 18:17:12]   Formatting email...
+[2025-10-28 18:17:12]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: henny.landkroon@abbvie.com)
+[2025-10-28 18:17:12]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:12]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Henny Landkroon).pdf...
+[2025-10-28 18:17:13]   Test mode: NOT updating CSV
+[2025-10-28 18:17:13]   Email address: jeroen.berkhof@abbvie.com
+[2025-10-28 18:17:13]   PDF: 20251028 ResilienceScanReport (AbbVie - Jeroen Berkhof).pdf
+[2025-10-28 18:17:13]   Formatting email...
+[2025-10-28 18:17:13]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: jeroen.berkhof@abbvie.com)
+[2025-10-28 18:17:13]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:13]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Jeroen Berkhof).pdf...
+[2025-10-28 18:17:13]   Test mode: NOT updating CSV
+[2025-10-28 18:17:13]   Email address: luc.kottink@abbvie.com
+[2025-10-28 18:17:13]   PDF: 20251028 ResilienceScanReport (AbbVie - Luc Kottink).pdf
+[2025-10-28 18:17:13]   Formatting email...
+[2025-10-28 18:17:13]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: luc.kottink@abbvie.com)
+[2025-10-28 18:17:13]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:13]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Luc Kottink).pdf...
+[2025-10-28 18:17:14]   Test mode: NOT updating CSV
+[2025-10-28 18:17:14]   Email address: marchel.mol@abbvie.com
+[2025-10-28 18:17:14]   PDF: 20251028 ResilienceScanReport (AbbVie - Marchel).pdf
+[2025-10-28 18:17:14]   Formatting email...
+[2025-10-28 18:17:14]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: marchel.mol@abbvie.com)
+[2025-10-28 18:17:14]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:14]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Marchel).pdf...
+[2025-10-28 18:17:14]   Test mode: NOT updating CSV
+[2025-10-28 18:17:14]   Email address: marieke.sellies@abbvie.com
+[2025-10-28 18:17:14]   PDF: 20251028 ResilienceScanReport (AbbVie - Marieke Sellies).pdf
+[2025-10-28 18:17:14]   Formatting email...
+[2025-10-28 18:17:14]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: marieke.sellies@abbvie.com)
+[2025-10-28 18:17:14]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:14]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Marieke Sellies).pdf...
+[2025-10-28 18:17:15]   Test mode: NOT updating CSV
+[2025-10-28 18:17:15]   Email address: miriam.porquerassalaverri@abbvie.com
+[2025-10-28 18:17:15]   PDF: 20251028 ResilienceScanReport (AbbVie - Miriam Porqueras Salaverri).pdf
+[2025-10-28 18:17:15]   Formatting email...
+[2025-10-28 18:17:15]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: miriam.porquerassalaverri@abbvie.com)
+[2025-10-28 18:17:15]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:15]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Miriam Porqueras Salaverri).pdf...
+[2025-10-28 18:17:15]   Test mode: NOT updating CSV
+[2025-10-28 18:17:15]   Email address: rene.kronenburg@abbvie.com
+[2025-10-28 18:17:15]   PDF: 20251028 ResilienceScanReport (AbbVie - Rene Kronenburg).pdf
+[2025-10-28 18:17:15]   Formatting email...
+[2025-10-28 18:17:15]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: rene.kronenburg@abbvie.com)
+[2025-10-28 18:17:15]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:15]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Rene Kronenburg).pdf...
+[2025-10-28 18:17:15]   Test mode: NOT updating CSV
+[2025-10-28 18:17:15]   Email address: rob.lindeboom@abbvie.com
+[2025-10-28 18:17:15]   PDF: 20251028 ResilienceScanReport (AbbVie - Rob Lindeboom).pdf
+[2025-10-28 18:17:15]   Formatting email...
+[2025-10-28 18:17:15]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: rob.lindeboom@abbvie.com)
+[2025-10-28 18:17:15]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:15]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Rob Lindeboom).pdf...
+[2025-10-28 18:17:16]   Test mode: NOT updating CSV
+[2025-10-28 18:17:16]   Email address: s.beltman@abbvie.com
+[2025-10-28 18:17:16]   PDF: 20251028 ResilienceScanReport (Abbvie - Stef Beltman).pdf
+[2025-10-28 18:17:16]   Formatting email...
+[2025-10-28 18:17:16]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: s.beltman@abbvie.com)
+[2025-10-28 18:17:16]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:16]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Abbvie - Stef Beltman).pdf...
+[2025-10-28 18:17:16]   Test mode: NOT updating CSV
+[2025-10-28 18:17:16]   Email address: vincent.piepers@abbvie.com
+[2025-10-28 18:17:16]   PDF: 20251028 ResilienceScanReport (AbbVie - Vincent).pdf
+[2025-10-28 18:17:16]   Formatting email...
+[2025-10-28 18:17:16]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: vincent.piepers@abbvie.com)
+[2025-10-28 18:17:16]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:16]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Vincent).pdf...
+[2025-10-28 18:17:17]   Test mode: NOT updating CSV
+[2025-10-28 18:17:17]   Email address: walter.verhoef@abbvie.com
+[2025-10-28 18:17:17]   PDF: 20251028 ResilienceScanReport (AbbVie - Walter Verhoef).pdf
+[2025-10-28 18:17:17]   Formatting email...
+[2025-10-28 18:17:17]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: walter.verhoef@abbvie.com)
+[2025-10-28 18:17:17]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:17]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AbbVie - Walter Verhoef).pdf...
+[2025-10-28 18:17:17]   Test mode: NOT updating CSV
+[2025-10-28 18:17:17]   Email address: hilal.lekehal@accenture.com
+[2025-10-28 18:17:17]   PDF: 20251028 ResilienceScanReport (ACN - Hilal L).pdf
+[2025-10-28 18:17:17]   Formatting email...
+[2025-10-28 18:17:17]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: hilal.lekehal@accenture.com)
+[2025-10-28 18:17:17]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:17]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (ACN - Hilal L).pdf...
+[2025-10-28 18:17:18]   Test mode: NOT updating CSV
+[2025-10-28 18:17:18]   Email address: xavier.vers@gmail.com
+[2025-10-28 18:17:18]   PDF: 20251028 ResilienceScanReport (AGILEA - vers).pdf
+[2025-10-28 18:17:18]   Formatting email...
+[2025-10-28 18:17:18]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: xavier.vers@gmail.com)
+[2025-10-28 18:17:18]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:18]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (AGILEA - vers).pdf...
+[2025-10-28 18:17:18]   Test mode: NOT updating CSV
+[2025-10-28 18:17:18]   Email address: a.kampjes@agrifac.com
+[2025-10-28 18:17:18]   PDF: 20251028 ResilienceScanReport (Agrifac Machinery B.V. - Art Kampjes).pdf
+[2025-10-28 18:17:18]   Formatting email...
+[2025-10-28 18:17:18]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: a.kampjes@agrifac.com)
+[2025-10-28 18:17:18]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:18]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Agrifac Machinery B.V. - Art Kampjes).pdf...
+[2025-10-28 18:17:18]   Test mode: NOT updating CSV
+[2025-10-28 18:17:18]   Email address: b.delange@agrifac.com
+[2025-10-28 18:17:19]   PDF: 20251028 ResilienceScanReport (Agrifac Machinery B.V. - Bjorn de Lange).pdf
+[2025-10-28 18:17:19]   Formatting email...
+[2025-10-28 18:17:19]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: b.delange@agrifac.com)
+[2025-10-28 18:17:19]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:19]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Agrifac Machinery B.V. - Bjorn de Lange).pdf...
+[2025-10-28 18:17:19]   Test mode: NOT updating CSV
+[2025-10-28 18:17:19]   Email address: ferry.agrifac@gmail.com
+[2025-10-28 18:17:19]   PDF: 20251028 ResilienceScanReport (Agrifac Machinery B.V. - Ferry).pdf
+[2025-10-28 18:17:19]   Formatting email...
+[2025-10-28 18:17:19]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: ferry.agrifac@gmail.com)
+[2025-10-28 18:17:19]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:19]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Agrifac Machinery B.V. - Ferry).pdf...
+[2025-10-28 18:17:19]   Test mode: NOT updating CSV
+[2025-10-28 18:17:19]   Email address: g.klein@agrifac.com
+[2025-10-28 18:17:19]   PDF: 20251028 ResilienceScanReport (Agrifac Machinery B.V. - Gert Klein).pdf
+[2025-10-28 18:17:19]   Formatting email...
+[2025-10-28 18:17:19]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: g.klein@agrifac.com)
+[2025-10-28 18:17:20]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:20]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Agrifac Machinery B.V. - Gert Klein).pdf...
+[2025-10-28 18:17:20]   Test mode: NOT updating CSV
+[2025-10-28 18:17:20]   Email address: h.ke@agrifac.com
+[2025-10-28 18:17:20]   PDF: 20251028 ResilienceScanReport (Agrifac Machinery B.V. - Huimin Ke).pdf
+[2025-10-28 18:17:20]   Formatting email...
+[2025-10-28 18:17:20]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: h.ke@agrifac.com)
+[2025-10-28 18:17:20]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:20]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Agrifac Machinery B.V. - Huimin Ke).pdf...
+[2025-10-28 18:17:20]   Falling back to SMTP...
+[2025-10-28 18:17:20]   Creating SMTP message...
+[2025-10-28 18:17:20]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:20]   Attaching PDF...
+[2025-10-28 18:17:20]   Connecting to SMTP: smtp.office365.com:587...
+[2025-10-28 18:17:20]   Starting TLS...
+[2025-10-28 18:17:20]   Logging in as: ...
+[2025-10-28 18:17:21]   Error type: SMTPException
+[2025-10-28 18:17:21]   Full error:
+Traceback (most recent call last):
+  File "C:\Users\Christiaan\Documents\RecilienceScan\ResilienceScanGUI.py", line 2545, in send_emails_thread
+    mail.Display()  # Opens email in Outlook for manual inspection
+    ~~~~~~~~~~~~^^
+  File "<COMObject CreateItem>", line 2, in Display
+pywintypes.com_error: (-2147352567, 'Exception occurred.', (4096, 'Microsoft Outlook', "Outlook can't do this because a dialog box is open. Please close it and try again.", None, 0, -2147467259), None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Christiaan\Documents\RecilienceScan\ResilienceScanGUI.py", line 2595, in send_emails_thread
+    server.login(smtp_username, smtp_password)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ~~~~~~~~~^
+        authmethod, getattr(self, method_name),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        initial_response_ok=initial_response_ok)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\smtplib.py", line 656, in auth
+    raise SMTPException(
+    ...<2 lines>...
+    )
+smtplib.SMTPException: Server AUTH mechanism infinite loop. Last response: (334, b'VXNlcm5hbWU6')
+
+[2025-10-28 18:17:21]   Email address: m.zantinge@agrifac.com
+[2025-10-28 18:17:21]   PDF: 20251028 ResilienceScanReport (Agrifac Machinery B.V. - Michiel Zantinge).pdf
+[2025-10-28 18:17:21]   Formatting email...
+[2025-10-28 18:17:21]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: m.zantinge@agrifac.com)
+[2025-10-28 18:17:21]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:21]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Agrifac Machinery B.V. - Michiel Zantinge).pdf...
+[2025-10-28 18:17:21]   Falling back to SMTP...
+[2025-10-28 18:17:21]   Creating SMTP message...
+[2025-10-28 18:17:21]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:21]   Attaching PDF...
+[2025-10-28 18:17:21]   Connecting to SMTP: smtp.office365.com:587...
+[2025-10-28 18:17:21]   Starting TLS...
+[2025-10-28 18:17:21]   Logging in as: ...
+[2025-10-28 18:17:21]   Error type: SMTPException
+[2025-10-28 18:17:21]   Full error:
+Traceback (most recent call last):
+  File "C:\Users\Christiaan\Documents\RecilienceScan\ResilienceScanGUI.py", line 2545, in send_emails_thread
+    mail.Display()  # Opens email in Outlook for manual inspection
+    ~~~~~~~~~~~~^^
+  File "<COMObject CreateItem>", line 2, in Display
+pywintypes.com_error: (-2147352567, 'Exception occurred.', (4096, 'Microsoft Outlook', "Outlook can't do this because a dialog box is open. Please close it and try again.", None, 0, -2147467259), None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Christiaan\Documents\RecilienceScan\ResilienceScanGUI.py", line 2595, in send_emails_thread
+    server.login(smtp_username, smtp_password)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ~~~~~~~~~^
+        authmethod, getattr(self, method_name),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        initial_response_ok=initial_response_ok)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\smtplib.py", line 656, in auth
+    raise SMTPException(
+    ...<2 lines>...
+    )
+smtplib.SMTPException: Server AUTH mechanism infinite loop. Last response: (334, b'VXNlcm5hbWU6')
+
+[2025-10-28 18:17:21]   Email address: marcus.nugroho@gmail.com
+[2025-10-28 18:17:21]   PDF: 20251028 ResilienceScanReport ([Technology Company] - Marcus Pribi Setyo N).pdf
+[2025-10-28 18:17:21]   Formatting email...
+[2025-10-28 18:17:21]   [TEST MODE] Sending to: r.deboer@windesheim.nl (original: marcus.nugroho@gmail.com)
+[2025-10-28 18:17:21]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:21]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport ([Technology Company] - Marcus Pribi Setyo N).pdf...
+[2025-10-28 18:17:21]   Falling back to SMTP...
+[2025-10-28 18:17:21]   Creating SMTP message...
+[2025-10-28 18:17:21]   Setting recipient to: r.deboer@windesheim.nl
+[2025-10-28 18:17:21]   Attaching PDF...
+[2025-10-28 18:17:21]   Connecting to SMTP: smtp.office365.com:587...
+[2025-10-28 18:17:21]   Starting TLS...
+[2025-10-28 18:17:21]   Logging in as: ...
+[2025-10-28 18:17:21]   Error type: SMTPException
+[2025-10-28 18:17:21]   Full error:
+Traceback (most recent call last):
+  File "C:\Users\Christiaan\Documents\RecilienceScan\ResilienceScanGUI.py", line 2545, in send_emails_thread
+    mail.Display()  # Opens email in Outlook for manual inspection
+    ~~~~~~~~~~~~^^
+  File "<COMObject CreateItem>", line 2, in Display
+pywintypes.com_error: (-2147352567, 'Exception occurred.', (4096, 'Microsoft Outlook', "Outlook can't do this because a dialog box is open. Please close it and try again.", None, 0, -2147467259), None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Christiaan\Documents\RecilienceScan\ResilienceScanGUI.py", line 2595, in send_emails_thread
+    server.login(smtp_username, smtp_password)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\smtplib.py", line 739, in login
+    (code, resp) = self.auth(
+                   ~~~~~~~~~^
+        authmethod, getattr(self, method_name),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        initial_response_ok=initial_response_ok)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python313\Lib\smtplib.py", line 656, in auth
+    raise SMTPException(
+    ...<2 lines>...
+    )
+smtplib.SMTPException: Server AUTH mechanism infinite loop. Last response: (334, b'VXNlcm5hbWU6')
+
