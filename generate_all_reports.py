@@ -134,23 +134,50 @@ def generate_reports():
             f'quarto render "{TEMPLATE}" '
             f'-P company="{company}" '
             f'--to pdf '
-            f'--output "{temp_output}" '
-            f'--quiet'
+            f'--output "{temp_output}"'
+            # Removed --quiet to see actual errors
         )
 
-        # Execute quarto render
-        result = os.system(cmd)
+        # Execute quarto render with verbose output
+        print(f"   🔧 Running: quarto render...")
+        import subprocess
+        try:
+            result = subprocess.run(
+                cmd,
+                shell=True,
+                capture_output=True,
+                text=True,
+                timeout=120  # 2 minute timeout per report
+            )
 
-        if result == 0:
-            if Path(temp_output).exists():
-                shutil.move(temp_output, output_file)
-                print(f"   ✅ Saved: {output_file}")
-                generated += 1
+            if result.returncode == 0:
+                if Path(temp_output).exists():
+                    shutil.move(temp_output, output_file)
+                    print(f"   ✅ Saved: {output_file}")
+                    generated += 1
+                else:
+                    print(f"   ❌ Output file not found after successful render")
+                    print(f"   📋 stdout: {result.stdout[-500:]}" if result.stdout else "")
+                    print(f"   ⚠️  stderr: {result.stderr[-500:]}" if result.stderr else "")
+                    failed += 1
             else:
-                print(f"   ❌ Output file not found")
+                print(f"   ❌ Failed (exit code: {result.returncode})")
+                print(f"   📋 Error output:")
+                if result.stderr:
+                    # Show last 1000 chars of error for readability
+                    error_text = result.stderr[-1000:] if len(result.stderr) > 1000 else result.stderr
+                    print(f"   {error_text}")
+                if result.stdout:
+                    # Show last 500 chars of stdout if available
+                    stdout_text = result.stdout[-500:] if len(result.stdout) > 500 else result.stdout
+                    print(f"   📝 Output: {stdout_text}")
                 failed += 1
-        else:
-            print(f"   ❌ Failed (exit code: {result})")
+
+        except subprocess.TimeoutExpired:
+            print(f"   ❌ Failed: Timeout after 120 seconds")
+            failed += 1
+        except Exception as e:
+            print(f"   ❌ Failed: {type(e).__name__}: {e}")
             failed += 1
 
     # Summary
