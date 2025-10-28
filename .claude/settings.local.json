@@ -10,7 +10,8 @@
       "Bash(git push:*)",
       "Bash(python clean_data.py:*)",
       "Bash(python:*)",
-      "Bash(gh issue create:*)"
+      "Bash(gh issue create:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []
