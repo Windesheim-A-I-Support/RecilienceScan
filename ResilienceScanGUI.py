@@ -2541,16 +2541,16 @@ TOP 10 MOST ENGAGED COMPANIES:
                         # VERIFICATION: Log the actual recipient before sending
                         self.log_email(f"  ✅ Email configured - To: {mail.To}, Subject: {mail.Subject[:50]}...")
 
-                        # DEBUG: Uncomment the next two lines to display email instead of sending (for testing)
-                        # mail.Display()  # Opens email in Outlook for manual inspection
-                        # self.log_email(f"  📧 Email displayed for inspection (not sent)")
+                        # DEBUG MODE: Display email instead of sending (for testing)
+                        mail.Display()  # Opens email in Outlook for manual inspection
+                        self.log_email(f"  📧 Email displayed for inspection (not sent)")
 
-                        # Send
-                        self.log_email(f"  Sending via Outlook...")
-                        mail.Send()
+                        # Send - COMMENTED OUT FOR DEBUG MODE
+                        # self.log_email(f"  Sending via Outlook...")
+                        # mail.Send()
 
-                        # Verify after send - check if To field was modified
-                        self.log_email(f"  ✅ Sent via Outlook to: {mail.To}")
+                        # Verify after display - check To field
+                        self.log_email(f"  ✅ Email displayed with To: {mail.To}")
 
                     except Exception as outlook_ex:
                         outlook_error = str(outlook_ex)
