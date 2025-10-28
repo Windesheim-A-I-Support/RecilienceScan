@@ -196,6 +196,46 @@ def fix_numeric_columns(df, issues):
     return df
 
 
+def validate_data_sufficiency(df, issues):
+    """
+    Validate that companies have sufficient data for meaningful reports.
+    """
+    print("\n📊 Validating data sufficiency...")
+
+    if 'company_name' not in df.columns:
+        return
+
+    # Count respondents per company
+    company_counts = df['company_name'].value_counts()
+
+    # Check for companies with insufficient data
+    single_respondent = company_counts[company_counts == 1]
+    if len(single_respondent) > 0:
+        print(f"   ⚠️  WARNING: {len(single_respondent)} companies have only 1 respondent")
+        print(f"      These reports may have limited data/examples:")
+        for company in single_respondent.head(5).index:
+            print(f"      - {company}")
+        if len(single_respondent) > 5:
+            print(f"      ... and {len(single_respondent) - 5} more")
+        issues.append(f"{len(single_respondent)} companies have only 1 respondent (limited data)")
+
+    # Check for missing dimension data
+    score_columns = [col for col in df.columns if
+                     col.startswith('up__') or
+                     col.startswith('in__') or
+                     col.startswith('do__')]
+
+    if score_columns:
+        # Group by company and check missing data
+        for company in df['company_name'].unique():
+            company_data = df[df['company_name'] == company]
+            missing_pct = company_data[score_columns].isna().sum().sum() / (len(company_data) * len(score_columns)) * 100
+
+            if missing_pct > 50:
+                print(f"   ⚠️  {company}: {missing_pct:.0f}% of dimension data missing")
+                issues.append(f"{company}: {missing_pct:.0f}% dimension data missing")
+
+
 def generate_cleaning_report(df, issues, original_count):
     """
     Generate a summary report of cleaning actions.
@@ -212,15 +252,23 @@ def generate_cleaning_report(df, issues, original_count):
     if 'company_name' in df.columns:
         print(f"   - Unique companies: {df['company_name'].nunique()}")
 
+        # Show distribution of respondents per company
+        company_counts = df['company_name'].value_counts()
+        print(f"\n   Company size distribution:")
+        print(f"     - 1 respondent:  {(company_counts == 1).sum()} companies")
+        print(f"     - 2-5 respondents: {((company_counts >= 2) & (company_counts <= 5)).sum()} companies")
+        print(f"     - 6-10 respondents: {((company_counts >= 6) & (company_counts <= 10)).sum()} companies")
+        print(f"     - 10+ respondents: {(company_counts > 10).sum()} companies")
+
     if 'sector' in df.columns:
         print(f"   - Unique sectors: {df['sector'].nunique()}")
 
     if issues:
-        print(f"\n⚠️  ISSUES FIXED ({len(issues)}):")
+        print(f"\n⚠️  ISSUES FOUND ({len(issues)}):")
         for i, issue in enumerate(issues, 1):
             print(f"   {i}. {issue}")
     else:
-        print(f"\n✅ NO ISSUES FOUND - Data was already clean!")
+        print(f"\n✅ NO ISSUES FOUND - Data is clean and sufficient!")
 
     print("=" * 70)
 
@@ -285,7 +333,10 @@ def clean_and_fix():
     if fixed_values > 0:
         summary_lines.append(f"Fixed {fixed_values} non-numeric value(s) in score columns")
 
-    # Step 9: Generate cleaning report
+    # Step 9: Validate data sufficiency
+    validate_data_sufficiency(df, issues)
+
+    # Step 10: Generate cleaning report
     generate_cleaning_report(df, issues, original_count)
 
     # Step 10: Save cleaned data back to same file
