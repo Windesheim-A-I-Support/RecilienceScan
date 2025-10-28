@@ -2539,18 +2539,25 @@ TOP 10 MOST ENGAGED COMPANIES:
                         mail.Attachments.Add(str(attachment_path.absolute()))
 
                         # VERIFICATION: Log the actual recipient before sending
-                        self.log_email(f"  ✅ Email configured - To: {mail.To}, Subject: {mail.Subject[:50]}...")
+                        self.log_email(f"  ✅ Email configured:")
+                        self.log_email(f"     To: {mail.To}")
+                        self.log_email(f"     CC: {mail.CC if hasattr(mail, 'CC') and mail.CC else '(none)'}")
+                        self.log_email(f"     BCC: {mail.BCC if hasattr(mail, 'BCC') and mail.BCC else '(none)'}")
+                        self.log_email(f"     From Account: {mail.SendUsingAccount.SmtpAddress if hasattr(mail, 'SendUsingAccount') and mail.SendUsingAccount else '(default)'}")
+                        self.log_email(f"     Subject: {mail.Subject[:50]}...")
 
                         # DEBUG MODE: Display email instead of sending (for testing)
+                        self.log_email(f"  📧 Opening email in Outlook for inspection...")
+                        self.log_email(f"  ⚠️  DO NOT CLICK SEND - Just inspect and close!")
                         mail.Display()  # Opens email in Outlook for manual inspection
-                        self.log_email(f"  📧 Email displayed for inspection (not sent)")
+                        self.log_email(f"  ✅ Email window opened - waiting for you to close it...")
 
                         # Send - COMMENTED OUT FOR DEBUG MODE
                         # self.log_email(f"  Sending via Outlook...")
                         # mail.Send()
 
-                        # Verify after display - check To field
-                        self.log_email(f"  ✅ Email displayed with To: {mail.To}")
+                        # After display closes
+                        self.log_email(f"  📧 Email window closed by user")
 
                     except Exception as outlook_ex:
                         outlook_error = str(outlook_ex)
