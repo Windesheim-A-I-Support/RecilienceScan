@@ -2822,3 +2822,19 @@
 [2025-10-28 13:22:25] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
 [2025-10-28 13:22:25] Importing email tracking data...
 [2025-10-28 13:22:26] Running system check...
+[2025-10-28 13:25:07] Looking for Excel files in /data folder...
+[2025-10-28 13:25:13] Loading cleaned_master.csv for cleaning...
+[2025-10-28 13:25:13] Summary: Removed 1 invalid company name(s)
+Fixed 6252 non-numeric value(s) in score columns
+[2025-10-28 13:27:04] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-28 13:27:07] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-28 13:27:07] [3/506] Generating: Aako B.V. - Frank Mooij
+[2025-10-28 13:27:07] [4/506] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-10-28 13:27:07] [5/506] Generating: AB - Anne
+[2025-10-28 13:27:10] [6/506] Generating: Abbott - Robert Smelt
+[2025-10-28 13:27:10] [7/506] Generating: Abbott - Lisa Daly
+[2025-10-28 13:27:10] [8/506] Generating: Abbott labs - Tim Katanik
+[2025-10-28 13:27:10] [9/506] Generating: AbbVie - Rene Kronenburg
+[2025-10-28 13:27:10] [10/506] Generating: AbbVie - Rene Kronenburg
+[2025-10-28 13:27:10] [11/506] Generating: Abbvie - Stef Beltman
+[2025-10-28 13:27:10] [12/506] Generating: AbbVie - Vincent

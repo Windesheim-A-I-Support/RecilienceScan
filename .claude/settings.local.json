@@ -9,7 +9,8 @@
       "Bash(powershell -ExecutionPolicy Bypass -File Install-ResilienceScan.ps1 -Profile RecilienceScan)",
       "Bash(git push:*)",
       "Bash(python clean_data.py:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(gh issue create:*)"
     ],
     "deny": [],
     "ask": []
