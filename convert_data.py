@@ -50,6 +50,7 @@ def load_excel_file(file_path):
     """
     Load Excel file with intelligent format detection.
     Supports .xlsx and .xls formats.
+    Includes robust error handling for common issues.
     """
     print(f"\n📂 Loading Excel file: {file_path}")
     file_ext = Path(file_path).suffix.lower()
@@ -59,17 +60,61 @@ def load_excel_file(file_path):
     if file_ext in ['.xlsx', '.xls']:
         print(f"   Format detected: Excel ({file_ext})")
         try:
+            # Check if file is accessible (not locked by another program)
+            try:
+                with open(file_path, 'rb') as f:
+                    f.read(1)
+            except PermissionError:
+                print(f"   ❌ File is locked - please close it in Excel or other programs")
+                return None
+            except Exception as e:
+                print(f"   ❌ Cannot access file: {e}")
+                return None
+
+            # Try loading with appropriate engine
             if file_ext == '.xlsx':
-                df = pd.read_excel(file_path, engine='openpyxl', header=None)
-                print("   ✅ Loaded with openpyxl engine")
+                try:
+                    df = pd.read_excel(file_path, engine='openpyxl', header=None)
+                    print("   ✅ Loaded with openpyxl engine")
+                except ImportError:
+                    print("   ⚠️  openpyxl not installed, trying default engine...")
+                    df = pd.read_excel(file_path, header=None)
+                    print("   ✅ Loaded with default engine")
             else:
-                df = pd.read_excel(file_path, engine='xlrd', header=None)
-                print("   ✅ Loaded with xlrd engine")
+                try:
+                    df = pd.read_excel(file_path, engine='xlrd', header=None)
+                    print("   ✅ Loaded with xlrd engine")
+                except ImportError:
+                    print("   ⚠️  xlrd not installed, trying default engine...")
+                    df = pd.read_excel(file_path, header=None)
+                    print("   ✅ Loaded with default engine")
+
+            # Validate loaded data
+            if df is None or df.empty:
+                print("   ❌ File loaded but contains no data")
+                return None
+
+            if df.shape[0] < 2:
+                print("   ❌ File must have at least 2 rows (header + data)")
+                return None
+
+            if df.shape[1] < 3:
+                print("   ❌ File must have at least 3 columns")
+                return None
+
+        except FileNotFoundError:
+            print(f"   ❌ File not found: {file_path}")
+            return None
+        except PermissionError:
+            print(f"   ❌ Permission denied - file may be locked by another program")
+            return None
         except Exception as e:
-            print(f"   ❌ Excel load failed: {e}")
+            print(f"   ❌ Excel load failed: {type(e).__name__}: {e}")
+            print(f"   💡 Tip: Make sure the file is a valid Excel file and not corrupted")
             return None
     else:
         print(f"   ⚠️  Unsupported file extension: {file_ext}")
+        print(f"   💡 Supported formats: .xlsx, .xls")
         return None
 
     return df
@@ -79,20 +124,48 @@ def detect_header_row(df, max_rows_to_check=10):
     """
     Intelligently detect which row contains the actual header.
     Looks for rows with column-like content.
+    More robust detection with multiple criteria.
     """
     print("🔍 Detecting header row...")
 
     header_keywords = ['company', 'name', 'email', 'submitdate', 'up -', 'in -', 'do -']
 
     for idx in range(min(max_rows_to_check, len(df))):
-        row_values = df.iloc[idx].astype(str).str.lower()
+        try:
+            row_values = df.iloc[idx]
 
-        # Check if this row contains header-like keywords
-        keyword_matches = sum(any(keyword in str(val) for keyword in header_keywords) for val in row_values)
+            # Convert to string safely, handling NaN and other types
+            row_strings = []
+            for val in row_values:
+                if pd.isna(val):
+                    row_strings.append('')
+                else:
+                    row_strings.append(str(val).lower())
 
-        if keyword_matches >= 3:  # At least 3 header keywords found
-            print(f"✅ Detected header at row {idx + 1} (index {idx})")
-            return idx
+            # Check if this row contains header-like keywords
+            keyword_matches = sum(
+                any(keyword in row_str for keyword in header_keywords)
+                for row_str in row_strings
+            )
+
+            # Additional checks for header-like rows:
+            # 1. More text than numbers
+            text_count = sum(1 for s in row_strings if s and not s.replace('.', '').replace('-', '').isdigit())
+            # 2. Not mostly empty
+            non_empty = sum(1 for s in row_strings if s)
+
+            if keyword_matches >= 3:  # At least 3 header keywords found
+                print(f"✅ Detected header at row {idx + 1} (index {idx})")
+                print(f"   Found {keyword_matches} header keywords, {non_empty}/{len(row_strings)} non-empty cells")
+                return idx
+            elif text_count > len(row_strings) * 0.7 and non_empty > len(row_strings) * 0.5:
+                # Looks like a header (mostly text, mostly filled)
+                print(f"✅ Detected likely header at row {idx + 1} (index {idx})")
+                print(f"   {text_count} text cells, {non_empty}/{len(row_strings)} non-empty cells")
+                return idx
+        except Exception as e:
+            print(f"   ⚠️  Error checking row {idx}: {e}")
+            continue
 
     print("⚠️  Using default header row (index 0)")
     return 0
@@ -102,17 +175,46 @@ def clean_column_names(columns):
     """
     Clean and standardize column names.
     Converts to lowercase, replaces spaces with underscores, removes special characters.
+    More robust handling of edge cases.
     """
-    cleaned = (
-        pd.Series(columns)
-        .astype(str)
-        .str.strip()
-        .str.lower()
-        .str.replace(' ', '_', regex=False)
-        .str.replace('-', '', regex=False)
-        .str.replace(':', '', regex=False)
-        .str.replace(r'[^\w_]', '', regex=True)
-    )
+    cleaned = []
+
+    for i, col in enumerate(columns):
+        try:
+            # Handle None, NaN, and other non-string types
+            if pd.isna(col) or col is None or str(col).strip() == '':
+                # Generate a default name for empty/invalid columns
+                col_name = f'column_{i+1}'
+            else:
+                # Convert to string and clean
+                col_name = (
+                    str(col)
+                    .strip()
+                    .lower()
+                    .replace(' ', '_')
+                    .replace('-', '')
+                    .replace(':', '')
+                    .replace('(', '')
+                    .replace(')', '')
+                    .replace('[', '')
+                    .replace(']', '')
+                )
+                # Remove any remaining special characters except underscore
+                import re
+                col_name = re.sub(r'[^\w_]', '', col_name)
+
+                # Ensure it starts with a letter or underscore (valid Python identifier)
+                if col_name and col_name[0].isdigit():
+                    col_name = f'col_{col_name}'
+
+                # If cleaning resulted in empty string, use default
+                if not col_name:
+                    col_name = f'column_{i+1}'
+
+            cleaned.append(col_name)
+        except Exception as e:
+            print(f"   ⚠️  Error cleaning column {i}: {e}, using default name")
+            cleaned.append(f'column_{i+1}')
 
     # Handle duplicate column names
     seen = {}
@@ -149,6 +251,7 @@ def merge_with_existing(new_df):
     Update existing cleaned_master.csv with new data.
     Preserves ONLY the 'reportsent' column from existing file.
     Everything else is updated from the new Excel source.
+    More robust handling of edge cases and errors.
     """
     if not Path(OUTPUT_PATH).exists():
         print("ℹ️  No existing cleaned_master.csv found - creating new file")
@@ -159,13 +262,35 @@ def merge_with_existing(new_df):
 
     print("\n🔄 Updating existing cleaned_master.csv...")
 
-    # Load existing data
-    existing_df = pd.read_csv(OUTPUT_PATH)
-    print(f"   Existing records: {len(existing_df)}")
-    print(f"   New records from Excel: {len(new_df)}")
+    try:
+        # Load existing data with error handling
+        try:
+            existing_df = pd.read_csv(OUTPUT_PATH, encoding='utf-8')
+        except UnicodeDecodeError:
+            print("   ⚠️  UTF-8 decode failed, trying latin-1 encoding...")
+            existing_df = pd.read_csv(OUTPUT_PATH, encoding='latin-1')
+        except Exception as e:
+            print(f"   ❌ Could not read existing file: {e}")
+            print("   ℹ️  Creating new file instead")
+            new_df['reportsent'] = False
+            return new_df
 
-    # Create backup before updating
-    create_backup(OUTPUT_PATH)
+        print(f"   Existing records: {len(existing_df)}")
+        print(f"   New records from Excel: {len(new_df)}")
+
+        # Validate existing data
+        if existing_df.empty:
+            print("   ⚠️  Existing file is empty - creating new file")
+            new_df['reportsent'] = False
+            return new_df
+
+        # Create backup before updating
+        create_backup(OUTPUT_PATH)
+    except Exception as e:
+        print(f"   ❌ Error processing existing file: {e}")
+        print("   ℹ️  Creating new file instead")
+        new_df['reportsent'] = False
+        return new_df
 
     # Standardize column names for matching
     existing_df.columns = existing_df.columns.str.lower().str.strip()
@@ -290,15 +415,62 @@ def convert_and_save():
     print(f"\n💾 Saving to: {OUTPUT_PATH}")
 
     try:
-        os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
+        # Ensure output directory exists
+        output_dir = os.path.dirname(OUTPUT_PATH)
+        if output_dir:  # Only create if there's a directory component
+            try:
+                os.makedirs(output_dir, exist_ok=True)
+            except PermissionError:
+                print(f"   ❌ Permission denied: Cannot create directory {output_dir}")
+                print(f"   💡 Tip: Check folder permissions or run as administrator")
+                return False
+            except Exception as e:
+                print(f"   ❌ Cannot create directory: {e}")
+                return False
+
+        # Check if we can write to the output file
+        if Path(OUTPUT_PATH).exists():
+            try:
+                # Test if file is writable
+                with open(OUTPUT_PATH, 'a'):
+                    pass
+            except PermissionError:
+                print(f"   ❌ File is locked: {OUTPUT_PATH}")
+                print(f"   💡 Tip: Close the file if it's open in Excel or another program")
+                return False
+
+        # Validate dataframe before saving
+        if df_final.empty:
+            print("   ⚠️  Warning: Dataframe is empty, but saving anyway")
+
+        # Save to CSV with error handling
         df_final.to_csv(OUTPUT_PATH, index=False, encoding='utf-8')
+
+        # Verify the file was created and is readable
+        if not Path(OUTPUT_PATH).exists():
+            print(f"   ❌ File was not created: {OUTPUT_PATH}")
+            return False
+
+        # Try to read it back to verify
+        try:
+            verification_df = pd.read_csv(OUTPUT_PATH, nrows=1)
+            if verification_df.empty and not df_final.empty:
+                print(f"   ⚠️  Warning: File created but appears empty")
+        except Exception as e:
+            print(f"   ⚠️  Warning: Could not verify saved file: {e}")
 
         print(f"   ✅ Saved successfully!")
         print(f"   📊 Final shape: {df_final.shape[0]} rows × {df_final.shape[1]} columns")
 
-        # Show sample of converted data
-        print("\n📋 Sample of converted data (first 3 rows, first 5 columns):")
-        print(df_final.iloc[:3, :5].to_string())
+        # Show sample of converted data (with error handling)
+        try:
+            if len(df_final) > 0 and len(df_final.columns) > 0:
+                print("\n📋 Sample of converted data (first 3 rows, first 5 columns):")
+                sample_cols = min(5, len(df_final.columns))
+                sample_rows = min(3, len(df_final))
+                print(df_final.iloc[:sample_rows, :sample_cols].to_string())
+        except Exception as e:
+            print(f"   ⚠️  Could not display sample: {e}")
 
         print("\n" + "=" * 70)
         print("✅ SUCCESS: Data converted to CSV!")
@@ -307,8 +479,14 @@ def convert_and_save():
 
         return True
 
+    except PermissionError as e:
+        print(f"\n❌ FAILED to save: Permission denied")
+        print(f"   💡 Tip: Close {OUTPUT_PATH} if it's open in another program")
+        print(f"   Error details: {e}")
+        return False
     except Exception as e:
-        print(f"\n❌ FAILED to save: {e}")
+        print(f"\n❌ FAILED to save: {type(e).__name__}: {e}")
+        print(f"   💡 Tip: Check that you have write permissions to the /data folder")
         return False
 
 
