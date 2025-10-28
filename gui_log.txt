@@ -2838,3 +2838,22 @@ Fixed 6252 non-numeric value(s) in score columns
 [2025-10-28 13:27:10] [10/506] Generating: AbbVie - Rene Kronenburg
 [2025-10-28 13:27:10] [11/506] Generating: Abbvie - Stef Beltman
 [2025-10-28 13:27:10] [12/506] Generating: AbbVie - Vincent
+[2025-10-28 14:56:12] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-28 14:56:12] Importing email tracking data...
+[2025-10-28 14:56:17] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-28 14:56:24] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-28 14:56:24] [3/506] Generating: Aako B.V. - Frank Mooij
+[2025-10-28 14:56:24] [4/506] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-10-28 14:56:24] [5/506] Generating: AB - Anne
+[2025-10-28 14:56:27] [6/506] Generating: Abbott - Robert Smelt
+[2025-10-28 14:56:27] [7/506] Generating: Abbott - Lisa Daly
+[2025-10-28 14:56:27] [8/506] Generating: Abbott labs - Tim Katanik
+[2025-10-28 14:56:27] [9/506] Generating: AbbVie - Rene Kronenburg
+[2025-10-28 14:56:27] [10/506] Generating: AbbVie - Rene Kronenburg
+[2025-10-28 14:56:27] [11/506] Generating: Abbvie - Stef Beltman
+[2025-10-28 14:56:27] [12/506] Generating: AbbVie - Vincent
+[2025-10-28 14:56:27] [13/506] Generating: AbbVie - Marieke Sellies
+[2025-10-28 14:56:35] [14/506] Generating: AbbVie - Rob Lindeboom
+[2025-10-28 14:56:42] [15/506] Generating: AbbVie - Marchel
+[2025-10-28 14:56:49] [16/506] Generating: AbbVie - Jeroen Berkhof
+[2025-10-28 14:56:56] [17/506] Generating: AbbVie - Miriam Porqueras Salaverri

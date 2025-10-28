@@ -1301,7 +1301,6 @@ cat("*End of Validation Debug Summary*\n")
 ```
 
 
-## PART 5 - STRATEGIC RESILIENCE DASHBOARD
 ```{r load-real-data-unconditional, echo=FALSE, include=FALSE}
 # ========================================================================
 # UNCONDITIONAL DATA LOADING WITH FUZZY MATCHING & COMPANY AVERAGING
