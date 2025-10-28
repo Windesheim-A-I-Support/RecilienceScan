@@ -1,0 +1,224 @@
+---
+title: "Supply Chain Resilience Analysis"
+subtitle: "Circular Dimension Visualization"
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=0.75in
+    fontsize: 11pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(scales)
+
+# Load data
+df <- read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+```
+
+# Executive Summary
+
+This report provides a circular visualization analysis of supply chain resilience dimensions across your organization. The circular barplot format allows for intuitive comparison of the five key resilience dimensions: Redundancy, Collaboration, Flexibility, Visibility, and Agility.
+
+## Company Overview
+
+```{r company-stats}
+total_companies <- length(unique(df$company_name[df$company_name != "" & !is.na(df$company_name)]))
+total_respondents <- nrow(df)
+avg_respondents_per_company <- round(total_respondents / total_companies, 1)
+
+cat(sprintf("**Total Companies Analyzed:** %d\n\n", total_companies))
+cat(sprintf("**Total Respondents:** %d\n\n", total_respondents))
+cat(sprintf("**Average Respondents per Company:** %.1f\n\n", avg_respondents_per_company))
+```
+
+\newpage
+
+## Circular Dimension Comparison
+
+The following visualization presents the average resilience scores across all five dimensions in a circular layout. This radial perspective highlights the relative strengths and weaknesses in your supply chain resilience profile.
+
+```{r circular-barplot, fig.width=10, fig.height=10}
+# Calculate average scores for each dimension across all phases
+dimension_scores <- df %>%
+  summarise(
+    Redundancy = mean(c(up__r, in__r, do__r), na.rm = TRUE),
+    Collaboration = mean(c(up__c, in__c, do__c), na.rm = TRUE),
+    Flexibility = mean(c(up__f, in__f, do__f), na.rm = TRUE),
+    Visibility = mean(c(up__v, in__v, do__v), na.rm = TRUE),
+    Agility = mean(c(up__a, in__a, do__a), na.rm = TRUE)
+  ) %>%
+  pivot_longer(everything(), names_to = "Dimension", values_to = "Score")
+
+# Add id for ordering
+dimension_scores$id <- seq(1, nrow(dimension_scores))
+
+# Calculate angles and positions
+number_of_bar <- nrow(dimension_scores)
+angle <- 90 - 360 * (dimension_scores$id - 0.5) / number_of_bar
+dimension_scores$hjust <- ifelse(angle < -90, 1, 0)
+dimension_scores$angle <- ifelse(angle < -90, angle + 180, angle)
+
+# Create circular barplot
+ggplot(dimension_scores, aes(x = as.factor(id), y = Score, fill = Score)) +
+  geom_bar(stat = "identity", alpha = 0.8, width = 0.9) +
+  scale_fill_gradient(low = "#E74C3C", high = "#27AE60", limits = c(1, 5)) +
+  ylim(-0.5, 5.5) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(rep(-1, 4), "cm"),
+    legend.position = "bottom",
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10)
+  ) +
+  coord_polar(start = 0) +
+  geom_text(
+    aes(x = id, y = Score + 0.3, label = Dimension, hjust = hjust),
+    color = "black",
+    fontface = "bold",
+    alpha = 0.8,
+    size = 5,
+    angle = dimension_scores$angle,
+    inherit.aes = FALSE
+  ) +
+  geom_text(
+    aes(x = id, y = Score - 0.5, label = sprintf("%.2f", Score)),
+    color = "white",
+    fontface = "bold",
+    size = 4.5,
+    inherit.aes = FALSE
+  ) +
+  labs(fill = "Resilience Score (1-5)")
+```
+
+\newpage
+
+## Phase-Level Circular Analysis
+
+Breaking down resilience by the three operational phases (Upstream, Internal, Downstream) provides deeper insights into where resilience capabilities are strongest and weakest.
+
+```{r phase-circular, fig.width=12, fig.height=12}
+# Calculate scores by phase and dimension
+phase_scores <- df %>%
+  summarise(
+    UP_Redundancy = mean(up__r, na.rm = TRUE),
+    UP_Collaboration = mean(up__c, na.rm = TRUE),
+    UP_Flexibility = mean(up__f, na.rm = TRUE),
+    UP_Visibility = mean(up__v, na.rm = TRUE),
+    UP_Agility = mean(up__a, na.rm = TRUE),
+    IN_Redundancy = mean(in__r, na.rm = TRUE),
+    IN_Collaboration = mean(in__c, na.rm = TRUE),
+    IN_Flexibility = mean(in__f, na.rm = TRUE),
+    IN_Visibility = mean(in__v, na.rm = TRUE),
+    IN_Agility = mean(in__a, na.rm = TRUE),
+    DO_Redundancy = mean(do__r, na.rm = TRUE),
+    DO_Collaboration = mean(do__c, na.rm = TRUE),
+    DO_Flexibility = mean(do__f, na.rm = TRUE),
+    DO_Visibility = mean(do__v, na.rm = TRUE),
+    DO_Agility = mean(do__a, na.rm = TRUE)
+  ) %>%
+  pivot_longer(everything(), names_to = "Metric", values_to = "Score") %>%
+  separate(Metric, into = c("Phase", "Dimension"), sep = "_", extra = "merge") %>%
+  mutate(
+    Phase = case_when(
+      Phase == "UP" ~ "Upstream",
+      Phase == "IN" ~ "Internal",
+      Phase == "DO" ~ "Downstream"
+    )
+  )
+
+# Add grouping for visualization
+phase_scores$id <- seq(1, nrow(phase_scores))
+angle <- 90 - 360 * (phase_scores$id - 0.5) / nrow(phase_scores)
+phase_scores$hjust <- ifelse(angle < -90, 1, 0)
+phase_scores$angle <- ifelse(angle < -90, angle + 180, angle)
+
+ggplot(phase_scores, aes(x = as.factor(id), y = Score, fill = Phase)) +
+  geom_bar(stat = "identity", alpha = 0.8, width = 0.95) +
+  scale_fill_manual(values = c("Upstream" = "#3498DB", "Internal" = "#E67E22", "Downstream" = "#9B59B6")) +
+  ylim(-1, 6) +
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(rep(-1, 4), "cm"),
+    legend.position = "bottom",
+    legend.title = element_text(size = 14, face = "bold"),
+    legend.text = element_text(size = 12)
+  ) +
+  coord_polar(start = 0) +
+  geom_text(
+    aes(x = id, y = Score + 0.4, label = paste(Phase, Dimension, sep = "\n"), hjust = hjust),
+    color = "black",
+    fontface = "bold",
+    alpha = 0.7,
+    size = 3.5,
+    angle = phase_scores$angle,
+    inherit.aes = FALSE
+  ) +
+  geom_text(
+    aes(x = id, y = Score / 2, label = sprintf("%.2f", Score)),
+    color = "white",
+    fontface = "bold",
+    size = 3.5,
+    inherit.aes = FALSE
+  ) +
+  labs(fill = "Operational Phase")
+```
+
+\newpage
+
+## Key Insights
+
+```{r insights}
+# Calculate insights
+best_dimension <- dimension_scores %>% filter(Score == max(Score)) %>% pull(Dimension)
+worst_dimension <- dimension_scores %>% filter(Score == min(Score)) %>% pull(Dimension)
+best_score <- max(dimension_scores$Score)
+worst_score <- min(dimension_scores$Score)
+
+# Phase analysis
+phase_avg <- phase_scores %>%
+  group_by(Phase) %>%
+  summarise(Avg = mean(Score, na.rm = TRUE))
+best_phase <- phase_avg %>% filter(Avg == max(Avg)) %>% pull(Phase)
+worst_phase <- phase_avg %>% filter(Avg == min(Avg)) %>% pull(Phase)
+```
+
+**Strongest Dimension:** `r best_dimension` (Score: `r sprintf("%.2f", best_score)`)
+
+- This dimension shows the highest resilience capability across your supply chain.
+- Consider leveraging these strengths when facing disruptions.
+
+**Weakest Dimension:** `r worst_dimension` (Score: `r sprintf("%.2f", worst_score)`)
+
+- This area represents the greatest opportunity for improvement.
+- Prioritize investments and initiatives to strengthen this capability.
+
+**Phase Analysis:**
+
+- **Strongest Phase:** `r best_phase` operations demonstrate the most robust resilience capabilities.
+- **Weakest Phase:** `r worst_phase` operations would benefit most from targeted resilience improvements.
+
+## Recommendations
+
+Based on the circular visualization analysis:
+
+1. **Focus on Balance**: The circular representation reveals any imbalances in resilience capabilities. Aim for a more rounded profile to ensure comprehensive resilience.
+
+2. **Phase Integration**: Gaps between operational phases (Upstream, Internal, Downstream) can create vulnerabilities. Work to strengthen the weakest phase to improve end-to-end resilience.
+
+3. **Dimension Prioritization**: While `r best_dimension` is strong, don't neglect it. Simultaneously invest in improving `r worst_dimension` to create a more balanced resilience portfolio.
+
+4. **Continuous Monitoring**: Use this circular visualization format for regular resilience assessments to track improvements over time.
+
+---
+
+*Report generated with ResilienceScan - Supply Chain Resilience Assessment Tool*

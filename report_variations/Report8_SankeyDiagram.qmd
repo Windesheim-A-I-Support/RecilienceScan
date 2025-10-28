@@ -1,0 +1,422 @@
+---
+title: "Supply Chain Resilience Flow Analysis"
+subtitle: "Sankey Diagram Visualization of Capability Transformation"
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=0.75in
+    fontsize: 11pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(networkD3)
+library(htmlwidgets)
+library(webshot)
+library(ggalluvial)
+
+# Load data
+df <- read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+```
+
+# Executive Summary
+
+Sankey diagrams visualize flows and transformations, making them ideal for showing how resilience capabilities flow through supply chain phases and aggregate into overall performance. The width of flows represents magnitude, revealing where capabilities concentrate and where they diminish.
+
+## Flow Analysis Overview
+
+```{r overview}
+total_companies <- length(unique(df$company_name[df$company_name != "" & !is.na(df$company_name)]))
+total_respondents <- nrow(df)
+
+cat(sprintf("**Organizations:** %d\n\n", total_companies))
+cat(sprintf("**Responses:** %d\n\n", total_respondents))
+cat("**Flow Concept:** Visualizing how dimensions flow through phases and contribute to overall resilience.\n")
+```
+
+\newpage
+
+## Dimension-to-Phase Flow
+
+This alluvial diagram shows how the five resilience dimensions distribute across the three supply chain phases, with flow width representing score magnitude.
+
+```{r dimension-phase-flow, fig.width=13, fig.height=10}
+# Prepare flow data
+flow_data <- df %>%
+  summarise(
+    across(c(up__r, up__c, up__f, up__v, up__a,
+             in__r, in__c, in__f, in__v, in__a,
+             do__r, do__c, do__f, do__v, do__a),
+           ~sum(.x, na.rm = TRUE))
+  ) %>%
+  pivot_longer(everything(), names_to = "Metric", values_to = "Total_Score") %>%
+  separate(Metric, into = c("Phase", "Dimension"), sep = "__") %>%
+  mutate(
+    Phase = case_when(
+      Phase == "up" ~ "Upstream",
+      Phase == "in" ~ "Internal",
+      Phase == "do" ~ "Downstream"
+    ),
+    Dimension = case_when(
+      Dimension == "r" ~ "Redundancy",
+      Dimension == "c" ~ "Collaboration",
+      Dimension == "f" ~ "Flexibility",
+      Dimension == "v" ~ "Visibility",
+      Dimension == "a" ~ "Agility"
+    ),
+    Phase = factor(Phase, levels = c("Upstream", "Internal", "Downstream")),
+    Dimension = factor(Dimension, levels = c("Redundancy", "Collaboration",
+                                             "Flexibility", "Visibility", "Agility"))
+  )
+
+ggplot(flow_data, aes(axis1 = Dimension, axis2 = Phase, y = Total_Score)) +
+  geom_alluvium(aes(fill = Dimension), alpha = 0.7, width = 1/12,
+                curve_type = "sigmoid") +
+  geom_stratum(width = 1/6, fill = "gray30", color = "white", size = 1) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+            color = "white", fontface = "bold", size = 4.5) +
+  scale_x_discrete(limits = c("Dimension", "Phase"),
+                   expand = c(0.15, 0.05)) +
+  scale_fill_viridis_d(option = "plasma", begin = 0.2, end = 0.9,
+                       name = "Dimension") +
+  theme_minimal() +
+  theme(
+    axis.title = element_blank(),
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = 15, face = "bold"),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "bottom",
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 11),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    title = "Resilience Dimension Flow Across Supply Chain Phases"
+  )
+```
+
+### Flow Insights
+
+```{r flow-insights}
+# Calculate flow concentrations
+phase_totals <- flow_data %>%
+  group_by(Phase) %>%
+  summarise(Total = sum(Total_Score), .groups = "drop") %>%
+  arrange(desc(Total))
+
+dim_totals <- flow_data %>%
+  group_by(Dimension) %>%
+  summarise(Total = sum(Total_Score), .groups = "drop") %>%
+  arrange(desc(Total))
+
+strongest_phase <- phase_totals$Phase[1]
+strongest_dim <- dim_totals$Dimension[1]
+```
+
+- **Dominant Flow:** `r strongest_dim` generates the largest total flow across all phases
+- **Capacity Concentration:** `r strongest_phase` phase shows the highest resilience capacity
+- **Flow Balance:** Wider flows indicate stronger capabilities; narrow flows highlight vulnerabilities
+
+\newpage
+
+## Phase Progression Flow
+
+Visualizing how resilience flows from Upstream through Internal to Downstream operations reveals transformation patterns.
+
+```{r phase-progression, fig.width=13, fig.height=9}
+# Create phase progression data
+progression_data <- df %>%
+  mutate(id = row_number()) %>%
+  select(id, up__r, up__c, up__f, up__v, up__a,
+         in__r, in__c, in__f, in__v, in__a,
+         do__r, do__c, do__f, do__v, do__a) %>%
+  mutate(
+    Upstream_Total = rowSums(select(., starts_with("up")), na.rm = TRUE),
+    Internal_Total = rowSums(select(., starts_with("in")), na.rm = TRUE),
+    Downstream_Total = rowSums(select(., starts_with("do")), na.rm = TRUE)
+  ) %>%
+  select(id, Upstream_Total, Internal_Total, Downstream_Total) %>%
+  mutate(
+    Performance_Level = case_when(
+      Upstream_Total < 10 ~ "Low Resilience",
+      Upstream_Total < 15 ~ "Medium Resilience",
+      Upstream_Total < 20 ~ "High Resilience",
+      TRUE ~ "Excellent Resilience"
+    ),
+    Performance_Level = factor(Performance_Level,
+                              levels = c("Low Resilience", "Medium Resilience",
+                                       "High Resilience", "Excellent Resilience"))
+  ) %>%
+  pivot_longer(c(Upstream_Total, Internal_Total, Downstream_Total),
+               names_to = "Phase", values_to = "Score") %>%
+  mutate(
+    Phase = gsub("_Total", "", Phase),
+    Phase = factor(Phase, levels = c("Upstream", "Internal", "Downstream"))
+  )
+
+ggplot(progression_data, aes(x = Phase, stratum = Performance_Level,
+                             alluvium = id, y = Score, fill = Performance_Level)) +
+  geom_flow(stat = "alluvium", alpha = 0.6, curve_type = "sigmoid",
+            lode.guidance = "frontback") +
+  geom_stratum(alpha = 0.8, width = 1/3) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+            size = 3.5, fontface = "bold") +
+  scale_fill_manual(values = c("Low Resilience" = "#E74C3C",
+                                "Medium Resilience" = "#F39C12",
+                                "High Resilience" = "#3498DB",
+                                "Excellent Resilience" = "#27AE60"),
+                    name = "Resilience Level") +
+  theme_minimal() +
+  theme(
+    axis.title.y = element_text(size = 13, face = "bold"),
+    axis.title.x = element_blank(),
+    axis.text.x = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 11),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "bottom",
+    legend.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    y = "Total Score",
+    title = "Resilience Flow Through Supply Chain Phases"
+  )
+```
+
+### Progression Patterns
+
+Organizations flowing through different performance levels across phases indicate:
+
+- **Upstream to Downstream Decline:** Loss of capability as products/services move through chain
+- **Building Momentum:** Resilience strengthens from upstream through downstream
+- **Consistent Flow:** Stable resilience across all phases (ideal state)
+- **Phase Bottlenecks:** Constrictions at specific phases limiting overall flow
+
+\newpage
+
+## Dimension Contribution to Overall Performance
+
+This Sankey shows how individual dimensions aggregate into overall resilience scores.
+
+```{r dimension-contribution, fig.width=13, fig.height=10}
+# Calculate dimension contributions to overall score
+contribution_data <- df %>%
+  filter(!is.na(overall_scres)) %>%
+  mutate(
+    Red_Score = (up__r + in__r + do__r) / 3,
+    Col_Score = (up__c + in__c + do__c) / 3,
+    Flex_Score = (up__f + in__f + do__f) / 3,
+    Vis_Score = (up__v + in__v + do__v) / 3,
+    Agi_Score = (up__a + in__a + do__a) / 3,
+    Overall_Category = case_when(
+      overall_scres < 2 ~ "Low (< 2.0)",
+      overall_scres < 3 ~ "Medium-Low (2.0-3.0)",
+      overall_scres < 4 ~ "Medium-High (3.0-4.0)",
+      TRUE ~ "High (≥ 4.0)"
+    ),
+    Overall_Category = factor(Overall_Category,
+                             levels = c("Low (< 2.0)", "Medium-Low (2.0-3.0)",
+                                       "Medium-High (3.0-4.0)", "High (≥ 4.0)"))
+  ) %>%
+  select(Red_Score, Col_Score, Flex_Score, Vis_Score, Agi_Score, Overall_Category) %>%
+  pivot_longer(c(Red_Score, Col_Score, Flex_Score, Vis_Score, Agi_Score),
+               names_to = "Dimension", values_to = "Score") %>%
+  filter(!is.na(Score)) %>%
+  mutate(
+    Dimension = case_when(
+      Dimension == "Red_Score" ~ "Redundancy",
+      Dimension == "Col_Score" ~ "Collaboration",
+      Dimension == "Flex_Score" ~ "Flexibility",
+      Dimension == "Vis_Score" ~ "Visibility",
+      Dimension == "Agi_Score" ~ "Agility"
+    ),
+    Dimension = factor(Dimension, levels = c("Redundancy", "Collaboration",
+                                            "Flexibility", "Visibility", "Agility"))
+  )
+
+ggplot(contribution_data, aes(axis1 = Dimension, axis2 = Overall_Category, y = Score)) +
+  geom_alluvium(aes(fill = Dimension), alpha = 0.7, width = 1/12,
+                curve_type = "sigmoid") +
+  geom_stratum(width = 1/5, fill = "gray20", color = "white", size = 1) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+            color = "white", fontface = "bold", size = 4) +
+  scale_x_discrete(limits = c("Dimension Scores", "Overall Performance"),
+                   expand = c(0.15, 0.05)) +
+  scale_fill_viridis_d(option = "plasma", begin = 0.2, end = 0.9,
+                       name = "Dimension") +
+  theme_minimal() +
+  theme(
+    axis.title = element_blank(),
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = 15, face = "bold"),
+    axis.ticks = element_blank(),
+    panel.grid = element_blank(),
+    legend.position = "bottom",
+    legend.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    title = "How Dimension Scores Flow Into Overall Resilience Performance"
+  )
+```
+
+### Contribution Analysis
+
+```{r contribution-analysis}
+# Calculate which dimensions contribute most to high performance
+high_performers <- df %>%
+  filter(overall_scres >= 4) %>%
+  summarise(
+    Redundancy = mean(c(up__r, in__r, do__r), na.rm = TRUE),
+    Collaboration = mean(c(up__c, in__c, do__c), na.rm = TRUE),
+    Flexibility = mean(c(up__f, in__f, do__f), na.rm = TRUE),
+    Visibility = mean(c(up__v, in__v, do__v), na.rm = TRUE),
+    Agility = mean(c(up__a, in__a, do__a), na.rm = TRUE)
+  ) %>%
+  pivot_longer(everything(), names_to = "Dimension", values_to = "Avg_Score") %>%
+  arrange(desc(Avg_Score))
+
+if (nrow(high_performers) > 0) {
+  top_contributor <- high_performers$Dimension[1]
+  top_score <- high_performers$Avg_Score[1]
+}
+```
+
+**High Performer Analysis:**
+
+Organizations with overall resilience ≥ 4.0 show strongest capability in `r if(nrow(high_performers) > 0) top_contributor` (Avg: `r if(nrow(high_performers) > 0) sprintf("%.2f", top_score)`).
+
+This suggests `r if(nrow(high_performers) > 0) top_contributor` is a critical enabler of top-tier resilience performance.
+
+\newpage
+
+## Value Chain Flow Analysis
+
+Understanding how resilience flows through different value chain positions reveals strategic patterns.
+
+```{r value-chain-flow, fig.width=13, fig.height=9}
+# Value chain position analysis
+value_chain_data <- df %>%
+  filter(!is.na(position_in_the_value_chain) & position_in_the_value_chain != "") %>%
+  mutate(
+    Position = case_when(
+      grepl("Upstream|upstream", position_in_the_value_chain) ~ "Upstream Position",
+      grepl("Center|center|Mid", position_in_the_value_chain) ~ "Center Position",
+      grepl("Downstream|downstream", position_in_the_value_chain) ~ "Downstream Position",
+      TRUE ~ "Other"
+    ),
+    Resilience_Level = case_when(
+      overall_scres < 2.5 ~ "Low",
+      overall_scres < 3.5 ~ "Medium",
+      TRUE ~ "High"
+    ),
+    Resilience_Level = factor(Resilience_Level, levels = c("Low", "Medium", "High"))
+  ) %>%
+  filter(Position != "Other" & !is.na(overall_scres)) %>%
+  count(Position, Resilience_Level, name = "Count")
+
+if (nrow(value_chain_data) > 0) {
+  ggplot(value_chain_data, aes(axis1 = Position, axis2 = Resilience_Level, y = Count)) +
+    geom_alluvium(aes(fill = Resilience_Level), alpha = 0.7, width = 1/12,
+                  curve_type = "sigmoid") +
+    geom_stratum(width = 1/4, fill = "gray25", color = "white", size = 1.5) +
+    geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+              color = "white", fontface = "bold", size = 5) +
+    scale_x_discrete(limits = c("Value Chain Position", "Resilience Performance"),
+                     expand = c(0.15, 0.05)) +
+    scale_fill_manual(values = c("Low" = "#E74C3C",
+                                  "Medium" = "#F39C12",
+                                  "High" = "#27AE60"),
+                      name = "Performance") +
+    theme_minimal() +
+    theme(
+      axis.title = element_blank(),
+      axis.text.y = element_blank(),
+      axis.text.x = element_text(size = 15, face = "bold"),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank(),
+      legend.position = "bottom",
+      legend.title = element_text(size = 13, face = "bold"),
+      legend.text = element_text(size = 12),
+      plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+    ) +
+    labs(
+      title = "Resilience Flow by Value Chain Position"
+    )
+} else {
+  cat("Insufficient value chain position data for flow visualization.\n")
+}
+```
+
+\newpage
+
+## Strategic Flow Optimization
+
+### Flow Efficiency Metrics
+
+```{r flow-metrics}
+# Calculate flow efficiency
+phase_efficiency <- flow_data %>%
+  group_by(Phase) %>%
+  summarise(
+    Total_Flow = sum(Total_Score),
+    Avg_Flow = mean(Total_Score),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    Flow_Pct = (Total_Flow / sum(Total_Flow)) * 100
+  )
+```
+
+**Flow Distribution Across Phases:**
+
+```{r print-flow}
+for(i in 1:nrow(phase_efficiency)) {
+  cat(sprintf("- **%s:** %.1f%% of total resilience capacity\n",
+              phase_efficiency$Phase[i], phase_efficiency$Flow_Pct[i]))
+}
+```
+
+### Flow Optimization Strategies
+
+1. **Widen Narrow Flows:**
+   - Identify dimensions/phases with narrow flows (low scores)
+   - Target investments to increase flow capacity
+   - Monitor flow width changes over time
+
+2. **Balance Phase Flows:**
+   - Aim for roughly equal flow distribution across phases (33% each)
+   - Significant imbalances create bottlenecks and vulnerabilities
+
+3. **Strengthen Weak Connections:**
+   - Where flows narrow between phases indicates weak handoffs
+   - Improve integration and coordination at transition points
+
+4. **Maintain High-Volume Flows:**
+   - Don't neglect dimensions with strong flows
+   - Degradation in major flows has outsized impact on overall resilience
+
+### Key Recommendations
+
+**Flow-Based Priorities:**
+
+1. Increase capacity in phases with < 30% of total flow
+2. Strengthen dimensions contributing < 15% to overall performance
+3. Improve phase transitions where flow constricts
+4. Monitor flow balance quarterly to prevent bottleneck development
+
+**Success Indicators:**
+
+- More uniform flow widths across all dimensions
+- Balanced phase distribution (±5% of 33% each)
+- Increasing total flow volume over time
+- Smooth transitions between phases (no abrupt narrowing)
+
+---
+
+*Report generated with ResilienceScan - Supply Chain Resilience Assessment Tool*

@@ -1,0 +1,317 @@
+---
+title: "Supply Chain Resilience Composition"
+subtitle: "Hierarchical Treemap Visualization"
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=0.75in
+    fontsize: 11pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(treemapify)
+
+# Load data
+df <- read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+```
+
+# Executive Summary
+
+This treemap analysis presents supply chain resilience as a hierarchical composition, showing how different dimensions and phases contribute to overall resilience. The size of each rectangle represents the relative strength of that capability.
+
+## Analysis Scope
+
+```{r scope}
+total_companies <- length(unique(df$company_name[df$company_name != "" & !is.na(df$company_name)]))
+total_respondents <- nrow(df)
+
+cat(sprintf("**Companies in Analysis:** %d\n\n", total_companies))
+cat(sprintf("**Survey Responses:** %d\n\n", total_respondents))
+```
+
+\newpage
+
+## Overall Resilience Composition
+
+This treemap shows how the five resilience dimensions contribute to your overall supply chain resilience profile. Larger rectangles indicate stronger dimensions.
+
+```{r dimension-treemap, fig.width=12, fig.height=9}
+# Calculate dimension scores
+dimension_data <- df %>%
+  summarise(
+    Redundancy = mean(c(up__r, in__r, do__r), na.rm = TRUE),
+    Collaboration = mean(c(up__c, in__c, do__c), na.rm = TRUE),
+    Flexibility = mean(c(up__f, in__f, do__f), na.rm = TRUE),
+    Visibility = mean(c(up__v, in__v, do__v), na.rm = TRUE),
+    Agility = mean(c(up__a, in__a, do__a), na.rm = TRUE)
+  ) %>%
+  pivot_longer(everything(), names_to = "Dimension", values_to = "Score") %>%
+  mutate(
+    # Use score as area (multiply by 100 for better scaling)
+    Area = Score * 100,
+    Label = sprintf("%s\n%.2f", Dimension, Score)
+  )
+
+ggplot(dimension_data, aes(area = Area, fill = Score, label = Label)) +
+  geom_treemap(color = "white", size = 3) +
+  geom_treemap_text(
+    color = "white",
+    place = "centre",
+    size = 18,
+    fontface = "bold",
+    grow = FALSE
+  ) +
+  scale_fill_gradient(low = "#E74C3C", high = "#27AE60", limits = c(1, 5)) +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 13, face = "bold"),
+    legend.text = element_text(size = 11),
+    legend.key.width = unit(3, "cm")
+  ) +
+  labs(
+    fill = "Resilience Score",
+    title = "Resilience Dimension Composition"
+  ) +
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5))
+```
+
+\newpage
+
+## Phase-Dimension Hierarchical View
+
+This nested treemap reveals the hierarchical structure of resilience: phases contain dimensions, showing the complete picture of where resilience capabilities exist.
+
+```{r hierarchical-treemap, fig.width=14, fig.height=10}
+# Create hierarchical data
+hierarchical_data <- df %>%
+  summarise(
+    across(c(up__r, up__c, up__f, up__v, up__a,
+             in__r, in__c, in__f, in__v, in__a,
+             do__r, do__c, do__f, do__v, do__a),
+           ~mean(.x, na.rm = TRUE))
+  ) %>%
+  pivot_longer(everything(), names_to = "Metric", values_to = "Score") %>%
+  separate(Metric, into = c("Phase", "Dimension"), sep = "__") %>%
+  mutate(
+    Phase = case_when(
+      Phase == "up" ~ "Upstream",
+      Phase == "in" ~ "Internal",
+      Phase == "do" ~ "Downstream"
+    ),
+    Dimension = case_when(
+      Dimension == "r" ~ "Redundancy",
+      Dimension == "c" ~ "Collaboration",
+      Dimension == "f" ~ "Flexibility",
+      Dimension == "v" ~ "Visibility",
+      Dimension == "a" ~ "Agility"
+    ),
+    Area = Score * 100,
+    Label = sprintf("%s\n%.2f", Dimension, Score)
+  )
+
+ggplot(hierarchical_data, aes(area = Area, fill = Score,
+                               label = Label, subgroup = Phase)) +
+  geom_treemap(color = "white", size = 2) +
+  geom_treemap_subgroup_border(color = "black", size = 4) +
+  geom_treemap_subgroup_text(
+    place = "centre",
+    grow = TRUE,
+    alpha = 0.5,
+    color = "black",
+    fontface = "bold",
+    size = 20
+  ) +
+  geom_treemap_text(
+    color = "white",
+    place = "centre",
+    size = 14,
+    fontface = "bold",
+    grow = FALSE
+  ) +
+  scale_fill_viridis_c(option = "plasma", limits = c(1, 5)) +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 13, face = "bold"),
+    legend.text = element_text(size = 11),
+    legend.key.width = unit(3, "cm")
+  ) +
+  labs(
+    fill = "Resilience Score",
+    title = "Hierarchical Resilience Structure: Phases > Dimensions"
+  ) +
+  theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5))
+```
+
+\newpage
+
+## Company Size Resilience Treemap
+
+Understanding how resilience varies by company size reveals patterns related to organizational scale and resource availability.
+
+```{r size-treemap, fig.width=13, fig.height=9}
+# Analyze by company size
+size_data <- df %>%
+  filter(!is.na(size_number_of_employees) & size_number_of_employees != "") %>%
+  mutate(
+    Size_Category = case_when(
+      grepl("1-9|10-49", size_number_of_employees) ~ "Small (1-49)",
+      grepl("50-99|100-499", size_number_of_employees) ~ "Medium (50-499)",
+      grepl("500-999|1,000-4,999|5,000-9,999", size_number_of_employees) ~ "Large (500-9,999)",
+      grepl("10,000", size_number_of_employees) ~ "Enterprise (10,000+)",
+      TRUE ~ "Other"
+    )
+  ) %>%
+  filter(Size_Category != "Other") %>%
+  group_by(Size_Category) %>%
+  summarise(
+    Redundancy = mean(c(up__r, in__r, do__r), na.rm = TRUE),
+    Collaboration = mean(c(up__c, in__c, do__c), na.rm = TRUE),
+    Flexibility = mean(c(up__f, in__f, do__f), na.rm = TRUE),
+    Visibility = mean(c(up__v, in__v, do__v), na.rm = TRUE),
+    Agility = mean(c(up__a, in__a, do__a), na.rm = TRUE),
+    Count = n(),
+    .groups = "drop"
+  ) %>%
+  pivot_longer(c(Redundancy, Collaboration, Flexibility, Visibility, Agility),
+               names_to = "Dimension", values_to = "Score") %>%
+  mutate(
+    Area = Score * Count * 10,  # Weight by both score and sample size
+    Label = sprintf("%s\n%.2f\n(n=%d)", Dimension, Score, Count)
+  )
+
+if (nrow(size_data) > 0) {
+  ggplot(size_data, aes(area = Area, fill = Score,
+                        label = Label, subgroup = Size_Category)) +
+    geom_treemap(color = "white", size = 2) +
+    geom_treemap_subgroup_border(color = "black", size = 4) +
+    geom_treemap_subgroup_text(
+      place = "centre",
+      grow = TRUE,
+      alpha = 0.6,
+      color = "black",
+      fontface = "bold",
+      size = 18
+    ) +
+    geom_treemap_text(
+      color = "white",
+      place = "centre",
+      size = 12,
+      fontface = "bold",
+      grow = FALSE
+    ) +
+    scale_fill_gradient2(low = "#D32F2F", mid = "#FFC107", high = "#4CAF50",
+                         midpoint = 3, limits = c(1, 5)) +
+    theme(
+      legend.position = "bottom",
+      legend.title = element_text(size = 13, face = "bold"),
+      legend.text = element_text(size = 11),
+      legend.key.width = unit(3, "cm")
+    ) +
+    labs(
+      fill = "Resilience Score",
+      title = "Resilience by Company Size"
+    ) +
+    theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5))
+} else {
+  cat("Insufficient company size data for treemap visualization.\n")
+}
+```
+
+\newpage
+
+## Sector Composition Analysis
+
+Different industry sectors exhibit unique resilience profiles based on their operational characteristics and challenges.
+
+```{r sector-treemap, fig.width=13, fig.height=9}
+# Sector treemap
+sector_data <- df %>%
+  filter(!is.na(sector) & sector != "") %>%
+  mutate(sector = substr(sector, 1, 30)) %>%  # Shorten long names
+  group_by(sector) %>%
+  filter(n() >= 2) %>%  # Only sectors with 2+ respondents
+  summarise(
+    Overall_Score = mean(overall_scres, na.rm = TRUE),
+    Count = n(),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    Area = Overall_Score * Count * 10,
+    Label = sprintf("%s\n%.2f\n(%d companies)", sector, Overall_Score, Count)
+  )
+
+if (nrow(sector_data) > 0) {
+  ggplot(sector_data, aes(area = Area, fill = Overall_Score, label = Label)) +
+    geom_treemap(color = "white", size = 3) +
+    geom_treemap_text(
+      color = "white",
+      place = "centre",
+      size = 11,
+      fontface = "bold",
+      grow = TRUE
+    ) +
+    scale_fill_viridis_c(option = "magma", limits = c(1, 5)) +
+    theme(
+      legend.position = "bottom",
+      legend.title = element_text(size = 13, face = "bold"),
+      legend.text = element_text(size = 11),
+      legend.key.width = unit(3, "cm")
+    ) +
+    labs(
+      fill = "Overall Resilience Score",
+      title = "Industry Sector Resilience Landscape"
+    ) +
+    theme(plot.title = element_text(size = 16, face = "bold", hjust = 0.5))
+} else {
+  cat("Insufficient sector data for treemap visualization.\n")
+}
+```
+
+\newpage
+
+## Key Insights from Treemap Analysis
+
+### Composition Insights
+
+```{r composition-insights}
+# Calculate insights
+largest_dim <- dimension_data %>% filter(Area == max(Area)) %>% pull(Dimension)
+smallest_dim <- dimension_data %>% filter(Area == min(Area)) %>% pull(Dimension)
+
+# Phase analysis
+phase_totals <- hierarchical_data %>%
+  group_by(Phase) %>%
+  summarise(Total_Area = sum(Area), Avg_Score = mean(Score)) %>%
+  arrange(desc(Total_Area))
+```
+
+1. **Dominant Dimension:** `r largest_dim` occupies the largest area in your resilience composition, indicating this is your strongest capability.
+
+2. **Underdeveloped Dimension:** `r smallest_dim` has the smallest footprint, suggesting this dimension needs growth to balance your resilience portfolio.
+
+3. **Phase Distribution:**
+   - **Strongest Phase:** `r phase_totals$Phase[1]` (Average: `r sprintf("%.2f", phase_totals$Avg_Score[1])`)
+   - **Weakest Phase:** `r phase_totals$Phase[nrow(phase_totals)]` (Average: `r sprintf("%.2f", phase_totals$Avg_Score[nrow(phase_totals)])`)
+
+### Strategic Recommendations
+
+1. **Balance Portfolio:** Aim for more evenly-sized rectangles across dimensions to ensure comprehensive resilience coverage.
+
+2. **Scale Considerations:** The treemap reveals that resilience isn't just about individual strengths but the overall composition. Small gaps in critical dimensions can create vulnerabilities.
+
+3. **Hierarchical Planning:** Use the phase-dimension hierarchy to target investments effectively:
+   - Identify the weakest phase
+   - Within that phase, strengthen the smallest dimensions
+   - This cascading approach ensures systematic improvement
+
+4. **Benchmark Against Size Peers:** Companies should compare their treemap structure against similar-sized organizations to identify realistic improvement targets.
+
+5. **Sector Context:** Understanding your sector's typical resilience composition helps set appropriate expectations and identify unique competitive advantages.
+
+---
+
+*Report generated with ResilienceScan - Supply Chain Resilience Assessment Tool*

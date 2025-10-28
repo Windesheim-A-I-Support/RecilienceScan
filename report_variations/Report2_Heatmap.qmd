@@ -1,0 +1,260 @@
+---
+title: "Supply Chain Resilience Heatmap Analysis"
+subtitle: "Pattern Recognition Across Dimensions and Phases"
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=0.75in
+    fontsize: 11pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(scales)
+library(viridis)
+
+# Load data
+df <- read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+```
+
+# Executive Summary
+
+This heatmap analysis reveals patterns in supply chain resilience across dimensions and operational phases. Heat intensity indicates resilience strength, allowing quick identification of hot spots (strengths) and cold spots (vulnerabilities).
+
+## Dataset Overview
+
+```{r data-overview}
+total_companies <- length(unique(df$company_name[df$company_name != "" & !is.na(df$company_name)]))
+total_respondents <- nrow(df)
+
+cat(sprintf("**Organizations Analyzed:** %d\n\n", total_companies))
+cat(sprintf("**Total Assessments:** %d\n\n", total_respondents))
+```
+
+\newpage
+
+## Primary Resilience Heatmap
+
+This heatmap displays the average resilience scores across all five dimensions and three operational phases. Warmer colors (yellow/green) indicate stronger resilience, while cooler colors (purple/blue) highlight areas needing attention.
+
+```{r main-heatmap, fig.width=12, fig.height=7}
+# Prepare heatmap data
+heatmap_data <- df %>%
+  summarise(
+    across(c(up__r, up__c, up__f, up__v, up__a,
+             in__r, in__c, in__f, in__v, in__a,
+             do__r, do__c, do__f, do__v, do__a),
+           ~mean(.x, na.rm = TRUE))
+  ) %>%
+  pivot_longer(everything(), names_to = "Metric", values_to = "Score") %>%
+  separate(Metric, into = c("Phase", "Dimension"), sep = "__") %>%
+  mutate(
+    Phase = case_when(
+      Phase == "up" ~ "Upstream",
+      Phase == "in" ~ "Internal",
+      Phase == "do" ~ "Downstream"
+    ),
+    Dimension = case_when(
+      Dimension == "r" ~ "Redundancy",
+      Dimension == "c" ~ "Collaboration",
+      Dimension == "f" ~ "Flexibility",
+      Dimension == "v" ~ "Visibility",
+      Dimension == "a" ~ "Agility"
+    ),
+    Phase = factor(Phase, levels = c("Upstream", "Internal", "Downstream")),
+    Dimension = factor(Dimension, levels = c("Redundancy", "Collaboration", "Flexibility", "Visibility", "Agility"))
+  )
+
+ggplot(heatmap_data, aes(x = Dimension, y = Phase, fill = Score)) +
+  geom_tile(color = "white", size = 1.5) +
+  geom_text(aes(label = sprintf("%.2f", Score)),
+            color = "white", size = 7, fontface = "bold") +
+  scale_fill_viridis(option = "plasma", limits = c(1, 5),
+                     breaks = seq(1, 5, 1),
+                     guide = guide_colorbar(barwidth = 20, barheight = 1)) +
+  theme_minimal() +
+  theme(
+    axis.title = element_blank(),
+    axis.text.x = element_text(angle = 0, hjust = 0.5, size = 13, face = "bold"),
+    axis.text.y = element_text(size = 13, face = "bold"),
+    legend.position = "bottom",
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 10),
+    panel.grid = element_blank(),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    fill = "Resilience Score",
+    title = "Supply Chain Resilience Matrix"
+  )
+```
+
+## Pattern Analysis
+
+```{r pattern-insights}
+# Identify patterns
+max_score <- heatmap_data %>% filter(Score == max(Score, na.rm = TRUE))
+min_score <- heatmap_data %>% filter(Score == min(Score, na.rm = TRUE))
+
+# Calculate variance
+score_variance <- var(heatmap_data$Score, na.rm = TRUE)
+score_range <- max(heatmap_data$Score, na.rm = TRUE) - min(heatmap_data$Score, na.rm = TRUE)
+```
+
+**Hottest Cell (Strongest):** `r paste(max_score$Phase, "-", max_score$Dimension)` (Score: `r sprintf("%.2f", max_score$Score)`)
+
+**Coldest Cell (Weakest):** `r paste(min_score$Phase, "-", min_score$Dimension)` (Score: `r sprintf("%.2f", min_score$Score)`)
+
+**Score Variance:** `r sprintf("%.3f", score_variance)` - This indicates `r ifelse(score_variance < 0.5, "relatively uniform", ifelse(score_variance < 1.0, "moderate variation in", "significant dispersion across"))` resilience capabilities.
+
+**Performance Range:** `r sprintf("%.2f", score_range)` points between strongest and weakest cells.
+
+\newpage
+
+## Company-Level Heatmap
+
+This visualization compares resilience profiles across different organizations, highlighting sectoral and organizational patterns.
+
+```{r company-heatmap, fig.width=14, fig.height=10}
+# Get companies with sufficient data
+company_scores <- df %>%
+  filter(company_name != "" & !is.na(company_name)) %>%
+  group_by(company_name) %>%
+  filter(n() >= 1) %>%
+  summarise(
+    Redundancy = mean(c(up__r, in__r, do__r), na.rm = TRUE),
+    Collaboration = mean(c(up__c, in__c, do__c), na.rm = TRUE),
+    Flexibility = mean(c(up__f, in__f, do__f), na.rm = TRUE),
+    Visibility = mean(c(up__v, in__v, do__v), na.rm = TRUE),
+    Agility = mean(c(up__a, in__a, do__a), na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  slice_head(n = 20) %>%  # Show top 20 companies
+  pivot_longer(-company_name, names_to = "Dimension", values_to = "Score") %>%
+  mutate(
+    company_name = substr(company_name, 1, 30),  # Truncate long names
+    Dimension = factor(Dimension, levels = c("Redundancy", "Collaboration", "Flexibility", "Visibility", "Agility"))
+  )
+
+ggplot(company_scores, aes(x = Dimension, y = reorder(company_name, Score), fill = Score)) +
+  geom_tile(color = "white", size = 0.8) +
+  geom_text(aes(label = sprintf("%.1f", Score)),
+            color = "white", size = 3.5, fontface = "bold") +
+  scale_fill_gradient2(low = "#D32F2F", mid = "#FFC107", high = "#4CAF50",
+                       midpoint = 3, limits = c(1, 5)) +
+  theme_minimal() +
+  theme(
+    axis.title = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 11, face = "bold"),
+    axis.text.y = element_text(size = 9),
+    legend.position = "right",
+    legend.title = element_text(size = 11, face = "bold"),
+    panel.grid = element_blank(),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    fill = "Score",
+    title = "Cross-Company Resilience Comparison"
+  )
+```
+
+\newpage
+
+## Sector Heatmap Analysis
+
+Understanding resilience patterns by industry sector reveals sector-specific strengths and common vulnerabilities.
+
+```{r sector-heatmap, fig.width=12, fig.height=8}
+# Sector analysis
+sector_scores <- df %>%
+  filter(!is.na(sector) & sector != "") %>%
+  group_by(sector) %>%
+  filter(n() >= 3) %>%  # Only sectors with 3+ respondents
+  summarise(
+    Redundancy = mean(c(up__r, in__r, do__r), na.rm = TRUE),
+    Collaboration = mean(c(up__c, in__c, do__c), na.rm = TRUE),
+    Flexibility = mean(c(up__f, in__f, do__f), na.rm = TRUE),
+    Visibility = mean(c(up__v, in__v, do__v), na.rm = TRUE),
+    Agility = mean(c(up__a, in__a, do__a), na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  pivot_longer(-sector, names_to = "Dimension", values_to = "Score") %>%
+  mutate(
+    sector = substr(sector, 1, 40),  # Truncate long names
+    Dimension = factor(Dimension, levels = c("Redundancy", "Collaboration", "Flexibility", "Visibility", "Agility"))
+  )
+
+if (nrow(sector_scores) > 0) {
+  ggplot(sector_scores, aes(x = Dimension, y = reorder(sector, Score), fill = Score)) +
+    geom_tile(color = "white", size = 1) +
+    geom_text(aes(label = sprintf("%.2f", Score)),
+              color = "white", size = 4.5, fontface = "bold") +
+    scale_fill_viridis(option = "magma", limits = c(1, 5),
+                       guide = guide_colorbar(barwidth = 1, barheight = 15)) +
+    theme_minimal() +
+    theme(
+      axis.title = element_blank(),
+      axis.text.x = element_text(angle = 0, hjust = 0.5, size = 12, face = "bold"),
+      axis.text.y = element_text(size = 10),
+      legend.position = "right",
+      legend.title = element_text(size = 11, face = "bold"),
+      panel.grid = element_blank(),
+      plot.title = element_text(size = 14, face = "bold", hjust = 0.5)
+    ) +
+    labs(
+      fill = "Score",
+      title = "Resilience by Industry Sector"
+    )
+} else {
+  cat("Insufficient sector data for heatmap visualization.\n")
+}
+```
+
+\newpage
+
+## Key Findings & Recommendations
+
+### Heatmap Insights
+
+1. **Hot Zones (Strengths):**
+   - Cells with scores above 4.0 represent areas of strong resilience capability.
+   - These can serve as benchmarks for other areas.
+
+2. **Cold Zones (Vulnerabilities):**
+   - Cells with scores below 2.5 indicate critical gaps requiring immediate attention.
+   - Prioritize resources to warm up these cold spots.
+
+3. **Pattern Recognition:**
+   - Horizontal patterns suggest phase-specific strengths or weaknesses.
+   - Vertical patterns indicate dimension-wide trends across all phases.
+   - Checkered patterns suggest inconsistent resilience implementation.
+
+### Strategic Recommendations
+
+```{r recommendations}
+# Calculate phase and dimension averages
+phase_avg <- heatmap_data %>%
+  group_by(Phase) %>%
+  summarise(Avg = mean(Score)) %>%
+  arrange(Avg)
+
+dim_avg <- heatmap_data %>%
+  group_by(Dimension) %>%
+  summarise(Avg = mean(Score)) %>%
+  arrange(Avg)
+```
+
+1. **Phase Focus:** The `r phase_avg$Phase[1]` phase shows the most room for improvement (Avg: `r sprintf("%.2f", phase_avg$Avg[1])`). Consider targeted initiatives here.
+
+2. **Dimension Priority:** `r dim_avg$Dimension[1]` demonstrates the lowest cross-phase performance (Avg: `r sprintf("%.2f", dim_avg$Avg[1])`). This should be a strategic priority.
+
+3. **Benchmark Learning:** Organizations should study companies or sectors showing strong heatmap performance in their weak areas.
+
+4. **Balanced Development:** Aim to eliminate extreme color variations for more uniform resilience across the supply chain.
+
+---
+
+*Report generated with ResilienceScan - Supply Chain Resilience Assessment Tool*

@@ -1,0 +1,432 @@
+---
+title: "Supply Chain Resilience Gap Analysis"
+subtitle: "Lollipop Chart Visualization of Performance Gaps"
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=0.75in
+    fontsize: 11pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(forcats)
+
+# Load data
+df <- read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+```
+
+# Executive Summary
+
+Lollipop charts provide a clean, modern way to visualize performance gaps and rankings. The stems show distance from benchmarks, while the circular endpoints emphasize actual values, making this format ideal for gap analysis and prioritization.
+
+## Analysis Foundation
+
+```{r foundation}
+total_companies <- length(unique(df$company_name[df$company_name != "" & !is.na(df$company_name)]))
+total_respondents <- nrow(df)
+
+cat(sprintf("**Organizations:** %d\n\n", total_companies))
+cat(sprintf("**Survey Responses:** %d\n\n", total_respondents))
+cat("**Benchmark:** Comparing actual performance vs. ideal state (5.0) and dataset average.\n")
+```
+
+\newpage
+
+## Dimension Performance vs. Benchmark
+
+This lollipop chart shows how far each dimension is from ideal performance (score = 5.0), with longer stems indicating larger gaps.
+
+```{r dimension-lollipop, fig.width=12, fig.height=8}
+# Calculate dimension scores
+dimension_scores <- df %>%
+  summarise(
+    Redundancy = mean(c(up__r, in__r, do__r), na.rm = TRUE),
+    Collaboration = mean(c(up__c, in__c, do__c), na.rm = TRUE),
+    Flexibility = mean(c(up__f, in__f, do__f), na.rm = TRUE),
+    Visibility = mean(c(up__v, in__v, do__v), na.rm = TRUE),
+    Agility = mean(c(up__a, in__a, do__a), na.rm = TRUE)
+  ) %>%
+  pivot_longer(everything(), names_to = "Dimension", values_to = "Current_Score") %>%
+  mutate(
+    Ideal_Score = 5.0,
+    Gap = Ideal_Score - Current_Score,
+    Gap_Pct = (Gap / Ideal_Score) * 100
+  ) %>%
+  arrange(desc(Gap))
+
+ggplot(dimension_scores, aes(x = fct_reorder(Dimension, Gap), y = Current_Score)) +
+  # Ideal benchmark line
+  geom_hline(yintercept = 5, linetype = "dashed", color = "#27AE60",
+             size = 1.5, alpha = 0.7) +
+  # Gap segments
+  geom_segment(aes(x = Dimension, xend = Dimension,
+                   y = Current_Score, yend = 5),
+               color = "#E74C3C", size = 2, alpha = 0.6) +
+  # Current score lollipops
+  geom_point(size = 12, color = "#3498DB", alpha = 0.9) +
+  geom_text(aes(label = sprintf("%.2f", Current_Score)),
+            color = "white", size = 4.5, fontface = "bold") +
+  # Gap labels
+  geom_text(aes(y = (Current_Score + 5) / 2,
+                label = sprintf("Gap: %.2f\n(%.0f%%)", Gap, Gap_Pct)),
+            hjust = -0.2, size = 3.5, fontface = "bold", color = "#E74C3C") +
+  scale_y_continuous(limits = c(0, 5.5), breaks = 0:5) +
+  coord_flip() +
+  theme_minimal() +
+  theme(
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 13, face = "bold"),
+    axis.text.x = element_text(size = 12),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 12, hjust = 0.5, color = "gray40")
+  ) +
+  labs(
+    x = NULL,
+    y = "Resilience Score",
+    title = "Dimension Performance Gap Analysis",
+    subtitle = "Distance from Ideal State (5.0)"
+  ) +
+  annotate("text", x = 0.5, y = 5.2, label = "Ideal Performance",
+           color = "#27AE60", fontface = "bold", size = 4)
+```
+
+### Priority Actions
+
+```{r priority-actions}
+largest_gap_dim <- dimension_scores %>% filter(Gap == max(Gap)) %>% pull(Dimension)
+largest_gap_value <- max(dimension_scores$Gap)
+smallest_gap_dim <- dimension_scores %>% filter(Gap == min(Gap)) %>% pull(Dimension)
+```
+
+**Highest Priority:** `r largest_gap_dim` (Gap: `r sprintf("%.2f points", largest_gap_value)`)
+
+- This dimension is furthest from ideal state
+- Focus improvement initiatives here for maximum impact
+
+**Best Performance:** `r smallest_gap_dim` (Closest to ideal)
+
+- Leverage this as a strength in your resilience strategy
+- Use as internal benchmark for other dimensions
+
+\newpage
+
+## Phase-Level Gap Comparison
+
+Comparing gaps across supply chain phases identifies where resilience implementation lags most.
+
+```{r phase-lollipop, fig.width=12, fig.height=8}
+# Phase comparison
+phase_scores <- df %>%
+  summarise(
+    Upstream = mean(c(up__r, up__c, up__f, up__v, up__a), na.rm = TRUE),
+    Internal = mean(c(in__r, in__c, in__f, in__v, in__a), na.rm = TRUE),
+    Downstream = mean(c(do__r, do__c, do__f, do__v, do__a), na.rm = TRUE)
+  ) %>%
+  pivot_longer(everything(), names_to = "Phase", values_to = "Current_Score") %>%
+  mutate(
+    Ideal_Score = 5.0,
+    Gap = Ideal_Score - Current_Score,
+    Phase = factor(Phase, levels = c("Upstream", "Internal", "Downstream"))
+  ) %>%
+  arrange(desc(Gap))
+
+# Phase colors
+phase_colors <- c("Upstream" = "#3498DB", "Internal" = "#E67E22", "Downstream" = "#9B59B6")
+
+ggplot(phase_scores, aes(x = fct_reorder(Phase, Gap), y = Current_Score, color = Phase)) +
+  geom_hline(yintercept = 5, linetype = "dashed", color = "#27AE60",
+             size = 1.5, alpha = 0.7) +
+  geom_segment(aes(x = Phase, xend = Phase, y = Current_Score, yend = 5),
+               size = 3, alpha = 0.6) +
+  geom_point(size = 16, alpha = 0.9) +
+  geom_text(aes(label = sprintf("%.2f", Current_Score)),
+            color = "white", size = 6, fontface = "bold") +
+  geom_text(aes(y = (Current_Score + 5) / 2,
+                label = sprintf("%.2f gap", Gap)),
+            hjust = -0.3, size = 4.5, fontface = "bold", show.legend = FALSE) +
+  scale_color_manual(values = phase_colors) +
+  scale_y_continuous(limits = c(0, 5.5), breaks = 0:5) +
+  coord_flip() +
+  theme_minimal() +
+  theme(
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 14, face = "bold"),
+    axis.text.x = element_text(size = 12),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "none",
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    x = NULL,
+    y = "Average Resilience Score",
+    title = "Supply Chain Phase Gap Analysis"
+  )
+```
+
+\newpage
+
+## Detailed Phase-Dimension Gap Matrix
+
+This comprehensive lollipop chart shows all 15 phase-dimension combinations, sorted by gap size to prioritize improvements.
+
+```{r detailed-lollipop, fig.width=13, fig.height=12}
+# Detailed phase-dimension gaps
+detailed_gaps <- df %>%
+  summarise(
+    across(c(up__r, up__c, up__f, up__v, up__a,
+             in__r, in__c, in__f, in__v, in__a,
+             do__r, do__c, do__f, do__v, do__a),
+           ~mean(.x, na.rm = TRUE))
+  ) %>%
+  pivot_longer(everything(), names_to = "Metric", values_to = "Current_Score") %>%
+  separate(Metric, into = c("Phase", "Dimension"), sep = "__") %>%
+  mutate(
+    Phase = case_when(
+      Phase == "up" ~ "Upstream",
+      Phase == "in" ~ "Internal",
+      Phase == "do" ~ "Downstream"
+    ),
+    Dimension = case_when(
+      Dimension == "r" ~ "Redundancy",
+      Dimension == "c" ~ "Collaboration",
+      Dimension == "f" ~ "Flexibility",
+      Dimension == "v" ~ "Visibility",
+      Dimension == "a" ~ "Agility"
+    ),
+    Label = paste(Phase, Dimension),
+    Ideal_Score = 5.0,
+    Gap = Ideal_Score - Current_Score,
+    Phase_Factor = factor(Phase, levels = c("Upstream", "Internal", "Downstream"))
+  ) %>%
+  arrange(desc(Gap))
+
+ggplot(detailed_gaps, aes(x = fct_reorder(Label, Gap), y = Current_Score, color = Phase_Factor)) +
+  geom_hline(yintercept = 5, linetype = "dashed", color = "#27AE60",
+             size = 1, alpha = 0.7) +
+  geom_segment(aes(x = Label, xend = Label, y = Current_Score, yend = 5),
+               size = 2, alpha = 0.7) +
+  geom_point(size = 8, alpha = 0.9) +
+  geom_text(aes(label = sprintf("%.2f", Current_Score)),
+            color = "white", size = 2.8, fontface = "bold") +
+  scale_color_manual(values = phase_colors,
+                     name = "Phase") +
+  scale_y_continuous(limits = c(0, 5.5), breaks = 0:5) +
+  coord_flip() +
+  theme_minimal() +
+  theme(
+    axis.title = element_text(size = 13, face = "bold"),
+    axis.text.y = element_text(size = 10),
+    axis.text.x = element_text(size = 11),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "bottom",
+    legend.title = element_text(size = 12, face = "bold"),
+    legend.text = element_text(size = 11),
+    plot.title = element_text(size = 15, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    x = NULL,
+    y = "Resilience Score",
+    title = "Comprehensive Gap Analysis: All Phase-Dimension Combinations"
+  )
+```
+
+\newpage
+
+## Current vs. Average Benchmark
+
+Comparing against dataset average provides realistic, achievable targets compared to the ideal state.
+
+```{r average-benchmark, fig.width=12, fig.height=8}
+# Calculate against average benchmark
+avg_benchmark <- dimension_scores %>%
+  mutate(
+    Dataset_Avg = mean(Current_Score),
+    Gap_from_Avg = Dataset_Avg - Current_Score,
+    Performance = case_when(
+      Gap_from_Avg < 0 ~ "Above Average",
+      Gap_from_Avg > 0 ~ "Below Average",
+      TRUE ~ "At Average"
+    )
+  )
+
+ggplot(avg_benchmark, aes(x = fct_reorder(Dimension, -Gap_from_Avg),
+                          y = Current_Score,
+                          color = Performance)) +
+  geom_hline(aes(yintercept = Dataset_Avg), linetype = "dashed",
+             color = "#34495E", size = 1.5, alpha = 0.7) +
+  geom_segment(aes(x = Dimension, xend = Dimension,
+                   y = Current_Score, yend = Dataset_Avg),
+               size = 2.5, alpha = 0.7) +
+  geom_point(size = 13, alpha = 0.9) +
+  geom_text(aes(label = sprintf("%.2f", Current_Score)),
+            color = "white", size = 4.5, fontface = "bold") +
+  scale_color_manual(values = c("Above Average" = "#27AE60",
+                                 "Below Average" = "#E74C3C",
+                                 "At Average" = "#F39C12"),
+                     name = "Performance") +
+  scale_y_continuous(limits = c(0, 5.5), breaks = 0:5) +
+  coord_flip() +
+  theme_minimal() +
+  theme(
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 13, face = "bold"),
+    axis.text.x = element_text(size = 12),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "bottom",
+    legend.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    x = NULL,
+    y = "Resilience Score",
+    title = "Performance vs. Dataset Average"
+  ) +
+  annotate("text", x = 0.5, y = avg_benchmark$Dataset_Avg[1] + 0.2,
+           label = sprintf("Average: %.2f", avg_benchmark$Dataset_Avg[1]),
+           color = "#34495E", fontface = "bold", size = 4)
+```
+
+### Competitive Position
+
+```{r competitive-position}
+above_avg_count <- sum(avg_benchmark$Gap_from_Avg < 0)
+below_avg_count <- sum(avg_benchmark$Gap_from_Avg > 0)
+```
+
+- **Above Average:** `r above_avg_count` dimensions - competitive strengths
+- **Below Average:** `r below_avg_count` dimensions - catch-up opportunities
+
+\newpage
+
+## Top Company Comparison
+
+Comparing against top-performing companies reveals best-in-class gaps and aspirational targets.
+
+```{r top-company-comparison, fig.width=12, fig.height=9}
+# Calculate top performer benchmarks (75th percentile)
+top_benchmark <- df %>%
+  summarise(
+    Redundancy_Top = quantile(c(up__r, in__r, do__r), 0.75, na.rm = TRUE),
+    Collaboration_Top = quantile(c(up__c, in__c, do__c), 0.75, na.rm = TRUE),
+    Flexibility_Top = quantile(c(up__f, in__f, do__f), 0.75, na.rm = TRUE),
+    Visibility_Top = quantile(c(up__v, in__v, do__v), 0.75, na.rm = TRUE),
+    Agility_Top = quantile(c(up__a, in__a, do__a), 0.75, na.rm = TRUE)
+  ) %>%
+  pivot_longer(everything(), names_to = "Dimension", values_to = "Top_Quartile") %>%
+  mutate(Dimension = gsub("_Top", "", Dimension))
+
+# Merge with current scores
+comparison <- dimension_scores %>%
+  select(Dimension, Current_Score) %>%
+  left_join(top_benchmark, by = "Dimension") %>%
+  mutate(
+    Gap_to_Top = Top_Quartile - Current_Score,
+    Gap_Pct = (Gap_to_Top / Top_Quartile) * 100
+  )
+
+ggplot(comparison, aes(x = fct_reorder(Dimension, Gap_to_Top))) +
+  # Top quartile benchmark
+  geom_segment(aes(x = Dimension, xend = Dimension,
+                   y = Current_Score, yend = Top_Quartile),
+               color = "#F39C12", size = 2.5, alpha = 0.6) +
+  # Current score
+  geom_point(aes(y = Current_Score), size = 11,
+             color = "#3498DB", alpha = 0.9) +
+  geom_text(aes(y = Current_Score, label = sprintf("%.2f", Current_Score)),
+            color = "white", size = 3.8, fontface = "bold") +
+  # Top quartile score
+  geom_point(aes(y = Top_Quartile), size = 11,
+             color = "#27AE60", alpha = 0.9) +
+  geom_text(aes(y = Top_Quartile, label = sprintf("%.2f", Top_Quartile)),
+            color = "white", size = 3.8, fontface = "bold") +
+  # Gap labels
+  geom_text(aes(y = (Current_Score + Top_Quartile) / 2,
+                label = sprintf("%.2f gap\n(%.0f%%)", Gap_to_Top, Gap_Pct)),
+            hjust = -0.2, size = 3.5, fontface = "bold", color = "#F39C12") +
+  scale_y_continuous(limits = c(0, 5.5), breaks = 0:5) +
+  coord_flip() +
+  theme_minimal() +
+  theme(
+    axis.title = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 13, face = "bold"),
+    axis.text.x = element_text(size = 12),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+    plot.subtitle = element_text(size = 11, hjust = 0.5, color = "gray40")
+  ) +
+  labs(
+    x = NULL,
+    y = "Resilience Score",
+    title = "Gap to Top Performers (75th Percentile)",
+    subtitle = "Blue = Your Score | Green = Top Quartile"
+  )
+```
+
+\newpage
+
+## Strategic Gap Closure Roadmap
+
+### Prioritization Framework
+
+```{r prioritization}
+# Create prioritization matrix
+priority_matrix <- detailed_gaps %>%
+  mutate(
+    Priority = case_when(
+      Gap > 2.0 ~ "Critical",
+      Gap > 1.5 ~ "High",
+      Gap > 1.0 ~ "Medium",
+      TRUE ~ "Low"
+    )
+  ) %>%
+  count(Priority) %>%
+  arrange(factor(Priority, levels = c("Critical", "High", "Medium", "Low")))
+```
+
+**Gap Priority Distribution:**
+
+```{r print-priorities}
+for(i in 1:nrow(priority_matrix)) {
+  cat(sprintf("- **%s Priority:** %d items\n", priority_matrix$Priority[i], priority_matrix$n[i]))
+}
+```
+
+### Closure Strategy
+
+**Immediate Actions (Next 90 Days):**
+
+1. Address all **Critical** gaps (Gap > 2.0 points)
+2. Quick wins in areas closest to benchmarks
+3. Resource allocation to largest gaps
+
+**Short-Term (6-12 Months):**
+
+1. Systematic closure of **High** priority gaps
+2. Phase-based improvement programs
+3. Capability building initiatives
+
+**Long-Term (12-24 Months):**
+
+1. Elevate all dimensions above dataset average
+2. Target top quartile performance in strategic dimensions
+3. Achieve balanced resilience profile (minimize gap variance)
+
+### Success Metrics
+
+- **Goal 1:** Reduce average gap to ideal from current `r sprintf("%.2f", mean(dimension_scores$Gap))` to < 1.5 points
+- **Goal 2:** Eliminate all gaps > 2.0 points
+- **Goal 3:** Achieve above-average performance in all five dimensions
+
+---
+
+*Report generated with ResilienceScan - Supply Chain Resilience Assessment Tool*

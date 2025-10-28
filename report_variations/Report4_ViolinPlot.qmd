@@ -1,0 +1,330 @@
+---
+title: "Supply Chain Resilience Distribution Analysis"
+subtitle: "Violin Plot Visualization of Score Patterns"
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=0.75in
+    fontsize: 11pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(viridis)
+
+# Load data
+df <- read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+```
+
+# Executive Summary
+
+This violin plot analysis reveals the distribution patterns of resilience scores across dimensions and phases. Unlike simple averages, these visualizations show the full spectrum of performance - including variability, outliers, and concentration points.
+
+## Survey Overview
+
+```{r overview}
+total_companies <- length(unique(df$company_name[df$company_name != "" & !is.na(df$company_name)]))
+total_respondents <- nrow(df)
+
+cat(sprintf("**Organizations Surveyed:** %d\n\n", total_companies))
+cat(sprintf("**Total Responses:** %d\n\n", total_respondents))
+cat("\n**Distribution Analysis:** Violin plots reveal not just average performance but the full range and concentration of resilience capabilities.\n")
+```
+
+\newpage
+
+## Dimension Score Distribution
+
+The width of each violin indicates the concentration of scores at that level. Wider sections show where most organizations cluster, while narrow sections indicate less common scores.
+
+```{r dimension-violin, fig.width=13, fig.height=8}
+# Prepare dimension data
+dimension_dist <- df %>%
+  select(up__r, up__c, up__f, up__v, up__a,
+         in__r, in__c, in__f, in__v, in__a,
+         do__r, do__c, do__f, do__v, do__a) %>%
+  summarise(
+    Redundancy = c(up__r, in__r, do__r),
+    Collaboration = c(up__c, in__c, do__c),
+    Flexibility = c(up__f, in__f, do__f),
+    Visibility = c(up__v, in__v, do__v),
+    Agility = c(up__a, in__a, do__a)
+  ) %>%
+  pivot_longer(everything(), names_to = "Dimension", values_to = "Score") %>%
+  filter(!is.na(Score)) %>%
+  mutate(Dimension = factor(Dimension,
+                            levels = c("Redundancy", "Collaboration", "Flexibility",
+                                     "Visibility", "Agility")))
+
+ggplot(dimension_dist, aes(x = Dimension, y = Score, fill = Dimension)) +
+  geom_violin(trim = FALSE, alpha = 0.7, scale = "width") +
+  geom_boxplot(width = 0.15, fill = "white", alpha = 0.5, outlier.alpha = 0.3) +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 4,
+               fill = "red", color = "darkred") +
+  scale_fill_viridis_d(option = "plasma", begin = 0.2, end = 0.9) +
+  scale_y_continuous(breaks = 1:5, limits = c(0.5, 5.5)) +
+  theme_minimal() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    axis.text.x = element_text(angle = 0, size = 12, face = "bold"),
+    axis.text.y = element_text(size = 11),
+    legend.position = "none",
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    y = "Resilience Score (1-5)",
+    title = "Distribution of Resilience Scores by Dimension"
+  ) +
+  annotate("text", x = 5.5, y = 0.8, label = "◆ = Mean Score",
+           hjust = 1, size = 4, color = "darkred", fontface = "bold")
+```
+
+### Distribution Insights
+
+```{r dim-insights}
+# Calculate distribution statistics
+dim_stats <- dimension_dist %>%
+  group_by(Dimension) %>%
+  summarise(
+    Mean = mean(Score, na.rm = TRUE),
+    Median = median(Score, na.rm = TRUE),
+    SD = sd(Score, na.rm = TRUE),
+    IQR = IQR(Score, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(Mean))
+
+most_consistent <- dim_stats %>% filter(SD == min(SD)) %>% pull(Dimension)
+most_variable <- dim_stats %>% filter(SD == max(SD)) %>% pull(Dimension)
+```
+
+- **Most Consistent:** `r most_consistent` shows the least variability (SD: `r sprintf("%.3f", min(dim_stats$SD))`), indicating uniform performance across organizations.
+
+- **Most Variable:** `r most_variable` displays the highest variability (SD: `r sprintf("%.3f", max(dim_stats$SD))`), suggesting significant differences in how organizations approach this dimension.
+
+\newpage
+
+## Phase Distribution Comparison
+
+Comparing distributions across operational phases reveals where resilience implementation is most consistent versus most fragmented.
+
+```{r phase-violin, fig.width=13, fig.height=8}
+# Phase distribution data
+phase_dist <- df %>%
+  select(up__r, up__c, up__f, up__v, up__a,
+         in__r, in__c, in__f, in__v, in__a,
+         do__r, do__c, do__f, do__v, do__a) %>%
+  summarise(
+    Upstream = c(up__r, up__c, up__f, up__v, up__a),
+    Internal = c(in__r, in__c, in__f, in__v, in__a),
+    Downstream = c(do__r, do__c, do__f, do__v, do__a)
+  ) %>%
+  pivot_longer(everything(), names_to = "Phase", values_to = "Score") %>%
+  filter(!is.na(Score)) %>%
+  mutate(Phase = factor(Phase, levels = c("Upstream", "Internal", "Downstream")))
+
+ggplot(phase_dist, aes(x = Phase, y = Score, fill = Phase)) +
+  geom_violin(trim = FALSE, alpha = 0.7, scale = "width", size = 1) +
+  geom_boxplot(width = 0.2, fill = "white", alpha = 0.6, outlier.size = 2) +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 5,
+               fill = "red", color = "darkred") +
+  scale_fill_manual(values = c("Upstream" = "#3498DB",
+                                "Internal" = "#E67E22",
+                                "Downstream" = "#9B59B6")) +
+  scale_y_continuous(breaks = 1:5, limits = c(0.5, 5.5)) +
+  theme_minimal() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    axis.text.x = element_text(angle = 0, size = 13, face = "bold"),
+    axis.text.y = element_text(size = 11),
+    legend.position = "none",
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    y = "Resilience Score (1-5)",
+    title = "Score Distribution Across Supply Chain Phases"
+  )
+```
+
+### Phase Pattern Analysis
+
+```{r phase-patterns}
+phase_stats <- phase_dist %>%
+  group_by(Phase) %>%
+  summarise(
+    Mean = mean(Score, na.rm = TRUE),
+    SD = sd(Score, na.rm = TRUE),
+    Q25 = quantile(Score, 0.25, na.rm = TRUE),
+    Q75 = quantile(Score, 0.75, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+most_uniform_phase <- phase_stats %>% filter(SD == min(SD)) %>% pull(Phase)
+most_diverse_phase <- phase_stats %>% filter(SD == max(SD)) %>% pull(Phase)
+```
+
+- **Most Uniform Phase:** `r most_uniform_phase` (SD: `r sprintf("%.3f", min(phase_stats$SD))`) - Organizations show similar capabilities in this phase.
+
+- **Most Diverse Phase:** `r most_diverse_phase` (SD: `r sprintf("%.3f", max(phase_stats$SD))`) - Wide variation in capabilities suggests best practice gaps.
+
+\newpage
+
+## Detailed Phase-Dimension Distribution Matrix
+
+This comprehensive view shows the distribution for each specific dimension within each phase, revealing granular patterns.
+
+```{r matrix-violin, fig.width=14, fig.height=11}
+# Detailed phase-dimension data
+detailed_dist <- df %>%
+  select(up__r, up__c, up__f, up__v, up__a,
+         in__r, in__c, in__f, in__v, in__a,
+         do__r, do__c, do__f, do__v, do__a) %>%
+  pivot_longer(everything(), names_to = "Metric", values_to = "Score") %>%
+  filter(!is.na(Score)) %>%
+  separate(Metric, into = c("Phase", "Dimension"), sep = "__") %>%
+  mutate(
+    Phase = case_when(
+      Phase == "up" ~ "Upstream",
+      Phase == "in" ~ "Internal",
+      Phase == "do" ~ "Downstream"
+    ),
+    Dimension = case_when(
+      Dimension == "r" ~ "Redundancy",
+      Dimension == "c" ~ "Collaboration",
+      Dimension == "f" ~ "Flexibility",
+      Dimension == "v" ~ "Visibility",
+      Dimension == "a" ~ "Agility"
+    ),
+    Phase = factor(Phase, levels = c("Upstream", "Internal", "Downstream")),
+    Dimension = factor(Dimension, levels = c("Redundancy", "Collaboration",
+                                             "Flexibility", "Visibility", "Agility"))
+  )
+
+ggplot(detailed_dist, aes(x = Dimension, y = Score, fill = Phase)) +
+  geom_violin(trim = FALSE, alpha = 0.6, scale = "width", position = position_dodge(0.9)) +
+  geom_boxplot(width = 0.15, position = position_dodge(0.9),
+               fill = "white", alpha = 0.5, outlier.size = 0.5) +
+  scale_fill_manual(values = c("Upstream" = "#3498DB",
+                                "Internal" = "#E67E22",
+                                "Downstream" = "#9B59B6")) +
+  scale_y_continuous(breaks = 1:5, limits = c(0.5, 5.5)) +
+  facet_wrap(~Phase, ncol = 1) +
+  theme_minimal() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_text(size = 13, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 11),
+    axis.text.y = element_text(size = 10),
+    legend.position = "none",
+    strip.text = element_text(size = 14, face = "bold"),
+    strip.background = element_rect(fill = "gray90", color = "gray50"),
+    panel.grid.major.x = element_blank(),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    y = "Resilience Score (1-5)",
+    title = "Comprehensive Phase-Dimension Distribution Analysis"
+  )
+```
+
+\newpage
+
+## Company Size Distribution Patterns
+
+Examining how score distributions vary by company size reveals whether larger organizations truly have more consistent resilience.
+
+```{r size-violin, fig.width=13, fig.height=8}
+# Size-based analysis
+size_dist <- df %>%
+  filter(!is.na(size_number_of_employees) & size_number_of_employees != "") %>%
+  mutate(
+    Size_Category = case_when(
+      grepl("1-9|10-49", size_number_of_employees) ~ "Small\n(1-49)",
+      grepl("50-99|100-499", size_number_of_employees) ~ "Medium\n(50-499)",
+      grepl("500-999|1,000-4,999|5,000-9,999", size_number_of_employees) ~ "Large\n(500-9,999)",
+      grepl("10,000", size_number_of_employees) ~ "Enterprise\n(10,000+)",
+      TRUE ~ NA_character_
+    ),
+    Overall = overall_scres
+  ) %>%
+  filter(!is.na(Size_Category) & !is.na(Overall)) %>%
+  mutate(Size_Category = factor(Size_Category,
+                                levels = c("Small\n(1-49)", "Medium\n(50-499)",
+                                          "Large\n(500-9,999)", "Enterprise\n(10,000+)")))
+
+if (nrow(size_dist) > 0) {
+  ggplot(size_dist, aes(x = Size_Category, y = Overall, fill = Size_Category)) +
+    geom_violin(trim = FALSE, alpha = 0.7, scale = "width") +
+    geom_boxplot(width = 0.15, fill = "white", alpha = 0.5, outlier.alpha = 0.5) +
+    stat_summary(fun = mean, geom = "point", shape = 23, size = 4,
+                 fill = "red", color = "darkred") +
+    scale_fill_brewer(palette = "Set2") +
+    scale_y_continuous(breaks = 1:5, limits = c(1, 5)) +
+    theme_minimal() +
+    theme(
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(size = 14, face = "bold"),
+      axis.text.x = element_text(angle = 0, size = 11, face = "bold"),
+      axis.text.y = element_text(size = 11),
+      legend.position = "none",
+      panel.grid.major.x = element_blank(),
+      plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+    ) +
+    labs(
+      y = "Overall Resilience Score",
+      title = "Resilience Score Distribution by Company Size"
+    )
+} else {
+  cat("Insufficient size data for distribution analysis.\n")
+}
+```
+
+\newpage
+
+## Key Findings & Strategic Implications
+
+### Distribution Patterns Tell a Story
+
+1. **Bimodal Distributions**: If violin plots show two bulges, it indicates two distinct groups - high and low performers - suggesting best practices aren't widely adopted.
+
+2. **Narrow Distributions**: Violin shapes that are consistently narrow indicate mature, standardized practices across organizations.
+
+3. **Wide Distributions**: Broad, spread-out violins reveal significant variability and opportunity for learning from top performers.
+
+4. **Outliers**: Points outside the violin shapes represent exceptional cases worthy of detailed investigation.
+
+### Actionable Insights
+
+```{r actionable}
+# Overall variability assessment
+overall_sd <- sd(df$overall_scres, na.rm = TRUE)
+variability_level <- ifelse(overall_sd < 0.5, "low",
+                           ifelse(overall_sd < 0.8, "moderate", "high"))
+```
+
+**Overall Variability:** `r variability_level` (SD: `r sprintf("%.3f", overall_sd)`)
+
+**Recommendations:**
+
+1. **High Variability Dimensions**: Focus benchmarking and best practice sharing on `r most_variable` where organizations show the widest performance gaps.
+
+2. **Consistent Dimensions**: For `r most_consistent`, shift from broad improvement programs to targeted excellence initiatives for laggards.
+
+3. **Phase Strategy**: The `r most_diverse_phase` phase shows the most opportunity for improvement through standardization and capability building.
+
+4. **Size Considerations**: Analyze whether your size category's distribution matches expectations - smaller firms may have wider distributions due to resource constraints.
+
+5. **Aspire to the Upper Quartile**: Organizations should benchmark against the 75th percentile of their violin plot, not just the mean, to set ambitious but achievable targets.
+
+---
+
+*Report generated with ResilienceScan - Supply Chain Resilience Assessment Tool*

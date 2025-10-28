@@ -423,8 +423,19 @@ class ResilienceScanGUI:
         template_combo = ttk.Combobox(
             controls_frame,
             textvariable=self.template_var,
-            values=["ResilienceReport.qmd", "ExecutiveDashboard.qmd"],
-            width=30
+            values=[
+                "ResilienceReport.qmd",
+                "ExecutiveDashboard.qmd",
+                "report_variations/Report1_CircularBarplot.qmd",
+                "report_variations/Report2_Heatmap.qmd",
+                "report_variations/Report3_Treemap.qmd",
+                "report_variations/Report4_ViolinPlot.qmd",
+                "report_variations/Report5_NetworkDiagram.qmd",
+                "report_variations/Report6_RidgelinePlot.qmd",
+                "report_variations/Report7_LollipopChart.qmd",
+                "report_variations/Report8_SankeyDiagram.qmd"
+            ],
+            width=45
         )
         template_combo.grid(row=0, column=1, sticky=(tk.W, tk.E), padx=10)
 
@@ -1547,10 +1558,20 @@ TOP 10 MOST ENGAGED COMPANIES:
                 display_company = safe_display_name(company)
                 display_person = safe_display_name(person)
 
-                # Output filename
+                # Output filename with template name
                 from datetime import datetime
                 date_str = datetime.now().strftime("%Y%m%d")
-                output_filename = f"{date_str} ResilienceScanReport ({display_company} - {display_person}).pdf"
+
+                # Extract report name from template path
+                template_name = Path(self.template_var.get()).stem  # Gets filename without extension
+                if template_name.startswith("Report"):
+                    # For report variations, use the full name (e.g., "Report1_CircularBarplot")
+                    report_name = template_name
+                else:
+                    # For standard reports, use the template name as is
+                    report_name = template_name
+
+                output_filename = f"{date_str} {report_name} ({display_company} - {display_person}).pdf"
                 output_file = REPORTS_DIR / output_filename
 
                 # Check if already exists

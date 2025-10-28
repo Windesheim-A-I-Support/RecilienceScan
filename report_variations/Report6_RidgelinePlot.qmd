@@ -1,0 +1,378 @@
+---
+title: "Supply Chain Resilience Landscape"
+subtitle: "Ridgeline Visualization of Multi-Company Patterns"
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=0.75in
+    fontsize: 11pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(ggridges)
+library(viridis)
+
+# Load data
+df <- read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+```
+
+# Executive Summary
+
+Ridgeline plots (also called "joy plots") display distributions as flowing curves, perfect for comparing resilience patterns across multiple companies, sectors, or dimensions. This bird's-eye view reveals the overall landscape of supply chain resilience.
+
+## Landscape Overview
+
+```{r overview}
+total_companies <- length(unique(df$company_name[df$company_name != "" & !is.na(df$company_name)]))
+total_respondents <- nrow(df)
+
+cat(sprintf("**Organizations in Landscape:** %d\n\n", total_companies))
+cat(sprintf("**Survey Responses:** %d\n\n", total_respondents))
+cat("**Visualization Approach:** Stacked density curves reveal comparative patterns.\n")
+```
+
+\newpage
+
+## Dimension Resilience Landscape
+
+Each ridge represents one dimension's score distribution, stacked to show the complete resilience landscape.
+
+```{r dimension-ridges, fig.width=12, fig.height=9}
+# Prepare dimension data
+dimension_dist <- df %>%
+  transmute(
+    Redundancy = (up__r + in__r + do__r) / 3,
+    Collaboration = (up__c + in__c + do__c) / 3,
+    Flexibility = (up__f + in__f + do__f) / 3,
+    Visibility = (up__v + in__v + do__v) / 3,
+    Agility = (up__a + in__a + do__a) / 3
+  ) %>%
+  pivot_longer(everything(), names_to = "Dimension", values_to = "Score") %>%
+  filter(!is.na(Score)) %>%
+  mutate(Dimension = factor(Dimension,
+                            levels = c("Agility", "Visibility", "Flexibility",
+                                     "Collaboration", "Redundancy")))
+
+ggplot(dimension_dist, aes(x = Score, y = Dimension, fill = stat(x))) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01,
+                               gradient_lwd = 1, alpha = 0.8) +
+  scale_x_continuous(expand = c(0, 0), limits = c(0.5, 5.5), breaks = 1:5) +
+  scale_y_discrete(expand = expansion(mult = c(0.01, 0.3))) +
+  scale_fill_viridis_c(option = "plasma", name = "Score") +
+  theme_ridges(font_size = 13, grid = TRUE, center_axis_labels = TRUE) +
+  theme(
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 13, face = "bold"),
+    axis.text.x = element_text(size = 12),
+    legend.position = "right",
+    legend.title = element_text(size = 12, face = "bold"),
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    x = "Resilience Score",
+    y = "Dimension",
+    title = "Supply Chain Resilience Dimension Landscape"
+  )
+```
+
+### Landscape Insights
+
+```{r landscape-insights}
+# Calculate modal values (peaks)
+dim_modes <- dimension_dist %>%
+  group_by(Dimension) %>%
+  summarise(
+    Mode = {
+      dens <- density(Score, na.rm = TRUE)
+      dens$x[which.max(dens$y)]
+    },
+    Mean = mean(Score, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+highest_peak_dim <- dim_modes %>% filter(Mode == max(Mode)) %>% pull(Dimension)
+lowest_peak_dim <- dim_modes %>% filter(Mode == min(Mode)) %>% pull(Dimension)
+```
+
+- **Highest Peak:** `r highest_peak_dim` (Modal score: `r sprintf("%.2f", max(dim_modes$Mode))`) - Most organizations cluster at this performance level.
+
+- **Lowest Peak:** `r lowest_peak_dim` (Modal score: `r sprintf("%.2f", min(dim_modes$Mode))`) - Indicates where most organizations struggle.
+
+- **Shape Matters:** Wide, flat ridges show diverse performance; tall, narrow ridges indicate consensus around specific capability levels.
+
+\newpage
+
+## Phase Comparison Ridgeline
+
+Comparing distributions across supply chain phases reveals where capabilities are strongest and most consistent.
+
+```{r phase-ridges, fig.width=12, fig.height=8}
+# Phase data
+phase_dist <- df %>%
+  transmute(
+    Downstream = (do__r + do__c + do__f + do__v + do__a) / 5,
+    Internal = (in__r + in__c + in__f + in__v + in__a) / 5,
+    Upstream = (up__r + up__c + up__f + up__v + up__a) / 5
+  ) %>%
+  pivot_longer(everything(), names_to = "Phase", values_to = "Score") %>%
+  filter(!is.na(Score)) %>%
+  mutate(Phase = factor(Phase, levels = c("Downstream", "Internal", "Upstream")))
+
+ggplot(phase_dist, aes(x = Score, y = Phase, fill = Phase)) +
+  geom_density_ridges(scale = 2.5, rel_min_height = 0.01,
+                      alpha = 0.7, color = "white", size = 1.5) +
+  scale_x_continuous(expand = c(0, 0), limits = c(0.5, 5.5), breaks = 1:5) +
+  scale_y_discrete(expand = expansion(mult = c(0.01, 0.25))) +
+  scale_fill_manual(values = c("Upstream" = "#3498DB",
+                                "Internal" = "#E67E22",
+                                "Downstream" = "#9B59B6")) +
+  theme_ridges(font_size = 13, grid = TRUE) +
+  theme(
+    axis.title.x = element_text(size = 14, face = "bold"),
+    axis.title.y = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 14, face = "bold"),
+    axis.text.x = element_text(size = 12),
+    legend.position = "none",
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    x = "Average Resilience Score",
+    y = "Supply Chain Phase",
+    title = "Resilience Distribution Across Supply Chain Phases"
+  )
+```
+
+\newpage
+
+## Sector Resilience Landscape
+
+Different industries exhibit distinct resilience patterns, shaped by their unique operational challenges and maturity.
+
+```{r sector-ridges, fig.width=13, fig.height=10}
+# Sector analysis
+sector_dist <- df %>%
+  filter(!is.na(sector) & sector != "" & !is.na(overall_scres)) %>%
+  mutate(sector = substr(sector, 1, 40)) %>%  # Truncate long names
+  group_by(sector) %>%
+  filter(n() >= 3) %>%  # Only sectors with 3+ responses
+  ungroup() %>%
+  select(sector, Score = overall_scres)
+
+if (nrow(sector_dist) > 0) {
+  # Reorder sectors by median score
+  sector_order <- sector_dist %>%
+    group_by(sector) %>%
+    summarise(Median = median(Score, na.rm = TRUE), .groups = "drop") %>%
+    arrange(Median) %>%
+    pull(sector)
+
+  sector_dist <- sector_dist %>%
+    mutate(sector = factor(sector, levels = sector_order))
+
+  ggplot(sector_dist, aes(x = Score, y = sector, fill = stat(x))) +
+    geom_density_ridges_gradient(scale = 2, rel_min_height = 0.01,
+                                 gradient_lwd = 0.8, alpha = 0.9) +
+    scale_x_continuous(expand = c(0, 0), limits = c(1, 5), breaks = 1:5) +
+    scale_y_discrete(expand = expansion(mult = c(0.01, 0.2))) +
+    scale_fill_viridis_c(option = "magma", name = "Score") +
+    theme_ridges(font_size = 11, grid = TRUE) +
+    theme(
+      axis.title.x = element_text(size = 13, face = "bold"),
+      axis.title.y = element_text(size = 13, face = "bold"),
+      axis.text.y = element_text(size = 10),
+      axis.text.x = element_text(size = 11),
+      legend.position = "right",
+      legend.title = element_text(size = 11, face = "bold"),
+      plot.title = element_text(size = 15, face = "bold", hjust = 0.5)
+    ) +
+    labs(
+      x = "Overall Resilience Score",
+      y = "Industry Sector",
+      title = "Resilience Landscape Across Industry Sectors"
+    )
+} else {
+  cat("Insufficient sector data for ridgeline visualization.\n")
+}
+```
+
+\newpage
+
+## Company Size Patterns
+
+Resilience capabilities often correlate with organizational size due to resource availability and operational complexity.
+
+```{r size-ridges, fig.width=12, fig.height=8}
+# Size-based analysis
+size_dist <- df %>%
+  filter(!is.na(size_number_of_employees) & size_number_of_employees != "" &
+         !is.na(overall_scres)) %>%
+  mutate(
+    Size_Category = case_when(
+      grepl("1-9|10-49", size_number_of_employees) ~ "Small (1-49 employees)",
+      grepl("50-99|100-499", size_number_of_employees) ~ "Medium (50-499)",
+      grepl("500-999|1,000-4,999|5,000-9,999", size_number_of_employees) ~ "Large (500-9,999)",
+      grepl("10,000", size_number_of_employees) ~ "Enterprise (10,000+)",
+      TRUE ~ NA_character_
+    ),
+    Score = overall_scres
+  ) %>%
+  filter(!is.na(Size_Category)) %>%
+  mutate(Size_Category = factor(Size_Category,
+                                levels = c("Enterprise (10,000+)", "Large (500-9,999)",
+                                          "Medium (50-499)", "Small (1-49 employees)")))
+
+if (nrow(size_dist) > 0) {
+  ggplot(size_dist, aes(x = Score, y = Size_Category, fill = Size_Category)) +
+    geom_density_ridges(scale = 2, rel_min_height = 0.01,
+                        alpha = 0.75, color = "white", size = 1.2) +
+    scale_x_continuous(expand = c(0, 0), limits = c(1, 5), breaks = 1:5) +
+    scale_y_discrete(expand = expansion(mult = c(0.01, 0.25))) +
+    scale_fill_brewer(palette = "Set2") +
+    theme_ridges(font_size = 13, grid = TRUE) +
+    theme(
+      axis.title.x = element_text(size = 14, face = "bold"),
+      axis.title.y = element_text(size = 14, face = "bold"),
+      axis.text.y = element_text(size = 13, face = "bold"),
+      axis.text.x = element_text(size = 12),
+      legend.position = "none",
+      plot.title = element_text(size = 16, face = "bold", hjust = 0.5)
+    ) +
+    labs(
+      x = "Overall Resilience Score",
+      y = "Company Size",
+      title = "Resilience Distribution by Organizational Size"
+    )
+} else {
+  cat("Insufficient size data for ridgeline visualization.\n")
+}
+```
+
+\newpage
+
+## Detailed Phase-Dimension Landscape
+
+This comprehensive ridgeline view stacks all 15 phase-dimension combinations, revealing the full topology of supply chain resilience.
+
+```{r detailed-ridges, fig.width=13, fig.height=12}
+# Detailed phase-dimension data
+detailed_dist <- df %>%
+  select(up__r, up__c, up__f, up__v, up__a,
+         in__r, in__c, in__f, in__v, in__a,
+         do__r, do__c, do__f, do__v, do__a) %>%
+  pivot_longer(everything(), names_to = "Metric", values_to = "Score") %>%
+  filter(!is.na(Score)) %>%
+  separate(Metric, into = c("Phase", "Dimension"), sep = "__") %>%
+  mutate(
+    Phase = case_when(
+      Phase == "up" ~ "UP",
+      Phase == "in" ~ "IN",
+      Phase == "do" ~ "DO"
+    ),
+    Dimension = case_when(
+      Dimension == "r" ~ "Redundancy",
+      Dimension == "c" ~ "Collaboration",
+      Dimension == "f" ~ "Flexibility",
+      Dimension == "v" ~ "Visibility",
+      Dimension == "a" ~ "Agility"
+    ),
+    Label = paste(Phase, Dimension),
+    Label = factor(Label, levels = rev(c(
+      "DO Agility", "DO Visibility", "DO Flexibility", "DO Collaboration", "DO Redundancy",
+      "IN Agility", "IN Visibility", "IN Flexibility", "IN Collaboration", "IN Redundancy",
+      "UP Agility", "UP Visibility", "UP Flexibility", "UP Collaboration", "UP Redundancy"
+    )))
+  )
+
+ggplot(detailed_dist, aes(x = Score, y = Label, fill = stat(x))) +
+  geom_density_ridges_gradient(scale = 2.5, rel_min_height = 0.01,
+                               gradient_lwd = 0.5, alpha = 0.85) +
+  scale_x_continuous(expand = c(0, 0), limits = c(0.5, 5.5), breaks = 1:5) +
+  scale_y_discrete(expand = expansion(mult = c(0.01, 0.15))) +
+  scale_fill_viridis_c(option = "turbo", name = "Score") +
+  theme_ridges(font_size = 10, grid = TRUE) +
+  theme(
+    axis.title.x = element_text(size = 13, face = "bold"),
+    axis.title.y = element_text(size = 13, face = "bold"),
+    axis.text.y = element_text(size = 9.5, face = "bold"),
+    axis.text.x = element_text(size = 11),
+    legend.position = "right",
+    legend.title = element_text(size = 11, face = "bold"),
+    plot.title = element_text(size = 15, face = "bold", hjust = 0.5)
+  ) +
+  labs(
+    x = "Resilience Score",
+    y = "Phase-Dimension Combination",
+    title = "Complete Resilience Landscape: All Phase-Dimension Combinations"
+  )
+```
+
+\newpage
+
+## Key Insights & Strategic Guidance
+
+### Reading the Landscape
+
+**Ridge Characteristics:**
+
+1. **Peak Location:** Where the ridge is highest = most common performance level
+2. **Ridge Width:** How spread out = variability in performance
+3. **Ridge Height:** How tall = concentration at that score level
+4. **Multiple Peaks:** Bimodal ridges = distinct high/low performer groups
+
+### Comparative Analysis
+
+```{r comparative-analysis}
+# Calculate landscape metrics
+overall_mode <- {
+  dens <- density(df$overall_scres, na.rm = TRUE)
+  dens$x[which.max(dens$y)]
+}
+
+# Distribution shape
+overall_skew <- {
+  scores <- df$overall_scres[!is.na(df$overall_scres)]
+  n <- length(scores)
+  m <- mean(scores)
+  s <- sd(scores)
+  sum(((scores - m) / s)^3) / n
+}
+
+skew_interpretation <- ifelse(abs(overall_skew) < 0.5, "symmetric",
+                              ifelse(overall_skew > 0, "right-skewed (more low scores)",
+                                    "left-skewed (more high scores)"))
+```
+
+**Overall Landscape:**
+- **Modal Performance:** `r sprintf("%.2f", overall_mode)` - where most organizations concentrate
+- **Distribution Shape:** `r skew_interpretation` (skewness: `r sprintf("%.2f", overall_skew)`)
+
+### Strategic Recommendations
+
+1. **Benchmark Against the Peak:** If your score is below the modal value, you're trailing the pack. Use this as your minimum target.
+
+2. **Aim for Ridge Overlap:** In mature resilience programs, dimension ridges should overlap significantly. Large gaps indicate unbalanced development.
+
+3. **Study Outliers:** Organizations far to the right of the peak have cracked the code. Investigate their practices.
+
+4. **Phase Alignment:** Ideally, phase ridges should align closely. Significant separation suggests inconsistent resilience implementation across the supply chain.
+
+5. **Sector Context:** Compare your position within your sector's ridge. Being above your sector's peak is more meaningful than absolute scores.
+
+6. **Size-Appropriate Targets:** Set goals based on your size category's upper quartile, not overall dataset peaks.
+
+### Action Planning
+
+Based on ridgeline position:
+
+- **Left of Peak:** Priority = rapid capability building to reach industry standard
+- **At Peak:** Focus = selective excellence in strategic dimensions
+- **Right of Peak:** Goal = maintain leadership and share best practices
+
+---
+
+*Report generated with ResilienceScan - Supply Chain Resilience Assessment Tool*

@@ -1,0 +1,358 @@
+---
+title: "Supply Chain Resilience Network Analysis"
+subtitle: "Interconnections and Correlations Between Dimensions"
+format:
+  pdf:
+    documentclass: article
+    geometry: margin=0.75in
+    fontsize: 11pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(igraph)
+library(ggraph)
+library(corrplot)
+
+# Load data
+df <- read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+```
+
+# Executive Summary
+
+This network analysis reveals the hidden relationships between resilience dimensions. Understanding these correlations helps identify which capabilities reinforce each other and which operate independently, enabling smarter investment decisions.
+
+## Analysis Foundation
+
+```{r foundation}
+total_companies <- length(unique(df$company_name[df$company_name != "" & !is.na(df$company_name)]))
+total_respondents <- nrow(df)
+
+cat(sprintf("**Organizations Analyzed:** %d\n\n", total_companies))
+cat(sprintf("**Data Points:** %d responses\n\n", total_respondents))
+cat("**Network Principle:** Strong correlations indicate dimensions that typically develop together.\n")
+```
+
+\newpage
+
+## Dimension Correlation Network
+
+This network diagram visualizes relationships between the five resilience dimensions. Thicker edges indicate stronger correlations, while node positioning reflects relationship patterns.
+
+```{r correlation-network, fig.width=12, fig.height=12}
+# Calculate correlation matrix for dimensions
+dimension_scores <- df %>%
+  transmute(
+    Redundancy = (up__r + in__r + do__r) / 3,
+    Collaboration = (up__c + in__c + do__c) / 3,
+    Flexibility = (up__f + in__f + do__f) / 3,
+    Visibility = (up__v + in__v + do__v) / 3,
+    Agility = (up__a + in__a + do__a) / 3
+  )
+
+# Calculate correlations
+cor_matrix <- cor(dimension_scores, use = "pairwise.complete.obs")
+
+# Create network from correlation matrix
+# Only include correlations above threshold
+threshold <- 0.3
+edges <- data.frame()
+for(i in 1:(nrow(cor_matrix)-1)) {
+  for(j in (i+1):ncol(cor_matrix)) {
+    if(abs(cor_matrix[i,j]) >= threshold) {
+      edges <- rbind(edges, data.frame(
+        from = rownames(cor_matrix)[i],
+        to = colnames(cor_matrix)[j],
+        weight = cor_matrix[i,j],
+        abs_weight = abs(cor_matrix[i,j])
+      ))
+    }
+  }
+}
+
+# Create graph
+if(nrow(edges) > 0) {
+  g <- graph_from_data_frame(edges, directed = FALSE)
+
+  # Calculate node metrics
+  V(g)$degree <- degree(g)
+  V(g)$avg_score <- sapply(V(g)$name, function(dim) {
+    mean(dimension_scores[[dim]], na.rm = TRUE)
+  })
+
+  # Create network plot
+  set.seed(42)
+  ggraph(g, layout = 'fr') +
+    geom_edge_link(aes(width = abs_weight, color = weight),
+                   alpha = 0.7, show.legend = TRUE) +
+    scale_edge_width(range = c(1, 8), name = "Correlation\nStrength") +
+    scale_edge_color_gradient2(low = "#E74C3C", mid = "#F39C12", high = "#27AE60",
+                               midpoint = 0.5, limits = c(0, 1),
+                               name = "Correlation\nValue") +
+    geom_node_point(aes(size = avg_score, fill = avg_score),
+                    shape = 21, color = "white", stroke = 2) +
+    scale_size(range = c(15, 35), name = "Average\nScore") +
+    scale_fill_gradient(low = "#3498DB", high = "#E67E22",
+                        limits = c(1, 5), name = "Average\nScore") +
+    geom_node_text(aes(label = name), size = 5.5, fontface = "bold",
+                   color = "white") +
+    theme_graph(base_family = "sans") +
+    theme(
+      legend.position = "right",
+      legend.title = element_text(size = 11, face = "bold"),
+      legend.text = element_text(size = 9),
+      plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+      plot.margin = margin(20, 20, 20, 20)
+    ) +
+    labs(
+      title = "Resilience Dimension Correlation Network"
+    )
+} else {
+  cat("Insufficient correlation strength for network visualization.\n")
+}
+```
+
+### Network Insights
+
+```{r network-insights}
+if(nrow(edges) > 0) {
+  strongest_link <- edges %>% arrange(desc(abs_weight)) %>% slice(1)
+  weakest_link <- edges %>% arrange(abs_weight) %>% slice(1)
+
+  # Calculate centrality
+  centrality <- data.frame(
+    Dimension = V(g)$name,
+    Degree = degree(g),
+    AvgScore = V(g)$avg_score
+  ) %>% arrange(desc(Degree))
+
+  most_connected <- centrality$Dimension[1]
+  least_connected <- centrality$Dimension[nrow(centrality)]
+}
+```
+
+**Strongest Correlation:** `r if(nrow(edges) > 0) paste(strongest_link$from, "↔", strongest_link$to)` (r = `r if(nrow(edges) > 0) sprintf("%.3f", strongest_link$weight)`)
+
+- These dimensions develop in tandem - strengthening one typically strengthens the other.
+
+**Most Connected Dimension:** `r if(nrow(edges) > 0) most_connected`
+
+- This dimension serves as a hub, correlating with multiple other capabilities.
+- Investing here creates ripple effects across the resilience system.
+
+**Least Connected:** `r if(nrow(edges) > 0) least_connected`
+
+- This dimension operates more independently.
+- Requires dedicated attention as improvements elsewhere may not naturally boost it.
+
+\newpage
+
+## Phase-Level Correlation Network
+
+Examining correlations within specific phases reveals how dimensions interact differently across the supply chain.
+
+```{r phase-networks, fig.width=14, fig.height=14}
+# Function to create phase network
+create_phase_network <- function(phase_data, phase_name, color) {
+  cor_matrix <- cor(phase_data, use = "pairwise.complete.obs")
+
+  threshold <- 0.25
+  edges <- data.frame()
+  for(i in 1:(nrow(cor_matrix)-1)) {
+    for(j in (i+1):ncol(cor_matrix)) {
+      if(abs(cor_matrix[i,j]) >= threshold) {
+        edges <- rbind(edges, data.frame(
+          from = rownames(cor_matrix)[i],
+          to = colnames(cor_matrix)[j],
+          weight = cor_matrix[i,j],
+          abs_weight = abs(cor_matrix[i,j])
+        ))
+      }
+    }
+  }
+
+  if(nrow(edges) == 0) return(NULL)
+
+  g <- graph_from_data_frame(edges, directed = FALSE)
+  V(g)$avg_score <- sapply(V(g)$name, function(dim) {
+    mean(phase_data[[dim]], na.rm = TRUE)
+  })
+
+  return(g)
+}
+
+# Create phase-specific networks
+upstream_data <- df %>%
+  transmute(Redundancy = up__r, Collaboration = up__c, Flexibility = up__f,
+            Visibility = up__v, Agility = up__a)
+
+internal_data <- df %>%
+  transmute(Redundancy = in__r, Collaboration = in__c, Flexibility = in__f,
+            Visibility = in__v, Agility = in__a)
+
+downstream_data <- df %>%
+  transmute(Redundancy = do__r, Collaboration = do__c, Flexibility = do__f,
+            Visibility = do__v, Agility = do__a)
+
+g_up <- create_phase_network(upstream_data, "Upstream", "#3498DB")
+g_in <- create_phase_network(internal_data, "Internal", "#E67E22")
+g_do <- create_phase_network(downstream_data, "Downstream", "#9B59B6")
+
+# Plot all three networks
+par(mfrow = c(2, 2), mar = c(2, 2, 3, 2))
+
+plot_phase_network <- function(g, title, color) {
+  if(!is.null(g)) {
+    set.seed(42)
+    coords <- layout_with_fr(g)
+
+    # Edge colors and widths
+    edge_colors <- sapply(E(g)$weight, function(w) {
+      if(w > 0.6) color
+      else if(w > 0.4) adjustcolor(color, alpha.f = 0.7)
+      else adjustcolor(color, alpha.f = 0.4)
+    })
+    edge_widths <- E(g)$abs_weight * 10
+
+    # Node sizes based on avg score
+    node_sizes <- rescale(V(g)$avg_score, to = c(15, 40))
+
+    plot(g,
+         layout = coords,
+         vertex.size = node_sizes,
+         vertex.color = color,
+         vertex.frame.color = "white",
+         vertex.frame.width = 3,
+         vertex.label.color = "white",
+         vertex.label.font = 2,
+         vertex.label.cex = 1.2,
+         edge.width = edge_widths,
+         edge.color = edge_colors,
+         edge.curved = 0.2,
+         main = title,
+         main.cex = 1.5,
+         main.font = 2)
+  }
+}
+
+plot_phase_network(g_up, "Upstream Phase", "#3498DB")
+plot_phase_network(g_in, "Internal Phase", "#E67E22")
+plot_phase_network(g_do, "Downstream Phase", "#9B59B6")
+
+# Legend
+par(mar = c(0, 0, 0, 0))
+plot.new()
+legend("center",
+       legend = c("Strong Correlation (>0.6)", "Moderate Correlation (0.4-0.6)",
+                 "Weak Correlation (0.25-0.4)", "Node size = Avg Score"),
+       lty = c(1, 1, 1, NA),
+       lwd = c(4, 3, 2, NA),
+       pch = c(NA, NA, NA, 21),
+       pt.cex = c(NA, NA, NA, 2),
+       pt.bg = c(NA, NA, NA, "#95A5A6"),
+       col = c("#2C3E50", adjustcolor("#2C3E50", alpha.f = 0.7),
+              adjustcolor("#2C3E50", alpha.f = 0.4), NA),
+       bty = "n",
+       cex = 1.2,
+       title = "Network Legend",
+       title.font = 2)
+```
+
+\newpage
+
+## Correlation Heatmap Matrix
+
+A traditional correlation matrix complements the network view, providing exact correlation values.
+
+```{r correlation-heatmap, fig.width=10, fig.height=10}
+# Enhanced correlation plot
+col_palette <- colorRampPalette(c("#E74C3C", "#F8F9FA", "#27AE60"))(200)
+
+corrplot(cor_matrix,
+         method = "circle",
+         type = "upper",
+         tl.col = "black",
+         tl.srt = 45,
+         tl.cex = 1.3,
+         cl.cex = 1.1,
+         col = col_palette,
+         addCoef.col = "black",
+         number.cex = 1.4,
+         number.font = 2,
+         diag = FALSE,
+         title = "Dimension Correlation Matrix",
+         mar = c(0, 0, 2, 0))
+```
+
+### Correlation Patterns
+
+```{r correlation-patterns}
+# Extract correlation insights
+high_cors <- which(cor_matrix > 0.6 & cor_matrix < 1, arr.ind = TRUE)
+low_cors <- which(cor_matrix < 0.3 & cor_matrix > -0.3, arr.ind = TRUE)
+```
+
+**High Correlations (>0.6):** `r nrow(high_cors)` dimension pairs show strong positive relationships.
+
+- These represent synergistic capabilities that reinforce each other.
+- Training and development programs should target these pairs together.
+
+**Independent Dimensions (<0.3):** Dimensions with low correlations require separate strategic focus.
+
+- Don't expect improvements in one to automatically boost the other.
+- Balanced investment across uncorrelated dimensions ensures comprehensive coverage.
+
+\newpage
+
+## Strategic Implications
+
+### Network-Based Strategy
+
+1. **Hub Strategy:** Focus on the most connected dimension (`r if(nrow(edges) > 0) most_connected`) to create cascading improvements across multiple areas.
+
+2. **Pair Programming:** Develop the strongest correlated pairs together through integrated initiatives rather than siloed programs.
+
+3. **Independent Investment:** Dimensions with weak correlations need dedicated resources and cannot be improved indirectly.
+
+4. **Phase Differences:** If phase networks differ significantly, it indicates inconsistent implementation approaches that may need standardization.
+
+### Practical Applications
+
+**For High Correlation Pairs:**
+- Joint training programs
+- Integrated KPIs
+- Combined technology solutions
+- Shared governance structures
+
+**For Low Correlation Pairs:**
+- Separate workstreams
+- Distinct budgets
+- Specialized expertise
+- Independent measurement systems
+
+### Benchmarking Guidance
+
+```{r benchmark-guidance}
+# Calculate overall network density
+if(nrow(edges) > 0) {
+  network_density <- edge_density(g)
+  density_level <- ifelse(network_density > 0.7, "highly integrated",
+                         ifelse(network_density > 0.5, "moderately integrated",
+                               "loosely integrated"))
+} else {
+  density_level <- "insufficient data"
+}
+```
+
+Your resilience dimensions are **`r if(nrow(edges) > 0) density_level`** (network density: `r if(nrow(edges) > 0) sprintf("%.2f", network_density)`).
+
+- **Highly Integrated (>0.7):** Strong systemic approach; focus on maintaining connections.
+- **Moderately Integrated (0.5-0.7):** Good foundation; opportunities to strengthen links.
+- **Loosely Integrated (<0.5):** Siloed capabilities; consider more integrated strategies.
+
+---
+
+*Report generated with ResilienceScan - Supply Chain Resilience Assessment Tool*
