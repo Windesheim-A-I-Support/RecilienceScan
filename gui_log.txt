@@ -4437,3 +4437,95 @@ Fixed 6252 non-numeric value(s) in score columns
 [2025-10-29 13:46:48]      From Account: cg.verhoef@windesheim.nl (default)
 [2025-10-29 13:46:48]      Subject: Your Resilience Scan Report – [Technology Company]...
 [2025-10-29 13:46:48]   Test mode: NOT updating CSV
+[2025-10-29 13:52:48] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-29 13:52:48] Importing email tracking data...
+[2025-10-29 13:53:03] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-29 13:53:06] Looking for Excel files in /data folder...
+[2025-10-29 13:53:09] Loading cleaned_master.csv for cleaning...
+[2025-10-29 13:53:10] Summary: Removed 1 invalid company name(s)
+Fixed 6252 non-numeric value(s) in score columns
+[2025-10-29 13:53:22] Loading cleaned_master.csv for cleaning...
+[2025-10-29 13:53:23] Summary: No issues found - data was already clean!
+[2025-10-29 13:53:37] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-29 13:53:37] Importing email tracking data...
+[2025-10-29 13:53:41] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-29 13:53:41] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-29 13:53:41] [3/506] Generating: Aako B.V. - Frank Mooij
+[2025-10-29 13:53:51] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-29 13:53:53]      processing file: Report1_CircularBarplot.qmd
+[2025-10-29 13:53:53]      1/11                   
+[2025-10-29 13:53:53]      2/11 [setup]           
+[2025-10-29 13:53:53]      Error in `file()`:
+[2025-10-29 13:53:53]      ! cannot open the connection
+[2025-10-29 13:53:53]      Backtrace:
+[2025-10-29 13:53:53]          x
+[2025-10-29 13:53:53]       1. \-utils::read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+[2025-10-29 13:53:53]       2.   \-utils::read.table(...)
+[2025-10-29 13:53:53]       3.     \-base::file(file, "rt")
+[2025-10-29 13:53:53]      Quitting from Report1_CircularBarplot.qmd:11-20 [setup]
+[2025-10-29 13:53:53]      Execution halted
+[2025-10-29 13:53:53] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-29 13:53:55]      processing file: Report1_CircularBarplot.qmd
+[2025-10-29 13:53:55]      1/11                   
+[2025-10-29 13:53:55]      2/11 [setup]           
+[2025-10-29 13:53:55]      Error in `file()`:
+[2025-10-29 13:53:55]      ! cannot open the connection
+[2025-10-29 13:53:55]      Backtrace:
+[2025-10-29 13:53:55]          x
+[2025-10-29 13:53:55]       1. \-utils::read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+[2025-10-29 13:53:55]       2.   \-utils::read.table(...)
+[2025-10-29 13:53:55]       3.     \-base::file(file, "rt")
+[2025-10-29 13:53:55]      Quitting from Report1_CircularBarplot.qmd:11-20 [setup]
+[2025-10-29 13:53:55]      Execution halted
+[2025-10-29 13:53:55] [3/506] Generating: Aako B.V. - Frank Mooij
+[2025-10-29 13:53:57]      processing file: Report1_CircularBarplot.qmd
+[2025-10-29 13:53:57]      1/11                   
+[2025-10-29 13:53:57]      2/11 [setup]           
+[2025-10-29 13:53:57]      Error in `file()`:
+[2025-10-29 13:53:57]      ! cannot open the connection
+[2025-10-29 13:53:57]      Backtrace:
+[2025-10-29 13:53:57]          x
+[2025-10-29 13:53:57]       1. \-utils::read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+[2025-10-29 13:53:57]       2.   \-utils::read.table(...)
+[2025-10-29 13:53:57]       3.     \-base::file(file, "rt")
+[2025-10-29 13:53:57]      Quitting from Report1_CircularBarplot.qmd:11-20 [setup]
+[2025-10-29 13:53:57]      Execution halted
+[2025-10-29 13:54:42] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-29 13:54:44]      processing file: Report4_ViolinPlot.qmd
+[2025-10-29 13:54:44]      1/19                   
+[2025-10-29 13:54:44]      2/19 [setup]           
+[2025-10-29 13:54:44]      Error in `file()`:
+[2025-10-29 13:54:44]      ! cannot open the connection
+[2025-10-29 13:54:44]      Backtrace:
+[2025-10-29 13:54:44]          x
+[2025-10-29 13:54:44]       1. \-utils::read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+[2025-10-29 13:54:44]       2.   \-utils::read.table(...)
+[2025-10-29 13:54:44]       3.     \-base::file(file, "rt")
+[2025-10-29 13:54:44]      Quitting from Report4_ViolinPlot.qmd:11-20 [setup]
+[2025-10-29 13:54:44]      Execution halted
+[2025-10-29 13:54:44] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-29 13:54:46]      processing file: Report4_ViolinPlot.qmd
+[2025-10-29 13:54:46]      1/19                   
+[2025-10-29 13:54:46]      2/19 [setup]           
+[2025-10-29 13:54:46]      Error in `file()`:
+[2025-10-29 13:54:46]      ! cannot open the connection
+[2025-10-29 13:54:46]      Backtrace:
+[2025-10-29 13:54:46]          x
+[2025-10-29 13:54:46]       1. \-utils::read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+[2025-10-29 13:54:46]       2.   \-utils::read.table(...)
+[2025-10-29 13:54:46]       3.     \-base::file(file, "rt")
+[2025-10-29 13:54:46]      Quitting from Report4_ViolinPlot.qmd:11-20 [setup]
+[2025-10-29 13:54:46]      Execution halted
+[2025-10-29 13:54:46] [3/506] Generating: Aako B.V. - Frank Mooij
+[2025-10-29 13:54:48]      processing file: Report4_ViolinPlot.qmd
+[2025-10-29 13:54:48]      1/19                   
+[2025-10-29 13:54:48]      2/19 [setup]           
+[2025-10-29 13:54:48]      Error in `file()`:
+[2025-10-29 13:54:48]      ! cannot open the connection
+[2025-10-29 13:54:48]      Backtrace:
+[2025-10-29 13:54:48]          x
+[2025-10-29 13:54:48]       1. \-utils::read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+[2025-10-29 13:54:48]       2.   \-utils::read.table(...)
+[2025-10-29 13:54:48]       3.     \-base::file(file, "rt")
+[2025-10-29 13:54:48]      Quitting from Report4_ViolinPlot.qmd:11-20 [setup]
+[2025-10-29 13:54:48]      Execution halted

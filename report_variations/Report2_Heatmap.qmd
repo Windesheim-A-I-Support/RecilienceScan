@@ -16,8 +16,11 @@ library(tidyr)
 library(scales)
 library(viridis)
 
-# Load data
-df <- read.csv("data/cleaned_master.csv", stringsAsFactors = FALSE)
+# Load data - find the project root dynamically
+script_dir <- if (exists("knitr")) dirname(knitr::current_input()) else getwd()
+project_root <- if (basename(script_dir) == "report_variations") dirname(script_dir) else script_dir
+data_path <- file.path(project_root, "data", "cleaned_master.csv")
+df <- read.csv(data_path, stringsAsFactors = FALSE)
 ```
 
 # Executive Summary

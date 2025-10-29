@@ -467,15 +467,6 @@ class ResilienceScanGUI:
         )
         self.gen_start_btn.grid(row=0, column=0, padx=5)
 
-        self.gen_stop_btn = ttk.Button(
-            button_frame,
-            text="⏸ Pause",
-            command=self.pause_generation,
-            state=tk.DISABLED,
-            width=15
-        )
-        self.gen_stop_btn.grid(row=0, column=1, padx=5)
-
         self.gen_cancel_btn = ttk.Button(
             button_frame,
             text="⏹ Cancel",
@@ -483,7 +474,7 @@ class ResilienceScanGUI:
             state=tk.DISABLED,
             width=15
         )
-        self.gen_cancel_btn.grid(row=0, column=2, padx=5)
+        self.gen_cancel_btn.grid(row=0, column=1, padx=5)
 
         # Progress
         progress_frame = ttk.LabelFrame(gen_tab, text="Generation Progress", padding=10)
@@ -725,8 +716,6 @@ class ResilienceScanGUI:
                        value="pending", command=self.update_email_status_display).pack(side=tk.LEFT, padx=5)
         ttk.Radiobutton(filter_frame, text="Sent", variable=self.email_filter_var,
                        value="sent", command=self.update_email_status_display).pack(side=tk.LEFT, padx=5)
-        ttk.Radiobutton(filter_frame, text="Failed", variable=self.email_filter_var,
-                       value="failed", command=self.update_email_status_display).pack(side=tk.LEFT, padx=5)
 
         # Email status treeview
         tree_frame = ttk.Frame(status_frame)
@@ -766,8 +755,6 @@ class ResilienceScanGUI:
 
         ttk.Button(update_btn_frame, text="Mark as Sent",
                   command=self.mark_selected_as_sent, width=15).pack(side=tk.LEFT, padx=5)
-        ttk.Button(update_btn_frame, text="Mark as Failed",
-                  command=self.mark_selected_as_failed, width=15).pack(side=tk.LEFT, padx=5)
         ttk.Button(update_btn_frame, text="Reset to Pending",
                   command=self.mark_selected_as_pending, width=15).pack(side=tk.LEFT, padx=5)
         ttk.Button(update_btn_frame, text="Refresh",
@@ -1022,15 +1009,26 @@ class ResilienceScanGUI:
 
             if success:
                 self.log("✅ Data conversion completed!")
+
+                # Automatically load the converted data
+                try:
+                    self.df = pd.read_csv(DATA_FILE)
+                    self.df.columns = self.df.columns.str.lower().str.strip()
+                    self.update_stats_display()
+                    self.update_data_preview()
+                    self.update_stats_text()
+                    self.log(f"✅ Data automatically loaded: {len(self.df)} records")
+                except Exception as e:
+                    self.log(f"⚠️ Could not auto-load data: {e}")
+
                 messagebox.showinfo(
                     "Success",
                     "Excel file converted to CSV!\n\n"
                     "The cleaned_master.csv file has been created/updated.\n"
                     "Email tracking status (reportsent) has been preserved.\n\n"
-                    "Next step: Click 'Clean Data' to fix any data quality issues,\n"
-                    "then 'Refresh' to load the data."
+                    "Next step: Click 'Clean Data' to fix any data quality issues."
                 )
-                self.status_label.config(text="Data converted - run Clean Data next")
+                self.status_label.config(text="Data converted and loaded - run Clean Data next")
             else:
                 self.log("❌ Data conversion failed - check logs for details")
                 messagebox.showerror(
@@ -1065,14 +1063,25 @@ class ResilienceScanGUI:
             if success:
                 self.log("✅ Data cleaning completed!")
                 self.log(f"Summary: {summary}")
+
+                # Automatically reload the cleaned data
+                try:
+                    self.df = pd.read_csv(DATA_FILE)
+                    self.df.columns = self.df.columns.str.lower().str.strip()
+                    self.update_stats_display()
+                    self.update_data_preview()
+                    self.update_stats_text()
+                    self.log(f"✅ Cleaned data automatically reloaded: {len(self.df)} records")
+                except Exception as e:
+                    self.log(f"⚠️ Could not auto-reload data: {e}")
+
                 messagebox.showinfo(
                     "Data Cleaned Successfully",
                     f"Data cleaning completed!\n\n"
                     f"What was done:\n{summary}\n\n"
-                    f"Data is now ready for report generation.\n\n"
-                    f"Click 'Refresh' to load the cleaned data."
+                    f"Data is now ready for report generation."
                 )
-                self.status_label.config(text="Data cleaned - click Refresh to load")
+                self.status_label.config(text="Data cleaned and loaded - ready for reports")
             else:
                 self.log("❌ Data cleaning failed - check logs for details")
                 messagebox.showerror(
@@ -1503,7 +1512,6 @@ TOP 10 MOST ENGAGED COMPANIES:
 
         self.is_generating = True
         self.gen_start_btn.config(state=tk.DISABLED)
-        self.gen_stop_btn.config(state=tk.NORMAL)
         self.gen_cancel_btn.config(state=tk.NORMAL)
 
         # Start generation in background thread
@@ -1655,16 +1663,10 @@ TOP 10 MOST ENGAGED COMPANIES:
 
         self.is_generating = False
         self.gen_start_btn.config(state=tk.NORMAL)
-        self.gen_stop_btn.config(state=tk.DISABLED)
         self.gen_cancel_btn.config(state=tk.DISABLED)
         self.gen_current_label.config(text="Generation complete")
 
         self.log_gen(f"\n✅ Generation complete! Success: {success}, Failed: {failed}")
-
-    def pause_generation(self):
-        """Pause generation"""
-        # Implementation needed
-        pass
 
     def cancel_generation(self):
         """Cancel generation"""
@@ -2257,17 +2259,6 @@ TOP 10 MOST ENGAGED COMPANIES:
 
         self.update_email_status_display()
         self.log_email(f"✅ Marked {len(selection)} record(s) as sent")
-
-    def mark_selected_as_failed(self):
-        """Mark selected email as failed (doesn't actually update CSV - just for tracking)"""
-        selection = self.email_status_tree.selection()
-        if not selection:
-            messagebox.showwarning("Warning", "Please select an email record first")
-            return
-
-        # Note: We don't track "failed" in CSV, only "sent" status matters
-        self.log_email(f"ℹ️  Note: 'Failed' status is not stored in CSV")
-        self.log_email(f"   Failed emails can be retried by clicking 'Send All Emails' again")
 
     def mark_selected_as_pending(self):
         """Reset selected email to pending"""
