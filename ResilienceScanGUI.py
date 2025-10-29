@@ -2549,8 +2549,9 @@ TOP 10 MOST ENGAGED COMPANIES:
                 self.log_email(f"  Email address: {email if email else 'NO EMAIL FOUND'}")
                 self.log_email(f"  PDF: {attachment_path.name}")
 
-                # Check if email exists
-                if not email or email.strip() == "" or email == "NO EMAIL":
+                # Check if email exists - handle NaN/None/empty values
+                import pandas as pd
+                if pd.isna(email) or not email or (isinstance(email, str) and (email.strip() == "" or email == "NO EMAIL")):
                     raise ValueError(f"No email address found for {company} - {person}")
 
                 # Format subject and body with template
