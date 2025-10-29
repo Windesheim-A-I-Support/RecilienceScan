@@ -635,8 +635,9 @@ class ResilienceScanGUI:
 
         # From Email
         ttk.Label(smtp_frame, text="From Email:").grid(row=2, column=0, sticky=tk.W, pady=5)
-        self.smtp_from_var = tk.StringVar(value="")
-        ttk.Entry(smtp_frame, textvariable=self.smtp_from_var, width=40).grid(row=2, column=1, sticky=(tk.W, tk.E), padx=10, pady=5)
+        self.smtp_from_var = tk.StringVar(value="contact@resiliencescan.org")
+        from_entry = ttk.Entry(smtp_frame, textvariable=self.smtp_from_var, width=40, state='readonly')
+        from_entry.grid(row=2, column=1, sticky=(tk.W, tk.E), padx=10, pady=5)
 
         # SMTP Username
         ttk.Label(smtp_frame, text="SMTP Username:").grid(row=3, column=0, sticky=tk.W, pady=5)
@@ -2597,9 +2598,8 @@ TOP 10 MOST ENGAGED COMPANIES:
                         mail.Subject = subject
                         mail.Body = body
 
-                        # Use the default Outlook account (whatever is currently logged in)
-                        # No need to set SendUsingAccount - it will use the default
-                        self.log_email(f"  Using default Outlook account (currently logged in)")
+                        # Outlook will use the logged-in account (contact@resiliencescan.org)
+                        self.log_email(f"  Using logged-in Outlook account (contact@resiliencescan.org)")
 
                         # Add attachment
                         self.log_email(f"  Attaching PDF: {attachment_path}...")

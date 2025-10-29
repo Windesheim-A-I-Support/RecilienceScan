@@ -4529,3 +4529,500 @@ Fixed 6252 non-numeric value(s) in score columns
 [2025-10-29 13:54:48]       3.     \-base::file(file, "rt")
 [2025-10-29 13:54:48]      Quitting from Report4_ViolinPlot.qmd:11-20 [setup]
 [2025-10-29 13:54:48]      Execution halted
+[2025-10-29 14:06:01] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-29 14:06:01] Importing email tracking data...
+[2025-10-29 14:06:08] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-29 14:06:15] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-29 14:08:55] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-29 14:09:01] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-29 14:09:41] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-29 14:09:46]      processing file: Report5_NetworkDiagram.qmd
+[2025-10-29 14:09:46]      1/17                       
+[2025-10-29 14:09:46]      2/17 [setup]               
+[2025-10-29 14:09:46]      3/17                       
+[2025-10-29 14:09:46]      4/17 [foundation]          
+[2025-10-29 14:09:46]      5/17                       
+[2025-10-29 14:09:46]      6/17 [correlation-network] 
+[2025-10-29 14:09:46]      7/17                       
+[2025-10-29 14:09:46]      8/17 [network-insights]    
+[2025-10-29 14:09:46]      9/17                       
+[2025-10-29 14:09:46]      10/17 [phase-networks]      
+[2025-10-29 14:09:46]      Error in `rescale()`:
+[2025-10-29 14:09:46]      ! could not find function "rescale"
+[2025-10-29 14:09:46]      Backtrace:
+[2025-10-29 14:09:46]          x
+[2025-10-29 14:09:46]       1. \-global plot_phase_network(g_up, "Upstream Phase", "#3498DB")
+[2025-10-29 14:09:46]      Quitting from Report5_NetworkDiagram.qmd:160-265 [phase-networks]
+[2025-10-29 14:09:46]      Execution halted
+[2025-10-29 14:09:46] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-29 14:09:50]      processing file: Report5_NetworkDiagram.qmd
+[2025-10-29 14:09:50]      1/17                       
+[2025-10-29 14:09:50]      2/17 [setup]               
+[2025-10-29 14:09:50]      3/17                       
+[2025-10-29 14:09:50]      4/17 [foundation]          
+[2025-10-29 14:09:50]      5/17                       
+[2025-10-29 14:09:50]      6/17 [correlation-network] 
+[2025-10-29 14:09:50]      7/17                       
+[2025-10-29 14:09:50]      8/17 [network-insights]    
+[2025-10-29 14:09:50]      9/17                       
+[2025-10-29 14:09:50]      10/17 [phase-networks]      
+[2025-10-29 14:09:50]      Error in `rescale()`:
+[2025-10-29 14:09:50]      ! could not find function "rescale"
+[2025-10-29 14:09:50]      Backtrace:
+[2025-10-29 14:09:50]          x
+[2025-10-29 14:09:50]       1. \-global plot_phase_network(g_up, "Upstream Phase", "#3498DB")
+[2025-10-29 14:09:50]      Quitting from Report5_NetworkDiagram.qmd:160-265 [phase-networks]
+[2025-10-29 14:09:50]      Execution halted
+[2025-10-29 14:09:50] [3/506] Generating: Aako B.V. - Frank Mooij
+[2025-10-29 14:09:55]      processing file: Report5_NetworkDiagram.qmd
+[2025-10-29 14:09:55]      1/17                       
+[2025-10-29 14:09:55]      2/17 [setup]               
+[2025-10-29 14:09:55]      3/17                       
+[2025-10-29 14:09:55]      4/17 [foundation]          
+[2025-10-29 14:09:55]      5/17                       
+[2025-10-29 14:09:55]      6/17 [correlation-network] 
+[2025-10-29 14:09:55]      7/17                       
+[2025-10-29 14:09:55]      8/17 [network-insights]    
+[2025-10-29 14:09:55]      9/17                       
+[2025-10-29 14:09:55]      10/17 [phase-networks]      
+[2025-10-29 14:09:55]      Error in `rescale()`:
+[2025-10-29 14:09:55]      ! could not find function "rescale"
+[2025-10-29 14:09:55]      Backtrace:
+[2025-10-29 14:09:55]          x
+[2025-10-29 14:09:55]       1. \-global plot_phase_network(g_up, "Upstream Phase", "#3498DB")
+[2025-10-29 14:09:55]      Quitting from Report5_NetworkDiagram.qmd:160-265 [phase-networks]
+[2025-10-29 14:09:55]      Execution halted
+[2025-10-29 14:09:56] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-29 14:10:04] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-29 14:13:02]   Email address: casper@24ice.com
+[2025-10-29 14:13:02]   PDF: 20251028 ResilienceReport (24 ICE - Casper Hondema).pdf
+[2025-10-29 14:13:02]   Formatting email...
+[2025-10-29 14:13:02]   [TEST MODE] Sending to: chris@tonomy.foundation (original: casper@24ice.com)
+[2025-10-29 14:13:03]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:03]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:03]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (24 ICE - Casper Hondema).pdf...
+[2025-10-29 14:13:03]      To: chris@tonomy.foundation
+[2025-10-29 14:13:03]      CC: (none)
+[2025-10-29 14:13:03]      BCC: (none)
+[2025-10-29 14:13:03]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:03]      Subject: Your Resilience Scan Report – 24 ICE...
+[2025-10-29 14:13:03]   Test mode: NOT updating CSV
+[2025-10-29 14:13:03]   Email address: f.mooij@aako.nl
+[2025-10-29 14:13:03]   PDF: 20251028 ResilienceReport (Aako B.V. - Frank Mooij).pdf
+[2025-10-29 14:13:03]   Formatting email...
+[2025-10-29 14:13:03]   [TEST MODE] Sending to: chris@tonomy.foundation (original: f.mooij@aako.nl)
+[2025-10-29 14:13:03]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:03]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:03]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (Aako B.V. - Frank Mooij).pdf...
+[2025-10-29 14:13:03]      To: chris@tonomy.foundation
+[2025-10-29 14:13:03]      CC: (none)
+[2025-10-29 14:13:03]      BCC: (none)
+[2025-10-29 14:13:04]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:04]      Subject: Your Resilience Scan Report – Aako B.V....
+[2025-10-29 14:13:04]   Test mode: NOT updating CSV
+[2025-10-29 14:13:04]   Email address: jop@aarnink.nl
+[2025-10-29 14:13:04]   PDF: 20251028 ResilienceReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf
+[2025-10-29 14:13:04]   Formatting email...
+[2025-10-29 14:13:04]   [TEST MODE] Sending to: chris@tonomy.foundation (original: jop@aarnink.nl)
+[2025-10-29 14:13:04]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:04]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:04]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf...
+[2025-10-29 14:13:04]      To: chris@tonomy.foundation
+[2025-10-29 14:13:04]      CC: (none)
+[2025-10-29 14:13:04]      BCC: (none)
+[2025-10-29 14:13:04]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:04]      Subject: Your Resilience Scan Report – Aarnink Kunststof ko...
+[2025-10-29 14:13:04]   Test mode: NOT updating CSV
+[2025-10-29 14:13:04]   Email address: lisa.daly@abbott.com
+[2025-10-29 14:13:04]   PDF: 20251028 ResilienceReport (Abbott - Lisa Daly).pdf
+[2025-10-29 14:13:04]   Formatting email...
+[2025-10-29 14:13:04]   [TEST MODE] Sending to: chris@tonomy.foundation (original: lisa.daly@abbott.com)
+[2025-10-29 14:13:04]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:04]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:04]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (Abbott - Lisa Daly).pdf...
+[2025-10-29 14:13:04]      To: chris@tonomy.foundation
+[2025-10-29 14:13:04]      CC: (none)
+[2025-10-29 14:13:04]      BCC: (none)
+[2025-10-29 14:13:04]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:04]      Subject: Your Resilience Scan Report – Abbott...
+[2025-10-29 14:13:04]   Test mode: NOT updating CSV
+[2025-10-29 14:13:04]   Email address: robert.smelt@abbott.com
+[2025-10-29 14:13:04]   PDF: 20251028 ResilienceReport (Abbott - Robert Smelt).pdf
+[2025-10-29 14:13:04]   Formatting email...
+[2025-10-29 14:13:04]   [TEST MODE] Sending to: chris@tonomy.foundation (original: robert.smelt@abbott.com)
+[2025-10-29 14:13:04]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:04]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:04]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (Abbott - Robert Smelt).pdf...
+[2025-10-29 14:13:04]      To: chris@tonomy.foundation
+[2025-10-29 14:13:04]      CC: (none)
+[2025-10-29 14:13:04]      BCC: (none)
+[2025-10-29 14:13:04]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:04]      Subject: Your Resilience Scan Report – Abbott...
+[2025-10-29 14:13:04]   Test mode: NOT updating CSV
+[2025-10-29 14:13:04]   Email address: timothy.katanik@abbott.com
+[2025-10-29 14:13:04]   PDF: 20251028 ResilienceReport (Abbott labs - Tim Katanik).pdf
+[2025-10-29 14:13:04]   Formatting email...
+[2025-10-29 14:13:04]   [TEST MODE] Sending to: chris@tonomy.foundation (original: timothy.katanik@abbott.com)
+[2025-10-29 14:13:04]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:04]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:04]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (Abbott labs - Tim Katanik).pdf...
+[2025-10-29 14:13:04]      To: chris@tonomy.foundation
+[2025-10-29 14:13:04]      CC: (none)
+[2025-10-29 14:13:04]      BCC: (none)
+[2025-10-29 14:13:04]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:04]      Subject: Your Resilience Scan Report – Abbott labs...
+[2025-10-29 14:13:04]   Test mode: NOT updating CSV
+[2025-10-29 14:13:04]   Email address: bas.groenwold@abbvie.com
+[2025-10-29 14:13:04]   PDF: 20251028 ResilienceReport (AbbVie - Bas Groenwold).pdf
+[2025-10-29 14:13:04]   Formatting email...
+[2025-10-29 14:13:05]   [TEST MODE] Sending to: chris@tonomy.foundation (original: bas.groenwold@abbvie.com)
+[2025-10-29 14:13:05]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:05]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:05]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Bas Groenwold).pdf...
+[2025-10-29 14:13:05]      To: chris@tonomy.foundation
+[2025-10-29 14:13:05]      CC: (none)
+[2025-10-29 14:13:05]      BCC: (none)
+[2025-10-29 14:13:05]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:05]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:05]   Test mode: NOT updating CSV
+[2025-10-29 14:13:05]   Email address: henny.landkroon@abbvie.com
+[2025-10-29 14:13:05]   PDF: 20251028 ResilienceReport (AbbVie - Henny Landkroon).pdf
+[2025-10-29 14:13:05]   Formatting email...
+[2025-10-29 14:13:05]   [TEST MODE] Sending to: chris@tonomy.foundation (original: henny.landkroon@abbvie.com)
+[2025-10-29 14:13:05]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:05]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:05]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Henny Landkroon).pdf...
+[2025-10-29 14:13:05]      To: chris@tonomy.foundation
+[2025-10-29 14:13:05]      CC: (none)
+[2025-10-29 14:13:05]      BCC: (none)
+[2025-10-29 14:13:05]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:05]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:05]   Test mode: NOT updating CSV
+[2025-10-29 14:13:05]   Email address: jeroen.berkhof@abbvie.com
+[2025-10-29 14:13:05]   PDF: 20251028 ResilienceReport (AbbVie - Jeroen Berkhof).pdf
+[2025-10-29 14:13:05]   Formatting email...
+[2025-10-29 14:13:05]   [TEST MODE] Sending to: chris@tonomy.foundation (original: jeroen.berkhof@abbvie.com)
+[2025-10-29 14:13:05]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:05]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:05]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Jeroen Berkhof).pdf...
+[2025-10-29 14:13:05]      To: chris@tonomy.foundation
+[2025-10-29 14:13:05]      CC: (none)
+[2025-10-29 14:13:05]      BCC: (none)
+[2025-10-29 14:13:05]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:05]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:05]   Test mode: NOT updating CSV
+[2025-10-29 14:13:05]   Email address: luc.kottink@abbvie.com
+[2025-10-29 14:13:05]   PDF: 20251028 ResilienceReport (AbbVie - Luc Kottink).pdf
+[2025-10-29 14:13:05]   Formatting email...
+[2025-10-29 14:13:05]   [TEST MODE] Sending to: chris@tonomy.foundation (original: luc.kottink@abbvie.com)
+[2025-10-29 14:13:05]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:05]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:05]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Luc Kottink).pdf...
+[2025-10-29 14:13:05]      To: chris@tonomy.foundation
+[2025-10-29 14:13:05]      CC: (none)
+[2025-10-29 14:13:05]      BCC: (none)
+[2025-10-29 14:13:05]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:05]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:05]   Test mode: NOT updating CSV
+[2025-10-29 14:13:05]   Email address: marchel.mol@abbvie.com
+[2025-10-29 14:13:05]   PDF: 20251028 ResilienceReport (AbbVie - Marchel).pdf
+[2025-10-29 14:13:05]   Formatting email...
+[2025-10-29 14:13:05]   [TEST MODE] Sending to: chris@tonomy.foundation (original: marchel.mol@abbvie.com)
+[2025-10-29 14:13:05]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:05]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:05]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Marchel).pdf...
+[2025-10-29 14:13:05]      To: chris@tonomy.foundation
+[2025-10-29 14:13:05]      CC: (none)
+[2025-10-29 14:13:05]      BCC: (none)
+[2025-10-29 14:13:06]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:06]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:06]   Test mode: NOT updating CSV
+[2025-10-29 14:13:06]   Email address: marieke.sellies@abbvie.com
+[2025-10-29 14:13:06]   PDF: 20251028 ResilienceReport (AbbVie - Marieke Sellies).pdf
+[2025-10-29 14:13:06]   Formatting email...
+[2025-10-29 14:13:06]   [TEST MODE] Sending to: chris@tonomy.foundation (original: marieke.sellies@abbvie.com)
+[2025-10-29 14:13:06]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:06]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:06]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Marieke Sellies).pdf...
+[2025-10-29 14:13:06]      To: chris@tonomy.foundation
+[2025-10-29 14:13:06]      CC: (none)
+[2025-10-29 14:13:06]      BCC: (none)
+[2025-10-29 14:13:06]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:06]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:06]   Test mode: NOT updating CSV
+[2025-10-29 14:13:06]   Email address: miriam.porquerassalaverri@abbvie.com
+[2025-10-29 14:13:06]   PDF: 20251028 ResilienceReport (AbbVie - Miriam Porqueras Salaverri).pdf
+[2025-10-29 14:13:06]   Formatting email...
+[2025-10-29 14:13:06]   [TEST MODE] Sending to: chris@tonomy.foundation (original: miriam.porquerassalaverri@abbvie.com)
+[2025-10-29 14:13:06]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:06]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:06]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Miriam Porqueras Salaverri).pdf...
+[2025-10-29 14:13:06]      To: chris@tonomy.foundation
+[2025-10-29 14:13:06]      CC: (none)
+[2025-10-29 14:13:06]      BCC: (none)
+[2025-10-29 14:13:06]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:06]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:06]   Test mode: NOT updating CSV
+[2025-10-29 14:13:06]   Email address: rene.kronenburg@abbvie.com
+[2025-10-29 14:13:06]   PDF: 20251028 ResilienceReport (AbbVie - Rene Kronenburg).pdf
+[2025-10-29 14:13:06]   Formatting email...
+[2025-10-29 14:13:06]   [TEST MODE] Sending to: chris@tonomy.foundation (original: rene.kronenburg@abbvie.com)
+[2025-10-29 14:13:06]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:06]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:06]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Rene Kronenburg).pdf...
+[2025-10-29 14:13:06]      To: chris@tonomy.foundation
+[2025-10-29 14:13:06]      CC: (none)
+[2025-10-29 14:13:06]      BCC: (none)
+[2025-10-29 14:13:06]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:06]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:06]   Test mode: NOT updating CSV
+[2025-10-29 14:13:06]   Email address: rob.lindeboom@abbvie.com
+[2025-10-29 14:13:06]   PDF: 20251028 ResilienceReport (AbbVie - Rob Lindeboom).pdf
+[2025-10-29 14:13:06]   Formatting email...
+[2025-10-29 14:13:06]   [TEST MODE] Sending to: chris@tonomy.foundation (original: rob.lindeboom@abbvie.com)
+[2025-10-29 14:13:06]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:06]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:06]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Rob Lindeboom).pdf...
+[2025-10-29 14:13:06]      To: chris@tonomy.foundation
+[2025-10-29 14:13:06]      CC: (none)
+[2025-10-29 14:13:06]      BCC: (none)
+[2025-10-29 14:13:06]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:06]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:06]   Test mode: NOT updating CSV
+[2025-10-29 14:13:06]   Email address: s.beltman@abbvie.com
+[2025-10-29 14:13:06]   PDF: 20251028 ResilienceReport (Abbvie - Stef Beltman).pdf
+[2025-10-29 14:13:06]   Formatting email...
+[2025-10-29 14:13:06]   [TEST MODE] Sending to: chris@tonomy.foundation (original: s.beltman@abbvie.com)
+[2025-10-29 14:13:06]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:06]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (Abbvie - Stef Beltman).pdf...
+[2025-10-29 14:13:07]      To: chris@tonomy.foundation
+[2025-10-29 14:13:07]      CC: (none)
+[2025-10-29 14:13:07]      BCC: (none)
+[2025-10-29 14:13:07]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:07]      Subject: Your Resilience Scan Report – Abbvie...
+[2025-10-29 14:13:07]   Test mode: NOT updating CSV
+[2025-10-29 14:13:07]   Email address: vincent.piepers@abbvie.com
+[2025-10-29 14:13:07]   PDF: 20251028 ResilienceReport (AbbVie - Vincent).pdf
+[2025-10-29 14:13:07]   Formatting email...
+[2025-10-29 14:13:07]   [TEST MODE] Sending to: chris@tonomy.foundation (original: vincent.piepers@abbvie.com)
+[2025-10-29 14:13:07]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:07]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Vincent).pdf...
+[2025-10-29 14:13:07]      To: chris@tonomy.foundation
+[2025-10-29 14:13:07]      CC: (none)
+[2025-10-29 14:13:07]      BCC: (none)
+[2025-10-29 14:13:07]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:07]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:07]   Test mode: NOT updating CSV
+[2025-10-29 14:13:07]   Email address: walter.verhoef@abbvie.com
+[2025-10-29 14:13:07]   PDF: 20251028 ResilienceReport (AbbVie - Walter Verhoef).pdf
+[2025-10-29 14:13:07]   Formatting email...
+[2025-10-29 14:13:07]   [TEST MODE] Sending to: chris@tonomy.foundation (original: walter.verhoef@abbvie.com)
+[2025-10-29 14:13:07]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:07]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AbbVie - Walter Verhoef).pdf...
+[2025-10-29 14:13:07]      To: chris@tonomy.foundation
+[2025-10-29 14:13:07]      CC: (none)
+[2025-10-29 14:13:07]      BCC: (none)
+[2025-10-29 14:13:07]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:07]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-10-29 14:13:07]   Test mode: NOT updating CSV
+[2025-10-29 14:13:07]   Email address: hilal.lekehal@accenture.com
+[2025-10-29 14:13:07]   PDF: 20251028 ResilienceReport (ACN - Hilal L).pdf
+[2025-10-29 14:13:07]   Formatting email...
+[2025-10-29 14:13:07]   [TEST MODE] Sending to: chris@tonomy.foundation (original: hilal.lekehal@accenture.com)
+[2025-10-29 14:13:07]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:07]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (ACN - Hilal L).pdf...
+[2025-10-29 14:13:07]      To: chris@tonomy.foundation
+[2025-10-29 14:13:07]      CC: (none)
+[2025-10-29 14:13:07]      BCC: (none)
+[2025-10-29 14:13:07]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:07]      Subject: Your Resilience Scan Report – ACN...
+[2025-10-29 14:13:07]   Test mode: NOT updating CSV
+[2025-10-29 14:13:07]   Email address: xavier.vers@gmail.com
+[2025-10-29 14:13:07]   PDF: 20251028 ResilienceReport (AGILEA - vers).pdf
+[2025-10-29 14:13:07]   Formatting email...
+[2025-10-29 14:13:07]   [TEST MODE] Sending to: chris@tonomy.foundation (original: xavier.vers@gmail.com)
+[2025-10-29 14:13:07]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:07]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport (AGILEA - vers).pdf...
+[2025-10-29 14:13:07]      To: chris@tonomy.foundation
+[2025-10-29 14:13:07]      CC: (none)
+[2025-10-29 14:13:07]      BCC: (none)
+[2025-10-29 14:13:07]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:07]      Subject: Your Resilience Scan Report – AGILEA...
+[2025-10-29 14:13:08]   Test mode: NOT updating CSV
+[2025-10-29 14:13:08]   Email address: marcus.nugroho@gmail.com
+[2025-10-29 14:13:08]   PDF: 20251028 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf
+[2025-10-29 14:13:08]   Formatting email...
+[2025-10-29 14:13:08]   [TEST MODE] Sending to: chris@tonomy.foundation (original: marcus.nugroho@gmail.com)
+[2025-10-29 14:13:08]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:08]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf...
+[2025-10-29 14:13:08]      To: chris@tonomy.foundation
+[2025-10-29 14:13:08]      CC: (none)
+[2025-10-29 14:13:08]      BCC: (none)
+[2025-10-29 14:13:08]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:08]      Subject: Your Resilience Scan Report – [Technology Company]...
+[2025-10-29 14:13:08]   Test mode: NOT updating CSV
+[2025-10-29 14:13:08]   Email address: casper@24ice.com
+[2025-10-29 14:13:08]   PDF: 20251028 ResilienceScanReport (24 ICE - Casper Hondema).pdf
+[2025-10-29 14:13:08]   Formatting email...
+[2025-10-29 14:13:08]   [TEST MODE] Sending to: chris@tonomy.foundation (original: casper@24ice.com)
+[2025-10-29 14:13:08]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:08]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (24 ICE - Casper Hondema).pdf...
+[2025-10-29 14:13:08]      To: chris@tonomy.foundation
+[2025-10-29 14:13:08]      CC: (none)
+[2025-10-29 14:13:08]      BCC: (none)
+[2025-10-29 14:13:08]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:08]      Subject: Your Resilience Scan Report – 24 ICE...
+[2025-10-29 14:13:08]   Test mode: NOT updating CSV
+[2025-10-29 14:13:08]   Email address: f.mooij@aako.nl
+[2025-10-29 14:13:08]   PDF: 20251028 ResilienceScanReport (Aako B.V. - Frank Mooij).pdf
+[2025-10-29 14:13:08]   Formatting email...
+[2025-10-29 14:13:08]   [TEST MODE] Sending to: chris@tonomy.foundation (original: f.mooij@aako.nl)
+[2025-10-29 14:13:08]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:08]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Aako B.V. - Frank Mooij).pdf...
+[2025-10-29 14:13:08]      To: chris@tonomy.foundation
+[2025-10-29 14:13:08]      CC: (none)
+[2025-10-29 14:13:08]      BCC: (none)
+[2025-10-29 14:13:08]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:08]      Subject: Your Resilience Scan Report – Aako B.V....
+[2025-10-29 14:13:08]   Test mode: NOT updating CSV
+[2025-10-29 14:13:08]   Email address: jop@aarnink.nl
+[2025-10-29 14:13:08]   PDF: 20251028 ResilienceScanReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf
+[2025-10-29 14:13:08]   Formatting email...
+[2025-10-29 14:13:08]   [TEST MODE] Sending to: chris@tonomy.foundation (original: jop@aarnink.nl)
+[2025-10-29 14:13:08]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:08]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf...
+[2025-10-29 14:13:08]      To: chris@tonomy.foundation
+[2025-10-29 14:13:08]      CC: (none)
+[2025-10-29 14:13:08]      BCC: (none)
+[2025-10-29 14:13:08]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:08]      Subject: Your Resilience Scan Report – Aarnink Kunststof ko...
+[2025-10-29 14:13:08]   Test mode: NOT updating CSV
+[2025-10-29 14:13:08]   Email address: lisa.daly@abbott.com
+[2025-10-29 14:13:08]   PDF: 20251028 ResilienceScanReport (Abbott - Lisa Daly).pdf
+[2025-10-29 14:13:08]   Formatting email...
+[2025-10-29 14:13:08]   [TEST MODE] Sending to: chris@tonomy.foundation (original: lisa.daly@abbott.com)
+[2025-10-29 14:13:09]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:09]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Abbott - Lisa Daly).pdf...
+[2025-10-29 14:13:09]      To: chris@tonomy.foundation
+[2025-10-29 14:13:09]      CC: (none)
+[2025-10-29 14:13:09]      BCC: (none)
+[2025-10-29 14:13:09]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:09]      Subject: Your Resilience Scan Report – Abbott...
+[2025-10-29 14:13:09]   Test mode: NOT updating CSV
+[2025-10-29 14:13:09]   Email address: robert.smelt@abbott.com
+[2025-10-29 14:13:09]   PDF: 20251028 ResilienceScanReport (Abbott - Robert Smelt).pdf
+[2025-10-29 14:13:09]   Formatting email...
+[2025-10-29 14:13:09]   [TEST MODE] Sending to: chris@tonomy.foundation (original: robert.smelt@abbott.com)
+[2025-10-29 14:13:09]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:09]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Abbott - Robert Smelt).pdf...
+[2025-10-29 14:13:09]      To: chris@tonomy.foundation
+[2025-10-29 14:13:09]      CC: (none)
+[2025-10-29 14:13:09]      BCC: (none)
+[2025-10-29 14:13:09]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:09]      Subject: Your Resilience Scan Report – Abbott...
+[2025-10-29 14:13:09]   Test mode: NOT updating CSV
+[2025-10-29 14:13:09]   Email address: timothy.katanik@abbott.com
+[2025-10-29 14:13:09]   PDF: 20251028 ResilienceScanReport (Abbott labs - Tim Katanik).pdf
+[2025-10-29 14:13:09]   Formatting email...
+[2025-10-29 14:13:09]   [TEST MODE] Sending to: chris@tonomy.foundation (original: timothy.katanik@abbott.com)
+[2025-10-29 14:13:09]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:09]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Abbott labs - Tim Katanik).pdf...
+[2025-10-29 14:13:09]      To: chris@tonomy.foundation
+[2025-10-29 14:13:09]      CC: (none)
+[2025-10-29 14:13:09]      BCC: (none)
+[2025-10-29 14:13:09]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:09]      Subject: Your Resilience Scan Report – Abbott labs...
+[2025-10-29 14:13:09]   Test mode: NOT updating CSV
+[2025-10-29 14:13:09]   Email address: m.zantinge@agrifac.com
+[2025-10-29 14:13:09]   PDF: 20251028 ResilienceScanReport (Agrifac Machinery B.V. - Michiel Zantinge).pdf
+[2025-10-29 14:13:09]   Formatting email...
+[2025-10-29 14:13:09]   [TEST MODE] Sending to: chris@tonomy.foundation (original: m.zantinge@agrifac.com)
+[2025-10-29 14:13:09]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:09]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251028 ResilienceScanReport (Agrifac Machinery B.V. - Michiel Zantinge).pdf...
+[2025-10-29 14:13:09]      To: chris@tonomy.foundation
+[2025-10-29 14:13:09]      CC: (none)
+[2025-10-29 14:13:09]      BCC: (none)
+[2025-10-29 14:13:09]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:09]      Subject: Your Resilience Scan Report – Agrifac Machinery B....
+[2025-10-29 14:13:09]   Test mode: NOT updating CSV
+[2025-10-29 14:13:09]   Email address: casper@24ice.com
+[2025-10-29 14:13:09]   PDF: 20251029 ResilienceReport (24 ICE - Casper Hondema).pdf
+[2025-10-29 14:13:09]   Formatting email...
+[2025-10-29 14:13:09]   [TEST MODE] Sending to: chris@tonomy.foundation (original: casper@24ice.com)
+[2025-10-29 14:13:09]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:09]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251029 ResilienceReport (24 ICE - Casper Hondema).pdf...
+[2025-10-29 14:13:09]      To: chris@tonomy.foundation
+[2025-10-29 14:13:09]      CC: (none)
+[2025-10-29 14:13:10]      BCC: (none)
+[2025-10-29 14:13:10]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:10]      Subject: Your Resilience Scan Report – 24 ICE...
+[2025-10-29 14:13:10]   Test mode: NOT updating CSV
+[2025-10-29 14:13:10]   Email address: f.mooij@aako.nl
+[2025-10-29 14:13:10]   PDF: 20251029 ResilienceReport (Aako B.V. - Frank Mooij).pdf
+[2025-10-29 14:13:10]   Formatting email...
+[2025-10-29 14:13:10]   [TEST MODE] Sending to: chris@tonomy.foundation (original: f.mooij@aako.nl)
+[2025-10-29 14:13:10]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:10]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:10]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251029 ResilienceReport (Aako B.V. - Frank Mooij).pdf...
+[2025-10-29 14:13:10]      To: chris@tonomy.foundation
+[2025-10-29 14:13:10]      CC: (none)
+[2025-10-29 14:13:10]      BCC: (none)
+[2025-10-29 14:13:10]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:10]      Subject: Your Resilience Scan Report – Aako B.V....
+[2025-10-29 14:13:10]   Test mode: NOT updating CSV
+[2025-10-29 14:13:10]   Email address: marcus.nugroho@gmail.com
+[2025-10-29 14:13:10]   PDF: 20251029 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf
+[2025-10-29 14:13:10]   Formatting email...
+[2025-10-29 14:13:10]   [TEST MODE] Sending to: chris@tonomy.foundation (original: marcus.nugroho@gmail.com)
+[2025-10-29 14:13:10]   Setting recipient to: chris@tonomy.foundation
+[2025-10-29 14:13:10]   Using default Outlook account (currently logged in)
+[2025-10-29 14:13:10]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251029 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf...
+[2025-10-29 14:13:10]      To: chris@tonomy.foundation
+[2025-10-29 14:13:10]      CC: (none)
+[2025-10-29 14:13:10]      BCC: (none)
+[2025-10-29 14:13:10]      From Account: cg.verhoef@windesheim.nl (default)
+[2025-10-29 14:13:10]      Subject: Your Resilience Scan Report – [Technology Company]...
+[2025-10-29 14:13:10]   Test mode: NOT updating CSV
+[2025-10-29 14:30:14] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-29 14:30:14] Importing email tracking data...
+[2025-10-29 14:30:22] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-29 14:30:22] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-29 14:30:22] [3/506] Generating: Aako B.V. - Frank Mooij
+[2025-10-29 14:30:22] [4/506] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-10-29 14:30:30] [5/506] Generating: AB - Anne
+[2025-10-29 14:30:33]      24/41 [company-extraction-and-matching]
+[2025-10-29 14:30:33]      25/41                                  
+[2025-10-29 14:30:33]      26/41 [extracted-company-analysis]     
+[2025-10-29 14:30:33]      27/41                                  
+[2025-10-29 14:30:33]      28/41 [final-validation-summary]       
+[2025-10-29 14:30:33]      29/41                                  
+[2025-10-29 14:30:33]      30/41 [load-real-data-unconditional]   
+[2025-10-29 14:30:33]      31/41                                  
+[2025-10-29 14:30:33]      32/41 [dashboard-setup]                
+[2025-10-29 14:30:33]      33/41                                  
+[2025-10-29 14:30:33]      34/41 [main-dashboard-content]         
+[2025-10-29 14:30:33]      35/41                                  
+[2025-10-29 14:30:33]      36/41 [company-average-dashboard]      
+[2025-10-29 14:30:33]      37/41                                  
+[2025-10-29 14:30:33]      38/41 [performance-summary]            
+[2025-10-29 14:30:33]      Error in `if (overall_score >= 4) ...`:
+[2025-10-29 14:30:33]      ! missing value where TRUE/FALSE needed
+[2025-10-29 14:30:33]      Quitting from ResilienceReport.qmd:1889-1917 [performance-summary]
+[2025-10-29 14:30:33]      Execution halted
+[2025-10-29 14:30:33] [6/506] Generating: Abbott - Robert Smelt
+[2025-10-29 14:30:42] [7/506] Generating: Abbott - Lisa Daly
+[2025-10-29 14:30:50] [8/506] Generating: Abbott labs - Tim Katanik

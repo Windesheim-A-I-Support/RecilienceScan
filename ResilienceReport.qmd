@@ -1958,25 +1958,19 @@ analyze_pillar_detailed <- function(prefix, pillar_name_nl, pillar_name_en) {
   # Calculate range
   score_range <- max(scores) - min(scores)
 
-  # Generate output text - more concise format
+  # Generate output text - compact format (single line for single respondent)
   if (detected_language == "dutch") {
-    cat(sprintf("\n### %s (gemiddelde: %.2f)\n\n", pillar_name, mean(scores)))
-    cat(sprintf("**Sterkste:** %s (%.2f) | **Zwakste:** %s (%.2f) | **Verschil:** %.2f punten\n\n",
+    cat(sprintf("\n### %s (gem: %.2f) • Sterkste: %s (%.2f) | Zwakste: %s (%.2f) | Verschil: %.2f\n\n",
+                pillar_name, mean(scores),
                 names(top_2)[1], top_2[1],
                 names(bottom_2)[2], bottom_2[2],
                 score_range))
-    cat(sprintf("**Top 2:** %s (%.2f), %s (%.2f) • **Bottom 2:** %s (%.2f), %s (%.2f)\n\n",
-                names(top_2)[1], top_2[1], names(top_2)[2], top_2[2],
-                names(bottom_2)[1], bottom_2[1], names(bottom_2)[2], bottom_2[2]))
   } else {
-    cat(sprintf("\n### %s (average: %.2f)\n\n", pillar_name, mean(scores)))
-    cat(sprintf("**Strongest:** %s (%.2f) | **Weakest:** %s (%.2f) | **Gap:** %.2f points\n\n",
+    cat(sprintf("\n### %s (avg: %.2f) • Strongest: %s (%.2f) | Weakest: %s (%.2f) | Gap: %.2f\n\n",
+                pillar_name, mean(scores),
                 names(top_2)[1], top_2[1],
                 names(bottom_2)[2], bottom_2[2],
                 score_range))
-    cat(sprintf("**Top 2:** %s (%.2f), %s (%.2f) • **Bottom 2:** %s (%.2f), %s (%.2f)\n\n",
-                names(top_2)[1], top_2[1], names(top_2)[2], top_2[2],
-                names(bottom_2)[1], bottom_2[1], names(bottom_2)[2], bottom_2[2]))
   }
 }
 
