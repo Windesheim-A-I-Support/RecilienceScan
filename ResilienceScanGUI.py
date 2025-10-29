@@ -598,8 +598,8 @@ class ResilienceScanGUI:
             "Please find attached your resilience scan report for {company}.\n\n"
             "If you have any questions, feel free to reach out.\n\n"
             "Best regards,\n\n"
-            "Christiaan Verhoef\n"
-            "Windesheim | Value Chain Hackers"
+            "[Your Name]\n"
+            "[Your Organization]"
         )
         self.email_body_text.insert('1.0', default_body)
 
@@ -791,7 +791,7 @@ class ResilienceScanGUI:
         test_check.grid(row=0, column=0, columnspan=2, sticky=tk.W, pady=5)
 
         ttk.Label(controls_frame, text="Test Email:").grid(row=1, column=0, sticky=tk.W)
-        self.test_email_var = tk.StringVar(value="cg.verhoef@windesheim.nl")
+        self.test_email_var = tk.StringVar(value="")
         ttk.Entry(
             controls_frame,
             textvariable=self.test_email_var,
@@ -863,6 +863,9 @@ class ResilienceScanGUI:
 
         parent.columnconfigure(0, weight=1)
         parent.rowconfigure(3, weight=1)
+
+        # Load initial email status display
+        self.root.after(100, self.update_email_status_display)
 
     def create_logs_tab(self):
         """Create system logs tab"""
@@ -1997,8 +2000,8 @@ TOP 10 MOST ENGAGED COMPANIES:
             "Please find attached your resilience scan report for {company}.\n\n"
             "If you have any questions, feel free to reach out.\n\n"
             "Best regards,\n\n"
-            "Christiaan Verhoef\n"
-            "Windesheim | Value Chain Hackers"
+            "[Your Name]\n"
+            "[Your Organization]"
         )
 
         self.email_subject_var.set(default_subject)
@@ -2056,9 +2059,12 @@ TOP 10 MOST ENGAGED COMPANIES:
         display_company = safe_display_name(sample_company)
         display_person = safe_display_name(sample_name)
 
-        # Look for report file
-        pattern = f"*ResilienceScanReport ({display_company} - {display_person}).pdf"
-        matches = glob.glob(str(REPORTS_DIR / pattern))
+        # Look for report file - try both formats
+        pattern_new = f"*ResilienceScanReport ({display_company} - {display_person}).pdf"
+        pattern_legacy = f"*ResilienceReport ({display_company} - {display_person}).pdf"
+        matches = glob.glob(str(REPORTS_DIR / pattern_new))
+        if not matches:
+            matches = glob.glob(str(REPORTS_DIR / pattern_legacy))
 
         attachment_info = ""
         if matches:
@@ -2096,6 +2102,15 @@ TOP 10 MOST ENGAGED COMPANIES:
 
     def update_email_status_display(self):
         """Update email status treeview - ONLY shows companies with generated PDF reports"""
+        # Load CSV data if not already loaded
+        if self.df is None and DATA_FILE.exists():
+            try:
+                self.df = pd.read_csv(DATA_FILE)
+                self.df.columns = self.df.columns.str.lower().str.strip()
+                self.log_email("📂 Loaded CSV data for email display")
+            except Exception as e:
+                self.log_email(f"⚠️  Could not load CSV: {e}")
+
         # Clear existing items
         for item in self.email_status_tree.get_children():
             self.email_status_tree.delete(item)
@@ -2118,45 +2133,50 @@ TOP 10 MOST ENGAGED COMPANIES:
 
             # Extract company and person from filename
             # Format: YYYYMMDD ResilienceScanReport (COMPANY NAME - Firstname Lastname).pdf
+            # Also support legacy format: YYYYMMDD ResilienceReport (COMPANY NAME - Firstname Lastname).pdf
             try:
+                content = None
+                # Try new format first
                 if "ResilienceScanReport (" in filename and ").pdf" in filename:
-                    # Extract the part between parentheses
                     content = filename.split("ResilienceScanReport (")[1].split(").pdf")[0]
+                # Fallback to legacy format
+                elif "ResilienceReport (" in filename and ").pdf" in filename:
+                    content = filename.split("ResilienceReport (")[1].split(").pdf")[0]
 
+                if content and " - " in content:
                     # Split by " - " to get company and person
-                    if " - " in content:
-                        company, person = content.rsplit(" - ", 1)
+                    company, person = content.rsplit(" - ", 1)
 
-                        # Look up email address from CSV data
-                        email = ""
-                        if self.df is not None:
-                            # Find matching record
-                            matches = self.df[
-                                (self.df['company_name'].str.strip() == company.strip()) &
-                                (self.df['name'].str.strip() == person.strip())
-                            ]
-                            if not matches.empty:
-                                email = matches.iloc[0].get('email_address', '')
+                    # Look up email address from CSV data
+                    email = ""
+                    if self.df is not None:
+                        # Find matching record
+                        matches = self.df[
+                            (self.df['company_name'].str.strip() == company.strip()) &
+                            (self.df['name'].str.strip() == person.strip())
+                        ]
+                        if not matches.empty:
+                            email = matches.iloc[0].get('email_address', '')
 
-                        # Check if already sent (from CSV reportsent column)
-                        sent_status = "pending"
-                        if self.df is not None:
-                            matches = self.df[
-                                (self.df['company_name'].str.strip() == company.strip()) &
-                                (self.df['name'].str.strip() == person.strip())
-                            ]
-                            if not matches.empty and 'reportsent' in self.df.columns:
-                                is_sent = matches.iloc[0].get('reportsent', False)
-                                if is_sent:
-                                    sent_status = "sent"
+                    # Check if already sent (from CSV reportsent column)
+                    sent_status = "pending"
+                    if self.df is not None:
+                        matches = self.df[
+                            (self.df['company_name'].str.strip() == company.strip()) &
+                            (self.df['name'].str.strip() == person.strip())
+                        ]
+                        if not matches.empty and 'reportsent' in self.df.columns:
+                            is_sent = matches.iloc[0].get('reportsent', False)
+                            if is_sent:
+                                sent_status = "sent"
 
-                        reports_ready.append({
-                            'company': company,
-                            'person': person,
-                            'email': email,
-                            'status': sent_status,
-                            'pdf_path': pdf_path
-                        })
+                    reports_ready.append({
+                        'company': company,
+                        'person': person,
+                        'email': email,
+                        'status': sent_status,
+                        'pdf_path': pdf_path
+                    })
             except Exception as e:
                 self.log_email(f"⚠️  Could not parse filename: {filename} - {e}")
                 continue
@@ -2433,41 +2453,47 @@ TOP 10 MOST ENGAGED COMPANIES:
 
             # Extract company and person from filename
             # Format: YYYYMMDD ResilienceScanReport (COMPANY NAME - Firstname Lastname).pdf
+            # Also support legacy format: YYYYMMDD ResilienceReport (COMPANY NAME - Firstname Lastname).pdf
             try:
+                content = None
+                # Try new format first
                 if "ResilienceScanReport (" in filename and ").pdf" in filename:
                     content = filename.split("ResilienceScanReport (")[1].split(").pdf")[0]
+                # Fallback to legacy format
+                elif "ResilienceReport (" in filename and ").pdf" in filename:
+                    content = filename.split("ResilienceReport (")[1].split(").pdf")[0]
 
-                    if " - " in content:
-                        company, person = content.rsplit(" - ", 1)
+                if content and " - " in content:
+                    company, person = content.rsplit(" - ", 1)
 
-                        # Look up email address from CSV data
-                        email = ""
-                        if self.df is not None:
-                            matches = self.df[
-                                (self.df['company_name'].str.strip() == company.strip()) &
-                                (self.df['name'].str.strip() == person.strip())
-                            ]
-                            if not matches.empty:
-                                email = matches.iloc[0].get('email_address', '')
+                    # Look up email address from CSV data
+                    email = ""
+                    if self.df is not None:
+                        matches = self.df[
+                            (self.df['company_name'].str.strip() == company.strip()) &
+                            (self.df['name'].str.strip() == person.strip())
+                        ]
+                        if not matches.empty:
+                            email = matches.iloc[0].get('email_address', '')
 
-                        # Check if already sent (from CSV reportsent column)
-                        is_sent = False
-                        if self.df is not None and 'reportsent' in self.df.columns:
-                            matches = self.df[
-                                (self.df['company_name'].str.strip() == company.strip()) &
-                                (self.df['name'].str.strip() == person.strip())
-                            ]
-                            if not matches.empty:
-                                is_sent = matches.iloc[0].get('reportsent', False)
+                    # Check if already sent (from CSV reportsent column)
+                    is_sent = False
+                    if self.df is not None and 'reportsent' in self.df.columns:
+                        matches = self.df[
+                            (self.df['company_name'].str.strip() == company.strip()) &
+                            (self.df['name'].str.strip() == person.strip())
+                        ]
+                        if not matches.empty:
+                            is_sent = matches.iloc[0].get('reportsent', False)
 
-                        # Only add if not sent yet
-                        if not is_sent:
-                            pending_records.append({
-                                'company': company,
-                                'person': person,
-                                'email': email,
-                                'pdf_path': pdf_path
-                            })
+                    # Only add if not sent yet
+                    if not is_sent:
+                        pending_records.append({
+                            'company': company,
+                            'person': person,
+                            'email': email,
+                            'pdf_path': pdf_path
+                        })
             except Exception as e:
                 self.log_email(f"⚠️  Could not parse filename: {filename} - {e}")
                 continue
@@ -2579,11 +2605,6 @@ TOP 10 MOST ENGAGED COMPANIES:
                         mail.To = recipient
                         mail.Subject = subject
                         mail.Body = body
-
-                        # Add CC to monitor in test mode
-                        if test_mode:
-                            mail.CC = "cg.verhoef@windesheim.nl"
-                            self.log_email(f"  Setting CC (monitoring): cg.verhoef@windesheim.nl")
 
                         # Use the default Outlook account (whatever is currently logged in)
                         # No need to set SendUsingAccount - it will use the default

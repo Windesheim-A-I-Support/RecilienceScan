@@ -1,25 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Read(//c/Users/ChrisTest/Documents/Github/**)",
-      "Bash(tree:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git config:*)",
-      "Bash(powershell -ExecutionPolicy Bypass -File Install-ResilienceScan.ps1 -Profile RecilienceScan)",
-      "Bash(git push:*)",
-      "Bash(python clean_data.py:*)",
-      "Bash(python:*)",
-      "Bash(gh issue create:*)",
-      "Bash(findstr:*)",
-      "Bash(for file in create_test_pdfs.py dependency_manager.py email_tracker.py gui_system_check.py)",
-      "Bash(do)",
-      "Bash(if [ -f \"$file\" ])",
-      "Bash(then)",
-      "Bash(fi)",
-      "Bash(done)",
-      "Bash(for file in *.py)",
-      "Bash(echo:*)"
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []
