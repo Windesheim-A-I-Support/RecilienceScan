@@ -322,6 +322,24 @@ def clean_and_fix():
     # Step 7: Fix email addresses (trim whitespace, validate)
     df = fix_email_addresses(df, issues)
 
+    # Step 7b: Remove rows without email addresses
+    rows_before = len(df)
+    if 'email_address' in df.columns:
+        df = df[df['email_address'].notna() & (df['email_address'].astype(str).str.strip() != '')]
+        rows_removed = rows_before - len(df)
+        if rows_removed > 0:
+            summary_lines.append(f"Removed {rows_removed} row(s) without email addresses")
+            print(f"   [OK] Removed {rows_removed} row(s) without email addresses")
+
+    # Step 7c: Remove duplicate records (same company, name, email)
+    rows_before = len(df)
+    if 'company_name' in df.columns and 'name' in df.columns and 'email_address' in df.columns:
+        df = df.drop_duplicates(subset=['company_name', 'name', 'email_address'], keep='first')
+        rows_removed = rows_before - len(df)
+        if rows_removed > 0:
+            summary_lines.append(f"Removed {rows_removed} duplicate record(s)")
+            print(f"   [OK] Removed {rows_removed} duplicate record(s)")
+
     # Step 8: Fix numeric columns (convert to numeric)
     score_cols_before = [col for col in df.columns if col.startswith(('up__', 'in__', 'do__', 'overall_'))]
     fixed_values = 0

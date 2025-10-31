@@ -277,9 +277,21 @@ class ResilienceScanGUI:
 
         ttk.Button(
             controls_frame,
+            text="📊 View Cleaning Report",
+            command=self.view_cleaning_report
+        ).grid(row=0, column=5, padx=5)
+
+        ttk.Button(
+            controls_frame,
+            text="🔍 Validate Integrity",
+            command=self.run_integrity_validation
+        ).grid(row=0, column=6, padx=5)
+
+        ttk.Button(
+            controls_frame,
             text="Refresh",
             command=self.load_initial_data
-        ).grid(row=0, column=5, padx=5)
+        ).grid(row=0, column=7, padx=5)
 
         controls_frame.columnconfigure(1, weight=1)
 
@@ -1049,17 +1061,17 @@ class ResilienceScanGUI:
             self.status_label.config(text="Error")
 
     def run_clean_data(self):
-        """Run the data cleaning script to fix data quality issues"""
-        self.log("🧹 Starting data cleaning...")
+        """Run the enhanced data cleaning script with comprehensive validation"""
+        self.log("🧹 Starting enhanced data cleaning with validation...")
         self.status_label.config(text="Cleaning data...")
 
         try:
-            # Import and run the clean_data module
-            import clean_data
+            # Import and run the clean_data_enhanced module
+            import clean_data_enhanced
 
             # Run the cleaning function
-            self.log("Loading cleaned_master.csv for cleaning...")
-            success, summary = clean_data.clean_and_fix()
+            self.log("Loading cleaned_master.csv for enhanced cleaning...")
+            success, summary = clean_data_enhanced.clean_and_fix()
 
             if success:
                 self.log("✅ Data cleaning completed!")
@@ -1078,8 +1090,8 @@ class ResilienceScanGUI:
 
                 messagebox.showinfo(
                     "Data Cleaned Successfully",
-                    f"Data cleaning completed!\n\n"
-                    f"What was done:\n{summary}\n\n"
+                    f"Enhanced data cleaning completed!\n\n"
+                    f"Results:\n{summary}\n\n"
                     f"Data is now ready for report generation."
                 )
                 self.status_label.config(text="Data cleaned and loaded - ready for reports")
@@ -1087,12 +1099,13 @@ class ResilienceScanGUI:
                 self.log("❌ Data cleaning failed - check logs for details")
                 messagebox.showerror(
                     "Cleaning Failed",
-                    "Data cleaning failed.\n\n"
+                    f"Data cleaning failed.\n\n"
+                    f"Reason: {summary}\n\n"
                     "Please ensure:\n"
                     "1. You have run 'Convert Data' first\n"
                     "2. The cleaned_master.csv file exists\n"
-                    "3. The data contains required columns (company_name, name)\n"
-                    "4. Check the logs for more details"
+                    "3. The data contains required columns (company_name, name, email)\n"
+                    "4. Check the cleaning report for detailed feedback"
                 )
                 self.status_label.config(text="Data cleaning failed")
 
@@ -1100,6 +1113,229 @@ class ResilienceScanGUI:
             self.log(f"❌ Error during data cleaning: {e}")
             messagebox.showerror("Error", f"Failed to run data cleaning:\n{e}")
             self.status_label.config(text="Error")
+
+    def view_cleaning_report(self):
+        """Display the detailed cleaning report in a new window"""
+        from pathlib import Path
+        import json
+
+        report_path = Path("./data/cleaning_report.txt")
+        log_path = Path("./data/cleaning_validation_log.json")
+
+        if not report_path.exists():
+            messagebox.showwarning(
+                "No Report Available",
+                "No cleaning report found.\n\n"
+                "Please run 'Clean Data' first to generate a detailed report."
+            )
+            return
+
+        # Create new window for report
+        report_window = tk.Toplevel(self.root)
+        report_window.title("Data Cleaning Report")
+        report_window.geometry("900x700")
+
+        # Create frame with scrollbar
+        frame = ttk.Frame(report_window, padding=10)
+        frame.pack(fill=tk.BOTH, expand=True)
+
+        # Text widget with scrollbar
+        text_widget = tk.Text(frame, wrap=tk.WORD, font=('Courier', 10))
+        scrollbar = ttk.Scrollbar(frame, command=text_widget.yview)
+        text_widget.config(yscrollcommand=scrollbar.set)
+
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Load and display report
+        try:
+            with open(report_path, 'r', encoding='utf-8') as f:
+                report_content = f.read()
+            text_widget.insert('1.0', report_content)
+            text_widget.config(state=tk.DISABLED)
+
+            # Button frame
+            button_frame = ttk.Frame(report_window, padding=10)
+            button_frame.pack(fill=tk.X)
+
+            # Add button to view detailed validation log
+            if log_path.exists():
+                ttk.Button(
+                    button_frame,
+                    text="📋 View Detailed Validation Log",
+                    command=lambda: self.view_validation_log(log_path)
+                ).pack(side=tk.LEFT, padx=5)
+
+            ttk.Button(
+                button_frame,
+                text="Close",
+                command=report_window.destroy
+            ).pack(side=tk.RIGHT, padx=5)
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load cleaning report:\n{e}")
+            report_window.destroy()
+
+    def view_validation_log(self, log_path):
+        """Display the detailed JSON validation log"""
+        import json
+
+        log_window = tk.Toplevel(self.root)
+        log_window.title("Detailed Validation Log")
+        log_window.geometry("1000x800")
+
+        # Create frame with scrollbar
+        frame = ttk.Frame(log_window, padding=10)
+        frame.pack(fill=tk.BOTH, expand=True)
+
+        # Text widget with scrollbar
+        text_widget = tk.Text(frame, wrap=tk.WORD, font=('Courier', 9))
+        scrollbar = ttk.Scrollbar(frame, command=text_widget.yview)
+        text_widget.config(yscrollcommand=scrollbar.set)
+
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Load and display log
+        try:
+            with open(log_path, 'r', encoding='utf-8') as f:
+                log_data = json.load(f)
+
+            # Format JSON with pretty printing
+            formatted_log = json.dumps(log_data, indent=2)
+            text_widget.insert('1.0', formatted_log)
+            text_widget.config(state=tk.DISABLED)
+
+            # Button frame
+            button_frame = ttk.Frame(log_window, padding=10)
+            button_frame.pack(fill=tk.X)
+
+            ttk.Button(
+                button_frame,
+                text="Close",
+                command=log_window.destroy
+            ).pack(side=tk.RIGHT, padx=5)
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load validation log:\n{e}")
+            log_window.destroy()
+
+    def run_integrity_validation(self):
+        """Run data integrity validator to compare Excel vs CSV"""
+        self.log("🔍 Starting data integrity validation...")
+        self.status_label.config(text="Validating data integrity...")
+
+        try:
+            # Import and run the integrity validator
+            import validate_data_integrity
+
+            # Run validation with 15 samples
+            self.log("Comparing Excel source with cleaned CSV (15 random samples)...")
+            success = validate_data_integrity.main(num_samples=15)
+
+            if success:
+                self.log("✅ Data integrity validation completed!")
+
+                # Load the validation results
+                from pathlib import Path
+                import json
+
+                report_path = Path("./data/integrity_validation_report.txt")
+                json_path = Path("./data/integrity_validation_report.json")
+
+                if json_path.exists():
+                    with open(json_path, 'r') as f:
+                        results = json.load(f)
+
+                    stats = results.get('statistics', {})
+                    accuracy = 0
+                    if stats.get('samples_validated', 0) > 0:
+                        accuracy = ((stats.get('perfect_matches', 0) + stats.get('acceptable_matches', 0)) /
+                                   stats.get('samples_validated', 1) * 100)
+
+                    # Show summary
+                    summary = (
+                        f"Data Integrity Validation Complete!\n\n"
+                        f"Excel records: {stats.get('total_records_excel', 0)}\n"
+                        f"CSV records: {stats.get('total_records_csv', 0)}\n"
+                        f"Records removed during cleaning: {stats.get('total_records_excel', 0) - stats.get('total_records_csv', 0)}\n\n"
+                        f"Samples validated: {stats.get('samples_validated', 0)}\n"
+                        f"Perfect matches: {stats.get('perfect_matches', 0)}\n"
+                        f"Acceptable matches: {stats.get('acceptable_matches', 0)}\n"
+                        f"Mismatches: {stats.get('mismatches', 0)}\n\n"
+                        f"Overall accuracy: {accuracy:.1f}%\n\n"
+                    )
+
+                    if accuracy >= 95:
+                        summary += "✅ Data integrity verified!\n✅ Cleaning process preserves data accurately"
+                        messagebox.showinfo("Validation Successful", summary)
+                    elif accuracy >= 80:
+                        summary += "⚠️ Minor discrepancies detected\n📊 Review detailed report for more information"
+                        messagebox.showwarning("Validation - Minor Issues", summary)
+                    else:
+                        summary += "❌ Significant discrepancies detected\n📋 Review detailed report immediately"
+                        messagebox.showerror("Validation Failed", summary)
+
+                    # Offer to view detailed report
+                    if messagebox.askyesno("View Report?", "Would you like to view the detailed validation report?"):
+                        self.view_integrity_report(report_path)
+
+                self.status_label.config(text="Integrity validation completed")
+            else:
+                self.log("❌ Data integrity validation failed - check logs")
+                messagebox.showerror(
+                    "Validation Failed",
+                    "Data integrity validation failed.\n\n"
+                    "Please ensure:\n"
+                    "1. Excel source file exists in data/ folder\n"
+                    "2. cleaned_master.csv has been created\n"
+                    "3. Check the console logs for details"
+                )
+                self.status_label.config(text="Integrity validation failed")
+
+        except Exception as e:
+            self.log(f"❌ Error during integrity validation: {e}")
+            messagebox.showerror("Error", f"Failed to run integrity validation:\n{e}")
+            self.status_label.config(text="Error")
+
+    def view_integrity_report(self, report_path):
+        """Display the integrity validation report"""
+        report_window = tk.Toplevel(self.root)
+        report_window.title("Data Integrity Validation Report")
+        report_window.geometry("1000x800")
+
+        # Create frame with scrollbar
+        frame = ttk.Frame(report_window, padding=10)
+        frame.pack(fill=tk.BOTH, expand=True)
+
+        # Text widget with scrollbar
+        text_widget = tk.Text(frame, wrap=tk.WORD, font=('Courier', 10))
+        scrollbar = ttk.Scrollbar(frame, command=text_widget.yview)
+        text_widget.config(yscrollcommand=scrollbar.set)
+
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Load and display report
+        try:
+            with open(report_path, 'r', encoding='utf-8') as f:
+                report_content = f.read()
+            text_widget.insert('1.0', report_content)
+            text_widget.config(state=tk.DISABLED)
+
+            # Button frame
+            button_frame = ttk.Frame(report_window, padding=10)
+            button_frame.pack(fill=tk.X)
+
+            ttk.Button(
+                button_frame,
+                text="Close",
+                command=report_window.destroy
+            ).pack(side=tk.RIGHT, padx=5)
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load report:\n{e}")
+            report_window.destroy()
 
     def update_data_preview(self):
         """Update data preview treeview with current filter"""
@@ -1519,6 +1755,54 @@ TOP 10 MOST ENGAGED COMPANIES:
         thread = threading.Thread(target=self.generate_reports_thread, daemon=True)
         thread.start()
 
+    def validate_record_for_report(self, row):
+        """
+        Validate if a record has sufficient data to generate a report.
+        Returns dict with 'is_valid' (bool) and 'reason' (str).
+        Uses same logic as clean_data_enhanced.py
+        """
+        # Check company name
+        company = row.get('company_name')
+        if pd.isna(company) or str(company).strip() in ['', '-', 'Unknown']:
+            return {'is_valid': False, 'reason': 'No valid company name'}
+
+        # Check person name
+        person = row.get('name')
+        if pd.isna(person) or str(person).strip() == '':
+            return {'is_valid': False, 'reason': 'No person name'}
+
+        # Check email
+        email = row.get('email_address')
+        if pd.isna(email) or '@' not in str(email):
+            return {'is_valid': False, 'reason': 'Invalid/missing email'}
+
+        # Check score availability - need at least 5 valid scores out of 15
+        score_columns = ['up__r', 'up__c', 'up__f', 'up__v', 'up__a',
+                        'in__r', 'in__c', 'in__f', 'in__v', 'in__a',
+                        'do__r', 'do__c', 'do__f', 'do__v', 'do__a']
+
+        available_scores = 0
+        for col in score_columns:
+            if col in row.index:
+                val = row[col]
+                if pd.notna(val) and val not in ['?', '', ' ']:
+                    try:
+                        float_val = float(str(val).replace(',', '.'))
+                        if 0 <= float_val <= 5:
+                            available_scores += 1
+                    except:
+                        pass
+
+        min_scores_required = 5
+        if available_scores < min_scores_required:
+            return {
+                'is_valid': False,
+                'reason': f'Insufficient data ({available_scores}/15 scores, need {min_scores_required})'
+            }
+
+        # All checks passed
+        return {'is_valid': True, 'reason': 'Valid'}
+
     def generate_reports_thread(self):
         """Background thread for report generation"""
         self.log_gen("🚀 Starting batch report generation...")
@@ -1526,6 +1810,7 @@ TOP 10 MOST ENGAGED COMPANIES:
         total = len(self.df)
         success = 0
         failed = 0
+        skipped = 0
 
         self.gen_progress['maximum'] = total
         self.gen_progress['value'] = 0
@@ -1543,9 +1828,12 @@ TOP 10 MOST ENGAGED COMPANIES:
             )
 
             try:
-                # Skip if missing company name
-                if pd.isna(company) or str(company).strip() in ['', '-', 'Unknown']:
-                    self.log_gen(f"[{idx+1}/{total}] ⏭ Skipping: No valid company name")
+                # Pre-generation validation: Check if record has sufficient data
+                validation_result = self.validate_record_for_report(row)
+
+                if not validation_result['is_valid']:
+                    self.log_gen(f"[{idx+1}/{total}] ⏭ Skipping {company}: {validation_result['reason']}")
+                    skipped += 1
                     continue
 
                 self.log_gen(f"[{idx+1}/{total}] Generating: {company} - {person}")
@@ -1659,7 +1947,7 @@ TOP 10 MOST ENGAGED COMPANIES:
 
             self.gen_progress['value'] = idx + 1
             self.gen_progress_label.config(
-                text=f"Progress: {idx+1}/{total} | Success: {success} | Failed: {failed}"
+                text=f"Progress: {idx+1}/{total} | Success: {success} | Failed: {failed} | Skipped: {skipped}"
             )
 
         self.is_generating = False
@@ -1667,7 +1955,20 @@ TOP 10 MOST ENGAGED COMPANIES:
         self.gen_cancel_btn.config(state=tk.DISABLED)
         self.gen_current_label.config(text="Generation complete")
 
-        self.log_gen(f"\n✅ Generation complete! Success: {success}, Failed: {failed}")
+        # Comprehensive summary
+        self.log_gen(f"\n" + "="*60)
+        self.log_gen(f"GENERATION COMPLETE")
+        self.log_gen(f"="*60)
+        self.log_gen(f"Total records: {total}")
+        self.log_gen(f"✅ Successfully generated: {success}")
+        self.log_gen(f"❌ Failed: {failed}")
+        self.log_gen(f"⏭ Skipped (insufficient data): {skipped}")
+        self.log_gen(f"="*60)
+
+        if skipped > 0:
+            self.log_gen(f"\nℹ️ Note: {skipped} record(s) were skipped due to insufficient data.")
+            self.log_gen(f"   These records don't have enough scores to generate a valid report.")
+            self.log_gen(f"   Run 'Clean Data' to see details about removed/insufficient records.")
 
     def cancel_generation(self):
         """Cancel generation"""

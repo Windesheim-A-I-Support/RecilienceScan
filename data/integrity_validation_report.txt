@@ -1,0 +1,66 @@
+======================================================================
+DATA INTEGRITY VALIDATION REPORT
+Generated: 2025-10-31 21:25:06
+======================================================================
+
+OVERVIEW:
+  Excel file records: 507
+  CSV file records: 467
+  Records removed during cleaning: 40
+
+SAMPLE VALIDATION RESULTS:
+  Samples validated: 10
+  Perfect matches: 10
+  Acceptable matches (>90%): 0
+  Mismatches: 0
+  Missing in CSV: 0
+
+  Overall accuracy: 100.0%
+
+DETAILED SAMPLE RESULTS:
+
+  [1] Fujifilm Europe B.V. - Bart Verhoeven
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [2] Royal Koopmans - B. Dolman
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [3] Upfield - Arjen van der Meer
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [4] The Greenery - Sebastiaan van Oeffelen
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [5] Royal Koopmans - Jildou van der Schaaf
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [6] Corbion (2) - Andrew Huschka (2)
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [7] Swinkels Family Brewers - Hans van Vijfeijken
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [8] Axalta Coating Systems GmbH - Edgar Peet
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [9] Farm Frites International B.V. - Jakob Rentier
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [10] The Coca-Cola Company - Iris Meza
+      Status: PERFECT
+      Matched: 18/18 fields
+
+======================================================================
+VERDICT:
+  [OK] Data integrity verified!
+  [OK] Cleaning process preserves data accurately
+======================================================================

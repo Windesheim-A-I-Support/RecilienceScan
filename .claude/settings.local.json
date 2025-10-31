@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(find:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue create:*)",
+      "Bash(gh issue comment:*)",
+      "Bash(gh:*)",
+      "Bash(quarto render:*)",
+      "Bash(ls:*)",
+      "Bash(pip install:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

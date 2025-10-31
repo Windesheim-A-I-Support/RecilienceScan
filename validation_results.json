@@ -1,0 +1,127 @@
+[
+  {
+    "company": "24 ICE",
+    "status": "success",
+    "filepath": "C:\\Users\\Christiaan\\Documents\\RecilienceScan\\reports\\20251031 ResilienceScanReport (24 ICE).pdf",
+    "expected": {
+      "company": "24 ICE",
+      "person": "Casper Hondema",
+      "upstream": {
+        "R": 3.4666666666666672,
+        "C": 3.6666666666666665,
+        "F": 3.375,
+        "V": 2.625,
+        "A": 4.0,
+        "avg": 3.43
+      },
+      "internal": {
+        "avg": 3.09
+      },
+      "downstream": {
+        "avg": 3.37
+      },
+      "overall_scres": 3.3,
+      "respondent_count": 1
+    }
+  },
+  {
+    "company": "AbbVie",
+    "status": "success",
+    "filepath": "C:\\Users\\Christiaan\\Documents\\RecilienceScan\\reports\\20251031 ResilienceScanReport (AbbVie).pdf",
+    "expected": {
+      "company": "AbbVie",
+      "person": "Rene Kronenburg",
+      "upstream": {
+        "R": 5.0,
+        "C": null,
+        "F": 1.5,
+        "V": null,
+        "A": 2.0,
+        "avg": 2.83
+      },
+      "internal": {
+        "avg": 3.16
+      },
+      "downstream": {
+        "avg": 2.67
+      },
+      "overall_scres": 2.89,
+      "respondent_count": 11
+    }
+  },
+  {
+    "company": "Agrifac Machinery B.V.",
+    "status": "success",
+    "filepath": "C:\\Users\\Christiaan\\Documents\\RecilienceScan\\reports\\20251031 ResilienceScanReport (Agrifac Machinery B.V.).pdf",
+    "expected": {
+      "company": "Agrifac Machinery B.V.",
+      "person": "Art Kampjes",
+      "upstream": {
+        "R": 3.6,
+        "C": 4.083333333333333,
+        "F": 3.625,
+        "V": 3.5416666666666665,
+        "A": 3.9166666666666665,
+        "avg": 3.75
+      },
+      "internal": {
+        "avg": 3.36
+      },
+      "downstream": {
+        "avg": 2.9
+      },
+      "overall_scres": 3.34,
+      "respondent_count": 7
+    }
+  },
+  {
+    "company": "Aako B.V.",
+    "status": "success",
+    "filepath": "C:\\Users\\Christiaan\\Documents\\RecilienceScan\\reports\\20251031 ResilienceScanReport (Aako B.V.).pdf",
+    "expected": {
+      "company": "Aako B.V.",
+      "person": "Frank Mooij",
+      "upstream": {
+        "R": 1.8,
+        "C": 1.9166666666666663,
+        "F": 1.3333333333333333,
+        "V": 1.9166666666666667,
+        "A": 2.583333333333333,
+        "avg": 1.91
+      },
+      "internal": {
+        "avg": 2.62
+      },
+      "downstream": {
+        "avg": 2.37
+      },
+      "overall_scres": 2.3,
+      "respondent_count": 1
+    }
+  },
+  {
+    "company": "Abbott",
+    "status": "success",
+    "filepath": "C:\\Users\\Christiaan\\Documents\\RecilienceScan\\reports\\20251031 ResilienceScanReport (Abbott).pdf",
+    "expected": {
+      "company": "Abbott",
+      "person": "Robert Smelt",
+      "upstream": {
+        "R": 3.083333333333333,
+        "C": 3.666666666666667,
+        "F": 2.375,
+        "V": 3.333333333333333,
+        "A": 2.833333333333333,
+        "avg": 3.06
+      },
+      "internal": {
+        "avg": 3.23
+      },
+      "downstream": {
+        "avg": 3.03
+      },
+      "overall_scres": 3.11,
+      "respondent_count": 2
+    }
+  }
+]

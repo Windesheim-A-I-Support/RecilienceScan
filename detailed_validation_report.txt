@@ -1,0 +1,445 @@
+======================================================================
+DETAILED PDF REPORT VALIDATION
+Checking ALL dimension values (R, C, F, V, A) for all pillars
+======================================================================
+
+[LOAD] Loading CSV data...
+   Total companies: 321
+
+[SCAN] Scanning for PDF reports in C:\Users\Christiaan\Documents\RecilienceScan\reports...
+   Found 13 PDF files
+
+======================================================================
+VALIDATING REPORTS
+======================================================================
+
+[[Technology Company]]
+   File: 20251028 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Both NA
+      [INTERNAL  ] Mismatch in NA handling [FAIL]
+      [DOWNSTREAM] Mismatch in NA handling [FAIL]
+
+   INDIVIDUAL DIMENSIONS:
+      [internal_R     ] Not found in PDF [FAIL]
+      [internal_C     ] Not found in PDF [FAIL]
+      [internal_F     ] Not found in PDF [FAIL]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Not found in PDF [FAIL]
+      [downstream_R   ] Not found in PDF [FAIL]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Not found in PDF [FAIL]
+      [downstream_V   ] Not found in PDF [FAIL]
+      [downstream_A   ] Not found in PDF [FAIL]
+
+   OVERALL SCRES:
+      Expected=4.32, Actual=4.32 [OK]
+
+   SUMMARY:
+      Dimensions: 5/15 matched
+      Issues: internal_R, internal_C, internal_F, internal_V, internal_A, downstream_R, downstream_C, downstream_F, downstream_V, downstream_A
+      Status: [FAIL]
+
+[24 ICE]
+   File: 20251031 ResilienceReport (24 ICE - Casper Hondema).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Expected=3.43, Actual=3.43 [OK]
+      [INTERNAL  ] Expected=3.09, Actual=3.09 [OK]
+      [DOWNSTREAM] Expected=3.37, Actual=3.37 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Not found in PDF [FAIL]
+      [upstream_C     ] Not found in PDF [FAIL]
+      [upstream_F     ] Not found in PDF [FAIL]
+      [upstream_V     ] Expected=2.62, Actual=2.62 [OK]
+      [upstream_A     ] Expected=4.00, Actual=4.00 [OK]
+      [internal_R     ] Expected=2.80, Actual=2.80 [OK]
+      [internal_C     ] Not found in PDF [FAIL]
+      [internal_F     ] Not found in PDF [FAIL]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Expected=3.50, Actual=3.50 [OK]
+      [downstream_R   ] Expected=3.80, Actual=3.80 [OK]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Not found in PDF [FAIL]
+      [downstream_V   ] Expected=2.29, Actual=2.29 [OK]
+      [downstream_A   ] Not found in PDF [FAIL]
+
+   OVERALL SCRES:
+      Expected=3.30, Actual=3.30 [OK]
+
+   SUMMARY:
+      Dimensions: 6/15 matched
+      Issues: upstream_R, upstream_C, upstream_F, internal_C, internal_F, internal_V, downstream_C, downstream_F, downstream_A
+      Status: [FAIL]
+
+[Aako B.V.]
+   File: 20251031 ResilienceReport (Aako B.V. - Frank Mooij).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Expected=1.91, Actual=1.91 [OK]
+      [INTERNAL  ] Expected=2.62, Actual=2.62 [OK]
+      [DOWNSTREAM] Expected=2.38, Actual=2.38 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Not found in PDF [FAIL]
+      [upstream_C     ] Not found in PDF [FAIL]
+      [upstream_F     ] Expected=1.33, Actual=1.33 [OK]
+      [upstream_V     ] Not found in PDF [FAIL]
+      [upstream_A     ] Expected=2.58, Actual=2.58 [OK]
+      [internal_R     ] Expected=2.33, Actual=2.33 [OK]
+      [internal_C     ] Not found in PDF [FAIL]
+      [internal_F     ] Expected=3.00, Actual=3.00 [OK]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Not found in PDF [FAIL]
+      [downstream_R   ] Expected=1.75, Actual=1.75 [OK]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Not found in PDF [FAIL]
+      [downstream_V   ] Not found in PDF [FAIL]
+      [downstream_A   ] Expected=2.79, Actual=2.79 [OK]
+
+   OVERALL SCRES:
+      Expected=2.30, Actual=2.30 [OK]
+
+   SUMMARY:
+      Dimensions: 6/15 matched
+      Issues: upstream_R, upstream_C, upstream_V, internal_C, internal_V, internal_A, downstream_C, downstream_F, downstream_V
+      Status: [FAIL]
+
+[Aarnink Kunststof kozijnen fabriek]
+   File: 20251031 ResilienceReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Expected=2.64, Actual=2.64 [OK]
+      [INTERNAL  ] Expected=3.06, Actual=3.06 [OK]
+      [DOWNSTREAM] Expected=2.75, Actual=2.75 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Expected=1.90, Actual=1.90 [OK]
+      [upstream_C     ] Not found in PDF [FAIL]
+      [upstream_F     ] Not found in PDF [FAIL]
+      [upstream_V     ] Expected=3.62, Actual=3.62 [OK]
+      [upstream_A     ] Not found in PDF [FAIL]
+      [internal_R     ] Not found in PDF [FAIL]
+      [internal_C     ] Expected=3.44, Actual=3.44 [OK]
+      [internal_F     ] Not found in PDF [FAIL]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Expected=2.50, Actual=2.50 [OK]
+      [downstream_R   ] Expected=1.93, Actual=1.93 [OK]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Not found in PDF [FAIL]
+      [downstream_V   ] Expected=3.46, Actual=3.46 [OK]
+      [downstream_A   ] Not found in PDF [FAIL]
+
+   OVERALL SCRES:
+      Expected=2.82, Actual=2.82 [OK]
+
+   SUMMARY:
+      Dimensions: 6/15 matched
+      Issues: upstream_C, upstream_F, upstream_A, internal_R, internal_F, internal_V, downstream_C, downstream_F, downstream_A
+      Status: [FAIL]
+
+[Abbott]
+   File: 20251031 ResilienceReport (Abbott - Robert Smelt).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Expected=3.06, Actual=3.06 [OK]
+      [INTERNAL  ] Expected=3.23, Actual=3.23 [OK]
+      [DOWNSTREAM] Expected=3.03, Actual=3.03 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Not found in PDF [FAIL]
+      [upstream_C     ] Expected=3.67, Actual=3.67 [OK]
+      [upstream_F     ] Expected=2.38, Actual=2.38 [OK]
+      [upstream_V     ] Not found in PDF [FAIL]
+      [upstream_A     ] Not found in PDF [FAIL]
+      [internal_R     ] Not found in PDF [FAIL]
+      [internal_C     ] Expected=3.83, Actual=3.83 [OK]
+      [internal_F     ] Expected=2.22, Actual=2.22 [OK]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Not found in PDF [FAIL]
+      [downstream_R   ] Not found in PDF [FAIL]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Expected=2.17, Actual=2.17 [OK]
+      [downstream_V   ] Expected=3.50, Actual=3.50 [OK]
+      [downstream_A   ] Not found in PDF [FAIL]
+
+   OVERALL SCRES:
+      Expected=3.11, Actual=3.11 [OK]
+
+   SUMMARY:
+      Dimensions: 6/15 matched
+      Issues: upstream_R, upstream_V, upstream_A, internal_R, internal_V, internal_A, downstream_R, downstream_C, downstream_A
+      Status: [FAIL]
+
+[[Technology Company]]
+   File: 20251031 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Both NA
+      [INTERNAL  ] Expected=4.55, Actual=4.55 [OK]
+      [DOWNSTREAM] Expected=4.09, Actual=4.09 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [internal_R     ] Expected=5.00, Actual=5.00 [OK]
+      [internal_C     ] Not found in PDF [FAIL]
+      [internal_F     ] Not found in PDF [FAIL]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Expected=4.00, Actual=4.00 [OK]
+      [downstream_R   ] Expected=5.00, Actual=5.00 [OK]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Expected=2.78, Actual=2.78 [OK]
+      [downstream_V   ] Not found in PDF [FAIL]
+      [downstream_A   ] Not found in PDF [FAIL]
+
+   OVERALL SCRES:
+      Expected=4.32, Actual=4.32 [OK]
+
+   SUMMARY:
+      Dimensions: 9/15 matched
+      Issues: internal_C, internal_F, internal_V, downstream_C, downstream_V, downstream_A
+      Status: [FAIL]
+
+[24 ICE]
+   File: 20251031 ResilienceScanReport (24 ICE).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Expected=3.43, Actual=3.43 [OK]
+      [INTERNAL  ] Expected=3.09, Actual=3.09 [OK]
+      [DOWNSTREAM] Expected=3.37, Actual=3.37 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Not found in PDF [FAIL]
+      [upstream_C     ] Not found in PDF [FAIL]
+      [upstream_F     ] Not found in PDF [FAIL]
+      [upstream_V     ] Expected=2.62, Actual=2.62 [OK]
+      [upstream_A     ] Expected=4.00, Actual=4.00 [OK]
+      [internal_R     ] Expected=2.80, Actual=2.80 [OK]
+      [internal_C     ] Not found in PDF [FAIL]
+      [internal_F     ] Not found in PDF [FAIL]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Expected=3.50, Actual=3.50 [OK]
+      [downstream_R   ] Expected=3.80, Actual=3.80 [OK]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Not found in PDF [FAIL]
+      [downstream_V   ] Expected=2.29, Actual=2.29 [OK]
+      [downstream_A   ] Not found in PDF [FAIL]
+
+   OVERALL SCRES:
+      Expected=3.30, Actual=3.30 [OK]
+
+   SUMMARY:
+      Dimensions: 6/15 matched
+      Issues: upstream_R, upstream_C, upstream_F, internal_C, internal_F, internal_V, downstream_C, downstream_F, downstream_A
+      Status: [FAIL]
+
+[Aako B.V.]
+   File: 20251031 ResilienceScanReport (Aako B.V.).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Expected=1.91, Actual=1.91 [OK]
+      [INTERNAL  ] Expected=2.62, Actual=2.62 [OK]
+      [DOWNSTREAM] Expected=2.38, Actual=2.38 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Not found in PDF [FAIL]
+      [upstream_C     ] Not found in PDF [FAIL]
+      [upstream_F     ] Expected=1.33, Actual=1.33 [OK]
+      [upstream_V     ] Not found in PDF [FAIL]
+      [upstream_A     ] Expected=2.58, Actual=2.58 [OK]
+      [internal_R     ] Expected=2.33, Actual=2.33 [OK]
+      [internal_C     ] Not found in PDF [FAIL]
+      [internal_F     ] Expected=3.00, Actual=3.00 [OK]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Not found in PDF [FAIL]
+      [downstream_R   ] Expected=1.75, Actual=1.75 [OK]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Not found in PDF [FAIL]
+      [downstream_V   ] Not found in PDF [FAIL]
+      [downstream_A   ] Expected=2.79, Actual=2.79 [OK]
+
+   OVERALL SCRES:
+      Expected=2.30, Actual=2.30 [OK]
+
+   SUMMARY:
+      Dimensions: 6/15 matched
+      Issues: upstream_R, upstream_C, upstream_V, internal_C, internal_V, internal_A, downstream_C, downstream_F, downstream_V
+      Status: [FAIL]
+
+[Abbott]
+   File: 20251031 ResilienceScanReport (Abbott).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Expected=3.06, Actual=3.06 [OK]
+      [INTERNAL  ] Expected=3.23, Actual=3.23 [OK]
+      [DOWNSTREAM] Expected=3.03, Actual=3.03 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Not found in PDF [FAIL]
+      [upstream_C     ] Expected=3.67, Actual=3.67 [OK]
+      [upstream_F     ] Expected=2.38, Actual=2.38 [OK]
+      [upstream_V     ] Not found in PDF [FAIL]
+      [upstream_A     ] Not found in PDF [FAIL]
+      [internal_R     ] Not found in PDF [FAIL]
+      [internal_C     ] Expected=3.83, Actual=3.83 [OK]
+      [internal_F     ] Expected=2.22, Actual=2.22 [OK]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Not found in PDF [FAIL]
+      [downstream_R   ] Not found in PDF [FAIL]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Expected=2.17, Actual=2.17 [OK]
+      [downstream_V   ] Expected=3.50, Actual=3.50 [OK]
+      [downstream_A   ] Not found in PDF [FAIL]
+
+   OVERALL SCRES:
+      Expected=3.11, Actual=3.11 [OK]
+
+   SUMMARY:
+      Dimensions: 6/15 matched
+      Issues: upstream_R, upstream_V, upstream_A, internal_R, internal_V, internal_A, downstream_R, downstream_C, downstream_A
+      Status: [FAIL]
+
+[AbbVie]
+   File: 20251031 ResilienceScanReport (AbbVie).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Mismatch in NA handling [FAIL]
+      [INTERNAL  ] Expected=3.16, Actual=3.16 [OK]
+      [DOWNSTREAM] Expected=2.67, Actual=2.67 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Expected=5.00, Actual=5.00 [OK]
+      [upstream_F     ] Not found in PDF [FAIL]
+      [upstream_A     ] Not found in PDF [FAIL]
+      [internal_R     ] Expected=4.67, Actual=4.67 [OK]
+      [internal_C     ] Not found in PDF [FAIL]
+      [internal_F     ] Expected=1.00, Actual=1.00 [OK]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Not found in PDF [FAIL]
+      [downstream_R   ] Not found in PDF [FAIL]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Expected=1.50, Actual=1.50 [OK]
+      [downstream_V   ] Expected=3.75, Actual=3.75 [OK]
+      [downstream_A   ] Not found in PDF [FAIL]
+
+   OVERALL SCRES:
+      Expected=2.89, Actual=2.89 [OK]
+
+   SUMMARY:
+      Dimensions: 7/15 matched
+      Issues: upstream_F, upstream_A, internal_C, internal_V, internal_A, downstream_R, downstream_C, downstream_A
+      Status: [FAIL]
+
+[Agrifac Machinery B.V.]
+   File: 20251031 ResilienceScanReport (Agrifac Machinery B.V.).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Expected=3.75, Actual=3.75 [OK]
+      [INTERNAL  ] Expected=3.36, Actual=3.36 [OK]
+      [DOWNSTREAM] Expected=2.90, Actual=2.90 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Not found in PDF [FAIL]
+      [upstream_C     ] Expected=4.08, Actual=4.08 [OK]
+      [upstream_F     ] Not found in PDF [FAIL]
+      [upstream_V     ] Expected=3.54, Actual=3.54 [OK]
+      [upstream_A     ] Not found in PDF [FAIL]
+      [internal_R     ] Not found in PDF [FAIL]
+      [internal_C     ] Not found in PDF [FAIL]
+      [internal_F     ] Expected=3.00, Actual=3.00 [OK]
+      [internal_V     ] Not found in PDF [FAIL]
+      [internal_A     ] Expected=3.62, Actual=3.62 [OK]
+      [downstream_R   ] Not found in PDF [FAIL]
+      [downstream_C   ] Not found in PDF [FAIL]
+      [downstream_F   ] Not found in PDF [FAIL]
+      [downstream_V   ] Expected=3.79, Actual=3.79 [OK]
+      [downstream_A   ] Expected=2.25, Actual=2.25 [OK]
+
+   OVERALL SCRES:
+      Expected=3.34, Actual=3.34 [OK]
+
+   SUMMARY:
+      Dimensions: 6/15 matched
+      Issues: upstream_R, upstream_F, upstream_A, internal_R, internal_C, internal_V, downstream_R, downstream_C, downstream_F
+      Status: [FAIL]
+
+[Suplacon]
+   File: 20251031 ResilienceScanReport (Suplacon - Pim Jansen).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Expected=2.99, Actual=2.99 [OK]
+      [INTERNAL  ] Expected=3.19, Actual=3.19 [OK]
+      [DOWNSTREAM] Expected=2.33, Actual=2.33 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Not found in PDF [FAIL]
+      [upstream_C     ] Not found in PDF [FAIL]
+      [upstream_F     ] Expected=3.50, Actual=3.50 [OK]
+      [upstream_V     ] Expected=2.25, Actual=2.25 [OK]
+      [upstream_A     ] Not found in PDF [FAIL]
+      [internal_R     ] Expected=2.20, Actual=2.20 [OK]
+      [internal_C     ] Not found in PDF [FAIL]
+      [internal_F     ] Not found in PDF [FAIL]
+      [internal_V     ] Expected=4.00, Actual=4.00 [OK]
+      [internal_A     ] Not found in PDF [FAIL]
+      [downstream_R   ] Not found in PDF [FAIL]
+      [downstream_C   ] Expected=2.50, Actual=2.50 [OK]
+      [downstream_F   ] Expected=2.00, Actual=2.00 [OK]
+      [downstream_V   ] Not found in PDF [FAIL]
+      [downstream_A   ] Not found in PDF [FAIL]
+
+   OVERALL SCRES:
+      Expected=2.84, Actual=2.84 [OK]
+
+   SUMMARY:
+      Dimensions: 6/15 matched
+      Issues: upstream_R, upstream_C, upstream_A, internal_C, internal_F, internal_A, downstream_R, downstream_V, downstream_A
+      Status: [FAIL]
+
+[Suplacon]
+   File: 20251031 ResilienceScanReport (Suplacon).pdf
+
+   PILLAR AVERAGES:
+      [UPSTREAM  ] Expected=2.99, Actual=2.99 [OK]
+      [INTERNAL  ] Expected=3.19, Actual=3.19 [OK]
+      [DOWNSTREAM] Expected=2.33, Actual=2.33 [OK]
+
+   INDIVIDUAL DIMENSIONS:
+      [upstream_R     ] Not found in PDF [FAIL]
+      [upstream_C     ] Not found in PDF [FAIL]
+      [upstream_F     ] Expected=3.50, Actual=3.50 [OK]
+      [upstream_V     ] Expected=2.25, Actual=2.25 [OK]
+      [upstream_A     ] Not found in PDF [FAIL]
+      [internal_R     ] Expected=2.20, Actual=2.20 [OK]
+      [internal_C     ] Not found in PDF [FAIL]
+      [internal_F     ] Not found in PDF [FAIL]
+      [internal_V     ] Expected=4.00, Actual=4.00 [OK]
+      [internal_A     ] Not found in PDF [FAIL]
+      [downstream_R   ] Not found in PDF [FAIL]
+      [downstream_C   ] Expected=2.50, Actual=2.50 [OK]
+      [downstream_F   ] Expected=2.00, Actual=2.00 [OK]
+      [downstream_V   ] Not found in PDF [FAIL]
+      [downstream_A   ] Not found in PDF [FAIL]
+
+   OVERALL SCRES:
+      Expected=2.84, Actual=2.84 [OK]
+
+   SUMMARY:
+      Dimensions: 6/15 matched
+      Issues: upstream_R, upstream_C, upstream_A, internal_C, internal_F, internal_A, downstream_R, downstream_V, downstream_A
+      Status: [FAIL]
+
+======================================================================
+FINAL VALIDATION SUMMARY
+======================================================================
+   Companies validated: 13
+   Fully passed: 0/13
+   Had issues: 13/13
+   Total dimensions checked: 195
+   Total dimensions matched: 81
+   Match rate: 41.5%
+
+   [ATTENTION] Some validation issues detected
+   Review the details above for specific problems
+======================================================================

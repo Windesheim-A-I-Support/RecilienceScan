@@ -5026,3 +5026,39 @@ Fixed 6252 non-numeric value(s) in score columns
 [2025-10-29 14:30:33] [6/506] Generating: Abbott - Robert Smelt
 [2025-10-29 14:30:42] [7/506] Generating: Abbott - Lisa Daly
 [2025-10-29 14:30:50] [8/506] Generating: Abbott labs - Tim Katanik
+[2025-10-31 14:14:18] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-31 14:14:18] Importing email tracking data...
+[2025-10-31 14:14:23] [1/506] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-31 14:14:31] [2/506] Generating: 24 ICE - Casper Hondema
+[2025-10-31 14:14:38] [3/506] Generating: Aako B.V. - Frank Mooij
+[2025-10-31 14:14:46] [4/506] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-10-31 14:14:53] [5/506] Generating: AB - Anne
+[2025-10-31 14:14:57]      24/41 [company-extraction-and-matching]
+[2025-10-31 14:14:57]      25/41                                  
+[2025-10-31 14:14:57]      26/41 [extracted-company-analysis]     
+[2025-10-31 14:14:57]      27/41                                  
+[2025-10-31 14:14:57]      28/41 [final-validation-summary]       
+[2025-10-31 14:14:57]      29/41                                  
+[2025-10-31 14:14:57]      30/41 [load-real-data-unconditional]   
+[2025-10-31 14:14:57]      31/41                                  
+[2025-10-31 14:14:57]      32/41 [dashboard-setup]                
+[2025-10-31 14:14:57]      33/41                                  
+[2025-10-31 14:14:57]      34/41 [main-dashboard-content]         
+[2025-10-31 14:14:57]      35/41                                  
+[2025-10-31 14:14:57]      36/41 [company-average-dashboard]      
+[2025-10-31 14:14:57]      37/41                                  
+[2025-10-31 14:14:57]      38/41 [performance-summary]            
+[2025-10-31 14:14:57]      Error in `if (overall_score >= 4) ...`:
+[2025-10-31 14:14:57]      ! missing value where TRUE/FALSE needed
+[2025-10-31 14:14:57]      Quitting from ResilienceReport.qmd:1919-1947 [performance-summary]
+[2025-10-31 14:14:57]      Execution halted
+[2025-10-31 14:14:57] [6/506] Generating: Abbott - Robert Smelt
+[2025-10-31 14:15:04] [7/506] Generating: Abbott - Lisa Daly
+[2025-10-31 20:28:55] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-31 20:28:55] Importing email tracking data...
+[2025-10-31 20:30:09] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-31 20:30:25] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-10-31 20:31:13] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-31 20:31:18] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-10-31 20:31:27] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-31 20:31:33] [2/467] Generating: 24 ICE - Casper Hondema
