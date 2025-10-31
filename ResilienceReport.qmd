@@ -1726,16 +1726,14 @@ tryCatch({
       # Ensure scores are within valid range [0, 5]
       scores <- pmax(0, pmin(5, scores))
 
-      # fmsb::radarchart starts at 3 o'clock (right) and goes clockwise
-      # With 5 dimensions: Right, Bottom-right, Bottom-left, Left, Top
-      # To get R-C-F-V-A clockwise from top: Top=R, Right=C, Bottom-right=F, Bottom-left=V, Left=A
-      # So column order should be: C(right), F, V, A, R(top)
+      # fmsb::radarchart plots first column at TOP and goes clockwise
+      # To get R-C-F-V-A clockwise from top, use that exact order
       radar_data <- data.frame(
+        Redundancy = c(5, 0, scores[1]),
         Collaboration = c(5, 0, scores[2]),
         Flexibility = c(5, 0, scores[3]),
         Visibility = c(5, 0, scores[4]),
-        Agility = c(5, 0, scores[5]),
-        Redundancy = c(5, 0, scores[1])
+        Agility = c(5, 0, scores[5])
       )
       
       fmsb::radarchart(radar_data,
@@ -1764,13 +1762,13 @@ tryCatch({
       mean(c(dashboard_data$up__a[1], dashboard_data$in__a[1], dashboard_data$do__a[1]), na.rm=TRUE)
     )
     
-    # Order: C, F, V, A, R for R-C-F-V-A clockwise from top
+    # First column plots at top, then clockwise
     overall_radar <- data.frame(
+      Redundancy = c(5, 0, overall_scores[1]),
       Collaboration = c(5, 0, overall_scores[2]),
       Flexibility = c(5, 0, overall_scores[3]),
       Visibility = c(5, 0, overall_scores[4]),
-      Agility = c(5, 0, overall_scores[5]),
-      Redundancy = c(5, 0, overall_scores[1])
+      Agility = c(5, 0, overall_scores[5])
     )
     
     fmsb::radarchart(overall_radar,
@@ -1865,13 +1863,13 @@ if (exists("company_data_average") && !is.null(company_data_average)) {
         # Ensure scores are within valid range [0, 5]
         scores <- pmax(0, pmin(5, scores))
 
-        # Order: C, F, V, A, R for R-C-F-V-A clockwise from top
+        # First column at top, then clockwise
         radar_data <- data.frame(
+          Redundancy = c(5, 0, scores[1]),
           Collaboration = c(5, 0, scores[2]),
           Flexibility = c(5, 0, scores[3]),
           Visibility = c(5, 0, scores[4]),
-          Agility = c(5, 0, scores[5]),
-          Redundancy = c(5, 0, scores[1])
+          Agility = c(5, 0, scores[5])
         )
 
         fmsb::radarchart(radar_data,
@@ -1900,13 +1898,13 @@ if (exists("company_data_average") && !is.null(company_data_average)) {
         mean(c(company_data_average$up__a[1], company_data_average$in__a[1], company_data_average$do__a[1]), na.rm=TRUE)
       )
 
-      # Order: C, F, V, A, R for R-C-F-V-A clockwise from top
+      # First column at top, then clockwise
       company_overall_radar <- data.frame(
+        Redundancy = c(5, 0, company_overall_scores[1]),
         Collaboration = c(5, 0, company_overall_scores[2]),
         Flexibility = c(5, 0, company_overall_scores[3]),
         Visibility = c(5, 0, company_overall_scores[4]),
-        Agility = c(5, 0, company_overall_scores[5]),
-        Redundancy = c(5, 0, company_overall_scores[1])
+        Agility = c(5, 0, company_overall_scores[5])
       )
 
       fmsb::radarchart(company_overall_radar,
