@@ -1273,7 +1273,7 @@ class ResilienceScanGUI:
                         summary += "[WARNING] Minor discrepancies detected\n[INFO] Review detailed report for more information"
                         messagebox.showwarning("Validation - Minor Issues", summary)
                     else:
-                        summary += "[ERROR] Significant discrepancies detected\n📋 Review detailed report immediately"
+                        summary += "[ERROR] Significant discrepancies detected\n[INFO] Review detailed report immediately"
                         messagebox.showerror("Validation Failed", summary)
 
                     # Offer to view detailed report
@@ -2087,14 +2087,14 @@ TOP 10 MOST ENGAGED COMPANIES:
                 report += "ERRORS FOUND:\n"
                 report += "=" * 70 + "\n"
                 for error in checker.errors:
-                    report += f"❌ {error}\n"
+                    report += f"[ERROR] {error}\n"
 
             if checker.warnings:
                 report += "\n" + "=" * 70 + "\n"
                 report += "WARNINGS:\n"
                 report += "=" * 70 + "\n"
                 for warning in checker.warnings:
-                    report += f"⚠️  {warning}\n"
+                    report += f"[WARNING] {warning}\n"
 
             # Display in stats text
             self.stats_text.insert('1.0', report)
@@ -2246,7 +2246,7 @@ TOP 10 MOST ENGAGED COMPANIES:
 
                     result = manager.install_package(package_name)
                     if result['success']:
-                        report += f"  ✅ {package_name} installed successfully\n\n"
+                        report += f"  [OK] {package_name} installed successfully\n\n"
                         python_packages_installed += 1
                     else:
                         report += f"  [ERROR] Failed to install {package_name}\n"
@@ -2408,7 +2408,7 @@ TOP 10 MOST ENGAGED COMPANIES:
             file_size = attachment_file.stat().st_size / (1024 * 1024)  # MB
             attachment_info = f"\n[ATTACH] Attachment: {attachment_file.name} ({file_size:.2f} MB)"
         else:
-            attachment_info = f"\n⚠️ No report found for {display_company} - {display_person}"
+            attachment_info = f"\n[WARNING] No report found for {display_company} - {display_person}"
 
         # Build preview
         preview = "=" * 70 + "\n"
@@ -2432,7 +2432,7 @@ TOP 10 MOST ENGAGED COMPANIES:
         self.email_preview_text.insert('1.0', preview)
         self.email_preview_text.config(state=tk.DISABLED)
 
-        self.log("👁️ Email preview generated")
+        self.log("[PREVIEW] Email preview generated")
 
     # ==================== Email Methods ====================
 
@@ -2573,7 +2573,7 @@ TOP 10 MOST ENGAGED COMPANIES:
                 self.df = pd.read_csv(DATA_FILE)
                 self.df.columns = self.df.columns.str.lower().str.strip()
 
-                self.log_email(f"  📝 Updated CSV: {company} - {person} marked as sent")
+                self.log_email(f"  [UPDATE] Updated CSV: {company} - {person} marked as sent")
         except Exception as e:
             self.log_email(f"  [WARNING] Could not update CSV: {e}")
 
@@ -2696,7 +2696,7 @@ TOP 10 MOST ENGAGED COMPANIES:
         if not self.test_mode_var.get():
             response = messagebox.askyesno(
                 "Confirm Live Sending",
-                f"⚠️ TEST MODE IS OFF!\n\n"
+                f"[WARNING] TEST MODE IS OFF!\n\n"
                 f"Emails will be sent to REAL recipients.\n\n"
                 f"Pending: {pending}\n"
                 f"Already sent: {already_sent}\n"
@@ -2968,7 +2968,7 @@ TOP 10 MOST ENGAGED COMPANIES:
 
                     except Exception as outlook_ex:
                         outlook_error = str(outlook_ex)
-                        self.log_email(f"  ⚠️  Outlook failed: {outlook_error}")
+                        self.log_email(f"  [WARNING] Outlook failed: {outlook_error}")
                         self.log_email(f"  Falling back to SMTP...")
 
                         # Fallback to SMTP
