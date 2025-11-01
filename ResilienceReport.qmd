@@ -1421,6 +1421,26 @@ if (file.exists(data_file)) {
 company_name <- params$company
 person_name <- if(!is.null(params$person)) params$person else ""
 
+# LaTeX escaping function for special characters
+escape_latex <- function(text) {
+  if (is.na(text) || is.null(text) || text == "") return(text)
+  text <- gsub("\\\\", "\\\\textbackslash{}", text)
+  text <- gsub("&", "\\\\&", text)
+  text <- gsub("%", "\\\\%", text)
+  text <- gsub("\\$", "\\\\$", text)
+  text <- gsub("#", "\\\\#", text)
+  text <- gsub("_", "\\\\_", text)
+  text <- gsub("\\{", "\\\\{", text)
+  text <- gsub("\\}", "\\\\}", text)
+  text <- gsub("~", "\\\\textasciitilde{}", text)
+  text <- gsub("\\^", "\\\\textasciicircum{}", text)
+  return(text)
+}
+
+# Create LaTeX-safe versions of company and person names
+company_name_safe <- escape_latex(company_name)
+person_name_safe <- escape_latex(person_name)
+
 # Initialize dashboard data
 dashboard_data <- NULL
 data_source <- "synthetic"
@@ -1655,13 +1675,13 @@ do_analysis <- analyze_pillar_gap("do")
 \begin{minipage}[t]{0.70\textwidth}
 \vspace{0pt}
 
-\textbf{\Large `r company_name`}
+\textbf{\Large `r company_name_safe`}
 
 \vspace{0.3cm}
 
 `r if (exists("has_multiple_respondents") && has_multiple_respondents) paste("\\textbf{Survey Respondents:}", nrow(company_data_all), "people from this company\\\\")`
 
-`r if (nchar(person_name) > 0) { if (nchar(person_function) > 0) paste("\\textbf{This Report:}", person_name, "---", gsub("&", "\\\\&", person_function), "\\\\") else paste("\\textbf{This Report:}", person_name, "\\\\") }`
+`r if (nchar(person_name) > 0) { if (nchar(person_function) > 0) paste("\\textbf{This Report:}", person_name_safe, "---", escape_latex(person_function), "\\\\") else paste("\\textbf{This Report:}", person_name_safe, "\\\\") }`
 
 `r if (nchar(submit_date) > 0) paste("\\textbf{Survey Date:}", submit_date, "\\\\")`
 
