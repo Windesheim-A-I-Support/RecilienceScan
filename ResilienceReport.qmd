@@ -1665,19 +1665,19 @@ do_analysis <- analyze_pillar_gap("do")
 ## `r if (detected_language == "dutch") "Supply Chain Resilience Analyse" else "Strategic Supply Chain Resilience Analysis"` {.unnumbered}
 
 ::: {.content-visible when-format="pdf"}
-% NEXT Gen Resilience logo centered at top
+% NEXT Gen Resilience logo centered at top - compact size
 \begin{center}
-\includegraphics[width=0.35\textwidth]{img/logo-resiliencescan.png}
+\includegraphics[width=0.30\textwidth]{img/logo-resiliencescan.png}
 \end{center}
 
-\vspace{0.5cm}
+\vspace{0.2cm}
 
-\begin{minipage}[t]{0.70\textwidth}
-\vspace{0pt}
-
+% Company info and partner logos - compact layout
+\noindent
+\begin{minipage}[t]{0.68\textwidth}
 \textbf{\Large `r company_name_safe`}
 
-\vspace{0.3cm}
+\vspace{0.15cm}
 
 `r if (exists("has_multiple_respondents") && has_multiple_respondents) paste("\\textbf{Survey Respondents:}", nrow(company_data_all), "people from this company\\\\")`
 
@@ -1687,21 +1687,18 @@ do_analysis <- analyze_pillar_gap("do")
 
 \textbf{Overall SCRES:} `r sprintf("%.2f", overall_score)`/5.00
 
-\vspace{0.2cm}
+\vspace{0.1cm}
 
 {\small\textit{NextGenResilience • RUG • Windesheim • Involvation}}
-
 \end{minipage}\hfill
-\begin{minipage}[t]{0.26\textwidth}
-\vspace{0pt}
+\begin{minipage}[t]{0.28\textwidth}
 \raggedleft
-% Partner logos stacked vertically
-\includegraphics[width=0.85\textwidth]{img/logo-windesheim.png}\\[2mm]
-\includegraphics[width=0.85\textwidth]{img/logo-involvation.png}\\[2mm]
-\includegraphics[width=0.85\textwidth]{img/logo-RUG.png}
+\includegraphics[width=0.75\textwidth]{img/logo-windesheim.png}\\[1.5mm]
+\includegraphics[width=0.75\textwidth]{img/logo-involvation.png}\\[1.5mm]
+\includegraphics[width=0.75\textwidth]{img/logo-RUG.png}
 \end{minipage}
 
-\vspace{0.4cm}
+\vspace{0.3cm}
 :::
 
 `r if (exists("has_multiple_respondents") && has_multiple_respondents) "### Individual Respondent Dashboard" else ""`
