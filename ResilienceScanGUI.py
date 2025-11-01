@@ -125,7 +125,7 @@ class ResilienceScanGUI:
         # Logo/Title
         title_label = ttk.Label(
             header_frame,
-            text="🔍 ResilienceScan Control Center",
+            text=" ResilienceScan Control Center",
             font=('Arial', 20, 'bold')
         )
         title_label.grid(row=0, column=0, sticky=tk.W)
@@ -167,7 +167,7 @@ class ResilienceScanGUI:
     def create_dashboard_tab(self):
         """Create overview dashboard tab"""
         dashboard = ttk.Frame(self.notebook)
-        self.notebook.add(dashboard, text="📊 Dashboard")
+        self.notebook.add(dashboard, text="[INFO] Dashboard")
 
         # Quick actions
         actions_frame = ttk.LabelFrame(dashboard, text="Quick Actions", padding=10)
@@ -182,7 +182,7 @@ class ResilienceScanGUI:
 
         ttk.Button(
             actions_frame,
-            text="📄 Generate All Reports",
+            text=" Generate All Reports",
             command=self.start_generation_all,
             width=20
         ).grid(row=0, column=1, padx=5, pady=5)
@@ -277,13 +277,13 @@ class ResilienceScanGUI:
 
         ttk.Button(
             controls_frame,
-            text="📊 View Cleaning Report",
+            text="[INFO] View Cleaning Report",
             command=self.view_cleaning_report
         ).grid(row=0, column=5, padx=5)
 
         ttk.Button(
             controls_frame,
-            text="🔍 Validate Integrity",
+            text=" Validate Integrity",
             command=self.run_integrity_validation
         ).grid(row=0, column=6, padx=5)
 
@@ -423,7 +423,7 @@ class ResilienceScanGUI:
     def create_generation_tab(self):
         """Create PDF generation tab"""
         gen_tab = ttk.Frame(self.notebook)
-        self.notebook.add(gen_tab, text="📄 Generation")
+        self.notebook.add(gen_tab, text=" Generation")
 
         # Controls
         controls_frame = ttk.LabelFrame(gen_tab, text="Generation Controls", padding=10)
@@ -619,7 +619,7 @@ class ResilienceScanGUI:
 
         ttk.Button(
             btn_frame,
-            text="🔄 Reset to Default",
+            text="[RESET] Reset to Default",
             command=self.reset_email_template,
             width=18
         ).grid(row=0, column=1, padx=5)
@@ -954,7 +954,7 @@ class ResilienceScanGUI:
                 # Import data into email tracker
                 self.log("Importing email tracking data...")
                 imported, skipped = self.email_tracker.import_from_csv(str(DATA_FILE))
-                self.log(f"✅ Email tracker: {imported} imported, {skipped} skipped")
+                self.log(f"[OK] Email tracker: {imported} imported, {skipped} skipped")
 
                 # Update email statistics
                 email_stats = self.email_tracker.get_statistics()
@@ -965,11 +965,11 @@ class ResilienceScanGUI:
                 self.update_stats_text()
                 self.update_email_status_display()
 
-                self.log(f"✅ Data loaded: {len(self.df)} respondents, {self.stats['total_companies']} companies")
+                self.log(f"[OK] Data loaded: {len(self.df)} respondents, {self.stats['total_companies']} companies")
                 self.status_label.config(text=f"Data loaded: {len(self.df)} records")
             else:
-                self.log("ℹ️  No data loaded - cleaned_master.csv not found")
-                self.log("ℹ️  First time setup: Use 'Data' tab to import and clean your data")
+                self.log("[INFO] No data loaded - cleaned_master.csv not found")
+                self.log("[INFO] First time setup: Use 'Data' tab to import and clean your data")
                 self.status_label.config(text="No data loaded - use Data tab to import and clean data")
                 # Initialize with empty stats
                 self.stats['total_respondents'] = 0
@@ -977,7 +977,7 @@ class ResilienceScanGUI:
                 self.stats['emails_sent'] = 0
                 self.update_stats_display()
         except Exception as e:
-            self.log(f"❌ Error loading data: {e}")
+            self.log(f"[ERROR] Error loading data: {e}")
             messagebox.showerror("Error", f"Failed to load data:\n{e}")
 
     def load_data_file(self):
@@ -1001,15 +1001,15 @@ class ResilienceScanGUI:
                 self.update_data_preview()
                 self.update_stats_text()
 
-                self.log(f"✅ Data loaded from: {filename}")
+                self.log(f"[OK] Data loaded from: {filename}")
                 messagebox.showinfo("Success", f"Data loaded successfully!\n{len(self.df)} records")
             except Exception as e:
-                self.log(f"❌ Error loading file: {e}")
+                self.log(f"[ERROR] Error loading file: {e}")
                 messagebox.showerror("Error", f"Failed to load file:\n{e}")
 
     def run_convert_data(self):
         """Run the data conversion script to convert Excel files to CSV format"""
-        self.log("📥 Starting data conversion process...")
+        self.log("[START] Starting data conversion process...")
         self.status_label.config(text="Converting data...")
 
         try:
@@ -1021,7 +1021,7 @@ class ResilienceScanGUI:
             success = convert_data.convert_and_save()
 
             if success:
-                self.log("✅ Data conversion completed!")
+                self.log("[OK] Data conversion completed!")
 
                 # Automatically load the converted data
                 try:
@@ -1030,9 +1030,9 @@ class ResilienceScanGUI:
                     self.update_stats_display()
                     self.update_data_preview()
                     self.update_stats_text()
-                    self.log(f"✅ Data automatically loaded: {len(self.df)} records")
+                    self.log(f"[OK] Data automatically loaded: {len(self.df)} records")
                 except Exception as e:
-                    self.log(f"⚠️ Could not auto-load data: {e}")
+                    self.log(f"[WARNING] Could not auto-load data: {e}")
 
                 messagebox.showinfo(
                     "Success",
@@ -1043,7 +1043,7 @@ class ResilienceScanGUI:
                 )
                 self.status_label.config(text="Data converted and loaded - run Clean Data next")
             else:
-                self.log("❌ Data conversion failed - check logs for details")
+                self.log("[ERROR] Data conversion failed - check logs for details")
                 messagebox.showerror(
                     "Conversion Failed",
                     "Data conversion failed.\n\n"
@@ -1056,13 +1056,13 @@ class ResilienceScanGUI:
                 self.status_label.config(text="Data conversion failed")
 
         except Exception as e:
-            self.log(f"❌ Error during data conversion: {e}")
+            self.log(f"[ERROR] Error during data conversion: {e}")
             messagebox.showerror("Error", f"Failed to run data conversion:\n{e}")
             self.status_label.config(text="Error")
 
     def run_clean_data(self):
         """Run the enhanced data cleaning script with comprehensive validation"""
-        self.log("🧹 Starting enhanced data cleaning with validation...")
+        self.log("[START] Starting enhanced data cleaning with validation...")
         self.status_label.config(text="Cleaning data...")
 
         try:
@@ -1074,7 +1074,7 @@ class ResilienceScanGUI:
             success, summary = clean_data_enhanced.clean_and_fix()
 
             if success:
-                self.log("✅ Data cleaning completed!")
+                self.log("[OK] Data cleaning completed!")
                 self.log(f"Summary: {summary}")
 
                 # Automatically reload the cleaned data
@@ -1084,9 +1084,9 @@ class ResilienceScanGUI:
                     self.update_stats_display()
                     self.update_data_preview()
                     self.update_stats_text()
-                    self.log(f"✅ Cleaned data automatically reloaded: {len(self.df)} records")
+                    self.log(f"[OK] Cleaned data automatically reloaded: {len(self.df)} records")
                 except Exception as e:
-                    self.log(f"⚠️ Could not auto-reload data: {e}")
+                    self.log(f"[WARNING] Could not auto-reload data: {e}")
 
                 messagebox.showinfo(
                     "Data Cleaned Successfully",
@@ -1096,7 +1096,7 @@ class ResilienceScanGUI:
                 )
                 self.status_label.config(text="Data cleaned and loaded - ready for reports")
             else:
-                self.log("❌ Data cleaning failed - check logs for details")
+                self.log("[ERROR] Data cleaning failed - check logs for details")
                 messagebox.showerror(
                     "Cleaning Failed",
                     f"Data cleaning failed.\n\n"
@@ -1110,7 +1110,7 @@ class ResilienceScanGUI:
                 self.status_label.config(text="Data cleaning failed")
 
         except Exception as e:
-            self.log(f"❌ Error during data cleaning: {e}")
+            self.log(f"[ERROR] Error during data cleaning: {e}")
             messagebox.showerror("Error", f"Failed to run data cleaning:\n{e}")
             self.status_label.config(text="Error")
 
@@ -1222,7 +1222,7 @@ class ResilienceScanGUI:
 
     def run_integrity_validation(self):
         """Run data integrity validator to compare Excel vs CSV"""
-        self.log("🔍 Starting data integrity validation...")
+        self.log("[START] Starting data integrity validation...")
         self.status_label.config(text="Validating data integrity...")
 
         try:
@@ -1234,7 +1234,7 @@ class ResilienceScanGUI:
             success = validate_data_integrity.main(num_samples=15)
 
             if success:
-                self.log("✅ Data integrity validation completed!")
+                self.log("[OK] Data integrity validation completed!")
 
                 # Load the validation results
                 from pathlib import Path
@@ -1267,13 +1267,13 @@ class ResilienceScanGUI:
                     )
 
                     if accuracy >= 95:
-                        summary += "✅ Data integrity verified!\n✅ Cleaning process preserves data accurately"
+                        summary += "[OK] Data integrity verified!\n[OK] Cleaning process preserves data accurately"
                         messagebox.showinfo("Validation Successful", summary)
                     elif accuracy >= 80:
-                        summary += "⚠️ Minor discrepancies detected\n📊 Review detailed report for more information"
+                        summary += "[WARNING] Minor discrepancies detected\n[INFO] Review detailed report for more information"
                         messagebox.showwarning("Validation - Minor Issues", summary)
                     else:
-                        summary += "❌ Significant discrepancies detected\n📋 Review detailed report immediately"
+                        summary += "[ERROR] Significant discrepancies detected\n📋 Review detailed report immediately"
                         messagebox.showerror("Validation Failed", summary)
 
                     # Offer to view detailed report
@@ -1282,7 +1282,7 @@ class ResilienceScanGUI:
 
                 self.status_label.config(text="Integrity validation completed")
             else:
-                self.log("❌ Data integrity validation failed - check logs")
+                self.log("[ERROR] Data integrity validation failed - check logs")
                 messagebox.showerror(
                     "Validation Failed",
                     "Data integrity validation failed.\n\n"
@@ -1294,7 +1294,7 @@ class ResilienceScanGUI:
                 self.status_label.config(text="Integrity validation failed")
 
         except Exception as e:
-            self.log(f"❌ Error during integrity validation: {e}")
+            self.log(f"[ERROR] Error during integrity validation: {e}")
             messagebox.showerror("Error", f"Failed to run integrity validation:\n{e}")
             self.status_label.config(text="Error")
 
@@ -1676,10 +1676,10 @@ TOP 10 MOST ENGAGED COMPANIES:
             try:
                 self.filtered_df.to_csv(filename, index=False)
                 messagebox.showinfo("Success", f"Exported {len(self.filtered_df)} records to:\n{filename}")
-                self.log(f"✅ Exported {len(self.filtered_df)} records to {filename}")
+                self.log(f"[OK] Exported {len(self.filtered_df)} records to {filename}")
             except Exception as e:
                 messagebox.showerror("Error", f"Failed to export data:\n{e}")
-                self.log(f"❌ Export failed: {e}")
+                self.log(f"[ERROR] Export failed: {e}")
 
     def show_row_details(self, event):
         """Show detailed view of selected row on double-click"""
@@ -1805,7 +1805,7 @@ TOP 10 MOST ENGAGED COMPANIES:
 
     def generate_reports_thread(self):
         """Background thread for report generation"""
-        self.log_gen("🚀 Starting batch report generation...")
+        self.log_gen("[START] Starting batch report generation...")
 
         total = len(self.df)
         success = 0
@@ -1837,7 +1837,7 @@ TOP 10 MOST ENGAGED COMPANIES:
                 validation_result = self.validate_record_for_report(row)
 
                 if not validation_result['is_valid']:
-                    self.log_gen(f"[{idx+1}/{total}] ⏭ Skipping {company}: {validation_result['reason']}")
+                    self.log_gen(f"[{idx+1}/{total}] [SKIP] Skipping {company}: {validation_result['reason']}")
                     skipped += 1
                     continue
 
@@ -1881,7 +1881,7 @@ TOP 10 MOST ENGAGED COMPANIES:
 
                 # Check if already exists
                 if output_file.exists():
-                    self.log_gen(f"  🔁 Already exists, skipping")
+                    self.log_gen(f"  [SKIP] Already exists, skipping")
                     success += 1
                     continue
 
@@ -1904,17 +1904,17 @@ TOP 10 MOST ENGAGED COMPANIES:
                     if temp_path.exists():
                         import shutil
                         shutil.move(str(temp_path), str(output_file))
-                        self.log_gen(f"  ✅ Success: {output_filename}")
+                        self.log_gen(f"  [OK] Success: {output_filename}")
                         success += 1
                     else:
-                        self.log_gen(f"  ❌ Error: Output file not found")
+                        self.log_gen(f"  [ERROR] Error: Output file not found")
                         if result.stderr:
                             self.log_gen(f"     stderr: {result.stderr[-500:]}")
                         if result.stdout:
                             self.log_gen(f"     stdout: {result.stdout[-500:]}")
                         failed += 1
                 else:
-                    self.log_gen(f"  ❌ Error: Exit code {result.returncode}")
+                    self.log_gen(f"  [ERROR] Error: Exit code {result.returncode}")
 
                     # Show stderr (last 800 chars for readability)
                     error_shown = False
@@ -1942,13 +1942,13 @@ TOP 10 MOST ENGAGED COMPANIES:
 
             except FileNotFoundError as e:
                 failed += 1
-                self.log_gen(f"  ❌ Error: Quarto not found - please install from https://quarto.org")
+                self.log_gen(f"  [ERROR] Error: Quarto not found - please install from https://quarto.org")
             except subprocess.TimeoutExpired:
                 failed += 1
-                self.log_gen(f"  ❌ Error: Generation timeout (>5 minutes)")
+                self.log_gen(f"  [ERROR] Error: Generation timeout (>5 minutes)")
             except Exception as e:
                 failed += 1
-                self.log_gen(f"  ❌ Error: {e}")
+                self.log_gen(f"  [ERROR] Error: {e}")
 
                 self.gen_progress['value'] = idx + 1
                 self.gen_progress_label.config(
@@ -2026,14 +2026,14 @@ TOP 10 MOST ENGAGED COMPANIES:
             result = subprocess.run(cmd, cwd=ROOT_DIR, capture_output=True, text=True)
 
             if result.returncode == 0:
-                self.log("✅ Executive Dashboard generated successfully")
+                self.log("[OK] Executive Dashboard generated successfully")
                 messagebox.showinfo("Success", "Executive Dashboard generated!\n\nSaved as: ExecutiveDashboard.pdf")
             else:
-                self.log(f"❌ Error generating dashboard: {result.stderr}")
+                self.log(f"[ERROR] Error generating dashboard: {result.stderr}")
                 messagebox.showerror("Error", f"Failed to generate dashboard:\n{result.stderr}")
 
         except Exception as e:
-            self.log(f"❌ Error: {e}")
+            self.log(f"[ERROR] Error: {e}")
             messagebox.showerror("Error", f"Failed to generate dashboard:\n{e}")
         finally:
             self.status_label.config(text="Ready")
@@ -2065,9 +2065,9 @@ TOP 10 MOST ENGAGED COMPANIES:
             successes = total_checks - errors - warnings
 
             if all_ok:
-                report += "🎉 SYSTEM STATUS: ALL CHECKS PASSED\n\n"
+                report += "[OK] SYSTEM STATUS: ALL CHECKS PASSED\n\n"
             else:
-                report += f"⚠️  SYSTEM STATUS: {errors} ERROR(S), {warnings} WARNING(S)\n\n"
+                report += f"[WARNING] SYSTEM STATUS: {errors} ERROR(S), {warnings} WARNING(S)\n\n"
 
             report += f"Summary: {successes} OK | {warnings} Warnings | {errors} Errors\n"
             report += "=" * 70 + "\n\n"
@@ -2100,22 +2100,22 @@ TOP 10 MOST ENGAGED COMPANIES:
             self.stats_text.insert('1.0', report)
 
             # Log summary
-            self.log(f"✅ System check complete: {successes} OK, {warnings} warnings, {errors} errors")
+            self.log(f"[OK] System check complete: {successes} OK, {warnings} warnings, {errors} errors")
 
             # Show summary dialog
             if all_ok:
                 messagebox.showinfo(
                     "System Check Complete",
-                    f"✅ All checks passed!\n\n{total_checks} checks completed successfully."
+                    f"[OK] All checks passed!\n\n{total_checks} checks completed successfully."
                 )
             else:
                 messagebox.showwarning(
                     "System Check Complete",
-                    f"⚠️ Found {errors} error(s) and {warnings} warning(s)\n\nSee Dashboard for details."
+                    f"[WARNING] Found {errors} error(s) and {warnings} warning(s)\n\nSee Dashboard for details."
                 )
 
         except Exception as e:
-            self.log(f"❌ Error running system check: {e}")
+            self.log(f"[ERROR] Error running system check: {e}")
             messagebox.showerror("Error", f"Failed to run system check:\n{e}")
         finally:
             self.status_label.config(text="Ready")
@@ -2249,7 +2249,7 @@ TOP 10 MOST ENGAGED COMPANIES:
                         report += f"  ✅ {package_name} installed successfully\n\n"
                         python_packages_installed += 1
                     else:
-                        report += f"  ❌ Failed to install {package_name}\n"
+                        report += f"  [ERROR] Failed to install {package_name}\n"
                         report += f"  Error: {result['error']}\n\n"
                         python_packages_failed += 1
 
@@ -2277,16 +2277,16 @@ TOP 10 MOST ENGAGED COMPANIES:
             report += f"Then click 'Check System' to verify installation.\n"
 
             self.stats_text.insert('1.0', report)
-            self.log(f"✅ Linux installation guide displayed: {python_packages_installed} packages installed")
+            self.log(f"[OK] Linux installation guide displayed: {python_packages_installed} packages installed")
 
             messagebox.showinfo(
                 "Installation Guide",
-                f"✅ Installed {python_packages_installed} Python package(s)\n\n"
+                f"[OK] Installed {python_packages_installed} Python package(s)\n\n"
                 f"See Dashboard for commands to install R and Quarto."
             )
 
         except Exception as e:
-            self.log(f"❌ Error installing dependencies: {e}")
+            self.log(f"[ERROR] Error installing dependencies: {e}")
             messagebox.showerror("Error", f"Failed to install dependencies:\n{e}")
         finally:
             self.status_label.config(text="Ready")
@@ -2305,11 +2305,11 @@ TOP 10 MOST ENGAGED COMPANIES:
             with open(template_file, 'w') as f:
                 json.dump(template_data, f, indent=2)
 
-            self.log("✅ Email template saved")
+            self.log("[OK] Email template saved")
             messagebox.showinfo("Success", "Email template saved successfully!")
 
         except Exception as e:
-            self.log(f"❌ Error saving template: {e}")
+            self.log(f"[ERROR] Error saving template: {e}")
             messagebox.showerror("Error", f"Failed to save template:\n{e}")
 
     def load_email_template(self):
@@ -2324,9 +2324,9 @@ TOP 10 MOST ENGAGED COMPANIES:
                 self.email_body_text.delete('1.0', tk.END)
                 self.email_body_text.insert('1.0', template_data.get('body', ''))
 
-                self.log("✅ Email template loaded")
+                self.log("[OK] Email template loaded")
         except Exception as e:
-            self.log(f"⚠️ Could not load template: {e}")
+            self.log(f"[WARNING] Could not load template: {e}")
 
     def reset_email_template(self):
         """Reset to default template"""
@@ -2344,7 +2344,7 @@ TOP 10 MOST ENGAGED COMPANIES:
         self.email_body_text.delete('1.0', tk.END)
         self.email_body_text.insert('1.0', default_body)
 
-        self.log("🔄 Email template reset to default")
+        self.log("[RESET] Email template reset to default")
         messagebox.showinfo("Reset", "Template reset to default!")
 
     def preview_email(self):
@@ -2406,7 +2406,7 @@ TOP 10 MOST ENGAGED COMPANIES:
         if matches:
             attachment_file = Path(matches[0])
             file_size = attachment_file.stat().st_size / (1024 * 1024)  # MB
-            attachment_info = f"\n📎 Attachment: {attachment_file.name} ({file_size:.2f} MB)"
+            attachment_info = f"\n[ATTACH] Attachment: {attachment_file.name} ({file_size:.2f} MB)"
         else:
             attachment_info = f"\n⚠️ No report found for {display_company} - {display_person}"
 
@@ -2443,9 +2443,9 @@ TOP 10 MOST ENGAGED COMPANIES:
             try:
                 self.df = pd.read_csv(DATA_FILE)
                 self.df.columns = self.df.columns.str.lower().str.strip()
-                self.log_email("📂 Loaded CSV data for email display")
+                self.log_email("[LOAD] Loaded CSV data for email display")
             except Exception as e:
-                self.log_email(f"⚠️  Could not load CSV: {e}")
+                self.log_email(f"[WARNING] Could not load CSV: {e}")
 
         # Clear existing items
         for item in self.email_status_tree.get_children():
@@ -2514,7 +2514,7 @@ TOP 10 MOST ENGAGED COMPANIES:
                         'pdf_path': pdf_path
                     })
             except Exception as e:
-                self.log_email(f"⚠️  Could not parse filename: {filename} - {e}")
+                self.log_email(f"[WARNING] Could not parse filename: {filename} - {e}")
                 continue
 
         # Update statistics
@@ -2575,7 +2575,7 @@ TOP 10 MOST ENGAGED COMPANIES:
 
                 self.log_email(f"  📝 Updated CSV: {company} - {person} marked as sent")
         except Exception as e:
-            self.log_email(f"  ⚠️  Could not update CSV: {e}")
+            self.log_email(f"  [WARNING] Could not update CSV: {e}")
 
     def mark_selected_as_sent(self):
         """Mark selected email as sent"""
@@ -2592,7 +2592,7 @@ TOP 10 MOST ENGAGED COMPANIES:
             self.mark_as_sent_in_csv(company, person)
 
         self.update_email_status_display()
-        self.log_email(f"✅ Marked {len(selection)} record(s) as sent")
+        self.log_email(f"[OK] Marked {len(selection)} record(s) as sent")
 
     def mark_selected_as_pending(self):
         """Reset selected email to pending"""
@@ -2615,17 +2615,17 @@ TOP 10 MOST ENGAGED COMPANIES:
                     # Save back to CSV file
                     self.df.to_csv(DATA_FILE, index=False)
             except Exception as e:
-                self.log_email(f"⚠️  Could not update CSV: {e}")
+                self.log_email(f"[WARNING] Could not update CSV: {e}")
 
         self.update_email_status_display()
-        self.log_email(f"🔄 Reset {len(selection)} record(s) to pending")
+        self.log_email(f"[RESET] Reset {len(selection)} record(s) to pending")
 
     def toggle_test_mode(self):
         """Toggle test mode for emails"""
         if self.test_mode_var.get():
-            self.log_email("ℹ️ Test mode enabled - emails will only go to test address")
+            self.log_email("[INFO] Test mode enabled - emails will only go to test address")
         else:
-            self.log_email("⚠️ Test mode disabled - emails will go to real recipients!")
+            self.log_email("[WARNING] Test mode disabled - emails will go to real recipients!")
 
     def start_email_all(self):
         """Start sending all emails with prerequisite checks"""
@@ -2735,14 +2735,14 @@ TOP 10 MOST ENGAGED COMPANIES:
         pythoncom.CoInitialize()
 
         try:
-            self.log_email("📧 Starting email distribution...")
+            self.log_email("[START] Starting email distribution...")
 
             # Log test mode status at the start
             if self.test_mode_var.get():
                 test_email = self.test_email_var.get().strip()
-                self.log_email(f"🧪 TEST MODE ENABLED - All emails will be sent to: {test_email}")
+                self.log_email(f"[TEST] TEST MODE ENABLED - All emails will be sent to: {test_email}")
             else:
-                self.log_email("🚀 LIVE MODE - Emails will be sent to actual recipients")
+                self.log_email("[LIVE] LIVE MODE - Emails will be sent to actual recipients")
 
             self._send_emails_impl()
         finally:
@@ -2757,7 +2757,7 @@ TOP 10 MOST ENGAGED COMPANIES:
         report_files = glob.glob(str(REPORTS_DIR / "*.pdf"))
 
         if not report_files:
-            self.log_email("❌ No PDF reports found in /reports folder")
+            self.log_email("[ERROR] No PDF reports found in /reports folder")
             def finalize_empty():
                 self.is_sending_emails = False
                 self.email_start_btn.config(state=tk.NORMAL)
@@ -2820,14 +2820,14 @@ TOP 10 MOST ENGAGED COMPANIES:
                             'pdf_path': pdf_path
                         })
             except Exception as e:
-                self.log_email(f"⚠️  Could not parse filename: {filename} - {e}")
+                self.log_email(f"[WARNING] Could not parse filename: {filename} - {e}")
                 continue
 
         total = len(pending_records)
-        self.log_email(f"📊 Total reports ready to send: {total}")
+        self.log_email(f"[INFO] Total reports ready to send: {total}")
 
         if total == 0:
-            self.log_email("ℹ️  All reports have already been sent!")
+            self.log_email("[INFO] All reports have already been sent!")
             def finalize_empty():
                 self.is_sending_emails = False
                 self.email_start_btn.config(state=tk.NORMAL)
@@ -2850,7 +2850,7 @@ TOP 10 MOST ENGAGED COMPANIES:
         smtp_password = self.smtp_password_var.get()
         smtp_from = self.smtp_from_var.get()
 
-        self.log_email(f"📧 Connecting to SMTP server: {smtp_server}:{smtp_port}")
+        self.log_email(f"[SMTP] Connecting to SMTP server: {smtp_server}:{smtp_port}")
 
         # Note: SMTP connection will be created per-email to avoid timeout issues
 
@@ -2863,7 +2863,7 @@ TOP 10 MOST ENGAGED COMPANIES:
 
         for idx, record in enumerate(pending_records):
             if not self.is_sending_emails:
-                self.log_email("⏹ Email sending stopped by user")
+                self.log_email("[STOP] Email sending stopped by user")
                 break
 
             company = record['company']
@@ -2878,7 +2878,7 @@ TOP 10 MOST ENGAGED COMPANIES:
             self.root.after(0, update_current)
 
             try:
-                self.log_email(f"[{idx+1}/{total}] 📧 Sending to: {company} - {person}")
+                self.log_email(f"[{idx+1}/{total}] [SEND] Sending to: {company} - {person}")
                 self.log_email(f"  Email address: {email if email else 'NO EMAIL FOUND'}")
                 self.log_email(f"  PDF: {attachment_path.name}")
 
@@ -2919,7 +2919,7 @@ TOP 10 MOST ENGAGED COMPANIES:
 
                 if use_outlook:
                     try:
-                        self.log_email(f"  📮 Using Outlook to send email...")
+                        self.log_email(f"  [OUTLOOK] Using Outlook to send email...")
                         import win32com.client
 
                         # Create Outlook instance
@@ -2940,7 +2940,7 @@ TOP 10 MOST ENGAGED COMPANIES:
                         mail.Attachments.Add(str(attachment_path.absolute()))
 
                         # VERIFICATION: Log the actual recipient before sending
-                        self.log_email(f"  ✅ Email configured:")
+                        self.log_email(f"  [OK] Email configured:")
                         self.log_email(f"     To: {mail.To}")
                         self.log_email(f"     CC: {mail.CC if mail.CC else '(none)'}")
                         self.log_email(f"     BCC: {mail.BCC if mail.BCC else '(none)'}")
@@ -2962,9 +2962,9 @@ TOP 10 MOST ENGAGED COMPANIES:
                         self.log_email(f"     Subject: {mail.Subject[:50]}...")
 
                         # Send the email
-                        self.log_email(f"  📤 Sending via Outlook...")
+                        self.log_email(f"  [OUTLOOK] Sending via Outlook...")
                         mail.Send()
-                        self.log_email(f"  ✅ Email sent successfully!")
+                        self.log_email(f"  [OK] Email sent successfully!")
 
                     except Exception as outlook_ex:
                         outlook_error = str(outlook_ex)
@@ -3014,7 +3014,7 @@ TOP 10 MOST ENGAGED COMPANIES:
                         self.log_email(f"  Closing connection...")
                         server.quit()
 
-                        self.log_email(f"  ✅ Sent via SMTP (fallback)!")
+                        self.log_email(f"  [OK] Sent via SMTP (fallback)!")
                 else:
                     # Direct SMTP if Outlook disabled
                     import smtplib
@@ -3050,12 +3050,12 @@ TOP 10 MOST ENGAGED COMPANIES:
                     self.log_email(f"  Test mode: NOT updating CSV")
 
                 sent_count += 1
-                self.log_email(f"  ✅ SUCCESS: Email sent!")
+                self.log_email(f"  [OK] SUCCESS: Email sent!")
 
             except Exception as e:
                 failed_count += 1
                 error_msg = str(e)
-                self.log_email(f"  ❌ FAILED: {error_msg}")
+                self.log_email(f"  [ERROR] FAILED: {error_msg}")
                 self.log_email(f"  Error type: {type(e).__name__}")
 
                 # Log more details for common errors
@@ -3087,7 +3087,7 @@ TOP 10 MOST ENGAGED COMPANIES:
                 self.df = pd.read_csv(DATA_FILE)
                 self.df.columns = self.df.columns.str.lower().str.strip()
             except Exception as e:
-                self.log_email(f"⚠️  Could not reload CSV: {e}")
+                self.log_email(f"[WARNING] Could not reload CSV: {e}")
 
             # Update email status display
             self.update_email_status_display()
@@ -3101,13 +3101,13 @@ TOP 10 MOST ENGAGED COMPANIES:
             test_mode_str = " [TEST MODE]" if test_mode else ""
             summary_message = (
                 f"Email Distribution Complete{test_mode_str}\n\n"
-                f"✅ Successfully sent: {sent_count}\n"
-                f"❌ Failed: {failed_count}\n"
-                f"📊 Total processed: {total}\n\n"
+                f"[OK] Successfully sent: {sent_count}\n"
+                f"[ERROR] Failed: {failed_count}\n"
+                f"[INFO] Total processed: {total}\n\n"
             )
 
             if test_mode:
-                summary_message += "⚠️  Test mode was enabled - CSV not updated.\n"
+                summary_message += "[WARNING] Test mode was enabled - CSV not updated.\n"
                 summary_message += "All emails were sent to test address.\n\n"
 
             if failed_count > 0:
@@ -3124,7 +3124,7 @@ TOP 10 MOST ENGAGED COMPANIES:
 
         self.root.after(0, finalize)
 
-        self.log_email(f"\n✅ Email distribution complete! Sent: {sent_count}, Failed: {failed_count}")
+        self.log_email(f"\n[OK] Email distribution complete! Sent: {sent_count}, Failed: {failed_count}")
 
     def stop_email(self):
         """Stop email sending"""
