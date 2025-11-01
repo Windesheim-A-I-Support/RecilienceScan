@@ -52,7 +52,7 @@ def load_excel_file(file_path):
     Supports .xlsx and .xls formats.
     Includes robust error handling for common issues.
     """
-    print(f"\n📂 Loading Excel file: {file_path}")
+    print(f"\n[LOAD] Loading Excel file: {file_path}")
     file_ext = Path(file_path).suffix.lower()
 
     df = None
@@ -242,7 +242,7 @@ def create_backup(file_path):
     backup_path = os.path.join(BACKUP_DIR, f"{filename}_{timestamp}{ext}")
 
     shutil.copy2(file_path, backup_path)
-    print(f"📦 Backup created: {backup_path}")
+    print(f"[BACKUP] Backup created: {backup_path}")
     return backup_path
 
 
@@ -381,7 +381,7 @@ def convert_and_save():
     data_rows = df_raw.iloc[header_row_idx + 1:]
 
     print(f"[SAMPLE] Using row {header_row_idx + 1} as header")
-    print(f"📦 Data rows: {len(data_rows)}")
+    print(f"[DATA] Data rows: {len(data_rows)}")
 
     # Step 5: Create dataframe with proper headers
     df_converted = pd.DataFrame(data_rows.values, columns=header_row)
@@ -406,13 +406,13 @@ def convert_and_save():
     removed_rows = initial_rows - len(df_converted)
 
     if removed_rows > 0:
-        print(f"\n🗑️  Removed {removed_rows} empty rows")
+        print(f"\n[CLEAN] Removed {removed_rows} empty rows")
 
     # Step 8: Update existing CSV or create new (preserves 'reportsent' column only)
     df_final = merge_with_existing(df_converted)
 
     # Step 9: Save to output
-    print(f"\n💾 Saving to: {OUTPUT_PATH}")
+    print(f"\n[SAVE] Saving to: {OUTPUT_PATH}")
 
     try:
         # Ensure output directory exists

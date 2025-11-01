@@ -27,7 +27,7 @@ def create_backup(file_path):
     backup_path = os.path.join(BACKUP_DIR, f"{filename}_{timestamp}{ext}")
 
     shutil.copy2(file_path, backup_path)
-    print(f"📦 Backup created: {backup_path}")
+    print(f"[BACKUP] Backup created: {backup_path}")
     return backup_path
 
 
@@ -162,7 +162,7 @@ def fix_numeric_columns(df, issues):
     Fix score columns - ensure they contain numeric values.
     Converts non-numeric values to NaN.
     """
-    print("\n🔢 Cleaning numeric score columns...")
+    print("\n[CLEAN] Cleaning numeric score columns...")
 
     score_columns = [col for col in df.columns if
                      col.startswith('up__') or
