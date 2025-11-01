@@ -1816,18 +1816,23 @@ TOP 10 MOST ENGAGED COMPANIES:
         self.gen_progress['value'] = 0
 
         for idx, row in self.df.iterrows():
-            if not self.is_generating:
-                self.log_gen("⏹ Generation cancelled by user")
-                break
-
-            company = row.get('company_name', 'Unknown')
-            person = row.get('name', 'Unknown')
-
-            self.gen_current_label.config(
-                text=f"Generating: {company} - {person}"
-            )
-
             try:
+                if not self.is_generating:
+                    self.log_gen("Generation cancelled by user")
+                    break
+
+                company = row.get('company_name', 'Unknown')
+                person = row.get('name', 'Unknown')
+
+                # Handle potential encoding issues in GUI labels
+                try:
+                    display_text = f"Generating: {company} - {person}"
+                    self.gen_current_label.config(text=display_text)
+                except (UnicodeDecodeError, UnicodeEncodeError):
+                    # Fallback to safe ASCII if encoding fails
+                    safe_company = company.encode('ascii', 'replace').decode('ascii')
+                    safe_person = person.encode('ascii', 'replace').decode('ascii')
+                    self.gen_current_label.config(text=f"Generating: {safe_company} - {safe_person}")
                 # Pre-generation validation: Check if record has sufficient data
                 validation_result = self.validate_record_for_report(row)
 
@@ -1945,10 +1950,21 @@ TOP 10 MOST ENGAGED COMPANIES:
                 failed += 1
                 self.log_gen(f"  ❌ Error: {e}")
 
-            self.gen_progress['value'] = idx + 1
-            self.gen_progress_label.config(
-                text=f"Progress: {idx+1}/{total} | Success: {success} | Failed: {failed} | Skipped: {skipped}"
-            )
+                self.gen_progress['value'] = idx + 1
+                self.gen_progress_label.config(
+                    text=f"Progress: {idx+1}/{total} | Success: {success} | Failed: {failed} | Skipped: {skipped}"
+                )
+
+            except Exception as e:
+                # Catch-all for ANY exception in loop (including encoding errors, etc)
+                failed += 1
+                self.log_gen(f"[{idx+1}/{total}] CRITICAL ERROR: {e}")
+                self.log_gen(f"     Company: {row.get('company_name', 'Unknown')}, Person: {row.get('name', 'Unknown')}")
+                # Continue processing next record despite error
+                self.gen_progress['value'] = idx + 1
+                self.gen_progress_label.config(
+                    text=f"Progress: {idx+1}/{total} | Success: {success} | Failed: {failed} | Skipped: {skipped}"
+                )
 
         self.is_generating = False
         self.gen_start_btn.config(state=tk.NORMAL)
@@ -1957,16 +1973,32 @@ TOP 10 MOST ENGAGED COMPANIES:
 
         # Comprehensive summary
         self.log_gen(f"\n" + "="*60)
-        self.log_gen(f"GENERATION COMPLETE")
-        self.log_gen(f"="*60)
-        self.log_gen(f"Total records: {total}")
-        self.log_gen(f"✅ Successfully generated: {success}")
-        self.log_gen(f"❌ Failed: {failed}")
-        self.log_gen(f"⏭ Skipped (insufficient data): {skipped}")
-        self.log_gen(f"="*60)
+
+        # Check if generation completed all records
+        processed = success + failed + skipped
+        if processed < total:
+            self.log_gen(f"WARNING: GENERATION INCOMPLETE")
+            self.log_gen(f"="*60)
+            self.log_gen(f"Total records: {total}")
+            self.log_gen(f"Processed: {processed}/{total}")
+            self.log_gen(f"Successfully generated: {success}")
+            self.log_gen(f"Failed: {failed}")
+            self.log_gen(f"Skipped (insufficient data): {skipped}")
+            self.log_gen(f"NOT PROCESSED: {total - processed}")
+            self.log_gen(f"="*60)
+            self.log_gen(f"\nCRITICAL: Generation stopped early at record {processed}.")
+            self.log_gen(f"Check error messages above for details.")
+        else:
+            self.log_gen(f"GENERATION COMPLETE")
+            self.log_gen(f"="*60)
+            self.log_gen(f"Total records: {total}")
+            self.log_gen(f"Successfully generated: {success}")
+            self.log_gen(f"Failed: {failed}")
+            self.log_gen(f"Skipped (insufficient data): {skipped}")
+            self.log_gen(f"="*60)
 
         if skipped > 0:
-            self.log_gen(f"\nℹ️ Note: {skipped} record(s) were skipped due to insufficient data.")
+            self.log_gen(f"\nNote: {skipped} record(s) were skipped due to insufficient data.")
             self.log_gen(f"   These records don't have enough scores to generate a valid report.")
             self.log_gen(f"   Run 'Clean Data' to see details about removed/insufficient records.")
 
