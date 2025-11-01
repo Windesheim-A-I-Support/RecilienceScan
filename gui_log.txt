@@ -5062,3 +5062,265 @@ Fixed 6252 non-numeric value(s) in score columns
 [2025-10-31 20:31:18] [2/467] Generating: 24 ICE - Casper Hondema
 [2025-10-31 20:31:27] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
 [2025-10-31 20:31:33] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-10-31 22:09:31] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-10-31 22:09:31] Importing email tracking data...
+[2025-10-31 22:09:36] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-31 22:09:37] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-10-31 22:09:37] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-10-31 22:09:37] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-10-31 22:09:37] [5/467] Generating: Abbott - Robert Smelt
+[2025-10-31 22:09:37] [6/467] Generating: Abbott - Lisa Daly
+[2025-10-31 22:09:37] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-10-31 22:09:44] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-10-31 22:09:52] [9/467] Generating: Abbvie - Stef Beltman
+[2025-10-31 22:10:00] [10/467] Generating: AbbVie - Vincent
+[2025-10-31 22:10:08] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-10-31 22:10:16] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-10-31 22:10:23] [13/467] Generating: AbbVie - Marchel
+[2025-10-31 22:10:31] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-10-31 22:10:38] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-10-31 22:10:46] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-10-31 22:10:54] [17/467] Generating: AbbVie - Luc Kottink
+[2025-10-31 22:11:01] [18/467] Generating: AbbVie - Bas Groenwold
+[2025-10-31 22:11:09] [19/467] Generating: AbbVie - Walter Verhoef
+[2025-10-31 22:11:16] [20/467] Generating: ACN - Hilal L
+[2025-10-31 22:11:24] [21/467] Generating: AGILEA - vers
+[2025-10-31 22:11:31] [22/467] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-10-31 22:11:32]      ERROR: Error executing 'C:\Program Files\R\R-4.4.2\bin\Rscript': The pipe is being closed. (os error 232)
+[2025-10-31 22:11:32]      Error occurred during cleanup: PermissionDenied: Access is denied. (os error 5)
+[2025-10-31 22:11:32] [23/467] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-10-31 22:11:39] [24/467] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-10-31 22:11:47] [25/467] Generating: Agrifac Machinery B.V. - Ferry
+[2025-10-31 22:11:55] [26/467] Generating: Agrifac Machinery B.V. - Huimin Ke
+[2025-10-31 22:12:02] [27/467] Generating: Agrifac Machinery B.V. - Bjorn de Lange
+[2025-10-31 22:12:09] [28/467] Generating: Agrifac Machinery B.V. - Nick van Huffelen
+[2025-10-31 22:12:17] [29/467] Generating: AGV International B.V. - Tom Broeder
+[2025-10-31 22:12:24] [30/467] Generating: Ales Metaaltechniek - Dick de Leeuw
+[2025-10-31 22:12:32] [31/467] Generating: Ales Metaaltechniek - Ruben Spansier
+[2025-10-31 22:12:39] [32/467] Generating: Alfa Laval Nijmegen - Henk de Lang
+[2025-10-31 22:12:47] [33/467] Generating: Alfen - Maria Verbeek
+[2025-10-31 22:12:54] [34/467] Generating: All Round shipping BV - osadolor edmund omokaro
+[2025-10-31 22:13:01] [35/467] Generating: Allied Motion - Robert Frank
+[2025-10-31 22:13:09] [36/467] Generating: Allied Motion Dordrecht B.V. - Max Elligens
+[2025-10-31 22:13:16] [37/467] Generating: Alphatronics BV - Jos Herrebrugh
+[2025-10-31 22:13:23] [38/467] Generating: Alpla Zwolle B.V. - Kevin Mulder
+[2025-10-31 22:13:31] [39/467] Generating: Alpla Zwolle B.V. - Bertus Bos
+[2025-10-31 22:13:38] [40/467] Generating: Ames - Jeroen Berning
+[2025-10-31 22:13:46] [41/467] Generating: Amgen - Bart Kennes
+[2025-10-31 22:13:53] [42/467] Generating: AP Nederland B.V. - Egbert Wendel
+[2025-10-31 22:14:01] [43/467] Generating: Applied Medical - PJ Sluimer
+[2025-10-31 22:14:09] [44/467] Generating: Applied Medical Europe b.v. - Ralf Slag
+[2025-10-31 22:14:17] [45/467] Generating: aristeio - Veronica
+[2025-10-31 22:14:25] [46/467] Generating: ASML - Jan Jaap van Soest
+[2025-10-31 22:14:33] [47/467] Generating: ASML - Fleur Koster
+[2025-10-31 22:14:41] [48/467] Generating: ASSA ABLOY Opening Solutions EMEIA - Danny van der Ster
+[2025-10-31 22:14:49] [49/467] Generating: Atos - Folkert Folkerts
+[2025-10-31 22:14:57] [50/467] Generating: Auping - Bart van der Boom
+[2025-10-31 22:15:04] [51/467] Generating: Auping - Arjan van der Plas
+[2025-10-31 22:15:12] [52/467] Generating: Avebe - Erik Pricker (1.0)
+[2025-10-31 22:15:16]      itional]   
+[2025-10-31 22:15:16]      31/41                                  
+[2025-10-31 22:15:16]      32/41 [dashboard-setup]                
+[2025-10-31 22:15:16]      33/41                                  
+[2025-10-31 22:15:16]      34/41 [main-dashboard-content]         
+[2025-10-31 22:15:16]      35/41                                  
+[2025-10-31 22:15:16]      36/41 [company-average-dashboard]      
+[2025-10-31 22:15:16]      37/41                                  
+[2025-10-31 22:15:16]      38/41 [performance-summary]            
+[2025-10-31 22:15:16]      39/41                                  
+[2025-10-31 22:15:16]      40/41 [detailed-pillar-analysis]       
+[2025-10-31 22:15:16]      41/41                                  
+[2025-10-31 22:15:16]      output file: ResilienceReport.knit.md
+[2025-10-31 22:15:16]      Error in readLines(con, warn = FALSE) : cannot open the connection
+[2025-10-31 22:15:16]      Calls: .main ... partition_yaml_front_matter -> grep -> is.factor -> read_utf8 -> readLines
+[2025-10-31 22:15:16]      In addition: Warning message:
+[2025-10-31 22:15:16]      In readLines(con, warn = FALSE) :
+[2025-10-31 22:15:16]        cannot open file 'ResilienceReport.qmd': No such file or directory
+[2025-10-31 22:15:16]      Execution halted
+[2025-10-31 22:15:16] [53/467] Generating: Avebe - Bas Wijnbergen
+[2025-10-31 22:15:20]      an\Documents\RecilienceScan\ResilienceReport.tex'
+[2025-10-31 22:15:20]      Stack trace:
+[2025-10-31 22:15:20]          at Object.removeSync (ext:deno_fs/30_fs.js:250:3)
+[2025-10-31 22:15:20]          at safeRemoveSync (file:///C:/Program Files/Quarto/bin/quarto.js:2369:14)
+[2025-10-31 22:15:20]          at copyFileSync1 (file:///C:/Program Files/Quarto/bin/quarto.js:42183:9)
+[2025-10-31 22:15:20]          at copyTo (file:///C:/Program Files/Quarto/bin/quarto.js:42130:9)
+[2025-10-31 22:15:20]          at processLines (file:///C:/Program Files/Quarto/bin/quarto.js:80319:9)
+[2025-10-31 22:15:20]          at eventLoopTick (ext:core/01_core.js:175:7)
+[2025-10-31 22:15:20]          at async file:///C:/Program Files/Quarto/bin/quarto.js:80277:9
+[2025-10-31 22:15:20]          at async Object.complete (file:///C:/Program Files/Quarto/bin/quarto.js:79366:37)
+[2025-10-31 22:15:20]          at async Object.onPostProcess (file:///C:/Program Files/Quarto/bin/quarto.js:86960:36)
+[2025-10-31 22:15:20]          at async renderFileInternal (file:///C:/Program Files/Quarto/bin/quarto.js:86944:5)
+[2025-10-31 22:15:20] [54/467] Generating: Avebe - Gerlof Tempelman
+[2025-10-31 22:15:28] [55/467] Generating: AWL-Techniek - Stijn Kamps (1)
+[2025-10-31 22:15:36] [56/467] Generating: Axalta Coating Systems GmbH - Edgar Peet
+[2025-10-31 22:15:44] [57/467] Generating: Banks Holdings Ltd. - Corey Campbell
+[2025-10-31 22:15:52] [58/467] Generating: Barentsz Ontdekkingshuizen - Casper Hellebrekers
+[2025-10-31 22:15:59] [59/467] Generating: BBA Pompen en Buizen - Andre Kleverwal
+[2025-10-31 22:16:07] [60/467] Generating: BBA pompen en buizen - Michiel Liesting
+[2025-10-31 22:16:15] [61/467] Generating: Bejo Zaden - Nadia Lemmes
+[2025-10-31 22:16:23] [62/467] Generating: Bidfood - Hessel de keijzer (1.0)
+[2025-10-31 22:16:39] [64/467] Generating: Blink Charging - Joris van Liempt
+[2025-10-31 22:16:46]      d mode
+[2025-10-31 22:16:46]      running xelatex - 2
+[2025-10-31 22:16:46]        This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex)
+[2025-10-31 22:16:46]         restricted \write18 enabled.
+[2025-10-31 22:16:46]        entering extended mode
+[2025-10-31 22:16:46]      ERROR: 
+[2025-10-31 22:16:46]      compilation failed- Error compiling latex
+[2025-10-31 22:16:46]      Argument of \@ifl@aded has an extra }.
+[2025-10-31 22:16:46]      <inserted text> 
+[2025-10-31 22:16:46]                      \par 
+[2025-10-31 22:16:46]      l.146 \@ifpackageloaded{fontawesome5}
+[2025-10-31 22:16:46]                                           {}{\usepackage{fontawesome5}}
+[2025-10-31 22:16:46]      I've run across a `}' that doesn't seem to match anything.
+[2025-10-31 22:16:46]      For example, `\def\a#1{...}' and `\a}' would produce
+[2025-10-31 22:16:46]      this error. If you simply proceed now, the `\par' that
+[2025-10-31 22:16:46]      I've just inserted will cause me to report a runaway
+[2025-10-31 22:16:46]      argument that might be the root of the problem. But if
+[2025-10-31 22:16:46]      your `}' was spurious, just type `2' and it will go away.
+[2025-10-31 22:16:46]      see ResilienceReport.log for more information.
+[2025-10-31 22:16:46] [65/467] Generating: Blue Sky Inn - Baruch Colthof
+[2025-10-31 22:16:50]      an\Documents\RecilienceScan\ResilienceReport.tex'
+[2025-10-31 22:16:50]      Stack trace:
+[2025-10-31 22:16:50]          at Object.removeSync (ext:deno_fs/30_fs.js:250:3)
+[2025-10-31 22:16:50]          at safeRemoveSync (file:///C:/Program Files/Quarto/bin/quarto.js:2369:14)
+[2025-10-31 22:16:50]          at copyFileSync1 (file:///C:/Program Files/Quarto/bin/quarto.js:42183:9)
+[2025-10-31 22:16:50]          at copyTo (file:///C:/Program Files/Quarto/bin/quarto.js:42130:9)
+[2025-10-31 22:16:50]          at processLines (file:///C:/Program Files/Quarto/bin/quarto.js:80319:9)
+[2025-10-31 22:16:50]          at eventLoopTick (ext:core/01_core.js:175:7)
+[2025-10-31 22:16:50]          at async file:///C:/Program Files/Quarto/bin/quarto.js:80277:9
+[2025-10-31 22:16:50]          at async Object.complete (file:///C:/Program Files/Quarto/bin/quarto.js:79366:37)
+[2025-10-31 22:16:50]          at async Object.onPostProcess (file:///C:/Program Files/Quarto/bin/quarto.js:86960:36)
+[2025-10-31 22:16:50]          at async renderFileInternal (file:///C:/Program Files/Quarto/bin/quarto.js:86944:5)
+[2025-10-31 22:16:50] [66/467] Generating: Bluesolution SRL - Alexandru Dobre
+[2025-10-31 22:16:58] [67/467] Generating: Bme - Axel Visser
+[2025-10-31 22:17:06] [68/467] Generating: Boermarke - Ronald Boezelman
+[2025-10-31 22:17:14] [69/467] Generating: bol. - Stijn de Boer
+[2025-10-31 22:17:21] [70/467] Generating: Bonduelle - Tom achtereekte
+[2025-10-31 22:17:29] [71/467] Generating: Boot groningen - Lieke van Noort
+[2025-10-31 22:17:37] 
+============================================================
+[2025-10-31 22:17:37] GENERATION COMPLETE
+[2025-10-31 22:17:37] ============================================================
+[2025-10-31 22:17:37] Total records: 467
+[2025-10-31 22:17:37] ============================================================
+[2025-10-31 22:17:38] Loading cleaned_master.csv for enhanced cleaning...
+[2025-10-31 22:17:38] Summary: All records passed validation - no changes needed!
+
+Final dataset: 467 valid records ready for reports
+
+Detailed reports saved to:
+- ./data/cleaning_report.txt
+- ./data/cleaning_validation_log.json
+[2025-10-31 22:17:45] Comparing Excel source with cleaned CSV (15 random samples)...
+[2025-10-31 22:24:26] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-10-31 22:24:26] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-10-31 22:24:26] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-10-31 22:24:26] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-10-31 22:24:26] [5/467] Generating: Abbott - Robert Smelt
+[2025-10-31 22:24:26] [6/467] Generating: Abbott - Lisa Daly
+[2025-10-31 22:24:26] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-10-31 22:24:26] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-10-31 22:24:26] [9/467] Generating: Abbvie - Stef Beltman
+[2025-10-31 22:24:26] [10/467] Generating: AbbVie - Vincent
+[2025-10-31 22:24:26] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-10-31 22:24:26] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-10-31 22:24:26] [13/467] Generating: AbbVie - Marchel
+[2025-10-31 22:24:26] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-10-31 22:24:26] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-10-31 22:24:26] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-10-31 22:24:26] [17/467] Generating: AbbVie - Luc Kottink
+[2025-10-31 22:24:26] [18/467] Generating: AbbVie - Bas Groenwold
+[2025-10-31 22:24:26] [19/467] Generating: AbbVie - Walter Verhoef
+[2025-10-31 22:24:26] [20/467] Generating: ACN - Hilal L
+[2025-10-31 22:24:26] [21/467] Generating: AGILEA - vers
+[2025-10-31 22:24:26] [22/467] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-10-31 22:24:34] [23/467] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-10-31 22:24:34] [24/467] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-10-31 22:24:34] [25/467] Generating: Agrifac Machinery B.V. - Ferry
+[2025-10-31 22:24:34] [26/467] Generating: Agrifac Machinery B.V. - Huimin Ke
+[2025-10-31 22:24:34] [27/467] Generating: Agrifac Machinery B.V. - Bjorn de Lange
+[2025-10-31 22:24:34] [28/467] Generating: Agrifac Machinery B.V. - Nick van Huffelen
+[2025-10-31 22:24:34] [29/467] Generating: AGV International B.V. - Tom Broeder
+[2025-10-31 22:24:34] [30/467] Generating: Ales Metaaltechniek - Dick de Leeuw
+[2025-10-31 22:24:34] [31/467] Generating: Ales Metaaltechniek - Ruben Spansier
+[2025-10-31 22:24:34] [32/467] Generating: Alfa Laval Nijmegen - Henk de Lang
+[2025-10-31 22:24:34] [33/467] Generating: Alfen - Maria Verbeek
+[2025-10-31 22:24:34] [34/467] Generating: All Round shipping BV - osadolor edmund omokaro
+[2025-10-31 22:24:34] [35/467] Generating: Allied Motion - Robert Frank
+[2025-10-31 22:24:34] [36/467] Generating: Allied Motion Dordrecht B.V. - Max Elligens
+[2025-10-31 22:24:34] [37/467] Generating: Alphatronics BV - Jos Herrebrugh
+[2025-10-31 22:24:34] [38/467] Generating: Alpla Zwolle B.V. - Kevin Mulder
+[2025-10-31 22:24:34] [39/467] Generating: Alpla Zwolle B.V. - Bertus Bos
+[2025-10-31 22:24:34] [40/467] Generating: Ames - Jeroen Berning
+[2025-10-31 22:24:34] [41/467] Generating: Amgen - Bart Kennes
+[2025-10-31 22:24:34] [42/467] Generating: AP Nederland B.V. - Egbert Wendel
+[2025-10-31 22:24:34] [43/467] Generating: Applied Medical - PJ Sluimer
+[2025-10-31 22:24:34] [44/467] Generating: Applied Medical Europe b.v. - Ralf Slag
+[2025-10-31 22:24:34] [45/467] Generating: aristeio - Veronica
+[2025-10-31 22:24:34] [46/467] Generating: ASML - Jan Jaap van Soest
+[2025-10-31 22:24:34] [47/467] Generating: ASML - Fleur Koster
+[2025-10-31 22:24:34] [48/467] Generating: ASSA ABLOY Opening Solutions EMEIA - Danny van der Ster
+[2025-10-31 22:24:34] [49/467] Generating: Atos - Folkert Folkerts
+[2025-10-31 22:24:34] [50/467] Generating: Auping - Bart van der Boom
+[2025-10-31 22:24:34] [51/467] Generating: Auping - Arjan van der Plas
+[2025-10-31 22:24:34] [52/467] Generating: Avebe - Erik Pricker (1.0)
+[2025-10-31 22:24:42] [53/467] Generating: Avebe - Bas Wijnbergen
+[2025-10-31 22:24:49] [54/467] Generating: Avebe - Gerlof Tempelman
+[2025-10-31 22:24:49] [55/467] Generating: AWL-Techniek - Stijn Kamps (1)
+[2025-10-31 22:24:49] [56/467] Generating: Axalta Coating Systems GmbH - Edgar Peet
+[2025-10-31 22:24:49] [57/467] Generating: Banks Holdings Ltd. - Corey Campbell
+[2025-10-31 22:24:49] [58/467] Generating: Barentsz Ontdekkingshuizen - Casper Hellebrekers
+[2025-10-31 22:24:49] [59/467] Generating: BBA Pompen en Buizen - Andre Kleverwal
+[2025-10-31 22:24:49] [60/467] Generating: BBA pompen en buizen - Michiel Liesting
+[2025-10-31 22:24:49] [61/467] Generating: Bejo Zaden - Nadia Lemmes
+[2025-10-31 22:24:49] [62/467] Generating: Bidfood - Hessel de keijzer (1.0)
+[2025-10-31 22:24:49] [64/467] Generating: Blink Charging - Joris van Liempt
+[2025-10-31 22:24:57] [65/467] Generating: Blue Sky Inn - Baruch Colthof
+[2025-10-31 22:25:04] [66/467] Generating: Bluesolution SRL - Alexandru Dobre
+[2025-10-31 22:25:04] [67/467] Generating: Bme - Axel Visser
+[2025-10-31 22:25:04] [68/467] Generating: Boermarke - Ronald Boezelman
+[2025-10-31 22:25:04] [69/467] Generating: bol. - Stijn de Boer
+[2025-10-31 22:25:04] [70/467] Generating: Bonduelle - Tom achtereekte
+[2025-10-31 22:25:04] [71/467] Generating: Boot groningen - Lieke van Noort
+[2025-10-31 22:25:04] [72/467] Generating: BOS GmbH & Co. KG - O. Dietrich
+[2025-10-31 22:26:11]      xelatex - 1
+[2025-10-31 22:26:11]        This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex)
+[2025-10-31 22:26:11]         restricted \write18 enabled.
+[2025-10-31 22:26:11]        entering extended mode
+[2025-10-31 22:26:11]      updating tlmgr
+[2025-10-31 22:26:11]      updating existing packages
+[2025-10-31 22:26:11]      ERROR: 
+[2025-10-31 22:26:11]      compilation failed- error
+[2025-10-31 22:26:11]      Misplaced alignment tab character &.
+[2025-10-31 22:26:11]      <argument> \Large BOS GmbH &
+[2025-10-31 22:26:11]                                   Co. KG
+[2025-10-31 22:26:11]      l.247 \textbf{\Large BOS GmbH & Co. KG}
+[2025-10-31 22:26:11]      I can't figure out why you would want to use a tab mark
+[2025-10-31 22:26:11]      here. If you just want an ampersand, the remedy is
+[2025-10-31 22:26:11]      simple: Just type `I\&' now. But if some right brace
+[2025-10-31 22:26:11]      up above has ended a previous alignment prematurely,
+[2025-10-31 22:26:11]      you're probably due for more error messages, and you
+[2025-10-31 22:26:11]      might try typing `S' now just to see what is salvageable.
+[2025-10-31 22:26:11]      see ResilienceReport.log for more information.
+[2025-10-31 22:26:11] [73/467] Generating: Bosch Thermotechniek B.V. - Rob ter Beek (1.0)
+[2025-10-31 22:26:25] [74/467] Generating: BouWatch - Jos Verberne
+[2025-10-31 22:26:32] [75/467] Generating: Bribus BV - Edwin Stevering
+[2025-10-31 22:26:40] [76/467] Generating: Broshuis B.V. - Jasper Luik (1.0)
+[2025-10-31 22:26:47] [77/467] Generating: BSH huishoudapparaten BV - Marcel van der Loos
+[2025-10-31 22:26:55] [78/467] Generating: BSH huishoudapparaten BV - robert van etten
+[2025-10-31 22:27:03] [79/467] Generating: BSH huishoudapparaten BV - Pascal van Noort
+[2025-10-31 22:27:10] [80/467] Generating: BSH huishoudapparaten BV - Robert van Seumeren
+[2025-10-31 22:27:18] [81/467] Generating: BSH Huishoudapparaten BV - Liesbeth Pel
+[2025-10-31 22:27:26] [82/467] Generating: BWS Sumatera IV Batam - Aswin
+[2025-10-31 22:27:33] [83/467] Generating: c. steenvoorden b.v. - kees steenvoorden
+[2025-10-31 22:27:41] [84/467] Generating: C. van Heezik - Niels Tammer
+[2025-10-31 22:27:48] [85/467] Generating: C.J. Vianen Flowerexport B.V. - Jan Ravensbergen
+[2025-10-31 22:27:56] [86/467] Generating: Celanese - Marco Verberne
+[2025-10-31 22:28:03] [87/467] Generating: CelaVIta / McCain - Ray Hobé
+[2025-10-31 22:28:11] 
+============================================================
+[2025-10-31 22:28:11] GENERATION COMPLETE
+[2025-10-31 22:28:11] ============================================================
+[2025-10-31 22:28:11] Total records: 467
+[2025-10-31 22:28:11] ============================================================

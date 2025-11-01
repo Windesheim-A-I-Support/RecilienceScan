@@ -1,6 +1,6 @@
 ======================================================================
 DATA INTEGRITY VALIDATION REPORT
-Generated: 2025-10-31 21:25:06
+Generated: 2025-10-31 22:17:46
 ======================================================================
 
 OVERVIEW:
@@ -9,58 +9,77 @@ OVERVIEW:
   Records removed during cleaning: 40
 
 SAMPLE VALIDATION RESULTS:
-  Samples validated: 10
-  Perfect matches: 10
+  Samples validated: 14
+  Perfect matches: 14
   Acceptable matches (>90%): 0
   Mismatches: 0
-  Missing in CSV: 0
+  Missing in CSV: 1
 
   Overall accuracy: 100.0%
 
 DETAILED SAMPLE RESULTS:
 
-  [1] Fujifilm Europe B.V. - Bart Verhoeven
+  [1] Vibrantz  Color Solutions Europe BV - Raimond Lony
       Status: PERFECT
       Matched: 18/18 fields
 
-  [2] Royal Koopmans - B. Dolman
+  [2] AbbVie - Vincent
       Status: PERFECT
       Matched: 18/18 fields
 
-  [3] Upfield - Arjen van der Meer
+  [3] yer - lennart
       Status: PERFECT
       Matched: 18/18 fields
 
-  [4] The Greenery - Sebastiaan van Oeffelen
+  [4] Eurosort Systems BV - Raymond Teeuw
       Status: PERFECT
       Matched: 18/18 fields
 
-  [5] Royal Koopmans - Jildou van der Schaaf
+  [5] MSD Animal Health - Lars Kalk
       Status: PERFECT
       Matched: 18/18 fields
 
-  [6] Corbion (2) - Andrew Huschka (2)
+  [6] Rituals
+      Status: MISSING IN CSV
+
+  [7] ESKA BV - Johan Homan
       Status: PERFECT
       Matched: 18/18 fields
 
-  [7] Swinkels Family Brewers - Hans van Vijfeijken
+  [8] The Coca-Cola Company - Takayoshi Hirose
       Status: PERFECT
       Matched: 18/18 fields
 
-  [8] Axalta Coating Systems GmbH - Edgar Peet
+  [9] ESC - Helder Pereira
       Status: PERFECT
       Matched: 18/18 fields
 
-  [9] Farm Frites International B.V. - Jakob Rentier
+  [10] Medco EP Natuna - Arqom
       Status: PERFECT
       Matched: 18/18 fields
 
-  [10] The Coca-Cola Company - Iris Meza
+  [11] Fast Forward Wheels bv - Henk Schipper
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [12] Swinkels Family Brewers - Rick van de Mortel
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [13] Fujifilm Europe B.V. - Theo Rosenberg
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [14] Agrifac Machinery B.V. - Gert Klein
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [15] Broshuis B.V. - Jasper Luik (1.0)
       Status: PERFECT
       Matched: 18/18 fields
 
 ======================================================================
 VERDICT:
-  [OK] Data integrity verified!
-  [OK] Cleaning process preserves data accurately
+  [OK] Data integrity is acceptable (>90% accuracy)
+  [!] Minor discrepancies found - review details above
 ======================================================================

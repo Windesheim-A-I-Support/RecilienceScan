@@ -10,7 +10,10 @@
       "Bash(quarto render:*)",
       "Bash(ls:*)",
       "Bash(pip install:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(Rscript:*)"
     ],
     "deny": [],
     "ask": []

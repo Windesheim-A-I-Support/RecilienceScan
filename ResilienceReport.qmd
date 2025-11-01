@@ -1805,6 +1805,7 @@ tryCatch({
 
 `r if (exists("has_multiple_respondents") && has_multiple_respondents) paste("This dashboard shows the **average scores across all", nrow(company_data_all), "respondents** from", company_name, "for comparison with the individual scores on the previous page.")`
 
+
 ```{r company-average-dashboard, echo=FALSE, fig.height=9, fig.width=13, eval=exists("has_multiple_respondents") && has_multiple_respondents}
 # ========================================================================
 # COMPANY AVERAGE DASHBOARD (2+ RESPONDENTS ONLY)
