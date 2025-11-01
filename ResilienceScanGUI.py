@@ -2456,7 +2456,7 @@ TOP 10 MOST ENGAGED COMPANIES:
         report_files = glob.glob(str(REPORTS_DIR / "*.pdf"))
 
         if not report_files:
-            self.log_email("ℹ️  No PDF reports found in /reports folder")
+            self.log_email("[INFO] No PDF reports found in /reports folder")
             self.email_stats_label.config(text="No PDF reports found - generate reports first")
             return
 

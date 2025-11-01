@@ -683,9 +683,9 @@ tryCatch({
   if (!dir.exists("data")) {
     add_validation_message(field = "filesystem", rule = "directory_exists", value = "data/", 
                           severity = "error", message = "Data directory does not exist")
-    cat("- Data directory: **NOT FOUND** ❌\n")
+    cat("- Data directory: **NOT FOUND** [X]\n")
   } else {
-    cat("- Data directory: Found ✅\n")
+    cat("- Data directory: Found [OK]\n")
     
     # List available files in data directory
     available_files <- list.files("data", pattern = "\\.(csv|xlsx|xls|txt)$", ignore.case = TRUE)
@@ -699,24 +699,24 @@ tryCatch({
   # Target file analysis
   if (file.exists(data_file_path)) {
     file_info <- file.info(data_file_path)
-    cat("- Target file: **FOUND** ✅\n")
+    cat("- Target file: **FOUND** [OK]\n")
     cat("  - Path:", data_file_path, "\n")
     cat("  - Size:", round(file_info$size / 1024, 1), "KB\n")
     cat("  - Modified:", as.character(file_info$mtime), "\n")
     
     # Check file permissions
     if (file.access(data_file_path, 4) == 0) {
-      cat("  - Readable: Yes ✅\n")
+      cat("  - Readable: Yes [OK]\n")
     } else {
       add_validation_message(field = "file_access", rule = "readable", value = data_file_path,
                             severity = "error", message = "File exists but not readable")
-      cat("  - Readable: **NO** ❌\n")
+      cat("  - Readable: **NO** [X]\n")
     }
     
   } else {
     add_validation_message(field = "file_existence", rule = "file_exists", value = data_file_path,
                           severity = "error", message = "Target CSV file not found")
-    cat("- Target file: **NOT FOUND** ❌\n")
+    cat("- Target file: **NOT FOUND** [X]\n")
   }
   
 }, error = function(e) {
@@ -752,7 +752,7 @@ tryCatch({
                                  show_col_types = FALSE,
                                  locale = readr::locale(encoding = "UTF-8"))
         loading_method <- "readr_utf8"
-        cat("- Strategy 1 (readr UTF-8): **SUCCESS** ✅\n")
+        cat("- Strategy 1 (readr UTF-8): **SUCCESS** [OK]\n")
       }, error = function(e) {
         cat("- Strategy 1 (readr UTF-8): Failed -", e$message, "\n")
       })
@@ -765,7 +765,7 @@ tryCatch({
                                  col_types = readr::cols(.default = "c"),
                                  show_col_types = FALSE)
         loading_method <- "readr_auto"
-        cat("- Strategy 2 (readr auto): **SUCCESS** ✅\n")
+        cat("- Strategy 2 (readr auto): **SUCCESS** [OK]\n")
       }, error = function(e) {
         cat("- Strategy 2 (readr auto): Failed -", e$message, "\n")
       })
@@ -779,7 +779,7 @@ tryCatch({
                           encoding = "UTF-8",
                           check.names = FALSE)
         loading_method <- "base_utf8"
-        cat("- Strategy 3 (base R UTF-8): **SUCCESS** ✅\n")
+        cat("- Strategy 3 (base R UTF-8): **SUCCESS** [OK]\n")
       }, error = function(e) {
         cat("- Strategy 3 (base R UTF-8): Failed -", e$message, "\n")
       })
@@ -790,7 +790,7 @@ tryCatch({
       tryCatch({
         df_raw <- read.csv(data_file_path, stringsAsFactors = FALSE)
         loading_method <- "base_minimal"
-        cat("- Strategy 4 (base R minimal): **SUCCESS** ✅\n")
+        cat("- Strategy 4 (base R minimal): **SUCCESS** [OK]\n")
       }, error = function(e) {
         cat("- Strategy 4 (base R minimal): Failed -", e$message, "\n")
       })
@@ -818,27 +818,27 @@ if (!is.null(df_raw)) {
   if (nrow(df_raw) == 0) {
     add_validation_message(field = "data_content", rule = "min_rows > 0", value = "0",
                           severity = "error", message = "Dataset contains no rows")
-    cat("- **Data content:** Empty dataset ❌\n")
+    cat("- **Data content:** Empty dataset [X]\n")
   } else if (nrow(df_raw) < 5) {
     add_validation_message(field = "data_content", rule = "min_rows >= 5", value = nrow(df_raw),
                           severity = "warning", message = "Very small dataset may limit analysis")
-    cat("- **Data content:** Very small dataset (", nrow(df_raw), " rows) ⚠️\n")
+    cat("- **Data content:** Very small dataset (", nrow(df_raw), " rows) [!]\n")
   } else {
-    cat("- **Data content:** Adequate size ✅\n")
+    cat("- **Data content:** Adequate size [OK]\n")
   }
   
   if (ncol(df_raw) == 0) {
     add_validation_message(field = "data_structure", rule = "min_cols > 0", value = "0",
                           severity = "error", message = "Dataset contains no columns")
-    cat("- **Data structure:** No columns ❌\n")
+    cat("- **Data structure:** No columns [X]\n")
   } else {
-    cat("- **Data structure:** ", ncol(df_raw), " columns available ✅\n")
+    cat("- **Data structure:** ", ncol(df_raw), " columns available [OK]\n")
   }
   
 } else {
   add_validation_message(field = "data_loading", rule = "load_success", value = "failed",
                         severity = "error", message = "All loading strategies failed - no data available")
-  cat("\n**⚠️ Data loading failed - no data available for analysis**\n")
+  cat("\n**[!] Data loading failed - no data available for analysis**\n")
 }
 
 cat("\n")
@@ -876,7 +876,7 @@ if (!is.null(df_raw) && nrow(df_raw) > 0) {
     cat("\n**Column Structure Analysis:**\n")
     cat("- **Total columns:** ", ncol(df_raw), "\n")
     cat("- **Column name consistency:** ", 
-        ifelse(any(duplicated(clean_colnames)), "Duplicates found ❌", "No duplicates ✅"), "\n")
+        ifelse(any(duplicated(clean_colnames)), "Duplicates found [X]", "No duplicates [OK]"), "\n")
     
     # Check for naming issues
     problematic_names <- original_colnames[grepl("[^a-zA-Z0-9_.]", original_colnames)]
@@ -884,9 +884,9 @@ if (!is.null(df_raw) && nrow(df_raw) > 0) {
       add_validation_message(field = "column_names", rule = "valid_characters", 
                             value = paste(problematic_names, collapse = ", "),
                             severity = "warning", message = "Column names contain special characters")
-      cat("- **Column name issues:** Special characters found in", length(problematic_names), "columns ⚠️\n")
+      cat("- **Column name issues:** Special characters found in", length(problematic_names), "columns [!]\n")
     } else {
-      cat("- **Column name format:** Clean format ✅\n")
+      cat("- **Column name format:** Clean format [OK]\n")
     }
     
   }, error = function(e) {
@@ -1000,7 +1000,7 @@ if (!is.null(df_raw) && nrow(df_raw) > 0) {
         cat("- **", problem_columns$column_name[i], ":** ", problem_columns$quality_flag[i], "\n", sep = "")
       }
     } else {
-      cat("\n**Data Quality:** No major issues detected ✅\n")
+      cat("\n**Data Quality:** No major issues detected [OK]\n")
     }
     
   }, error = function(e) {
@@ -1035,7 +1035,7 @@ if (!is.null(df_raw) && nrow(df_raw) > 0) {
     if (length(company_col_candidates) == 0) {
       add_validation_message(field = "company_column", rule = "company_col_exists", value = "none",
                             severity = "error", message = "No company name columns found")
-      cat("- **Status:** No company name columns detected ❌\n")
+      cat("- **Status:** No company name columns detected [X]\n")
       cat("- **Available columns:** ", paste(head(colnames(df_raw), 10), collapse = ", "), 
           if(ncol(df_raw) > 10) "..." else "", "\n")
     } else {
@@ -1044,7 +1044,7 @@ if (!is.null(df_raw) && nrow(df_raw) > 0) {
       
       # Use the first/best candidate
       company_col <- company_col_candidates[1]
-      cat("- **Selected column:** ", company_col, " ✅\n")
+      cat("- **Selected column:** ", company_col, " [OK]\n")
       
       # Analyze company data in this column
       company_names <- df_raw[[company_col]]
@@ -1058,7 +1058,7 @@ if (!is.null(df_raw) && nrow(df_raw) > 0) {
       # Exact match
       exact_matches <- which(tolower(trimws(company_names)) == tolower(trimws(target_company)))
       if (length(exact_matches) > 0) {
-        cat("- **Exact match:** Found ", length(exact_matches), " match(es) ✅\n")
+        cat("- **Exact match:** Found ", length(exact_matches), " match(es) [OK]\n")
         company_data <- df_raw[exact_matches[1], , drop = FALSE]
         match_type <- "exact"
       } else {
@@ -1067,7 +1067,7 @@ if (!is.null(df_raw) && nrow(df_raw) > 0) {
         # Partial match
         partial_matches <- which(grepl(tolower(trimws(target_company)), tolower(trimws(company_names)), fixed = TRUE))
         if (length(partial_matches) > 0) {
-          cat("- **Partial match:** Found ", length(partial_matches), " match(es) ⚠️\n")
+          cat("- **Partial match:** Found ", length(partial_matches), " match(es) [!]\n")
           cat("  - Matches: ", paste(head(company_names[partial_matches], 5), collapse = ", "), "\n")
           company_data <- df_raw[partial_matches[1], , drop = FALSE]
           match_type <- "partial"
@@ -1116,7 +1116,7 @@ if (!is.null(company_data) && nrow(company_data) > 0) {
   
   tryCatch({
     cat("**Successfully extracted company data:**\n")
-    cat("- **Company found:** ", company_data[[company_col]][1], " ✅\n")
+    cat("- **Company found:** ", company_data[[company_col]][1], " [OK]\n")
     cat("- **Match type:** ", match_type, "\n")
     cat("- **Data completeness analysis:**\n")
     
@@ -1204,7 +1204,7 @@ if (!is.null(company_data) && nrow(company_data) > 0) {
   cat("\n")
 } else if (!is.null(df_raw) && nrow(df_raw) > 0) {
   cat("## Company Data Extraction\n\n")
-  cat("**⚠️ No company data extracted - see matching issues above**\n\n")
+  cat("**[!] No company data extracted - see matching issues above**\n\n")
 }
 ```
 
@@ -1265,23 +1265,23 @@ tryCatch({
     }
     
   } else {
-    cat("\n**✅ No validation issues detected**\n")
+    cat("\n**[OK] No validation issues detected**\n")
   }
   
   # Overall status assessment
   cat("\n**Overall Data Quality Assessment:**\n")
   
   if (is.null(df_raw)) {
-    cat("- **Status:** ❌ **DATA LOADING FAILED** - No analysis possible\n")
+    cat("- **Status:** [X] **DATA LOADING FAILED** - No analysis possible\n")
     cat("- **Action required:** Check file path and format\n")
   } else if (validation_results$errors > 0) {
-    cat("- **Status:** ⚠️ **ERRORS DETECTED** - Data available but with critical issues\n")
+    cat("- **Status:** [!] **ERRORS DETECTED** - Data available but with critical issues\n")
     cat("- **Action required:** Review and fix error conditions before proceeding\n")
   } else if (validation_results$warnings > 0) {
-    cat("- **Status:** ⚠️ **WARNINGS PRESENT** - Data usable but with minor issues\n")
+    cat("- **Status:** [!] **WARNINGS PRESENT** - Data usable but with minor issues\n")
     cat("- **Action required:** Review warnings for potential improvements\n")
   } else {
-    cat("- **Status:** ✅ **DATA QUALITY GOOD** - Ready for analysis\n")
+    cat("- **Status:** [OK] **DATA QUALITY GOOD** - Ready for analysis\n")
     cat("- **Action required:** None - proceed with report generation\n")
   }
   
@@ -1293,7 +1293,7 @@ tryCatch({
   }
   
 }, error = function(e) {
-  cat("⚠️ **Error generating validation summary:** ", e$message, "\n")
+  cat("[!] **Error generating validation summary:** ", e$message, "\n")
 })
 
 cat("\n---\n")
