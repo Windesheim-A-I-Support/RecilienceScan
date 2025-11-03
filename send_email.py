@@ -19,15 +19,17 @@ TEST_EMAIL = "cg.verhoef@windesheim.nl"  # <- Change this to your address
 # NOTE: SMTP allows setting custom From address, Outlook COM does not
 SMTP_SERVER = "smtp.office365.com"
 SMTP_PORT = 587
-SMTP_FROM = "contact@resiliencescan.org"  # <- Sender email address
+SMTP_FROM = "info@resiliencescan.org"  # <- Sender email address
 SMTP_USERNAME = ""  # <- Login username (may differ from FROM address)
 SMTP_PASSWORD = ""  # <- Your password
 
-# IMPORTANT: When using Outlook COM (win32com.client), the From address
-# is automatically set to the default Outlook account and cannot be changed.
-# To send from contact@resiliencescan.org, you must:
-#   Option 1: Configure SMTP above with proper credentials
-#   Option 2: Set contact@resiliencescan.org as default account in Outlook
+# IMPORTANT: When using Outlook COM (win32com.client), the system will try
+# accounts in priority order:
+#   1. info@resiliencescan.org (preferred)
+#   2. r.deboer@windesheim.nl
+#   3. cg.verhoef@windesheim.nl
+#   4. Any available Outlook account
+#   5. SMTP as final fallback (if configured above)
 
 def safe_display_name(name):
     """Sanitize name for display in filename (keep spaces and hyphens, replace slashes)"""

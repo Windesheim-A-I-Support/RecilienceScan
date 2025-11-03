@@ -437,6 +437,7 @@ class ResilienceScanGUI:
             textvariable=self.template_var,
             values=[
                 "ResilienceReport.qmd",
+                "ResilienceReport_v2.qmd",
                 "ExecutiveDashboard.qmd",
                 "report_variations/Report1_CircularBarplot.qmd",
                 "report_variations/Report2_Heatmap.qmd",
@@ -471,13 +472,21 @@ class ResilienceScanGUI:
         button_frame = ttk.Frame(controls_frame)
         button_frame.grid(row=2, column=0, columnspan=3, pady=10)
 
+        self.gen_single_btn = ttk.Button(
+            button_frame,
+            text=" Generate Single",
+            command=self.generate_single_report,
+            width=20
+        )
+        self.gen_single_btn.grid(row=0, column=0, padx=5)
+
         self.gen_start_btn = ttk.Button(
             button_frame,
-            text="▶ Start Generation",
+            text="▶ Start All",
             command=self.start_generation_all,
             width=20
         )
-        self.gen_start_btn.grid(row=0, column=0, padx=5)
+        self.gen_start_btn.grid(row=0, column=1, padx=5)
 
         self.gen_cancel_btn = ttk.Button(
             button_frame,
@@ -486,7 +495,7 @@ class ResilienceScanGUI:
             state=tk.DISABLED,
             width=15
         )
-        self.gen_cancel_btn.grid(row=0, column=1, padx=5)
+        self.gen_cancel_btn.grid(row=0, column=2, padx=5)
 
         # Progress
         progress_frame = ttk.LabelFrame(gen_tab, text="Generation Progress", padding=10)
@@ -647,7 +656,7 @@ class ResilienceScanGUI:
 
         # From Email
         ttk.Label(smtp_frame, text="From Email:").grid(row=2, column=0, sticky=tk.W, pady=5)
-        self.smtp_from_var = tk.StringVar(value="contact@resiliencescan.org")
+        self.smtp_from_var = tk.StringVar(value="info@resiliencescan.org")
         from_entry = ttk.Entry(smtp_frame, textvariable=self.smtp_from_var, width=40, state='readonly')
         from_entry.grid(row=2, column=1, sticky=(tk.W, tk.E), padx=10, pady=5)
 
@@ -1728,6 +1737,207 @@ TOP 10 MOST ENGAGED COMPANIES:
 
     # ==================== Generation Methods ====================
 
+    def generate_single_report(self):
+        """Generate a single report for selected company/person"""
+        if self.df is None:
+            messagebox.showwarning("Warning", "Please load data first")
+            return
+
+        # Create dialog for company/person selection
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Generate Single Report")
+        dialog.geometry("600x450")
+        dialog.transient(self.root)
+        dialog.grab_set()
+
+        # Company selection
+        ttk.Label(dialog, text="Company:").grid(row=0, column=0, sticky=tk.W, padx=10, pady=5)
+
+        company_var = tk.StringVar()
+        company_list = sorted(self.df['company_name'].unique())
+        company_combo = ttk.Combobox(dialog, textvariable=company_var, values=company_list, width=50)
+        company_combo.grid(row=0, column=1, padx=10, pady=5, sticky=(tk.W, tk.E))
+
+        # Person selection
+        ttk.Label(dialog, text="Person:").grid(row=1, column=0, sticky=tk.W, padx=10, pady=5)
+
+        person_var = tk.StringVar()
+        person_combo = ttk.Combobox(dialog, textvariable=person_var, width=50)
+        person_combo.grid(row=1, column=1, padx=10, pady=5, sticky=(tk.W, tk.E))
+
+        # Update person list when company changes
+        def update_person_list(event=None):
+            company = company_var.get()
+            if company:
+                persons = self.df[self.df['company_name'] == company]['name'].tolist()
+                person_combo['values'] = persons
+                if persons:
+                    person_combo.current(0)
+
+        company_combo.bind('<<ComboboxSelected>>', update_person_list)
+
+        # Initialize with first company
+        if company_list:
+            company_combo.current(0)
+            update_person_list()
+
+        # Generate button
+        def do_generate():
+            company = company_var.get()
+            person = person_var.get()
+
+            if not company or not person:
+                messagebox.showwarning("Warning", "Please select both company and person")
+                return
+
+            dialog.destroy()
+
+            # Find the row
+            row_data = self.df[(self.df['company_name'] == company) & (self.df['name'] == person)]
+            if len(row_data) == 0:
+                messagebox.showerror("Error", "Selected record not found in data")
+                return
+
+            row = row_data.iloc[0]
+
+            # Validate record
+            validation_result = self.validate_record_for_report(row)
+            if not validation_result['is_valid']:
+                messagebox.showerror("Invalid Record", f"Cannot generate report:\n{validation_result['reason']}")
+                return
+
+            # Generate the report
+            self.generate_single_report_worker(row, company, person)
+
+        ttk.Button(dialog, text="Generate", command=do_generate, width=15).grid(row=2, column=0, columnspan=2, pady=20)
+
+        dialog.columnconfigure(1, weight=1)
+
+    def generate_single_report_worker(self, row, company, person):
+        """Worker function to generate a single report"""
+        from datetime import datetime
+        import subprocess
+        import shutil
+
+        self.log_gen(f"\n[START] Generating single report for {company} - {person}")
+
+        try:
+            # Create safe filenames
+            def safe_filename(name):
+                if pd.isna(name) or name == "":
+                    return "Unknown"
+                return "".join(c if c.isalnum() or c in [' ', '-'] else "_" for c in str(name)).replace(" ", "_")
+
+            def safe_display_name(name):
+                if pd.isna(name) or name == "":
+                    return "Unknown"
+                name_str = str(name).strip()
+                name_str = name_str.replace("/", "-").replace("\\", "-").replace(":", "-")
+                name_str = name_str.replace("*", "").replace("?", "").replace('"', "'")
+                name_str = name_str.replace("<", "(").replace(">", ")").replace("|", "-")
+                return name_str
+
+            safe_company = safe_filename(company)
+            safe_person = safe_filename(person)
+            display_company = safe_display_name(company)
+            display_person = safe_display_name(person)
+
+            # Output filename
+            date_str = datetime.now().strftime("%Y%m%d")
+            template_name = Path(self.template_var.get()).stem
+            if template_name.startswith("Report"):
+                report_name = template_name
+            else:
+                report_name = template_name
+
+            output_filename = f"{date_str} {report_name} ({display_company} - {display_person}).pdf"
+            output_file = REPORTS_DIR / output_filename
+
+            # Check if already exists
+            if output_file.exists():
+                response = messagebox.askyesnocancel(
+                    "File Exists",
+                    f"Report already exists:\n{output_filename}\n\nOverwrite?"
+                )
+                if not response:
+                    self.log_gen("[INFO] Generation cancelled - file already exists")
+                    return
+
+            # Build quarto command
+            selected_template = ROOT_DIR / self.template_var.get()
+            temp_output = f"temp_{safe_company}_{safe_person}.pdf"
+            cmd = [
+                'quarto', 'render', str(selected_template),
+                '-P', f'company={company}',
+                '--to', 'pdf',
+                '--output', temp_output
+            ]
+
+            self.log_gen(f"[INFO] Rendering PDF with template: {self.template_var.get()}")
+            self.status_label.config(text=f"Generating: {company} - {person}")
+
+            # Execute quarto render
+            result = subprocess.run(cmd, cwd=ROOT_DIR, capture_output=True, text=True, timeout=300)
+
+            if result.returncode == 0:
+                temp_path = ROOT_DIR / temp_output
+                if temp_path.exists():
+                    shutil.move(str(temp_path), str(output_file))
+                    self.log_gen(f"[OK] Success: {output_filename}")
+
+                    # Validate the generated report
+                    try:
+                        from validate_single_report import validate_report
+                        validation_result = validate_report(
+                            pdf_path=str(output_file),
+                            csv_path=str(DATA_FILE),
+                            company_name=company,
+                            person_name=person
+                        )
+
+                        if validation_result['success']:
+                            self.log_gen(f"[OK] Validation passed: All values match CSV")
+                            messagebox.showinfo("Success", f"Report generated and validated!\n\n{output_filename}\n\nAll values match CSV data.")
+                        else:
+                            self.log_gen(f"[WARNING] Validation: {validation_result['message']}")
+                            # Log details
+                            for key, info in validation_result.get('details', {}).items():
+                                if not info['matches']:
+                                    exp = f"{info['expected']:.2f}" if info.get('expected') is not None else "N/A"
+                                    act = f"{info['actual']:.2f}" if info.get('actual') is not None else "N/A"
+                                    self.log_gen(f"    {info['label']}: Expected={exp}, Actual={act}")
+
+                            messagebox.showwarning("Report Generated with Warnings",
+                                                 f"Report generated:\n{output_filename}\n\nBut validation found issues:\n{validation_result['message']}\n\nCheck logs for details.")
+                    except Exception as ve:
+                        self.log_gen(f"[INFO] Validation skipped: {ve}")
+                        messagebox.showinfo("Success", f"Report generated!\n\n{output_filename}")
+
+                    self.status_label.config(text="Report generated successfully")
+                else:
+                    self.log_gen(f"[ERROR] Output file not found after rendering")
+                    messagebox.showerror("Error", "Report generation failed: Output file not found")
+                    self.status_label.config(text="Error")
+            else:
+                self.log_gen(f"[ERROR] Quarto render failed with exit code {result.returncode}")
+                if result.stderr:
+                    self.log_gen(f"stderr: {result.stderr[-500:]}")
+                messagebox.showerror("Generation Failed", f"Report generation failed.\n\nCheck logs for details.")
+                self.status_label.config(text="Error")
+
+        except FileNotFoundError:
+            self.log_gen(f"[ERROR] Quarto not found - please install from https://quarto.org")
+            messagebox.showerror("Quarto Not Found", "Quarto is not installed.\n\nPlease install from https://quarto.org")
+            self.status_label.config(text="Error")
+        except subprocess.TimeoutExpired:
+            self.log_gen(f"[ERROR] Generation timeout (>5 minutes)")
+            messagebox.showerror("Timeout", "Report generation timed out (>5 minutes)")
+            self.status_label.config(text="Error")
+        except Exception as e:
+            self.log_gen(f"[ERROR] Error: {e}")
+            messagebox.showerror("Error", f"Report generation failed:\n{e}")
+            self.status_label.config(text="Error")
+
     def start_generation_all(self):
         """Start generating all reports"""
         if self.df is None:
@@ -1885,12 +2095,13 @@ TOP 10 MOST ENGAGED COMPANIES:
                     success += 1
                     continue
 
-                # Build quarto command using selected template
+                # Build quarto command using selected template with both company and person
                 selected_template = ROOT_DIR / self.template_var.get()
                 temp_output = f"temp_{safe_company}_{safe_person}.pdf"
                 cmd = [
                     'quarto', 'render', str(selected_template),
                     '-P', f'company={company}',
+                    '-P', f'person={person}',
                     '--to', 'pdf',
                     '--output', temp_output
                     # Removed --quiet to capture error details
@@ -1905,6 +2116,30 @@ TOP 10 MOST ENGAGED COMPANIES:
                         import shutil
                         shutil.move(str(temp_path), str(output_file))
                         self.log_gen(f"  [OK] Success: {output_filename}")
+
+                        # Validate the generated report
+                        try:
+                            from validate_single_report import validate_report
+                            validation_result = validate_report(
+                                pdf_path=str(output_file),
+                                csv_path=str(DATA_FILE),
+                                company_name=company,
+                                person_name=person
+                            )
+
+                            if validation_result['success']:
+                                self.log_gen(f"  [OK] Validation passed: All values match CSV")
+                            else:
+                                self.log_gen(f"  [WARNING] Validation: {validation_result['message']}")
+                                # Log details
+                                for key, info in validation_result.get('details', {}).items():
+                                    if not info['matches']:
+                                        exp = f"{info['expected']:.2f}" if info.get('expected') is not None else "N/A"
+                                        act = f"{info['actual']:.2f}" if info.get('actual') is not None else "N/A"
+                                        self.log_gen(f"      {info['label']}: Expected={exp}, Actual={act}")
+                        except Exception as ve:
+                            self.log_gen(f"  [INFO] Validation skipped: {ve}")
+
                         success += 1
                     else:
                         self.log_gen(f"  [ERROR] Error: Output file not found")
@@ -2913,17 +3148,56 @@ TOP 10 MOST ENGAGED COMPANIES:
                 if not recipient or '@' not in recipient:
                     raise ValueError(f"Invalid recipient email address: {recipient}")
 
-                # Try Outlook first, fallback to SMTP
+                # Try Outlook first with priority account fallback, then SMTP
                 use_outlook = True
                 outlook_error = None
 
                 if use_outlook:
                     try:
-                        self.log_email(f"  [OUTLOOK] Using Outlook to send email...")
+                        self.log_email(f"  [OUTLOOK] Attempting to send via Outlook...")
                         import win32com.client
 
                         # Create Outlook instance
                         outlook = win32com.client.Dispatch('Outlook.Application')
+
+                        # Define account priority list
+                        priority_accounts = [
+                            "info@resiliencescan.org",
+                            "r.deboer@windesheim.nl",
+                            "cg.verhoef@windesheim.nl"
+                        ]
+
+                        # Get all available accounts
+                        available_accounts = []
+                        try:
+                            for i in range(1, outlook.Session.Accounts.Count + 1):
+                                account = outlook.Session.Accounts.Item(i)
+                                available_accounts.append((account.SmtpAddress, account))
+                            self.log_email(f"  Found {len(available_accounts)} Outlook account(s)")
+                        except Exception as e:
+                            self.log_email(f"  [WARNING] Could not enumerate Outlook accounts: {e}")
+
+                        # Select account based on priority
+                        selected_account = None
+                        selected_address = None
+
+                        # Try priority accounts first
+                        for priority_email in priority_accounts:
+                            for smtp_address, account in available_accounts:
+                                if smtp_address.lower() == priority_email.lower():
+                                    selected_account = account
+                                    selected_address = smtp_address
+                                    self.log_email(f"  [OK] Using priority account: {selected_address}")
+                                    break
+                            if selected_account:
+                                break
+
+                        # If no priority account found, use any available account
+                        if not selected_account and available_accounts:
+                            selected_address, selected_account = available_accounts[0]
+                            self.log_email(f"  [INFO] No priority account available, using: {selected_address}")
+
+                        # Create mail item
                         mail = outlook.CreateItem(0)  # 0 = MailItem
 
                         # Set email properties
@@ -2932,8 +3206,12 @@ TOP 10 MOST ENGAGED COMPANIES:
                         mail.Subject = subject
                         mail.Body = body
 
-                        # Outlook will use the logged-in account (contact@resiliencescan.org)
-                        self.log_email(f"  Using logged-in Outlook account (contact@resiliencescan.org)")
+                        # Set the sending account if we found one
+                        if selected_account:
+                            mail.SendUsingAccount = selected_account
+                            self.log_email(f"  [OK] Configured to send from: {selected_address}")
+                        else:
+                            self.log_email(f"  [WARNING] No specific account found, using Outlook default")
 
                         # Add attachment
                         self.log_email(f"  Attaching PDF: {attachment_path}...")
@@ -2942,34 +3220,18 @@ TOP 10 MOST ENGAGED COMPANIES:
                         # VERIFICATION: Log the actual recipient before sending
                         self.log_email(f"  [OK] Email configured:")
                         self.log_email(f"     To: {mail.To}")
-                        self.log_email(f"     CC: {mail.CC if mail.CC else '(none)'}")
-                        self.log_email(f"     BCC: {mail.BCC if mail.BCC else '(none)'}")
-
-                        # Try to get the account that will be used
-                        try:
-                            if mail.SendUsingAccount:
-                                self.log_email(f"     From Account: {mail.SendUsingAccount.SmtpAddress}")
-                            else:
-                                # Get default account
-                                default_account = outlook.Session.Accounts[0] if outlook.Session.Accounts.Count > 0 else None
-                                if default_account:
-                                    self.log_email(f"     From Account: {default_account.SmtpAddress} (default)")
-                                else:
-                                    self.log_email(f"     From Account: (default - unknown)")
-                        except:
-                            self.log_email(f"     From Account: (could not determine)")
-
+                        self.log_email(f"     From: {selected_address if selected_address else '(default account)'}")
                         self.log_email(f"     Subject: {mail.Subject[:50]}...")
 
                         # Send the email
                         self.log_email(f"  [OUTLOOK] Sending via Outlook...")
                         mail.Send()
-                        self.log_email(f"  [OK] Email sent successfully!")
+                        self.log_email(f"  [OK] Email sent successfully via Outlook from {selected_address if selected_address else 'default account'}!")
 
                     except Exception as outlook_ex:
                         outlook_error = str(outlook_ex)
                         self.log_email(f"  [WARNING] Outlook failed: {outlook_error}")
-                        self.log_email(f"  Falling back to SMTP...")
+                        self.log_email(f"  [FALLBACK] Attempting SMTP as fallback...")
 
                         # Fallback to SMTP
                         import smtplib
@@ -2979,7 +3241,7 @@ TOP 10 MOST ENGAGED COMPANIES:
                         from email import encoders
 
                         # Create message
-                        self.log_email(f"  Creating SMTP message...")
+                        self.log_email(f"  [SMTP] Creating SMTP message as final fallback...")
                         self.log_email(f"  Setting recipient to: {recipient}")
                         msg = MIMEMultipart()
                         msg['From'] = smtp_from
@@ -2999,22 +3261,22 @@ TOP 10 MOST ENGAGED COMPANIES:
                             msg.attach(part)
 
                         # Connect and send
-                        self.log_email(f"  Connecting to SMTP: {smtp_server}:{smtp_port}...")
+                        self.log_email(f"  [SMTP] Connecting to SMTP: {smtp_server}:{smtp_port}...")
                         server = smtplib.SMTP(smtp_server, smtp_port)
 
-                        self.log_email(f"  Starting TLS...")
+                        self.log_email(f"  [SMTP] Starting TLS...")
                         server.starttls()
 
-                        self.log_email(f"  Logging in as: {smtp_username}...")
+                        self.log_email(f"  [SMTP] Logging in as: {smtp_username}...")
                         server.login(smtp_username, smtp_password)
 
-                        self.log_email(f"  Sending message...")
+                        self.log_email(f"  [SMTP] Sending message from {smtp_from}...")
                         server.send_message(msg)
 
-                        self.log_email(f"  Closing connection...")
+                        self.log_email(f"  [SMTP] Closing connection...")
                         server.quit()
 
-                        self.log_email(f"  [OK] Sent via SMTP (fallback)!")
+                        self.log_email(f"  [OK] Email sent successfully via SMTP from {smtp_from} (used as fallback after Outlook failed)!")
                 else:
                     # Direct SMTP if Outlook disabled
                     import smtplib

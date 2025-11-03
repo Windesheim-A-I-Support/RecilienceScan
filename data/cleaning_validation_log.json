@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-10-31T22:17:38.680987",
+  "timestamp": "2025-11-01T18:21:24.940915",
   "statistics": {
     "initial_rows": 467,
     "final_rows": 467,
@@ -13,43 +13,43 @@
   "info": [
     {
       "level": "INFO",
-      "message": "Backup created: ./data/backups\\cleaned_master_20251031_221738.csv",
-      "timestamp": "2025-10-31T22:17:38.588749"
+      "message": "Backup created: ./data/backups\\cleaned_master_20251101_182124.csv",
+      "timestamp": "2025-11-01T18:21:24.836925"
     },
     {
       "level": "INFO",
       "message": "Loading data from: ./data/cleaned_master.csv",
-      "timestamp": "2025-10-31T22:17:38.588915"
+      "timestamp": "2025-11-01T18:21:24.837039"
     },
     {
       "level": "INFO",
       "message": "Loaded 467 rows, 178 columns",
-      "timestamp": "2025-10-31T22:17:38.598054"
+      "timestamp": "2025-11-01T18:21:24.847322"
     },
     {
       "level": "INFO",
       "message": "All required columns present: ['company_name', 'name', 'email_address']",
-      "timestamp": "2025-10-31T22:17:38.598725"
+      "timestamp": "2025-11-01T18:21:24.848043"
     },
     {
       "level": "INFO",
       "message": "Cleaned 15 score columns",
-      "timestamp": "2025-10-31T22:17:38.616997"
+      "timestamp": "2025-11-01T18:21:24.872013"
     },
     {
       "level": "INFO",
       "message": "Kept 467/467 records after validation",
-      "timestamp": "2025-10-31T22:17:38.646631"
+      "timestamp": "2025-11-01T18:21:24.903699"
     },
     {
       "level": "INFO",
       "message": "No duplicates found",
-      "timestamp": "2025-10-31T22:17:38.649292"
+      "timestamp": "2025-11-01T18:21:24.907381"
     },
     {
       "level": "INFO",
       "message": "Saved cleaned data: ./data/cleaned_master.csv",
-      "timestamp": "2025-10-31T22:17:38.680839"
+      "timestamp": "2025-11-01T18:21:24.940762"
     }
   ],
   "removed_records": []

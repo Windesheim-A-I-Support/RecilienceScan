@@ -128,11 +128,12 @@ def generate_reports():
         print(f"   Person: {person}")
         print(f"   Output: {output_filename}")
 
-        # Build quarto command
+        # Build quarto command with both company and person parameters
         temp_output = f"temp_{safe_company}_{safe_person}.pdf"
         cmd = (
             f'quarto render "{TEMPLATE}" '
             f'-P company="{company}" '
+            f'-P person="{person}" '
             f'--to pdf '
             f'--output "{temp_output}"'
             # Removed --quiet to see actual errors

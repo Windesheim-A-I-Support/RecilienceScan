@@ -77,7 +77,6 @@ execute:
   freeze: false
 params:
   company: "Placeholder Company"
-  person: ""
   diagnostic_mode: false
   debug_mode: false
   data_guide_mode: false
@@ -1381,28 +1380,8 @@ if (file.exists(data_file)) {
         # Extract ALL entries for this company
         company_data_all <- df_master[company_matches, , drop = FALSE]
 
-        # Filter by person name if provided
-        person_target <- if(!is.null(params$person)) params$person else ""
-        if (person_target != "" && "name" %in% colnames(company_data_all)) {
-          # Normalize person names for matching
-          normalize_name <- function(x) {
-            tolower(trimws(as.character(x)))
-          }
-
-          person_target_norm <- normalize_name(person_target)
-          person_matches <- which(normalize_name(company_data_all$name) == person_target_norm)
-
-          if (length(person_matches) > 0) {
-            # Use the specific person's data
-            company_data_extracted <- company_data_all[person_matches[1], , drop = FALSE]
-          } else {
-            # Person not found, fall back to first entry
-            company_data_extracted <- company_data_all[1, , drop = FALSE]
-          }
-        } else {
-          # No person specified, use first entry
-          company_data_extracted <- company_data_all[1, , drop = FALSE]
-        }
+        # First entry (for individual report)
+        company_data_extracted <- company_data_all[1, , drop = FALSE]
 
         # Check if multiple respondents exist
         has_multiple_respondents <- nrow(company_data_all) >= 2
@@ -1509,16 +1488,10 @@ if (is.null(dashboard_data)) {
   data_source <- "synthetic"
 }
 
-# Ensure numeric conversion and valid ranges - ONLY for score columns
-score_cols <- c("up__r", "up__c", "up__f", "up__v", "up__a",
-                "in__r", "in__c", "in__f", "in__v", "in__a",
+# Ensure numeric conversion and valid ranges
+score_cols <- c("up__r", "up__c", "up__f", "up__v", "up__a", 
+                "in__r", "in__c", "in__f", "in__v", "in__a", 
                 "do__r", "do__c", "do__f", "do__v", "do__a")
-
-# Keep only score columns and company_name to avoid timestamp conversion issues
-cols_to_keep <- c("company_name", score_cols[score_cols %in% colnames(dashboard_data)])
-if (length(cols_to_keep) > 1) {
-  dashboard_data <- dashboard_data[, cols_to_keep, drop = FALSE]
-}
 
 for (col in score_cols) {
   if (col %in% colnames(dashboard_data)) {
@@ -1667,17 +1640,18 @@ do_analysis <- analyze_pillar_gap("do")
 ::: {.content-visible when-format="pdf"}
 \newgeometry{left=0.8cm,right=0.8cm,top=1.0cm,bottom=0.8cm}
 \thispagestyle{empty}
-
-\begin{flushright}
-\includegraphics[height=1.5cm]{img/logo-resiliencescan.png}
-\end{flushright}
-
-\vspace{0.5cm}
 :::
 
 ## `r if (detected_language == "dutch") "Supply Chain Resilience Analyse" else "Strategic Supply Chain Resilience Analysis"` {.unnumbered}
 
 ::: {.content-visible when-format="pdf"}
+% NEXT Gen Resilience logo centered at top
+\begin{center}
+\includegraphics[width=0.35\textwidth]{img/logo-resiliencescan.png}
+\end{center}
+
+\vspace{0.5cm}
+
 \begin{minipage}[t]{0.70\textwidth}
 \vspace{0pt}
 
@@ -1695,15 +1669,16 @@ do_analysis <- analyze_pillar_gap("do")
 
 \vspace{0.2cm}
 
-{\small\textit{A collaboration between Hogeschool Windesheim, University of Groningen, and Involvation}}
+{\small\textit{NextGenResilience • RUG • Windesheim • Involvation}}
 
 \end{minipage}\hfill
 \begin{minipage}[t]{0.26\textwidth}
 \vspace{0pt}
 \raggedleft
-\includegraphics[width=0.75\textwidth]{img/logo-RUG.png}\\[3mm]
-\includegraphics[width=0.75\textwidth]{img/logo-windesheim.png}\\[3mm]
-\includegraphics[width=0.75\textwidth]{img/logo-involvation.png}
+% Partner logos stacked vertically
+\includegraphics[width=0.85\textwidth]{img/logo-windesheim.png}\\[2mm]
+\includegraphics[width=0.85\textwidth]{img/logo-involvation.png}\\[2mm]
+\includegraphics[width=0.85\textwidth]{img/logo-RUG.png}
 \end{minipage}
 
 \vspace{0.4cm}
@@ -1727,18 +1702,35 @@ tryCatch({
     
     # Function to create radar data
     create_radar <- function(prefix, title, color) {
-      scores <- c(
-        dashboard_data[[paste0(prefix, "__r")]][1],
-        dashboard_data[[paste0(prefix, "__c")]][1],
-        dashboard_data[[paste0(prefix, "__f")]][1], 
-        dashboard_data[[paste0(prefix, "__v")]][1],
-        dashboard_data[[paste0(prefix, "__a")]][1]
-      )
+      # Extract scores with proper error handling
+      scores <- numeric(5)
+      col_names <- paste0(prefix, "__", c("r", "c", "f", "v", "a"))
+
+      for (i in 1:5) {
+        col_name <- col_names[i]
+        if (col_name %in% colnames(dashboard_data)) {
+          val <- dashboard_data[[col_name]][1]
+          # Convert to numeric if needed, handle comma decimal separator
+          if (!is.na(val) && !is.numeric(val)) {
+            val <- as.numeric(gsub(",", ".", as.character(val)))
+          }
+          scores[i] <- if (!is.na(val) && is.finite(val)) val else NA
+        } else {
+          scores[i] <- NA
+        }
+      }
+
+      # Only replace NA values with 2.5 as fallback
       scores[is.na(scores)] <- 2.5
-      
+
+      # Ensure scores are within valid range [0, 5]
+      scores <- pmax(0, pmin(5, scores))
+
+      # fmsb::radarchart plots first column at TOP and goes clockwise
+      # To get R-C-F-V-A clockwise from top, use that exact order
       radar_data <- data.frame(
         Redundancy = c(5, 0, scores[1]),
-        Collaboration = c(5, 0, scores[2]), 
+        Collaboration = c(5, 0, scores[2]),
         Flexibility = c(5, 0, scores[3]),
         Visibility = c(5, 0, scores[4]),
         Agility = c(5, 0, scores[5])
@@ -1770,10 +1762,11 @@ tryCatch({
       mean(c(dashboard_data$up__a[1], dashboard_data$in__a[1], dashboard_data$do__a[1]), na.rm=TRUE)
     )
     
+    # First column plots at top, then clockwise
     overall_radar <- data.frame(
       Redundancy = c(5, 0, overall_scores[1]),
       Collaboration = c(5, 0, overall_scores[2]),
-      Flexibility = c(5, 0, overall_scores[3]), 
+      Flexibility = c(5, 0, overall_scores[3]),
       Visibility = c(5, 0, overall_scores[4]),
       Agility = c(5, 0, overall_scores[5])
     )
@@ -1846,15 +1839,31 @@ if (exists("company_data_average") && !is.null(company_data_average)) {
 
       # Function to create radar data for company average
       create_company_radar <- function(prefix, title, color) {
-        scores <- c(
-          company_data_average[[paste0(prefix, "__r")]][1],
-          company_data_average[[paste0(prefix, "__c")]][1],
-          company_data_average[[paste0(prefix, "__f")]][1],
-          company_data_average[[paste0(prefix, "__v")]][1],
-          company_data_average[[paste0(prefix, "__a")]][1]
-        )
+        # Extract scores with proper error handling
+        scores <- numeric(5)
+        col_names <- paste0(prefix, "__", c("r", "c", "f", "v", "a"))
+
+        for (i in 1:5) {
+          col_name <- col_names[i]
+          if (col_name %in% colnames(company_data_average)) {
+            val <- company_data_average[[col_name]][1]
+            # Convert to numeric if needed, handle comma decimal separator
+            if (!is.na(val) && !is.numeric(val)) {
+              val <- as.numeric(gsub(",", ".", as.character(val)))
+            }
+            scores[i] <- if (!is.na(val) && is.finite(val)) val else NA
+          } else {
+            scores[i] <- NA
+          }
+        }
+
+        # Only replace NA values with 2.5 as fallback
         scores[is.na(scores)] <- 2.5
 
+        # Ensure scores are within valid range [0, 5]
+        scores <- pmax(0, pmin(5, scores))
+
+        # First column at top, then clockwise
         radar_data <- data.frame(
           Redundancy = c(5, 0, scores[1]),
           Collaboration = c(5, 0, scores[2]),
@@ -1889,6 +1898,7 @@ if (exists("company_data_average") && !is.null(company_data_average)) {
         mean(c(company_data_average$up__a[1], company_data_average$in__a[1], company_data_average$do__a[1]), na.rm=TRUE)
       )
 
+      # First column at top, then clockwise
       company_overall_radar <- data.frame(
         Redundancy = c(5, 0, company_overall_scores[1]),
         Collaboration = c(5, 0, company_overall_scores[2]),
@@ -1919,8 +1929,10 @@ if (exists("company_data_average") && !is.null(company_data_average)) {
 ```
 
 ```{r performance-summary, echo=FALSE}
-# Calculate performance assessment
-performance_level <- if (overall_score >= 4.0) {
+# Calculate performance assessment (handle NA/NaN values)
+performance_level <- if (is.na(overall_score) || is.nan(overall_score)) {
+  if (detected_language == "dutch") "Onvoldoende data" else "Insufficient Data"
+} else if (overall_score >= 4.0) {
   if (detected_language == "dutch") "Uitstekend" else "Excellent"
 } else if (overall_score >= 3.5) {
   if (detected_language == "dutch") "Goed" else "Good"
@@ -1932,8 +1944,10 @@ performance_level <- if (overall_score >= 4.0) {
   if (detected_language == "dutch") "Verbetering nodig" else "Needs Improvement"
 }
 
-# Determine callout type based on performance
-callout_type <- if (overall_score >= 4.0) {
+# Determine callout type based on performance (handle NA/NaN)
+callout_type <- if (is.na(overall_score) || is.nan(overall_score)) {
+  "warning"
+} else if (overall_score >= 4.0) {
   "tip"
 } else if (overall_score >= 3.5) {
   "note"
@@ -1951,22 +1965,18 @@ weakest <- names(pillars)[which.min(pillars)]
 ::: {.callout-`r callout_type` appearance="simple"}
 ### `r if (detected_language == "dutch") "Managementsamenvatting" else "Executive Summary"`
 
-`r if (detected_language == "dutch") "Deze analyse evalueert uw supply chain veerkracht via het SCRES-framework: Upstream (UP), Internal (IN) en Downstream (DO) capaciteiten over vijf dimensies." else "This analysis evaluates your supply chain resilience using the SCRES framework: Upstream (UP), Internal (IN), and Downstream (DO) capabilities across five dimensions."`
+**`r if (detected_language == "dutch") "Prestatie:" else "Performance:"` `r performance_level`** (`r sprintf("%.2f", overall_score)`/5.00)
 
-**`r if (detected_language == "dutch") "Overall Score:" else "Overall Score:"` `r performance_level`** — `r sprintf("%.2f", overall_score)`/5.00
+`r if (detected_language == "dutch") paste("**Sterkste gebied:**", if(strongest == "Internal") "Intern" else strongest, paste0("(", sprintf("%.2f", max(pillars)), ")")) else paste("**Strongest area:**", strongest, paste0("(", sprintf("%.2f", max(pillars)), ")"))`
 
-`r if (detected_language == "dutch") paste("**Sterkste domein:**", if(strongest == "Internal") "Intern" else strongest, paste0("(", sprintf("%.2f", max(pillars)), ") — Behoud deze sterkte")) else paste("**Strongest domain:**", strongest, paste0("(", sprintf("%.2f", max(pillars)), ") — Maintain this strength"))`
-
-`r if (detected_language == "dutch") paste("**Ontwikkelpunt:**", if(weakest == "Internal") "Intern" else weakest, paste0("(", sprintf("%.2f", min(pillars)), ") — Prioriteit voor verbetering")) else paste("**Development priority:**", weakest, paste0("(", sprintf("%.2f", min(pillars)), ") — Priority for improvement"))`
-
-`r gap <- max(pillars) - min(pillars); if (detected_language == "dutch") paste0("**Performance gap:** ", sprintf("%.2f", gap), if(gap > 1.0) " — Aanzienlijke ontwikkelkansen" else " — Redelijk gebalanceerd") else paste0("**Performance gap:** ", sprintf("%.2f", gap), if(gap > 1.0) " — Significant development opportunities" else " — Reasonably balanced")`
+`r if (detected_language == "dutch") paste("**Aandachtsgebied:**", if(weakest == "Internal") "Intern" else weakest, paste0("(", sprintf("%.2f", min(pillars)), ")")) else paste("**Focus area:**", weakest, paste0("(", sprintf("%.2f", min(pillars)), ")"))`
 :::
 
 ## `r if (detected_language == "dutch") "Gedetailleerde Analyse per Pijler" else "Detailed Analysis by Pillar"`
 
 ```{r detailed-pillar-analysis, echo=FALSE, results='asis'}
-# Function to format pillar details
-format_pillar_details <- function(prefix, pillar_name_nl, pillar_name_en) {
+# Function to get top 2 and bottom 2 scores for a pillar
+analyze_pillar_detailed <- function(prefix, pillar_name_nl, pillar_name_en, analysis_obj) {
   pillar_name <- if (detected_language == "dutch") pillar_name_nl else pillar_name_en
 
   # Get dimension names
@@ -1991,106 +2001,58 @@ format_pillar_details <- function(prefix, pillar_name_nl, pillar_name_en) {
   top_2 <- sorted_scores[1:2]
   bottom_2 <- sorted_scores[4:5]
 
-  # Generate output text
+  # Calculate range
+  score_range <- max(scores) - min(scores)
+
+  # Generate output text - compact format (single line for single respondent)
   if (detected_language == "dutch") {
-    cat(sprintf("**%s** (gem: %.2f) — Sterkste: %s (%.2f), Zwakste: %s (%.2f)\n\n",
+    cat(sprintf("\n### %s (gem: %.2f) • Sterkste: %s (%.2f) | Zwakste: %s (%.2f) | Verschil: %.2f\n\n",
                 pillar_name, mean(scores),
                 names(top_2)[1], top_2[1],
-                names(bottom_2)[2], bottom_2[2]))
+                names(bottom_2)[2], bottom_2[2],
+                score_range))
   } else {
-    cat(sprintf("**%s** (avg: %.2f) — Strongest: %s (%.2f), Weakest: %s (%.2f)\n\n",
+    cat(sprintf("\n### %s (avg: %.2f) • Strongest: %s (%.2f) | Weakest: %s (%.2f) | Gap: %.2f\n\n",
                 pillar_name, mean(scores),
                 names(top_2)[1], top_2[1],
-                names(bottom_2)[2], bottom_2[2]))
+                names(bottom_2)[2], bottom_2[2],
+                score_range))
+  }
+
+  # Add contributor text for highest dimension
+  if (!is.null(analysis_obj) && !is.null(analysis_obj$highest_dim) && !is.null(analysis_obj$high_examples)) {
+    if (detected_language == "dutch") {
+      cat(sprintf("**Items die bijdragen aan een hoog niveau van %s:**\n\n", analysis_obj$highest_dim))
+    } else {
+      cat(sprintf("**Items that contribute to a high level of %s:**\n\n", analysis_obj$highest_dim))
+    }
+
+    for (example in analysis_obj$high_examples) {
+      cat(sprintf("- %s\n", example))
+    }
+    cat("\n")
+  }
+
+  # Add contributor text for lowest dimension
+  if (!is.null(analysis_obj) && !is.null(analysis_obj$lowest_dim) && !is.null(analysis_obj$low_examples)) {
+    if (detected_language == "dutch") {
+      cat(sprintf("**Items om te verbeteren voor %s:**\n\n", analysis_obj$lowest_dim))
+    } else {
+      cat(sprintf("**Items to improve for %s:**\n\n", analysis_obj$lowest_dim))
+    }
+
+    for (example in analysis_obj$low_examples) {
+      cat(sprintf("- %s\n", example))
+    }
+    cat("\n")
   }
 }
 
-# Display each pillar summary
-format_pillar_details("up", "Upstream", "Upstream")
-format_pillar_details("in", "Intern", "Internal")
-format_pillar_details("do", "Downstream", "Downstream")
+# Analyze each pillar with gap analysis examples
+analyze_pillar_detailed("up", "Upstream", "Upstream", up_analysis)
+analyze_pillar_detailed("in", "Intern", "Internal", in_analysis)
+analyze_pillar_detailed("do", "Downstream", "Downstream", do_analysis)
 ```
-
-::: {.callout-note appearance="simple"}
-### `r if (detected_language == "dutch") "Belangrijkste Inzichten" else "Key Insights"`
-
-```{r key-insights, echo=FALSE, results='asis'}
-# Compile key insights from all three pillars
-if (detected_language == "dutch") {
-  # UPSTREAM
-  cat(sprintf("**Upstream — %s:** %s zoals: %s\n\n",
-              up_analysis$highest_dim,
-              "Sterke punten zijn",
-              paste(up_analysis$high_examples, collapse = ", ")))
-
-  if (up_analysis$lowest_score < 3.0) {
-    cat(sprintf("**Upstream — %s:** %s zoals: %s\n\n",
-                up_analysis$lowest_dim,
-                "Aandachtspunten",
-                paste(up_analysis$low_examples, collapse = ", ")))
-  }
-
-  # INTERNAL
-  cat(sprintf("**Internal — %s:** %s zoals: %s\n\n",
-              in_analysis$highest_dim,
-              "Sterke punten zijn",
-              paste(in_analysis$high_examples, collapse = ", ")))
-
-  if (in_analysis$lowest_score < 3.0) {
-    cat(sprintf("**Internal — %s:** %s zoals: %s\n\n",
-                in_analysis$lowest_dim,
-                "Aandachtspunten",
-                paste(in_analysis$low_examples, collapse = ", ")))
-  }
-
-  # DOWNSTREAM
-  cat(sprintf("**Downstream — %s:** %s zoals: %s\n\n",
-              do_analysis$highest_dim,
-              "Sterke punten zijn",
-              paste(do_analysis$high_examples, collapse = ", ")))
-
-  if (do_analysis$lowest_score < 3.0) {
-    cat(sprintf("**Downstream — %s:** %s zoals: %s\n\n",
-                do_analysis$lowest_dim,
-                "Aandachtspunten",
-                paste(do_analysis$low_examples, collapse = ", ")))
-  }
-} else {
-  # UPSTREAM
-  cat(sprintf("**Upstream — %s:** Strong practices include %s\n\n",
-              up_analysis$highest_dim,
-              tolower(paste(up_analysis$high_examples, collapse = ", "))))
-
-  if (up_analysis$lowest_score < 3.0) {
-    cat(sprintf("**Upstream — %s:** Development areas include %s\n\n",
-                up_analysis$lowest_dim,
-                tolower(paste(up_analysis$low_examples, collapse = ", "))))
-  }
-
-  # INTERNAL
-  cat(sprintf("**Internal — %s:** Strong practices include %s\n\n",
-              in_analysis$highest_dim,
-              tolower(paste(in_analysis$high_examples, collapse = ", "))))
-
-  if (in_analysis$lowest_score < 3.0) {
-    cat(sprintf("**Internal — %s:** Development areas include %s\n\n",
-                in_analysis$lowest_dim,
-                tolower(paste(in_analysis$low_examples, collapse = ", "))))
-  }
-
-  # DOWNSTREAM
-  cat(sprintf("**Downstream — %s:** Strong practices include %s\n\n",
-              do_analysis$highest_dim,
-              tolower(paste(do_analysis$high_examples, collapse = ", "))))
-
-  if (do_analysis$lowest_score < 3.0) {
-    cat(sprintf("**Downstream — %s:** Development areas include %s\n\n",
-                do_analysis$lowest_dim,
-                tolower(paste(do_analysis$low_examples, collapse = ", "))))
-  }
-}
-```
-:::
 
 ::: {.content-visible when-format="pdf"}
 \restoregeometry
