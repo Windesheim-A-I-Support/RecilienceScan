@@ -1701,8 +1701,9 @@ do_analysis <- analyze_pillar_gap("do")
 \begin{minipage}[t]{0.26\textwidth}
 \vspace{0pt}
 \raggedleft
-\includegraphics[width=0.75\textwidth]{img/logo-RUG.png}\\[3mm]
 \includegraphics[width=0.75\textwidth]{img/logo-windesheim.png}\\[3mm]
+\includegraphics[width=0.30\textwidth]{img/logo-RUG.png}\\[3mm]
+
 \includegraphics[width=0.75\textwidth]{img/logo-involvation.png}
 \end{minipage}
 

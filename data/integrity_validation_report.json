@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-01T18:21:29.462395",
+  "timestamp": "2025-11-03T15:03:10.967255",
   "statistics": {
     "total_records_excel": 507,
     "total_records_csv": 467,
@@ -12,9 +12,9 @@
   "samples": [
     {
       "sample_num": 1,
-      "company": "Fibrant",
-      "person": "Bertin Terpstra (1)",
-      "email": "bertin.terpstra@fibrant52.com",
+      "company": "Corbion (2)",
+      "person": "Rian",
+      "email": "rian.van.den.bos@corbion.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -22,9 +22,9 @@
     },
     {
       "sample_num": 2,
-      "company": "Unibouw",
-      "person": "Juul Cramer",
-      "email": "juul@unibouw.eu",
+      "company": "Vibrantz  Color Solutions Europe BV",
+      "person": "Raimond Lony",
+      "email": "raimond.lony@vibrantz.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -32,9 +32,9 @@
     },
     {
       "sample_num": 3,
-      "company": "Petrokimia Gresik",
-      "person": "Fariz",
-      "email": "fariz.darmawan@petrokimia-gresik.com",
+      "company": "JDE Peets",
+      "person": "Marnix Tax",
+      "email": "marnix.tax@jdecoffee.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -42,9 +42,9 @@
     },
     {
       "sample_num": 4,
-      "company": "Shell Chemicals",
-      "person": "Martijn Vermunt",
-      "email": "martijn.vermunt@shell.com",
+      "company": "Alphatronics BV",
+      "person": "Jos Herrebrugh",
+      "email": "jos@alphatronics.nl",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -52,9 +52,9 @@
     },
     {
       "sample_num": 5,
-      "company": "DSM Firmenich",
-      "person": "Roger Kerckhoffs",
-      "email": "roger.kerckhoffs@dsm.com",
+      "company": "Rituals",
+      "person": "Kelly Ultee",
+      "email": "kelly.ultee@rituals.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -62,9 +62,9 @@
     },
     {
       "sample_num": 6,
-      "company": "Bidfood",
-      "person": "Hessel de keijzer (1.0)",
-      "email": "hessel.dekeijzer@bidfood.nl",
+      "company": "Bonduelle",
+      "person": "Tom achtereekte",
+      "email": "tom.achtereekte@bonduelle.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -72,9 +72,9 @@
     },
     {
       "sample_num": 7,
-      "company": "Bejo Zaden",
-      "person": "Nadia Lemmes",
-      "email": "nlemmers@outlook.com",
+      "company": "Fabory",
+      "person": "Max Pennings",
+      "email": "max.pennings@fabory.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -82,9 +82,9 @@
     },
     {
       "sample_num": 8,
-      "company": "Royal Koopmans",
-      "person": "Kees Dekker",
-      "email": "k.dekker@royalkoopmans.com",
+      "company": "ESC",
+      "person": "Helder Pereira",
+      "email": "h.pereira@europeanshippers.eu",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -92,9 +92,9 @@
     },
     {
       "sample_num": 9,
-      "company": "BOS GmbH & Co. KG",
-      "person": "O. Dietrich",
-      "email": "odietrich@bos.de",
+      "company": "Corbion (1)",
+      "person": "Roland",
+      "email": "roland.ruijters@corbion.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -102,9 +102,9 @@
     },
     {
       "sample_num": 10,
-      "company": "AbbVie ",
-      "person": "Luc Kottink",
-      "email": "luc.kottink@abbvie.com",
+      "company": "Henkel Global Supply Chain",
+      "person": "Diego Crespo",
+      "email": "diego.crespo@henkel.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -112,9 +112,9 @@
     },
     {
       "sample_num": 11,
-      "company": "The Coca-Cola Company",
-      "person": "Sanjida Tamanna",
-      "email": "stamanna@coca-cola.com",
+      "company": "Ms Supply Chain Support",
+      "person": "Marco Stolk",
+      "email": "stolkiem@gmail.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -122,9 +122,9 @@
     },
     {
       "sample_num": 12,
-      "company": "Auping",
-      "person": "Bart van der Boom",
-      "email": "B.vanderboom@auping.com",
+      "company": "Thetford",
+      "person": "Susanne van Zundert",
+      "email": "svzundert@thetford.eu",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -132,9 +132,9 @@
     },
     {
       "sample_num": 13,
-      "company": "GE Healthcare",
-      "person": "Nicole Sies",
-      "email": "n.sies@xs4all.nl",
+      "company": "Farm Frites",
+      "person": "Iwan Hellemons",
+      "email": "iwanhellemons@farmfrites.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -142,9 +142,9 @@
     },
     {
       "sample_num": 14,
-      "company": "Corbion (1)",
-      "person": "Tanja Dekic ",
-      "email": "t.dekiczivkovic@corbion.com",
+      "company": "AbbVie",
+      "person": "Rob Lindeboom",
+      "email": "rob.lindeboom@abbvie.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -152,9 +152,9 @@
     },
     {
       "sample_num": 15,
-      "company": "Scania Logistics NL",
-      "person": "Jan Boersma",
-      "email": "jan.boersma@scania.com",
+      "company": "Celanese",
+      "person": "Marco Verberne",
+      "email": "marco.verberne@celanese.com",
       "fields_checked": 18,
       "fields_matched": 18,
       "mismatches": [],
@@ -167,112 +167,112 @@
     {
       "level": "INFO",
       "message": "Found Excel file: data\\Resilience - MasterDatabase.xlsx",
-      "timestamp": "2025-11-01T18:21:28.821164"
+      "timestamp": "2025-11-03T15:03:09.228708"
     },
     {
       "level": "INFO",
       "message": "Loaded raw Excel: 509 rows x 178 columns",
-      "timestamp": "2025-11-01T18:21:29.424044"
+      "timestamp": "2025-11-03T15:03:10.840962"
     },
     {
       "level": "INFO",
       "message": "Detected header at row 2",
-      "timestamp": "2025-11-01T18:21:29.424645"
+      "timestamp": "2025-11-03T15:03:10.841448"
     },
     {
       "level": "INFO",
       "message": "Excel data rows: 507",
-      "timestamp": "2025-11-01T18:21:29.429747"
+      "timestamp": "2025-11-03T15:03:10.850842"
     },
     {
       "level": "INFO",
       "message": "CSV data rows: 467",
-      "timestamp": "2025-11-01T18:21:29.442516"
+      "timestamp": "2025-11-03T15:03:10.872515"
     },
     {
       "level": "INFO",
       "message": "Created CSV lookup with 467 unique records",
-      "timestamp": "2025-11-01T18:21:29.454640"
+      "timestamp": "2025-11-03T15:03:10.932677"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.455276"
+      "timestamp": "2025-11-03T15:03:10.936618"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.455599"
+      "timestamp": "2025-11-03T15:03:10.938548"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.455880"
+      "timestamp": "2025-11-03T15:03:10.939778"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.456241"
+      "timestamp": "2025-11-03T15:03:10.941683"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.456602"
+      "timestamp": "2025-11-03T15:03:10.942965"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.456962"
+      "timestamp": "2025-11-03T15:03:10.944606"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.457274"
+      "timestamp": "2025-11-03T15:03:10.945874"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.457616"
+      "timestamp": "2025-11-03T15:03:10.947226"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.457973"
+      "timestamp": "2025-11-03T15:03:10.949123"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.458304"
+      "timestamp": "2025-11-03T15:03:10.950150"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.458634"
+      "timestamp": "2025-11-03T15:03:10.952388"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.459027"
+      "timestamp": "2025-11-03T15:03:10.955225"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.459328"
+      "timestamp": "2025-11-03T15:03:10.957741"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.459631"
+      "timestamp": "2025-11-03T15:03:10.959099"
     },
     {
       "level": "INFO",
       "message": "Perfect match: 18/18 fields",
-      "timestamp": "2025-11-01T18:21:29.459921"
+      "timestamp": "2025-11-03T15:03:10.960195"
     },
     {
       "level": "INFO",
       "message": "Report saved: ./data/integrity_validation_report.txt",
-      "timestamp": "2025-11-01T18:21:29.462284"
+      "timestamp": "2025-11-03T15:03:10.967150"
     }
   ]
 }

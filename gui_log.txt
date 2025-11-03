@@ -6571,3 +6571,450 @@ CRITICAL: Generation stopped early at record 13.
 [2025-11-03 14:56:02]   [OK] Success: 20251103 ResilienceReport (AbbVie - Walter Verhoef).pdf
 [2025-11-03 14:56:02]   [OK] Validation passed: All values match CSV
 [2025-11-03 14:56:02] [20/467] Generating: ACN - Hilal L
+[2025-11-03 15:02:28] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-03 15:02:28] Importing email tracking data...
+[2025-11-03 15:02:28] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-03 15:02:29] [OK] Data loaded: 467 respondents, 306 companies
+[2025-11-03 15:03:09] [START] Starting data integrity validation...
+[2025-11-03 15:03:09] Comparing Excel source with cleaned CSV (15 random samples)...
+[2025-11-03 15:03:10] [OK] Data integrity validation completed!
+[2025-11-03 15:06:22] [START] Starting batch report generation...
+[2025-11-03 15:06:22] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [9/467] Generating: Abbvie - Stef Beltman
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [10/467] Generating: AbbVie - Vincent
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [13/467] Generating: AbbVie - Marchel
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [17/467] Generating: AbbVie - Luc Kottink
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [18/467] Generating: AbbVie - Bas Groenwold
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [19/467] Generating: AbbVie - Walter Verhoef
+[2025-11-03 15:06:22]   [SKIP] Already exists, skipping
+[2025-11-03 15:06:22] [20/467] Generating: ACN - Hilal L
+[2025-11-03 15:06:31]   [OK] Success: 20251103 ResilienceReport (ACN - Hilal L).pdf
+[2025-11-03 15:06:32]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:06:32] [21/467] Generating: AGILEA - vers
+[2025-11-03 15:06:41]   [OK] Success: 20251103 ResilienceReport (AGILEA - vers).pdf
+[2025-11-03 15:06:41]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:06:41] Generation cancelled by user
+[2025-11-03 15:06:41] 
+============================================================
+[2025-11-03 15:06:41] WARNING: GENERATION INCOMPLETE
+[2025-11-03 15:06:41] ============================================================
+[2025-11-03 15:06:41] Total records: 467
+[2025-11-03 15:06:41] Processed: 21/467
+[2025-11-03 15:06:41] Successfully generated: 21
+[2025-11-03 15:06:41] Failed: 0
+[2025-11-03 15:06:41] Skipped (insufficient data): 0
+[2025-11-03 15:06:41] NOT PROCESSED: 446
+[2025-11-03 15:06:41] ============================================================
+[2025-11-03 15:06:41] 
+CRITICAL: Generation stopped early at record 21.
+[2025-11-03 15:06:41] Check error messages above for details.
+[2025-11-03 15:08:12] [START] Starting batch report generation...
+[2025-11-03 15:08:12] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-03 15:08:12]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:12] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-03 15:08:12]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:12] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-03 15:08:12]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:12] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-03 15:08:12]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:12] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-03 15:08:12]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:12] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-03 15:08:12]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [9/467] Generating: Abbvie - Stef Beltman
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [10/467] Generating: AbbVie - Vincent
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [13/467] Generating: AbbVie - Marchel
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [17/467] Generating: AbbVie - Luc Kottink
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [18/467] Generating: AbbVie - Bas Groenwold
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [19/467] Generating: AbbVie - Walter Verhoef
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [20/467] Generating: ACN - Hilal L
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [21/467] Generating: AGILEA - vers
+[2025-11-03 15:08:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:08:13] [22/467] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-11-03 15:08:22]   [OK] Success: 20251103 ResilienceReport (Agrifac Machinery B.V. - Art Kampjes).pdf
+[2025-11-03 15:08:22]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:08:22] [23/467] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-11-03 15:08:33]   [OK] Success: 20251103 ResilienceReport (Agrifac Machinery B.V. - Michiel Zantinge).pdf
+[2025-11-03 15:08:33]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:08:33] Generation cancelled by user
+[2025-11-03 15:08:33] 
+============================================================
+[2025-11-03 15:08:33] WARNING: GENERATION INCOMPLETE
+[2025-11-03 15:08:33] ============================================================
+[2025-11-03 15:08:33] Total records: 467
+[2025-11-03 15:08:33] Processed: 23/467
+[2025-11-03 15:08:33] Successfully generated: 23
+[2025-11-03 15:08:33] Failed: 0
+[2025-11-03 15:08:33] Skipped (insufficient data): 0
+[2025-11-03 15:08:33] NOT PROCESSED: 444
+[2025-11-03 15:08:33] ============================================================
+[2025-11-03 15:08:33] 
+CRITICAL: Generation stopped early at record 23.
+[2025-11-03 15:08:33] Check error messages above for details.
+[2025-11-03 15:10:54] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-03 15:10:54] Importing email tracking data...
+[2025-11-03 15:10:54] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-03 15:10:55] [OK] Data loaded: 467 respondents, 306 companies
+[2025-11-03 15:10:58] [START] Starting batch report generation...
+[2025-11-03 15:10:58] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [9/467] Generating: Abbvie - Stef Beltman
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [10/467] Generating: AbbVie - Vincent
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-11-03 15:10:58]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:58] [13/467] Generating: AbbVie - Marchel
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [17/467] Generating: AbbVie - Luc Kottink
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [18/467] Generating: AbbVie - Bas Groenwold
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [19/467] Generating: AbbVie - Walter Verhoef
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [20/467] Generating: ACN - Hilal L
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [21/467] Generating: AGILEA - vers
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [22/467] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [23/467] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-11-03 15:10:59]   [SKIP] Already exists, skipping
+[2025-11-03 15:10:59] [24/467] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-11-03 15:11:55] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-03 15:11:55] Importing email tracking data...
+[2025-11-03 15:11:55] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-03 15:11:55] [OK] Data loaded: 467 respondents, 306 companies
+[2025-11-03 15:12:01] [START] Starting batch report generation...
+[2025-11-03 15:12:01] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [9/467] Generating: Abbvie - Stef Beltman
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [10/467] Generating: AbbVie - Vincent
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [13/467] Generating: AbbVie - Marchel
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [17/467] Generating: AbbVie - Luc Kottink
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [18/467] Generating: AbbVie - Bas Groenwold
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [19/467] Generating: AbbVie - Walter Verhoef
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [20/467] Generating: ACN - Hilal L
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [21/467] Generating: AGILEA - vers
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [22/467] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [23/467] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-11-03 15:12:01]   [SKIP] Already exists, skipping
+[2025-11-03 15:12:01] [24/467] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-11-03 15:12:13]   [ERROR] Error: Exit code 1
+[2025-11-03 15:12:13]      }
+[2025-11-03 15:12:13]            \usepackage[normalem]{ulem}
+[2025-11-03 15:12:13]            \usepackage{makecell}
+[2025-11-03 15:12:13]            \usepackage{xcolor}
+[2025-11-03 15:12:13]      Rendering PDF
+[2025-11-03 15:12:13]      running xelatex - 1
+[2025-11-03 15:12:13]        This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex)
+[2025-11-03 15:12:13]         restricted \write18 enabled.
+[2025-11-03 15:12:13]        entering extended mode
+[2025-11-03 15:12:13]      updating tlmgr
+[2025-11-03 15:12:13]      updating existing packages
+[2025-11-03 15:12:13]      ERROR: 
+[2025-11-03 15:12:13]      compilation failed- error
+[2025-11-03 15:12:13]      LaTeX Error: There's no line here to end.
+[2025-11-03 15:12:13]      See the LaTeX manual or LaTeX Companion for explanation.
+[2025-11-03 15:12:13]      Type  H <return>  for immediate help.
+[2025-11-03 15:12:13]       ...                                              
+[2025-11-03 15:12:13]      l.267 \\
+[2025-11-03 15:12:13]              [3mm]
+[2025-11-03 15:12:13]      Your command was ignored.
+[2025-11-03 15:12:13]      Type  I <command> <return>  to replace it with another command,
+[2025-11-03 15:12:13]      or  <return>  to continue without it.
+[2025-11-03 15:12:13]      see ResilienceReport.log for more information.
+[2025-11-03 15:12:13] [25/467] Generating: Agrifac Machinery B.V. - Ferry
+[2025-11-03 15:12:24]   [ERROR] Error: Exit code 1
+[2025-11-03 15:12:24]      }
+[2025-11-03 15:12:24]            \usepackage[normalem]{ulem}
+[2025-11-03 15:12:24]            \usepackage{makecell}
+[2025-11-03 15:12:24]            \usepackage{xcolor}
+[2025-11-03 15:12:24]      Rendering PDF
+[2025-11-03 15:12:24]      running xelatex - 1
+[2025-11-03 15:12:24]        This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex)
+[2025-11-03 15:12:24]         restricted \write18 enabled.
+[2025-11-03 15:12:24]        entering extended mode
+[2025-11-03 15:12:24]      updating tlmgr
+[2025-11-03 15:12:24]      updating existing packages
+[2025-11-03 15:12:24]      ERROR: 
+[2025-11-03 15:12:24]      compilation failed- error
+[2025-11-03 15:12:24]      LaTeX Error: There's no line here to end.
+[2025-11-03 15:12:24]      See the LaTeX manual or LaTeX Companion for explanation.
+[2025-11-03 15:12:24]      Type  H <return>  for immediate help.
+[2025-11-03 15:12:24]       ...                                              
+[2025-11-03 15:12:24]      l.267 \\
+[2025-11-03 15:12:24]              [3mm]
+[2025-11-03 15:12:24]      Your command was ignored.
+[2025-11-03 15:12:24]      Type  I <command> <return>  to replace it with another command,
+[2025-11-03 15:12:24]      or  <return>  to continue without it.
+[2025-11-03 15:12:24]      see ResilienceReport.log for more information.
+[2025-11-03 15:12:24] [26/467] Generating: Agrifac Machinery B.V. - Huimin Ke
+[2025-11-03 15:12:35]   [ERROR] Error: Exit code 1
+[2025-11-03 15:12:35]      }
+[2025-11-03 15:12:35]            \usepackage[normalem]{ulem}
+[2025-11-03 15:12:35]            \usepackage{makecell}
+[2025-11-03 15:12:35]            \usepackage{xcolor}
+[2025-11-03 15:12:35]      Rendering PDF
+[2025-11-03 15:12:35]      running xelatex - 1
+[2025-11-03 15:12:35]        This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex)
+[2025-11-03 15:12:35]         restricted \write18 enabled.
+[2025-11-03 15:12:35]        entering extended mode
+[2025-11-03 15:12:35]      updating tlmgr
+[2025-11-03 15:12:35]      updating existing packages
+[2025-11-03 15:12:35]      ERROR: 
+[2025-11-03 15:12:35]      compilation failed- error
+[2025-11-03 15:12:35]      LaTeX Error: There's no line here to end.
+[2025-11-03 15:12:35]      See the LaTeX manual or LaTeX Companion for explanation.
+[2025-11-03 15:12:35]      Type  H <return>  for immediate help.
+[2025-11-03 15:12:35]       ...                                              
+[2025-11-03 15:12:35]      l.267 \\
+[2025-11-03 15:12:35]              [3mm]
+[2025-11-03 15:12:35]      Your command was ignored.
+[2025-11-03 15:12:35]      Type  I <command> <return>  to replace it with another command,
+[2025-11-03 15:12:35]      or  <return>  to continue without it.
+[2025-11-03 15:12:35]      see ResilienceReport.log for more information.
+[2025-11-03 15:12:35] [27/467] Generating: Agrifac Machinery B.V. - Bjorn de Lange
+[2025-11-03 15:13:10] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-03 15:13:10] Importing email tracking data...
+[2025-11-03 15:13:10] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-03 15:13:10] [OK] Data loaded: 467 respondents, 306 companies
+[2025-11-03 15:13:25] [START] Starting batch report generation...
+[2025-11-03 15:13:25] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [9/467] Generating: Abbvie - Stef Beltman
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [10/467] Generating: AbbVie - Vincent
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [13/467] Generating: AbbVie - Marchel
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [17/467] Generating: AbbVie - Luc Kottink
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [18/467] Generating: AbbVie - Bas Groenwold
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [19/467] Generating: AbbVie - Walter Verhoef
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [20/467] Generating: ACN - Hilal L
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [21/467] Generating: AGILEA - vers
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [22/467] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [23/467] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-11-03 15:13:25]   [SKIP] Already exists, skipping
+[2025-11-03 15:13:25] [24/467] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-11-03 15:13:36]   [OK] Success: 20251103 ResilienceReport (Agrifac Machinery B.V. - Gert Klein).pdf
+[2025-11-03 15:13:36]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:13:36] [25/467] Generating: Agrifac Machinery B.V. - Ferry
+[2025-11-03 15:13:47]   [OK] Success: 20251103 ResilienceReport (Agrifac Machinery B.V. - Ferry).pdf
+[2025-11-03 15:13:47]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:13:47] [26/467] Generating: Agrifac Machinery B.V. - Huimin Ke
+[2025-11-03 15:14:09] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-03 15:14:09] Importing email tracking data...
+[2025-11-03 15:14:09] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-03 15:14:09] [OK] Data loaded: 467 respondents, 306 companies
+[2025-11-03 15:14:13] [START] Starting batch report generation...
+[2025-11-03 15:14:13] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [9/467] Generating: Abbvie - Stef Beltman
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [10/467] Generating: AbbVie - Vincent
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [13/467] Generating: AbbVie - Marchel
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [17/467] Generating: AbbVie - Luc Kottink
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [18/467] Generating: AbbVie - Bas Groenwold
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [19/467] Generating: AbbVie - Walter Verhoef
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [20/467] Generating: ACN - Hilal L
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [21/467] Generating: AGILEA - vers
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [22/467] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [23/467] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [24/467] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [25/467] Generating: Agrifac Machinery B.V. - Ferry
+[2025-11-03 15:14:13]   [SKIP] Already exists, skipping
+[2025-11-03 15:14:13] [26/467] Generating: Agrifac Machinery B.V. - Huimin Ke
+[2025-11-03 15:14:22]   [OK] Success: 20251103 ResilienceReport (Agrifac Machinery B.V. - Huimin Ke).pdf
+[2025-11-03 15:14:22]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:14:22] [27/467] Generating: Agrifac Machinery B.V. - Bjorn de Lange
+[2025-11-03 15:14:31]   [OK] Success: 20251103 ResilienceReport (Agrifac Machinery B.V. - Bjorn de Lange).pdf
+[2025-11-03 15:14:31]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:14:31] [28/467] Generating: Agrifac Machinery B.V. - Nick van Huffelen
+[2025-11-03 15:14:40]   [OK] Success: 20251103 ResilienceReport (Agrifac Machinery B.V. - Nick van Huffelen).pdf
+[2025-11-03 15:14:40]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:14:40] Generation cancelled by user
+[2025-11-03 15:14:40] 
+============================================================
+[2025-11-03 15:14:40] WARNING: GENERATION INCOMPLETE
+[2025-11-03 15:14:40] ============================================================
+[2025-11-03 15:14:40] Total records: 467
+[2025-11-03 15:14:40] Processed: 28/467
+[2025-11-03 15:14:40] Successfully generated: 28
+[2025-11-03 15:14:40] Failed: 0
+[2025-11-03 15:14:40] Skipped (insufficient data): 0
+[2025-11-03 15:14:40] NOT PROCESSED: 439
+[2025-11-03 15:14:40] ============================================================
+[2025-11-03 15:14:40] 
+CRITICAL: Generation stopped early at record 28.
+[2025-11-03 15:14:40] Check error messages above for details.
