@@ -1,11 +1,25 @@
-pandas
-pywin32
-numpy
-scipy
-matplotlib
-seaborn
-openpyxl
-requests
-# You can also specify versions, e.g.:
-# pandas>=2.0.0,<3.0.0
-# requests==2.25.1
+# Core data processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Excel/CSV handling
+openpyxl>=3.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# PDF processing
+PyPDF2>=3.0.0
+
+# Statistics
+scipy>=1.10.0
+
+# Windows-specific (Outlook integration)
+pywin32>=305
+
+# HTTP requests (for web features if used)
+requests>=2.31.0
+
+# Note: tkinter is part of Python standard library
+# Note: Standard library modules (csv, json, os, etc.) don't need to be listed

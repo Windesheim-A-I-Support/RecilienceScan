@@ -1,6 +1,6 @@
 ======================================================================
 DATA INTEGRITY VALIDATION REPORT
-Generated: 2025-11-03 15:03:10
+Generated: 2025-11-04 09:26:50
 ======================================================================
 
 OVERVIEW:
@@ -9,78 +9,77 @@ OVERVIEW:
   Records removed during cleaning: 40
 
 SAMPLE VALIDATION RESULTS:
-  Samples validated: 15
-  Perfect matches: 15
+  Samples validated: 14
+  Perfect matches: 14
   Acceptable matches (>90%): 0
   Mismatches: 0
-  Missing in CSV: 0
+  Missing in CSV: 1
 
   Overall accuracy: 100.0%
 
 DETAILED SAMPLE RESULTS:
 
-  [1] Corbion (2) - Rian
+  [1] Pneutec - John van der Neut
       Status: PERFECT
       Matched: 18/18 fields
 
-  [2] Vibrantz  Color Solutions Europe BV - Raimond Lony
+  [2] Hiab (Frameworks) - Niels Stoffers
       Status: PERFECT
       Matched: 18/18 fields
 
-  [3] JDE Peets - Marnix Tax
+  [3] PT. Sam Adi Karya
+      Status: MISSING IN CSV
+
+  [4] Pon.bike - Karolis Keblikas 
       Status: PERFECT
       Matched: 18/18 fields
 
-  [4] Alphatronics BV - Jos Herrebrugh
+  [5] Swinkels Family Brewers - Wouter Vugts
       Status: PERFECT
       Matched: 18/18 fields
 
-  [5] Rituals - Kelly Ultee
+  [6] Vibrantz  Color Solutions Europe BV - Geert Verhelle
       Status: PERFECT
       Matched: 18/18 fields
 
-  [6] Bonduelle - Tom achtereekte
+  [7] Sunshine Group - Nick Helmink
       Status: PERFECT
       Matched: 18/18 fields
 
-  [7] Fabory - Max Pennings
+  [8] Corbion (2) - Cristina Navarro
       Status: PERFECT
       Matched: 18/18 fields
 
-  [8] ESC - Helder Pereira
+  [9] Samsung Electronics - Jeroen van der Linde
       Status: PERFECT
       Matched: 18/18 fields
 
-  [9] Corbion (1) - Roland
+  [10] Koppert BV - Arjen van der Wijden
       Status: PERFECT
       Matched: 18/18 fields
 
-  [10] Henkel Global Supply Chain - Diego Crespo
+  [11] SushiPoint Harderwijk - Shannon Nijhoff
       Status: PERFECT
       Matched: 18/18 fields
 
-  [11] Ms Supply Chain Support - Marco Stolk
+  [12] Ikazia ziekenhuis - Rosanne Brandt - van Rijnsbergen
       Status: PERFECT
       Matched: 18/18 fields
 
-  [12] Thetford - Susanne van Zundert
+  [13] Southerly Change Drinks - Louise
       Status: PERFECT
       Matched: 18/18 fields
 
-  [13] Farm Frites - Iwan Hellemons
+  [14] GBfoods/GranFood - Frank Hofland
       Status: PERFECT
       Matched: 18/18 fields
 
-  [14] AbbVie - Rob Lindeboom
-      Status: PERFECT
-      Matched: 18/18 fields
-
-  [15] Celanese - Marco Verberne
+  [15] Thales - Jeffrey Groen
       Status: PERFECT
       Matched: 18/18 fields
 
 ======================================================================
 VERDICT:
-  [OK] Data integrity verified!
-  [OK] Cleaning process preserves data accurately
+  [OK] Data integrity is acceptable (>90% accuracy)
+  [!] Minor discrepancies found - review details above
 ======================================================================

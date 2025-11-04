@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-11-03T23:17:10.743239",
+  "timestamp": "2025-11-04T09:26:43.960226",
   "statistics": {
     "initial_rows": 467,
     "final_rows": 467,
@@ -14,48 +14,48 @@
   "info": [
     {
       "level": "INFO",
-      "message": "Backup created: ./data/backups\\cleaned_master_20251103_231710.csv",
-      "timestamp": "2025-11-03T23:17:10.640591"
+      "message": "Backup created: ./data/backups\\cleaned_master_20251104_092643.csv",
+      "timestamp": "2025-11-04T09:26:43.857987"
     },
     {
       "level": "INFO",
       "message": "Loading data from: ./data/cleaned_master.csv",
-      "timestamp": "2025-11-03T23:17:10.640611"
+      "timestamp": "2025-11-04T09:26:43.858091"
     },
     {
       "level": "INFO",
       "message": "Loaded 467 rows, 178 columns",
-      "timestamp": "2025-11-03T23:17:10.652827"
+      "timestamp": "2025-11-04T09:26:43.866345"
     },
     {
       "level": "INFO",
       "message": "All required columns present: ['company_name', 'name', 'email_address']",
-      "timestamp": "2025-11-03T23:17:10.653168"
+      "timestamp": "2025-11-04T09:26:43.866840"
     },
     {
       "level": "INFO",
       "message": "All score values were valid",
-      "timestamp": "2025-11-03T23:17:10.679650"
+      "timestamp": "2025-11-04T09:26:43.892591"
     },
     {
       "level": "INFO",
       "message": "Cleaned 15 score columns",
-      "timestamp": "2025-11-03T23:17:10.679665"
+      "timestamp": "2025-11-04T09:26:43.892878"
     },
     {
       "level": "INFO",
       "message": "Kept 467/467 records after validation",
-      "timestamp": "2025-11-03T23:17:10.710035"
+      "timestamp": "2025-11-04T09:26:43.921938"
     },
     {
       "level": "INFO",
       "message": "No duplicates found",
-      "timestamp": "2025-11-03T23:17:10.712487"
+      "timestamp": "2025-11-04T09:26:43.925639"
     },
     {
       "level": "INFO",
       "message": "Saved cleaned data: ./data/cleaned_master.csv",
-      "timestamp": "2025-11-03T23:17:10.743204"
+      "timestamp": "2025-11-04T09:26:43.960096"
     }
   ],
   "removed_records": []

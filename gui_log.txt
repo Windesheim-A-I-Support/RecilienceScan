@@ -7100,3 +7100,150 @@ CRITICAL: Generation stopped early at record 28.
 [2025-11-03 15:45:11] 
 CRITICAL: Generation stopped early at record 30.
 [2025-11-03 15:45:11] Check error messages above for details.
+[2025-11-04 09:24:57] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-04 09:24:57] Importing email tracking data...
+[2025-11-04 09:24:57] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-04 09:24:57] [OK] Data loaded: 467 respondents, 306 companies
+[2025-11-04 09:25:11] [START] Starting batch report generation...
+[2025-11-04 09:25:11] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-04 09:25:26]   [OK] Success: 20251104 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf
+[2025-11-04 09:25:26]   [WARNING] Validation: [WARNING] 2 mismatch(es) found: Up Average: Missing value; Overall Scres: Expected=4.32, Actual=3.71, Diff=0.61
+[2025-11-04 09:25:26]       Up Average: Expected=N/A, Actual=2.50
+[2025-11-04 09:25:26]       Overall Scres: Expected=4.32, Actual=3.71
+[2025-11-04 09:25:26] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-04 09:25:33]   [OK] Success: 20251104 ResilienceReport (24 ICE - Casper Hondema).pdf
+[2025-11-04 09:25:33]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:25:33] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-04 09:25:41]   [OK] Success: 20251104 ResilienceReport (Aako B.V. - Frank Mooij).pdf
+[2025-11-04 09:25:41]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:25:41] Generation cancelled by user
+[2025-11-04 09:25:41] 
+============================================================
+[2025-11-04 09:25:41] WARNING: GENERATION INCOMPLETE
+[2025-11-04 09:25:41] ============================================================
+[2025-11-04 09:25:41] Total records: 467
+[2025-11-04 09:25:41] Processed: 3/467
+[2025-11-04 09:25:41] Successfully generated: 3
+[2025-11-04 09:25:41] Failed: 0
+[2025-11-04 09:25:41] Skipped (insufficient data): 0
+[2025-11-04 09:25:41] NOT PROCESSED: 464
+[2025-11-04 09:25:41] ============================================================
+[2025-11-04 09:25:41] 
+CRITICAL: Generation stopped early at record 3.
+[2025-11-04 09:25:41] Check error messages above for details.
+[2025-11-04 09:26:43] [START] Starting enhanced data cleaning with validation...
+[2025-11-04 09:26:43] Loading cleaned_master.csv for enhanced cleaning...
+[2025-11-04 09:26:43] [OK] Data cleaning completed!
+[2025-11-04 09:26:43] Summary: All records passed validation - no changes needed!
+
+Final dataset: 467 valid records ready for reports
+
+Detailed reports saved to:
+- ./data/cleaning_report.txt
+- ./data/cleaning_validation_log.json
+[2025-11-04 09:26:44] [OK] Cleaned data automatically reloaded: 467 records
+[2025-11-04 09:26:50] [START] Starting data integrity validation...
+[2025-11-04 09:26:50] Comparing Excel source with cleaned CSV (15 random samples)...
+[2025-11-04 09:26:50] [OK] Data integrity validation completed!
+[2025-11-04 09:33:32] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-04 09:33:32] Importing email tracking data...
+[2025-11-04 09:33:32] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-04 09:33:32] [OK] Data loaded: 467 respondents, 306 companies
+[2025-11-04 09:33:41] [START] Starting batch report generation...
+[2025-11-04 09:33:41] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-04 09:33:41]   [SKIP] Already exists, skipping
+[2025-11-04 09:33:41] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-04 09:33:41]   [SKIP] Already exists, skipping
+[2025-11-04 09:33:41] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-04 09:33:41]   [SKIP] Already exists, skipping
+[2025-11-04 09:33:41] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-04 09:33:49]   [OK] Success: 20251104 ResilienceReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf
+[2025-11-04 09:33:49]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:33:49] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-04 09:33:56]   [OK] Success: 20251104 ResilienceReport (Abbott - Robert Smelt).pdf
+[2025-11-04 09:33:57]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:33:57] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-04 09:34:05]   [OK] Success: 20251104 ResilienceReport (Abbott - Lisa Daly).pdf
+[2025-11-04 09:34:05]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:34:05] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-04 09:34:13]   [OK] Success: 20251104 ResilienceReport (Abbott labs - Tim Katanik).pdf
+[2025-11-04 09:34:13]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:34:13] Generation cancelled by user
+[2025-11-04 09:34:13] 
+============================================================
+[2025-11-04 09:34:13] WARNING: GENERATION INCOMPLETE
+[2025-11-04 09:34:13] ============================================================
+[2025-11-04 09:34:13] Total records: 467
+[2025-11-04 09:34:13] Processed: 7/467
+[2025-11-04 09:34:13] Successfully generated: 7
+[2025-11-04 09:34:13] Failed: 0
+[2025-11-04 09:34:13] Skipped (insufficient data): 0
+[2025-11-04 09:34:13] NOT PROCESSED: 460
+[2025-11-04 09:34:13] ============================================================
+[2025-11-04 09:34:13] 
+CRITICAL: Generation stopped early at record 7.
+[2025-11-04 09:34:13] Check error messages above for details.
+[2025-11-04 09:34:24] [START] Starting batch report generation...
+[2025-11-04 09:34:24] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-04 09:34:25]   [SKIP] Already exists, skipping
+[2025-11-04 09:34:25] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-04 09:34:25]   [SKIP] Already exists, skipping
+[2025-11-04 09:34:25] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-04 09:34:25]   [SKIP] Already exists, skipping
+[2025-11-04 09:34:25] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-04 09:34:25]   [SKIP] Already exists, skipping
+[2025-11-04 09:34:25] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-04 09:34:25]   [SKIP] Already exists, skipping
+[2025-11-04 09:34:25] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-04 09:34:25]   [SKIP] Already exists, skipping
+[2025-11-04 09:34:25] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-04 09:34:25]   [SKIP] Already exists, skipping
+[2025-11-04 09:34:25] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-11-04 09:34:32]   [OK] Success: 20251104 ResilienceReport (AbbVie - Rene Kronenburg).pdf
+[2025-11-04 09:34:32]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:34:32] [9/467] Generating: Abbvie - Stef Beltman
+[2025-11-04 09:34:40]   [OK] Success: 20251104 ResilienceReport (Abbvie - Stef Beltman).pdf
+[2025-11-04 09:34:40]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:34:40] [10/467] Generating: AbbVie - Vincent
+[2025-11-04 09:34:48]   [OK] Success: 20251104 ResilienceReport (AbbVie - Vincent).pdf
+[2025-11-04 09:34:48]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:34:48] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-11-04 09:34:56]   [OK] Success: 20251104 ResilienceReport (AbbVie - Marieke Sellies).pdf
+[2025-11-04 09:34:56]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:34:56] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-11-04 09:35:04]   [OK] Success: 20251104 ResilienceReport (AbbVie - Rob Lindeboom).pdf
+[2025-11-04 09:35:04]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:35:04] [13/467] Generating: AbbVie - Marchel
+[2025-11-04 09:35:12]   [OK] Success: 20251104 ResilienceReport (AbbVie - Marchel).pdf
+[2025-11-04 09:35:12]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:35:12] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-11-04 09:35:20]   [OK] Success: 20251104 ResilienceReport (AbbVie - Jeroen Berkhof).pdf
+[2025-11-04 09:35:20]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:35:20] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-11-04 09:35:28]   [OK] Success: 20251104 ResilienceReport (AbbVie - Miriam Porqueras Salaverri).pdf
+[2025-11-04 09:35:28]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:35:28] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-11-04 09:35:36]   [OK] Success: 20251104 ResilienceReport (AbbVie - Henny Landkroon).pdf
+[2025-11-04 09:35:36]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:35:36] [17/467] Generating: AbbVie - Luc Kottink
+[2025-11-04 09:35:44]   [OK] Success: 20251104 ResilienceReport (AbbVie - Luc Kottink).pdf
+[2025-11-04 09:35:44]   [OK] Validation passed: All values match CSV
+[2025-11-04 09:35:44] Generation cancelled by user
+[2025-11-04 09:35:44] 
+============================================================
+[2025-11-04 09:35:44] WARNING: GENERATION INCOMPLETE
+[2025-11-04 09:35:44] ============================================================
+[2025-11-04 09:35:44] Total records: 467
+[2025-11-04 09:35:44] Processed: 17/467
+[2025-11-04 09:35:44] Successfully generated: 17
+[2025-11-04 09:35:44] Failed: 0
+[2025-11-04 09:35:44] Skipped (insufficient data): 0
+[2025-11-04 09:35:44] NOT PROCESSED: 450
+[2025-11-04 09:35:44] ============================================================
+[2025-11-04 09:35:44] 
+CRITICAL: Generation stopped early at record 17.
+[2025-11-04 09:35:44] Check error messages above for details.
+[2025-11-04 09:38:17] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-04 09:38:17] Importing email tracking data...
+[2025-11-04 09:38:17] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-04 09:38:17] [OK] Data loaded: 467 respondents, 306 companies

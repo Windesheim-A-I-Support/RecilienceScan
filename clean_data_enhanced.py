@@ -219,7 +219,7 @@ class DataCleaningValidator:
                             'person': person,
                             'column': col,
                             'original_value': str(original_val),
-                            'action': 'set_to_NaN_then_2.5'
+                            'action': 'set_to_NaN (missing data)'
                         })
 
                     self.log_issue('WARNING',

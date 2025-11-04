@@ -1535,18 +1535,24 @@ for (col in score_cols) {
     # Convert to numeric (non-convertible values become NA)
     col_data <- suppressWarnings(as.numeric(col_data))
 
-    # Replace NA values with neutral score of 2.5 (midpoint)
-    col_data[is.na(col_data)] <- 2.5
+    # Clamp valid values to range [0, 5], keep NA as NA
+    col_data <- ifelse(is.na(col_data), NA, pmax(0, pmin(5, col_data)))
 
-    # Clamp values to valid range [0, 5]
-    dashboard_data[[col]] <- pmax(0, pmin(5, col_data))
+    dashboard_data[[col]] <- col_data
   }
 }
 
-# Calculate pillar averages
-upstream_avg <- mean(c(dashboard_data$up__r, dashboard_data$up__c, dashboard_data$up__f, dashboard_data$up__v, dashboard_data$up__a), na.rm = TRUE)
-internal_avg <- mean(c(dashboard_data$in__r, dashboard_data$in__c, dashboard_data$in__f, dashboard_data$in__v, dashboard_data$in__a), na.rm = TRUE)
-downstream_avg <- mean(c(dashboard_data$do__r, dashboard_data$do__c, dashboard_data$do__f, dashboard_data$do__v, dashboard_data$do__a), na.rm = TRUE)
+# Calculate pillar averages (na.rm = TRUE handles missing values properly)
+# If ALL values in a pillar are NA, the average will be NaN
+upstream_scores <- c(dashboard_data$up__r, dashboard_data$up__c, dashboard_data$up__f, dashboard_data$up__v, dashboard_data$up__a)
+internal_scores <- c(dashboard_data$in__r, dashboard_data$in__c, dashboard_data$in__f, dashboard_data$in__v, dashboard_data$in__a)
+downstream_scores <- c(dashboard_data$do__r, dashboard_data$do__c, dashboard_data$do__f, dashboard_data$do__v, dashboard_data$do__a)
+
+upstream_avg <- if(all(is.na(upstream_scores))) NA else mean(upstream_scores, na.rm = TRUE)
+internal_avg <- if(all(is.na(internal_scores))) NA else mean(internal_scores, na.rm = TRUE)
+downstream_avg <- if(all(is.na(downstream_scores))) NA else mean(downstream_scores, na.rm = TRUE)
+
+# Overall score only includes non-NA pillar averages
 overall_score <- mean(c(upstream_avg, internal_avg, downstream_avg), na.rm = TRUE)
 
 # Language detection
@@ -1575,21 +1581,27 @@ analyze_pillar_gap <- function(prefix) {
   
   codes <- c("r", "c", "f", "v", "a")
   scores <- numeric(5)
-  
+
   for (i in 1:5) {
     col <- paste0(prefix, "__", codes[i])
-    scores[i] <- if (col %in% colnames(dashboard_data)) dashboard_data[[col]][1] else 2.5
+    if (col %in% colnames(dashboard_data)) {
+      val <- dashboard_data[[col]][1]
+      # Replace NA with 2.5 for analysis purposes
+      scores[i] <- if(is.na(val)) 2.5 else val
+    } else {
+      scores[i] <- 2.5
+    }
   }
   names(scores) <- dims
-  
-  # Find highest and lowest
+
+  # Find highest and lowest (all values should be numeric now)
   max_idx <- which.max(scores)
   min_idx <- which.min(scores)
-  
-  highest_dim <- names(scores)[max_idx]
-  lowest_dim <- names(scores)[min_idx]
-  highest_score <- scores[max_idx]
-  lowest_score <- scores[min_idx]
+
+  highest_dim <- if(length(max_idx) > 0) names(scores)[max_idx] else dims[1]
+  lowest_dim <- if(length(min_idx) > 0) names(scores)[min_idx] else dims[1]
+  highest_score <- if(length(max_idx) > 0) scores[max_idx] else 2.5
+  lowest_score <- if(length(min_idx) > 0) scores[min_idx] else 2.5
   
   # Get examples based on dimension
   get_examples <- function(dimension, is_high) {
@@ -1774,9 +1786,13 @@ tryCatch({
     }
     
     # Create all 4 radar charts
-    create_radar("up", paste0("Upstream Resilience\n(μ=", sprintf("%.1f", upstream_avg), ")"), "#0277BD")
-    create_radar("in", paste0("Internal Resilience\n(μ=", sprintf("%.1f", internal_avg), ")"), "#FF8F00") 
-    create_radar("do", paste0("Downstream Resilience\n(μ=", sprintf("%.1f", downstream_avg), ")"), "#2E7D32")
+    up_label <- if(is.na(upstream_avg)) "N/A" else sprintf("%.1f", upstream_avg)
+    in_label <- if(is.na(internal_avg)) "N/A" else sprintf("%.1f", internal_avg)
+    do_label <- if(is.na(downstream_avg)) "N/A" else sprintf("%.1f", downstream_avg)
+
+    create_radar("up", paste0("Upstream Resilience\n(μ=", up_label, ")"), "#0277BD")
+    create_radar("in", paste0("Internal Resilience\n(μ=", in_label, ")"), "#FF8F00")
+    create_radar("do", paste0("Downstream Resilience\n(μ=", do_label, ")"), "#2E7D32")
     
     # Overall radar with combined scores
     overall_scores <- c(
@@ -1961,8 +1977,16 @@ callout_type <- if (overall_score >= 4.0) {
 }
 
 pillars <- c("Upstream" = upstream_avg, "Internal" = internal_avg, "Downstream" = downstream_avg)
-strongest <- names(pillars)[which.max(pillars)]
-weakest <- names(pillars)[which.min(pillars)]
+
+# Handle NA values when finding strongest/weakest
+valid_pillars <- pillars[!is.na(pillars)]
+if(length(valid_pillars) > 0) {
+  strongest <- names(valid_pillars)[which.max(valid_pillars)]
+  weakest <- names(valid_pillars)[which.min(valid_pillars)]
+} else {
+  strongest <- "N/A"
+  weakest <- "N/A"
+}
 ```
 
 ::: {.callout-`r callout_type` appearance="simple"}
@@ -1972,11 +1996,11 @@ weakest <- names(pillars)[which.min(pillars)]
 
 **`r if (detected_language == "dutch") "Overall Score:" else "Overall Score:"` `r performance_level`** — `r sprintf("%.2f", overall_score)`/5.00
 
-`r if (detected_language == "dutch") paste("**Sterkste domein:**", if(strongest == "Internal") "Intern" else strongest, paste0("(", sprintf("%.2f", max(pillars)), ") — Behoud deze sterkte")) else paste("**Strongest domain:**", strongest, paste0("(", sprintf("%.2f", max(pillars)), ") — Maintain this strength"))`
+`r if (length(valid_pillars) > 0) { if (detected_language == "dutch") paste("**Sterkste domein:**", if(strongest == "Internal") "Intern" else strongest, paste0("(", sprintf("%.2f", max(valid_pillars)), ") — Behoud deze sterkte")) else paste("**Strongest domain:**", strongest, paste0("(", sprintf("%.2f", max(valid_pillars)), ") — Maintain this strength")) } else { if (detected_language == "dutch") "**Sterkste domein:** Onvoldoende data" else "**Strongest domain:** Insufficient data" }`
 
-`r if (detected_language == "dutch") paste("**Ontwikkelpunt:**", if(weakest == "Internal") "Intern" else weakest, paste0("(", sprintf("%.2f", min(pillars)), ") — Prioriteit voor verbetering")) else paste("**Development priority:**", weakest, paste0("(", sprintf("%.2f", min(pillars)), ") — Priority for improvement"))`
+`r if (length(valid_pillars) > 0) { if (detected_language == "dutch") paste("**Ontwikkelpunt:**", if(weakest == "Internal") "Intern" else weakest, paste0("(", sprintf("%.2f", min(valid_pillars)), ") — Prioriteit voor verbetering")) else paste("**Development priority:**", weakest, paste0("(", sprintf("%.2f", min(valid_pillars)), ") — Priority for improvement")) } else { if (detected_language == "dutch") "**Ontwikkelpunt:** Onvoldoende data" else "**Development priority:** Insufficient data" }`
 
-`r gap <- max(pillars) - min(pillars); if (detected_language == "dutch") paste0("**Performance gap:** ", sprintf("%.2f", gap), if(gap > 1.0) " — Aanzienlijke ontwikkelkansen" else " — Redelijk gebalanceerd") else paste0("**Performance gap:** ", sprintf("%.2f", gap), if(gap > 1.0) " — Significant development opportunities" else " — Reasonably balanced")`
+`r if (length(valid_pillars) > 0) { gap <- max(valid_pillars) - min(valid_pillars); if (detected_language == "dutch") paste0("**Performance gap:** ", sprintf("%.2f", gap), if(!is.na(gap) && gap > 1.0) " — Aanzienlijke ontwikkelkansen" else " — Redelijk gebalanceerd") else paste0("**Performance gap:** ", sprintf("%.2f", gap), if(!is.na(gap) && gap > 1.0) " — Significant development opportunities" else " — Reasonably balanced") } else { if (detected_language == "dutch") "**Performance gap:** Onvoldoende data" else "**Performance gap:** Insufficient data" }`
 :::
 
 ## `r if (detected_language == "dutch") "Gedetailleerde Analyse per Pijler" else "Detailed Analysis by Pillar"`
