@@ -1522,8 +1522,24 @@ if (length(cols_to_keep) > 1) {
 
 for (col in score_cols) {
   if (col %in% colnames(dashboard_data)) {
-    dashboard_data[[col]] <- as.numeric(gsub(",", ".", as.character(dashboard_data[[col]])))
-    dashboard_data[[col]] <- pmax(0, pmin(5, dashboard_data[[col]]))
+    # Convert to character first
+    col_data <- as.character(dashboard_data[[col]])
+
+    # Replace commas with dots for European number format
+    col_data <- gsub(",", ".", col_data)
+
+    # Remove any non-numeric characters except dots and minus signs
+    # This handles "?", "N/A", "n.a.", symbols, etc.
+    col_data <- gsub("[^0-9.-]", "", col_data)
+
+    # Convert to numeric (non-convertible values become NA)
+    col_data <- suppressWarnings(as.numeric(col_data))
+
+    # Replace NA values with neutral score of 2.5 (midpoint)
+    col_data[is.na(col_data)] <- 2.5
+
+    # Clamp values to valid range [0, 5]
+    dashboard_data[[col]] <- pmax(0, pmin(5, col_data))
   }
 }
 
@@ -2096,3 +2112,52 @@ if (detected_language == "dutch") {
 ::: {.content-visible when-format="pdf"}
 \restoregeometry
 :::
+
+`r if (params$debug_mode) "\\newpage" else ""`
+
+`r if (params$debug_mode) "## Debug: Raw Score Values" else ""`
+
+`r if (params$debug_mode) paste0("**Company:** ", company_name, " | **Person:** ", person_name) else ""`
+
+```{r debug-table, echo=FALSE, eval=params$debug_mode}
+# Create debug table with all raw values
+debug_data <- data.frame(
+  Dimension = c("Redundancy", "Collaboration", "Flexibility", "Visibility", "Agility", "**Average**"),
+  Upstream = c(
+    sprintf("%.2f", dashboard_data$up__r[1]),
+    sprintf("%.2f", dashboard_data$up__c[1]),
+    sprintf("%.2f", dashboard_data$up__f[1]),
+    sprintf("%.2f", dashboard_data$up__v[1]),
+    sprintf("%.2f", dashboard_data$up__a[1]),
+    sprintf("**%.2f**", upstream_avg)
+  ),
+  Internal = c(
+    sprintf("%.2f", dashboard_data$in__r[1]),
+    sprintf("%.2f", dashboard_data$in__c[1]),
+    sprintf("%.2f", dashboard_data$in__f[1]),
+    sprintf("%.2f", dashboard_data$in__v[1]),
+    sprintf("%.2f", dashboard_data$in__a[1]),
+    sprintf("**%.2f**", internal_avg)
+  ),
+  Downstream = c(
+    sprintf("%.2f", dashboard_data$do__r[1]),
+    sprintf("%.2f", dashboard_data$do__c[1]),
+    sprintf("%.2f", dashboard_data$do__f[1]),
+    sprintf("%.2f", dashboard_data$do__v[1]),
+    sprintf("%.2f", dashboard_data$do__a[1]),
+    sprintf("**%.2f**", downstream_avg)
+  )
+)
+
+if ("kableExtra" %in% loaded_packages) {
+  kableExtra::kbl(debug_data, align = c("l", "c", "c", "c"),
+                  caption = paste("Overall SCRES:", sprintf("%.2f", overall_score))) %>%
+    kableExtra::kable_styling(bootstrap_options = c("striped", "hover"),
+                             full_width = FALSE,
+                             font_size = 11) %>%
+    kableExtra::row_spec(6, bold = TRUE, background = "#f0f0f0")
+} else {
+  knitr::kable(debug_data, align = c("l", "c", "c", "c"),
+               caption = paste("Overall SCRES:", sprintf("%.2f", overall_score)))
+}
+```

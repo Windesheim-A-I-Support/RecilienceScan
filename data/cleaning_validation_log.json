@@ -1,55 +1,61 @@
 {
-  "timestamp": "2025-11-01T18:21:24.940915",
+  "timestamp": "2025-11-03T23:17:10.743239",
   "statistics": {
     "initial_rows": 467,
     "final_rows": 467,
     "removed_rows": 0,
     "records_with_insufficient_data": 0,
     "records_with_no_scores": 0,
-    "duplicates_removed": 0
+    "duplicates_removed": 0,
+    "invalid_values_replaced": 0
   },
   "errors": [],
   "warnings": [],
   "info": [
     {
       "level": "INFO",
-      "message": "Backup created: ./data/backups\\cleaned_master_20251101_182124.csv",
-      "timestamp": "2025-11-01T18:21:24.836925"
+      "message": "Backup created: ./data/backups\\cleaned_master_20251103_231710.csv",
+      "timestamp": "2025-11-03T23:17:10.640591"
     },
     {
       "level": "INFO",
       "message": "Loading data from: ./data/cleaned_master.csv",
-      "timestamp": "2025-11-01T18:21:24.837039"
+      "timestamp": "2025-11-03T23:17:10.640611"
     },
     {
       "level": "INFO",
       "message": "Loaded 467 rows, 178 columns",
-      "timestamp": "2025-11-01T18:21:24.847322"
+      "timestamp": "2025-11-03T23:17:10.652827"
     },
     {
       "level": "INFO",
       "message": "All required columns present: ['company_name', 'name', 'email_address']",
-      "timestamp": "2025-11-01T18:21:24.848043"
+      "timestamp": "2025-11-03T23:17:10.653168"
+    },
+    {
+      "level": "INFO",
+      "message": "All score values were valid",
+      "timestamp": "2025-11-03T23:17:10.679650"
     },
     {
       "level": "INFO",
       "message": "Cleaned 15 score columns",
-      "timestamp": "2025-11-01T18:21:24.872013"
+      "timestamp": "2025-11-03T23:17:10.679665"
     },
     {
       "level": "INFO",
       "message": "Kept 467/467 records after validation",
-      "timestamp": "2025-11-01T18:21:24.903699"
+      "timestamp": "2025-11-03T23:17:10.710035"
     },
     {
       "level": "INFO",
       "message": "No duplicates found",
-      "timestamp": "2025-11-01T18:21:24.907381"
+      "timestamp": "2025-11-03T23:17:10.712487"
     },
     {
       "level": "INFO",
       "message": "Saved cleaned data: ./data/cleaned_master.csv",
-      "timestamp": "2025-11-01T18:21:24.940762"
+      "timestamp": "2025-11-03T23:17:10.743204"
     }
   ],
   "removed_records": []

@@ -183,15 +183,47 @@ class DataCleaningValidator:
             return pd.DataFrame()
 
     def clean_score_columns(self, df):
-        """Clean and convert score columns to numeric"""
+        """Clean and convert score columns to numeric with detailed logging"""
         print("\n" + "="*70)
         print("SCORE COLUMN CLEANING")
         print("="*70)
 
+        total_replacements = 0
+        replacement_log = []
+
         for col in SCORE_COLUMNS:
             if col in df.columns:
+                original_values = df[col].copy()
+
                 # Convert to string first, handle NaN
                 df[col] = df[col].astype(str)
+
+                # Track invalid values BEFORE cleaning
+                invalid_mask = ~df[col].str.match(r'^[0-5](\.[0-9]+)?$', na=False)
+                invalid_mask = invalid_mask & (df[col] != 'nan')
+
+                if invalid_mask.any():
+                    invalid_count = invalid_mask.sum()
+                    total_replacements += invalid_count
+
+                    # Log sample of replacements
+                    invalid_rows = df[invalid_mask].head(5)
+                    for idx in invalid_rows.index:
+                        original_val = original_values.loc[idx]
+                        company = df.loc[idx, 'company_name'] if 'company_name' in df.columns else 'Unknown'
+                        person = df.loc[idx, 'name'] if 'name' in df.columns else 'Unknown'
+
+                        replacement_log.append({
+                            'row': int(idx),
+                            'company': company,
+                            'person': person,
+                            'column': col,
+                            'original_value': str(original_val),
+                            'action': 'set_to_NaN_then_2.5'
+                        })
+
+                    self.log_issue('WARNING',
+                                 f"{col}: {invalid_count} invalid value(s) (e.g., '{original_values[invalid_mask].iloc[0]}')")
 
                 # Replace question marks and empty strings with NaN
                 df[col] = df[col].replace(['?', '', ' ', 'nan'], np.nan)
@@ -199,13 +231,30 @@ class DataCleaningValidator:
                 # Replace comma with period for European decimals
                 df[col] = df[col].str.replace(',', '.')
 
+                # Remove any remaining non-numeric characters
+                df[col] = df[col].str.replace(r'[^0-9.-]', '', regex=True)
+
                 # Convert to numeric
                 df[col] = pd.to_numeric(df[col], errors='coerce')
 
                 # Clip to valid range [0, 5]
                 df[col] = df[col].clip(lower=0, upper=5)
 
+        # Save detailed replacement log
+        if replacement_log:
+            replacement_df = pd.DataFrame(replacement_log)
+            replacement_log_path = './data/value_replacements_log.csv'
+            replacement_df.to_csv(replacement_log_path, index=False)
+            self.log_issue('INFO', f"Saved {len(replacement_log)} replacement details to: {replacement_log_path}")
+
+        if total_replacements > 0:
+            self.log_issue('WARNING', f"Total invalid values replaced: {total_replacements}")
+        else:
+            self.log_issue('INFO', "All score values were valid")
+
         self.log_issue('INFO', f"Cleaned {len(SCORE_COLUMNS)} score columns")
+        self.statistics['invalid_values_replaced'] = total_replacements
+
         return df
 
     def remove_duplicates(self, df):

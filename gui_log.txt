@@ -7018,3 +7018,85 @@ CRITICAL: Generation stopped early at record 23.
 [2025-11-03 15:14:40] 
 CRITICAL: Generation stopped early at record 28.
 [2025-11-03 15:14:40] Check error messages above for details.
+[2025-11-03 15:44:50] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-03 15:44:50] Importing email tracking data...
+[2025-11-03 15:44:50] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-03 15:44:50] [OK] Data loaded: 467 respondents, 306 companies
+[2025-11-03 15:44:53] [START] Starting batch report generation...
+[2025-11-03 15:44:53] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [9/467] Generating: Abbvie - Stef Beltman
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [10/467] Generating: AbbVie - Vincent
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [13/467] Generating: AbbVie - Marchel
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [17/467] Generating: AbbVie - Luc Kottink
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [18/467] Generating: AbbVie - Bas Groenwold
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [19/467] Generating: AbbVie - Walter Verhoef
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [20/467] Generating: ACN - Hilal L
+[2025-11-03 15:44:53]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:53] [21/467] Generating: AGILEA - vers
+[2025-11-03 15:44:54]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:54] [22/467] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-11-03 15:44:54]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:54] [23/467] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-11-03 15:44:54]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:54] [24/467] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-11-03 15:44:54]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:54] [25/467] Generating: Agrifac Machinery B.V. - Ferry
+[2025-11-03 15:44:54]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:54] [26/467] Generating: Agrifac Machinery B.V. - Huimin Ke
+[2025-11-03 15:44:54]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:54] [27/467] Generating: Agrifac Machinery B.V. - Bjorn de Lange
+[2025-11-03 15:44:54]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:54] [28/467] Generating: Agrifac Machinery B.V. - Nick van Huffelen
+[2025-11-03 15:44:54]   [SKIP] Already exists, skipping
+[2025-11-03 15:44:54] [29/467] Generating: AGV International B.V. - Tom Broeder
+[2025-11-03 15:45:02]   [OK] Success: 20251103 ResilienceReport (AGV International B.V. - Tom Broeder).pdf
+[2025-11-03 15:45:02]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:45:02] [30/467] Generating: Ales Metaaltechniek - Dick de Leeuw
+[2025-11-03 15:45:11]   [OK] Success: 20251103 ResilienceReport (Ales Metaaltechniek - Dick de Leeuw).pdf
+[2025-11-03 15:45:11]   [OK] Validation passed: All values match CSV
+[2025-11-03 15:45:11] Generation cancelled by user
+[2025-11-03 15:45:11] 
+============================================================
+[2025-11-03 15:45:11] WARNING: GENERATION INCOMPLETE
+[2025-11-03 15:45:11] ============================================================
+[2025-11-03 15:45:11] Total records: 467
+[2025-11-03 15:45:11] Processed: 30/467
+[2025-11-03 15:45:11] Successfully generated: 30
+[2025-11-03 15:45:11] Failed: 0
+[2025-11-03 15:45:11] Skipped (insufficient data): 0
+[2025-11-03 15:45:11] NOT PROCESSED: 437
+[2025-11-03 15:45:11] ============================================================
+[2025-11-03 15:45:11] 
+CRITICAL: Generation stopped early at record 30.
+[2025-11-03 15:45:11] Check error messages above for details.
