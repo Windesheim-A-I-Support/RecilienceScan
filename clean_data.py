@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import glob
 from pathlib import Path
+from datetime import datetime
 
 # Configuration
 DATA_DIR = "./data"
@@ -177,6 +178,81 @@ def clean_column_names(columns):
     return final_names
 
 
+def parse_survey_date(date_value):
+    """
+    Convert various date formats to ISO 8601 string (YYYY-MM-DD).
+    Handles Excel serial numbers, timestamps, and various string formats.
+
+    Args:
+        date_value: Date in various formats (Excel serial, string, timestamp)
+
+    Returns:
+        str: ISO 8601 formatted date (YYYY-MM-DD) or None if cannot parse
+    """
+    if pd.isna(date_value):
+        return None
+
+    # Try Excel serial number (integer or float)
+    if isinstance(date_value, (int, float)):
+        try:
+            # Excel epoch: 1899-12-30 (Excel day 0)
+            excel_epoch = datetime(1899, 12, 30)
+            date_obj = excel_epoch + pd.Timedelta(days=int(date_value))
+
+            # Validate reasonable date range (1900-2100)
+            if 1900 <= date_obj.year <= 2100:
+                return date_obj.strftime('%Y-%m-%d')
+        except (ValueError, OverflowError):
+            pass
+
+    # Try parsing as string with pandas
+    if isinstance(date_value, str):
+        try:
+            date_obj = pd.to_datetime(date_value, errors='coerce')
+            if pd.notna(date_obj):
+                return date_obj.strftime('%Y-%m-%d')
+        except:
+            pass
+
+    # If already a datetime object
+    if isinstance(date_value, (pd.Timestamp, datetime)):
+        return date_value.strftime('%Y-%m-%d')
+
+    return None  # Could not parse
+
+
+def fix_date_columns(df):
+    """
+    Identify and fix date columns in the dataframe.
+    Looks for columns with 'date', 'submitdate', or 'timestamp' in the name.
+
+    Args:
+        df: pandas DataFrame
+
+    Returns:
+        pandas DataFrame with fixed date columns
+    """
+    date_column_keywords = ['date', 'submitdate', 'timestamp', 'submit_date']
+
+    for col in df.columns:
+        col_lower = str(col).lower()
+
+        # Check if column name suggests it's a date
+        if any(keyword in col_lower for keyword in date_column_keywords):
+            print(f"   🗓️  Fixing date column: '{col}'")
+
+            # Count how many will be converted
+            before_count = df[col].notna().sum()
+            df[col] = df[col].apply(parse_survey_date)
+            after_count = df[col].notna().sum()
+
+            if before_count > 0:
+                success_rate = (after_count / before_count) * 100
+                print(f"      ✅ Converted {after_count}/{before_count} dates ({success_rate:.1f}% success)")
+
+    return df
+
+
 def clean_and_save():
     """
     Main function: Find data file, load it, clean it, and save to standardized format.
@@ -236,7 +312,11 @@ def clean_and_save():
     if removed_rows > 0:
         print(f"\n🗑️  Removed {removed_rows} empty rows")
 
-    # Step 8: Save to output
+    # Step 8: Fix date columns
+    print("\n🗓️  Fixing date columns...")
+    df_clean = fix_date_columns(df_clean)
+
+    # Step 9: Save to output
     print(f"\n💾 Saving cleaned data to: {OUTPUT_PATH}")
 
     try:
