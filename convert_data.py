@@ -411,6 +411,20 @@ def convert_and_save():
     # Step 8: Update existing CSV or create new (preserves 'reportsent' column only)
     df_final = merge_with_existing(df_converted)
 
+    # Step 8.5: Format date columns properly (fix Excel serial dates)
+    print("\n[DATE] Formatting date columns...")
+    date_columns = [col for col in df_final.columns if 'date' in col.lower()]
+    for col in date_columns:
+        try:
+            # Convert to datetime, handling Excel serial dates
+            df_final[col] = pd.to_datetime(df_final[col], errors='coerce')
+            # Format as string in standard format
+            df_final[col] = df_final[col].dt.strftime('%Y-%m-%d %H:%M:%S')
+            df_final[col] = df_final[col].fillna('')  # Replace NaT with empty string
+            print(f"   [OK] Formatted '{col}' column")
+        except Exception as e:
+            print(f"   [WARNING] Could not format '{col}': {e}")
+
     # Step 9: Save to output
     print(f"\n[SAVE] Saving to: {OUTPUT_PATH}")
 

@@ -1477,7 +1477,7 @@ tryCatch({
   }
 }, error = function(e) {})
 
-# Extract additional person details (function/role and submit date)
+# Extract additional person details (function/role and submit date) BEFORE filtering columns
 person_function <- ""
 submit_date <- ""
 if (!is.null(dashboard_data) && data_source == "real") {
@@ -1486,8 +1486,21 @@ if (!is.null(dashboard_data) && data_source == "real") {
     if (is.na(person_function)) person_function <- ""
   }
   if ("submitdate" %in% colnames(dashboard_data)) {
-    submit_date <- as.character(dashboard_data[1, "submitdate"])
-    if (is.na(submit_date)) submit_date <- ""
+    raw_date <- as.character(dashboard_data[1, "submitdate"])
+    if (!is.na(raw_date) && nchar(raw_date) > 0) {
+      # If it looks like a date (contains dash or colon), use as-is
+      if (grepl("[-:]", raw_date)) {
+        submit_date <- raw_date
+      } else if (grepl("^[0-9]+$", raw_date)) {
+        # Pure number - might be Unix timestamp
+        unix_time <- as.numeric(raw_date)
+        submit_date <- format(as.POSIXct(unix_time, origin="1970-01-01"), "%Y-%m-%d %H:%M:%S")
+      } else {
+        submit_date <- raw_date
+      }
+    } else {
+      submit_date <- ""
+    }
   }
 }
 
@@ -1497,7 +1510,7 @@ if (is.null(dashboard_data)) {
   base_score <- runif(1, 2.2, 4.3)
   variations <- runif(15, -0.9, 0.9)
   scores <- pmax(0.5, pmin(4.8, base_score + variations))
-  
+
   dashboard_data <- data.frame(
     company_name = company_name,
     up__r = scores[1], up__c = scores[2], up__f = scores[3], up__v = scores[4], up__a = scores[5],
@@ -2002,55 +2015,6 @@ if(length(valid_pillars) > 0) {
 
 `r if (length(valid_pillars) > 0) { gap <- max(valid_pillars) - min(valid_pillars); if (detected_language == "dutch") paste0("**Performance gap:** ", sprintf("%.2f", gap), if(!is.na(gap) && gap > 1.0) " — Aanzienlijke ontwikkelkansen" else " — Redelijk gebalanceerd") else paste0("**Performance gap:** ", sprintf("%.2f", gap), if(!is.na(gap) && gap > 1.0) " — Significant development opportunities" else " — Reasonably balanced") } else { if (detected_language == "dutch") "**Performance gap:** Onvoldoende data" else "**Performance gap:** Insufficient data" }`
 :::
-
-## `r if (detected_language == "dutch") "Gedetailleerde Analyse per Pijler" else "Detailed Analysis by Pillar"`
-
-```{r detailed-pillar-analysis, echo=FALSE, results='asis'}
-# Function to format pillar details
-format_pillar_details <- function(prefix, pillar_name_nl, pillar_name_en) {
-  pillar_name <- if (detected_language == "dutch") pillar_name_nl else pillar_name_en
-
-  # Get dimension names
-  if (detected_language == "dutch") {
-    dims <- c("Redundantie", "Samenwerking", "Flexibiliteit", "Transparantie", "Behendigheid")
-  } else {
-    dims <- c("Redundancy", "Collaboration", "Flexibility", "Visibility", "Agility")
-  }
-
-  codes <- c("r", "c", "f", "v", "a")
-  scores <- numeric(5)
-
-  # Extract scores
-  for (i in 1:5) {
-    col <- paste0(prefix, "__", codes[i])
-    scores[i] <- if (col %in% colnames(dashboard_data)) dashboard_data[[col]][1] else 2.5
-  }
-  names(scores) <- dims
-
-  # Sort scores to find highest and lowest
-  sorted_scores <- sort(scores, decreasing = TRUE)
-  top_2 <- sorted_scores[1:2]
-  bottom_2 <- sorted_scores[4:5]
-
-  # Generate output text
-  if (detected_language == "dutch") {
-    cat(sprintf("**%s** (gem: %.2f) — Sterkste: %s (%.2f), Zwakste: %s (%.2f)\n\n",
-                pillar_name, mean(scores),
-                names(top_2)[1], top_2[1],
-                names(bottom_2)[2], bottom_2[2]))
-  } else {
-    cat(sprintf("**%s** (avg: %.2f) — Strongest: %s (%.2f), Weakest: %s (%.2f)\n\n",
-                pillar_name, mean(scores),
-                names(top_2)[1], top_2[1],
-                names(bottom_2)[2], bottom_2[2]))
-  }
-}
-
-# Display each pillar summary
-format_pillar_details("up", "Upstream", "Upstream")
-format_pillar_details("in", "Intern", "Internal")
-format_pillar_details("do", "Downstream", "Downstream")
-```
 
 ::: {.callout-note appearance="simple"}
 ### `r if (detected_language == "dutch") "Belangrijkste Inzichten" else "Key Insights"`

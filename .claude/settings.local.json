@@ -19,7 +19,12 @@
       "Bash(ResilienceReport.qmd)",
       "Bash(del \"reports\\20251103 ResilienceReport (Abbott - Lisa Daly).pdf\" 2)",
       "Bash(nul)",
-      "Bash(if exist \"reports\\20251103 ResilienceReport (Abbott - Lisa Daly).pdf\" del \"reports\\20251103 ResilienceReport (Abbott - Lisa Daly).pdf\")"
+      "Bash(if exist \"reports\\20251103 ResilienceReport (Abbott - Lisa Daly).pdf\" del \"reports\\20251103 ResilienceReport (Abbott - Lisa Daly).pdf\")",
+      "Bash(if exist .quarto rmdir /s /q .quarto)",
+      "Bash(if exist ResilienceReport_files rmdir /s /q ResilienceReport_files)",
+      "Bash(del /q *.aux *.log 2)",
+      "Bash(powershell -Command:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []
