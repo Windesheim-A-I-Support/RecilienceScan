@@ -7611,3 +7611,1376 @@ CRITICAL: Generation stopped early at record 5.
 [2025-11-16 22:51:44]   [OK] Success: 20251116 ResilienceReport (AbbVie - Rob Lindeboom).pdf
 [2025-11-16 22:51:44]   [OK] Validation passed: All values match CSV
 [2025-11-16 22:51:44] [13/467] Generating: AbbVie - Marchel
+[2025-11-17 10:08:35] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-17 10:08:35] Importing email tracking data...
+[2025-11-17 10:08:35] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-17 10:08:35] [OK] Data loaded: 467 respondents, 306 companies
+[2025-11-17 10:08:43] [START] Starting batch report generation...
+[2025-11-17 10:08:43] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-17 10:08:59]   [OK] Success: 20251117 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf
+[2025-11-17 10:08:59]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:08:59] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-17 10:09:15]   [OK] Success: 20251117 ResilienceReport (24 ICE - Casper Hondema).pdf
+[2025-11-17 10:09:15]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:09:15] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-17 10:09:23]   [OK] Success: 20251117 ResilienceReport (Aako B.V. - Frank Mooij).pdf
+[2025-11-17 10:09:23]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:09:23] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-17 10:09:31]   [OK] Success: 20251117 ResilienceReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf
+[2025-11-17 10:09:31]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:09:31] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-17 10:09:40]   [OK] Success: 20251117 ResilienceReport (Abbott - Robert Smelt).pdf
+[2025-11-17 10:09:40]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:09:40] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-17 10:09:48]   [OK] Success: 20251117 ResilienceReport (Abbott - Lisa Daly).pdf
+[2025-11-17 10:09:48]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:09:48] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-17 10:09:56]   [OK] Success: 20251117 ResilienceReport (Abbott labs - Tim Katanik).pdf
+[2025-11-17 10:09:56]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:09:56] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-11-17 10:10:04]   [OK] Success: 20251117 ResilienceReport (AbbVie - Rene Kronenburg).pdf
+[2025-11-17 10:10:04]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:10:04] [9/467] Generating: Abbvie - Stef Beltman
+[2025-11-17 10:10:12]   [OK] Success: 20251117 ResilienceReport (Abbvie - Stef Beltman).pdf
+[2025-11-17 10:10:12]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:10:12] [10/467] Generating: AbbVie - Vincent
+[2025-11-17 10:10:21]   [OK] Success: 20251117 ResilienceReport (AbbVie - Vincent).pdf
+[2025-11-17 10:10:21]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:10:21] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-11-17 10:10:29]   [OK] Success: 20251117 ResilienceReport (AbbVie - Marieke Sellies).pdf
+[2025-11-17 10:10:29]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:10:29] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-11-17 10:10:38]   [OK] Success: 20251117 ResilienceReport (AbbVie - Rob Lindeboom).pdf
+[2025-11-17 10:10:39]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:10:39] [13/467] Generating: AbbVie - Marchel
+[2025-11-17 10:10:48]   [OK] Success: 20251117 ResilienceReport (AbbVie - Marchel).pdf
+[2025-11-17 10:10:48]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:10:48] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-11-17 10:10:56]   [OK] Success: 20251117 ResilienceReport (AbbVie - Jeroen Berkhof).pdf
+[2025-11-17 10:10:56]   [OK] Validation passed: All values match CSV
+[2025-11-17 10:10:56] Generation cancelled by user
+[2025-11-17 10:10:56] 
+============================================================
+[2025-11-17 10:10:56] WARNING: GENERATION INCOMPLETE
+[2025-11-17 10:10:56] ============================================================
+[2025-11-17 10:10:56] Total records: 467
+[2025-11-17 10:10:56] Processed: 14/467
+[2025-11-17 10:10:56] Successfully generated: 14
+[2025-11-17 10:10:56] Failed: 0
+[2025-11-17 10:10:56] Skipped (insufficient data): 0
+[2025-11-17 10:10:56] NOT PROCESSED: 453
+[2025-11-17 10:10:56] ============================================================
+[2025-11-17 10:10:56] 
+CRITICAL: Generation stopped early at record 14.
+[2025-11-17 10:10:56] Check error messages above for details.
+[2025-11-17 14:50:37] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-11-17 14:50:37] Importing email tracking data...
+[2025-11-17 14:50:37] [OK] Email tracker: 0 imported, 467 skipped
+[2025-11-17 14:50:37] [OK] Data loaded: 467 respondents, 306 companies
+[2025-11-17 14:50:59] [START] Starting batch report generation...
+[2025-11-17 14:50:59] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [5/467] Generating: Abbott - Robert Smelt
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [6/467] Generating: Abbott - Lisa Daly
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [9/467] Generating: Abbvie - Stef Beltman
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [10/467] Generating: AbbVie - Vincent
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [13/467] Generating: AbbVie - Marchel
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-11-17 14:50:59]   [SKIP] Already exists, skipping
+[2025-11-17 14:50:59] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-11-17 14:51:16]   [OK] Success: 20251117 ResilienceReport (AbbVie - Miriam Porqueras Salaverri).pdf
+[2025-11-17 14:51:16]   [OK] Validation passed: All values match CSV
+[2025-11-17 14:51:16] Generation cancelled by user
+[2025-11-17 14:51:16] 
+============================================================
+[2025-11-17 14:51:16] WARNING: GENERATION INCOMPLETE
+[2025-11-17 14:51:16] ============================================================
+[2025-11-17 14:51:16] Total records: 467
+[2025-11-17 14:51:16] Processed: 15/467
+[2025-11-17 14:51:16] Successfully generated: 15
+[2025-11-17 14:51:17] Failed: 0
+[2025-11-17 14:51:17] Skipped (insufficient data): 0
+[2025-11-17 14:51:17] NOT PROCESSED: 452
+[2025-11-17 14:51:17] ============================================================
+[2025-11-17 14:51:17] 
+CRITICAL: Generation stopped early at record 15.
+[2025-11-17 14:51:17] Check error messages above for details.
+[2025-12-02 12:44:58] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-12-02 12:44:58] Importing email tracking data...
+[2025-12-02 12:44:58] [OK] Email tracker: 0 imported, 467 skipped
+[2025-12-02 12:44:59] [OK] Data loaded: 467 respondents, 306 companies
+[2025-12-02 12:48:55] 
+[START] Generating single report for ASSA ABLOY Opening Solutions EMEIA - Danny van der Ster
+[2025-12-02 12:48:55] [INFO] Rendering PDF with template: ResilienceReport.qmd
+[2025-12-02 12:49:13] [OK] Success: 20251202 ResilienceReport (ASSA ABLOY Opening Solutions EMEIA - Danny van der Ster).pdf
+[2025-12-02 12:49:13] [OK] Validation passed: All values match CSV
+[2025-12-02 12:52:56] [START] Starting batch report generation...
+[2025-12-02 12:52:56] [1/467] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-12-02 12:53:04]   [OK] Success: 20251202 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf
+[2025-12-02 12:53:04]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:53:04] [2/467] Generating: 24 ICE - Casper Hondema
+[2025-12-02 12:53:11]   [OK] Success: 20251202 ResilienceReport (24 ICE - Casper Hondema).pdf
+[2025-12-02 12:53:11]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:53:11] [3/467] Generating: Aako B.V. - Frank Mooij
+[2025-12-02 12:53:19]   [OK] Success: 20251202 ResilienceReport (Aako B.V. - Frank Mooij).pdf
+[2025-12-02 12:53:19]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:53:19] [4/467] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-12-02 12:53:27]   [OK] Success: 20251202 ResilienceReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf
+[2025-12-02 12:53:27]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:53:27] [5/467] Generating: Abbott - Robert Smelt
+[2025-12-02 12:53:35]   [OK] Success: 20251202 ResilienceReport (Abbott - Robert Smelt).pdf
+[2025-12-02 12:53:35]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:53:35] [6/467] Generating: Abbott - Lisa Daly
+[2025-12-02 12:53:43]   [OK] Success: 20251202 ResilienceReport (Abbott - Lisa Daly).pdf
+[2025-12-02 12:53:43]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:53:43] [7/467] Generating: Abbott labs - Tim Katanik
+[2025-12-02 12:53:51]   [OK] Success: 20251202 ResilienceReport (Abbott labs - Tim Katanik).pdf
+[2025-12-02 12:53:51]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:53:51] [8/467] Generating: AbbVie - Rene Kronenburg
+[2025-12-02 12:53:59]   [OK] Success: 20251202 ResilienceReport (AbbVie - Rene Kronenburg).pdf
+[2025-12-02 12:53:59]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:53:59] [9/467] Generating: Abbvie - Stef Beltman
+[2025-12-02 12:54:07]   [OK] Success: 20251202 ResilienceReport (Abbvie - Stef Beltman).pdf
+[2025-12-02 12:54:07]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:54:07] [10/467] Generating: AbbVie - Vincent
+[2025-12-02 12:54:15]   [OK] Success: 20251202 ResilienceReport (AbbVie - Vincent).pdf
+[2025-12-02 12:54:15]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:54:15] [11/467] Generating: AbbVie - Marieke Sellies
+[2025-12-02 12:54:23]   [OK] Success: 20251202 ResilienceReport (AbbVie - Marieke Sellies).pdf
+[2025-12-02 12:54:23]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:54:23] [12/467] Generating: AbbVie - Rob Lindeboom
+[2025-12-02 12:54:31]   [OK] Success: 20251202 ResilienceReport (AbbVie - Rob Lindeboom).pdf
+[2025-12-02 12:54:31]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:54:31] [13/467] Generating: AbbVie - Marchel
+[2025-12-02 12:54:39]   [OK] Success: 20251202 ResilienceReport (AbbVie - Marchel).pdf
+[2025-12-02 12:54:39]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:54:39] [14/467] Generating: AbbVie - Jeroen Berkhof
+[2025-12-02 12:54:47]   [OK] Success: 20251202 ResilienceReport (AbbVie - Jeroen Berkhof).pdf
+[2025-12-02 12:54:47]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:54:47] [15/467] Generating: AbbVie - Miriam Porqueras Salaverri
+[2025-12-02 12:54:55]   [OK] Success: 20251202 ResilienceReport (AbbVie - Miriam Porqueras Salaverri).pdf
+[2025-12-02 12:54:55]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:54:55] [16/467] Generating: AbbVie - Henny Landkroon
+[2025-12-02 12:55:03]   [OK] Success: 20251202 ResilienceReport (AbbVie - Henny Landkroon).pdf
+[2025-12-02 12:55:03]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:55:03] [17/467] Generating: AbbVie - Luc Kottink
+[2025-12-02 12:55:11]   [OK] Success: 20251202 ResilienceReport (AbbVie - Luc Kottink).pdf
+[2025-12-02 12:55:11]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:55:11] [18/467] Generating: AbbVie - Bas Groenwold
+[2025-12-02 12:55:19]   [OK] Success: 20251202 ResilienceReport (AbbVie - Bas Groenwold).pdf
+[2025-12-02 12:55:19]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:55:19] [19/467] Generating: AbbVie - Walter Verhoef
+[2025-12-02 12:55:27]   [OK] Success: 20251202 ResilienceReport (AbbVie - Walter Verhoef).pdf
+[2025-12-02 12:55:27]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:55:27] [20/467] Generating: ACN - Hilal L
+[2025-12-02 12:55:35]   [OK] Success: 20251202 ResilienceReport (ACN - Hilal L).pdf
+[2025-12-02 12:55:35]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:55:35] [21/467] Generating: AGILEA - vers
+[2025-12-02 12:55:42]   [OK] Success: 20251202 ResilienceReport (AGILEA - vers).pdf
+[2025-12-02 12:55:43]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:55:43] [22/467] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-12-02 12:55:51]   [OK] Success: 20251202 ResilienceReport (Agrifac Machinery B.V. - Art Kampjes).pdf
+[2025-12-02 12:55:51]   [OK] Validation passed: All values match CSV
+[2025-12-02 12:55:51] Generation cancelled by user
+[2025-12-02 12:55:51] 
+============================================================
+[2025-12-02 12:55:51] WARNING: GENERATION INCOMPLETE
+[2025-12-02 12:55:51] ============================================================
+[2025-12-02 12:55:51] Total records: 467
+[2025-12-02 12:55:51] Processed: 22/467
+[2025-12-02 12:55:51] Successfully generated: 22
+[2025-12-02 12:55:51] Failed: 0
+[2025-12-02 12:55:51] Skipped (insufficient data): 0
+[2025-12-02 12:55:51] NOT PROCESSED: 445
+[2025-12-02 12:55:51] ============================================================
+[2025-12-02 12:55:51] 
+CRITICAL: Generation stopped early at record 22.
+[2025-12-02 12:55:51] Check error messages above for details.
+[2025-12-02 12:56:04] [START] Starting email distribution...
+[2025-12-02 12:56:04] [TEST] TEST MODE ENABLED - All emails will be sent to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:04] [INFO] Total reports ready to send: 23
+[2025-12-02 12:56:04] [SMTP] Connecting to SMTP server: smtp.office365.com:587
+[2025-12-02 12:56:04] [1/23] [SEND] Sending to: 24 ICE - Casper Hondema
+[2025-12-02 12:56:04]   Email address: casper@24ice.com
+[2025-12-02 12:56:04]   PDF: 20251202 ResilienceReport (24 ICE - Casper Hondema).pdf
+[2025-12-02 12:56:04]   Formatting email...
+[2025-12-02 12:56:04]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: casper@24ice.com)
+[2025-12-02 12:56:04]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:05]   Found 1 Outlook account(s)
+[2025-12-02 12:56:05]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:05]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:05]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:05]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (24 ICE - Casper Hondema).pdf...
+[2025-12-02 12:56:05]   [OK] Email configured:
+[2025-12-02 12:56:05]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:05]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:05]      Subject: Your Resilience Scan Report – 24 ICE...
+[2025-12-02 12:56:05]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:06]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:06]   Test mode: NOT updating CSV
+[2025-12-02 12:56:06]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:06] [2/23] [SEND] Sending to: Aako B.V. - Frank Mooij
+[2025-12-02 12:56:06]   Email address: f.mooij@aako.nl
+[2025-12-02 12:56:06]   PDF: 20251202 ResilienceReport (Aako B.V. - Frank Mooij).pdf
+[2025-12-02 12:56:06]   Formatting email...
+[2025-12-02 12:56:06]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: f.mooij@aako.nl)
+[2025-12-02 12:56:06]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:06]   Found 1 Outlook account(s)
+[2025-12-02 12:56:06]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:06]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:06]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:06]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (Aako B.V. - Frank Mooij).pdf...
+[2025-12-02 12:56:06]   [OK] Email configured:
+[2025-12-02 12:56:06]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:06]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:06]      Subject: Your Resilience Scan Report – Aako B.V....
+[2025-12-02 12:56:06]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:06]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:06]   Test mode: NOT updating CSV
+[2025-12-02 12:56:06]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:06] [3/23] [SEND] Sending to: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-12-02 12:56:06]   Email address: jop@aarnink.nl
+[2025-12-02 12:56:06]   PDF: 20251202 ResilienceReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf
+[2025-12-02 12:56:06]   Formatting email...
+[2025-12-02 12:56:06]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: jop@aarnink.nl)
+[2025-12-02 12:56:06]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:06]   Found 1 Outlook account(s)
+[2025-12-02 12:56:06]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:06]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:06]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:06]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (Aarnink Kunststof kozijnen fabriek - Jop Reimert).pdf...
+[2025-12-02 12:56:06]   [OK] Email configured:
+[2025-12-02 12:56:06]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:06]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:06]      Subject: Your Resilience Scan Report – Aarnink Kunststof ko...
+[2025-12-02 12:56:06]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:06]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:06]   Test mode: NOT updating CSV
+[2025-12-02 12:56:06]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:06] [4/23] [SEND] Sending to: Abbott - Lisa Daly
+[2025-12-02 12:56:06]   Email address: lisa.daly@abbott.com
+[2025-12-02 12:56:06]   PDF: 20251202 ResilienceReport (Abbott - Lisa Daly).pdf
+[2025-12-02 12:56:06]   Formatting email...
+[2025-12-02 12:56:07]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: lisa.daly@abbott.com)
+[2025-12-02 12:56:07]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:07]   Found 1 Outlook account(s)
+[2025-12-02 12:56:07]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (Abbott - Lisa Daly).pdf...
+[2025-12-02 12:56:07]   [OK] Email configured:
+[2025-12-02 12:56:07]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      Subject: Your Resilience Scan Report – Abbott...
+[2025-12-02 12:56:07]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:07]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:07]   Test mode: NOT updating CSV
+[2025-12-02 12:56:07]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:07] [5/23] [SEND] Sending to: Abbott - Robert Smelt
+[2025-12-02 12:56:07]   Email address: robert.smelt@abbott.com
+[2025-12-02 12:56:07]   PDF: 20251202 ResilienceReport (Abbott - Robert Smelt).pdf
+[2025-12-02 12:56:07]   Formatting email...
+[2025-12-02 12:56:07]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: robert.smelt@abbott.com)
+[2025-12-02 12:56:07]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:07]   Found 1 Outlook account(s)
+[2025-12-02 12:56:07]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (Abbott - Robert Smelt).pdf...
+[2025-12-02 12:56:07]   [OK] Email configured:
+[2025-12-02 12:56:07]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      Subject: Your Resilience Scan Report – Abbott...
+[2025-12-02 12:56:07]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:07]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:07]   Test mode: NOT updating CSV
+[2025-12-02 12:56:07]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:07] [6/23] [SEND] Sending to: Abbott labs - Tim Katanik
+[2025-12-02 12:56:07]   Email address: timothy.katanik@abbott.com
+[2025-12-02 12:56:07]   PDF: 20251202 ResilienceReport (Abbott labs - Tim Katanik).pdf
+[2025-12-02 12:56:07]   Formatting email...
+[2025-12-02 12:56:07]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: timothy.katanik@abbott.com)
+[2025-12-02 12:56:07]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:07]   Found 1 Outlook account(s)
+[2025-12-02 12:56:07]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (Abbott labs - Tim Katanik).pdf...
+[2025-12-02 12:56:07]   [OK] Email configured:
+[2025-12-02 12:56:07]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      Subject: Your Resilience Scan Report – Abbott labs...
+[2025-12-02 12:56:07]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:07]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:07]   Test mode: NOT updating CSV
+[2025-12-02 12:56:07]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:07] [7/23] [SEND] Sending to: AbbVie - Bas Groenwold
+[2025-12-02 12:56:07]   Email address: bas.groenwold@abbvie.com
+[2025-12-02 12:56:07]   PDF: 20251202 ResilienceReport (AbbVie - Bas Groenwold).pdf
+[2025-12-02 12:56:07]   Formatting email...
+[2025-12-02 12:56:07]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: bas.groenwold@abbvie.com)
+[2025-12-02 12:56:07]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:07]   Found 1 Outlook account(s)
+[2025-12-02 12:56:07]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Bas Groenwold).pdf...
+[2025-12-02 12:56:07]   [OK] Email configured:
+[2025-12-02 12:56:07]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:07]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:07]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:07]   Test mode: NOT updating CSV
+[2025-12-02 12:56:07]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:07] [8/23] [SEND] Sending to: AbbVie - Henny Landkroon
+[2025-12-02 12:56:07]   Email address: henny.landkroon@abbvie.com
+[2025-12-02 12:56:07]   PDF: 20251202 ResilienceReport (AbbVie - Henny Landkroon).pdf
+[2025-12-02 12:56:07]   Formatting email...
+[2025-12-02 12:56:07]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: henny.landkroon@abbvie.com)
+[2025-12-02 12:56:07]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:07]   Found 1 Outlook account(s)
+[2025-12-02 12:56:07]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Henny Landkroon).pdf...
+[2025-12-02 12:56:07]   [OK] Email configured:
+[2025-12-02 12:56:07]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:07]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:07]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:07]   Test mode: NOT updating CSV
+[2025-12-02 12:56:07]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:07] [9/23] [SEND] Sending to: AbbVie - Jeroen Berkhof
+[2025-12-02 12:56:07]   Email address: jeroen.berkhof@abbvie.com
+[2025-12-02 12:56:07]   PDF: 20251202 ResilienceReport (AbbVie - Jeroen Berkhof).pdf
+[2025-12-02 12:56:07]   Formatting email...
+[2025-12-02 12:56:07]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: jeroen.berkhof@abbvie.com)
+[2025-12-02 12:56:07]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:07]   Found 1 Outlook account(s)
+[2025-12-02 12:56:07]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Jeroen Berkhof).pdf...
+[2025-12-02 12:56:07]   [OK] Email configured:
+[2025-12-02 12:56:07]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:07]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:07]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:07]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:07]   Test mode: NOT updating CSV
+[2025-12-02 12:56:07]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:07] [10/23] [SEND] Sending to: AbbVie - Luc Kottink
+[2025-12-02 12:56:07]   Email address: luc.kottink@abbvie.com
+[2025-12-02 12:56:07]   PDF: 20251202 ResilienceReport (AbbVie - Luc Kottink).pdf
+[2025-12-02 12:56:07]   Formatting email...
+[2025-12-02 12:56:07]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: luc.kottink@abbvie.com)
+[2025-12-02 12:56:07]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:07]   Found 1 Outlook account(s)
+[2025-12-02 12:56:07]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Luc Kottink).pdf...
+[2025-12-02 12:56:08]   [OK] Email configured:
+[2025-12-02 12:56:08]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:08]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:08]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:08]   Test mode: NOT updating CSV
+[2025-12-02 12:56:08]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:08] [11/23] [SEND] Sending to: AbbVie - Marchel
+[2025-12-02 12:56:08]   Email address: marchel.mol@abbvie.com
+[2025-12-02 12:56:08]   PDF: 20251202 ResilienceReport (AbbVie - Marchel).pdf
+[2025-12-02 12:56:08]   Formatting email...
+[2025-12-02 12:56:08]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: marchel.mol@abbvie.com)
+[2025-12-02 12:56:08]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:08]   Found 1 Outlook account(s)
+[2025-12-02 12:56:08]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Marchel).pdf...
+[2025-12-02 12:56:08]   [OK] Email configured:
+[2025-12-02 12:56:08]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:08]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:08]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:08]   Test mode: NOT updating CSV
+[2025-12-02 12:56:08]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:08] [12/23] [SEND] Sending to: AbbVie - Marieke Sellies
+[2025-12-02 12:56:08]   Email address: marieke.sellies@abbvie.com
+[2025-12-02 12:56:08]   PDF: 20251202 ResilienceReport (AbbVie - Marieke Sellies).pdf
+[2025-12-02 12:56:08]   Formatting email...
+[2025-12-02 12:56:08]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: marieke.sellies@abbvie.com)
+[2025-12-02 12:56:08]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:08]   Found 1 Outlook account(s)
+[2025-12-02 12:56:08]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Marieke Sellies).pdf...
+[2025-12-02 12:56:08]   [OK] Email configured:
+[2025-12-02 12:56:08]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:08]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:08]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:08]   Test mode: NOT updating CSV
+[2025-12-02 12:56:08]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:08] [13/23] [SEND] Sending to: AbbVie - Miriam Porqueras Salaverri
+[2025-12-02 12:56:08]   Email address: miriam.porquerassalaverri@abbvie.com
+[2025-12-02 12:56:08]   PDF: 20251202 ResilienceReport (AbbVie - Miriam Porqueras Salaverri).pdf
+[2025-12-02 12:56:08]   Formatting email...
+[2025-12-02 12:56:08]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: miriam.porquerassalaverri@abbvie.com)
+[2025-12-02 12:56:08]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:08]   Found 1 Outlook account(s)
+[2025-12-02 12:56:08]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Miriam Porqueras Salaverri).pdf...
+[2025-12-02 12:56:08]   [OK] Email configured:
+[2025-12-02 12:56:08]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:08]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:08]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:08]   Test mode: NOT updating CSV
+[2025-12-02 12:56:08]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:08] [14/23] [SEND] Sending to: AbbVie - Rene Kronenburg
+[2025-12-02 12:56:08]   Email address: rene.kronenburg@abbvie.com
+[2025-12-02 12:56:08]   PDF: 20251202 ResilienceReport (AbbVie - Rene Kronenburg).pdf
+[2025-12-02 12:56:08]   Formatting email...
+[2025-12-02 12:56:08]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: rene.kronenburg@abbvie.com)
+[2025-12-02 12:56:08]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:08]   Found 1 Outlook account(s)
+[2025-12-02 12:56:08]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Rene Kronenburg).pdf...
+[2025-12-02 12:56:08]   [OK] Email configured:
+[2025-12-02 12:56:08]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:08]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:08]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:08]   Test mode: NOT updating CSV
+[2025-12-02 12:56:08]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:08] [15/23] [SEND] Sending to: AbbVie - Rob Lindeboom
+[2025-12-02 12:56:08]   Email address: rob.lindeboom@abbvie.com
+[2025-12-02 12:56:08]   PDF: 20251202 ResilienceReport (AbbVie - Rob Lindeboom).pdf
+[2025-12-02 12:56:08]   Formatting email...
+[2025-12-02 12:56:08]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: rob.lindeboom@abbvie.com)
+[2025-12-02 12:56:08]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:08]   Found 1 Outlook account(s)
+[2025-12-02 12:56:08]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Rob Lindeboom).pdf...
+[2025-12-02 12:56:08]   [OK] Email configured:
+[2025-12-02 12:56:08]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:08]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:08]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:08]   Test mode: NOT updating CSV
+[2025-12-02 12:56:08]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:08] [16/23] [SEND] Sending to: Abbvie - Stef Beltman
+[2025-12-02 12:56:08]   Email address: s.beltman@abbvie.com
+[2025-12-02 12:56:08]   PDF: 20251202 ResilienceReport (Abbvie - Stef Beltman).pdf
+[2025-12-02 12:56:08]   Formatting email...
+[2025-12-02 12:56:08]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: s.beltman@abbvie.com)
+[2025-12-02 12:56:08]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:08]   Found 1 Outlook account(s)
+[2025-12-02 12:56:08]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:08]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (Abbvie - Stef Beltman).pdf...
+[2025-12-02 12:56:08]   [OK] Email configured:
+[2025-12-02 12:56:08]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      Subject: Your Resilience Scan Report – Abbvie...
+[2025-12-02 12:56:09]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:09]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:09]   Test mode: NOT updating CSV
+[2025-12-02 12:56:09]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:09] [17/23] [SEND] Sending to: AbbVie - Vincent
+[2025-12-02 12:56:09]   Email address: vincent.piepers@abbvie.com
+[2025-12-02 12:56:09]   PDF: 20251202 ResilienceReport (AbbVie - Vincent).pdf
+[2025-12-02 12:56:09]   Formatting email...
+[2025-12-02 12:56:09]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: vincent.piepers@abbvie.com)
+[2025-12-02 12:56:09]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:09]   Found 1 Outlook account(s)
+[2025-12-02 12:56:09]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Vincent).pdf...
+[2025-12-02 12:56:09]   [OK] Email configured:
+[2025-12-02 12:56:09]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:09]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:09]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:09]   Test mode: NOT updating CSV
+[2025-12-02 12:56:09]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:09] [18/23] [SEND] Sending to: AbbVie - Walter Verhoef
+[2025-12-02 12:56:09]   Email address: walter.verhoef@abbvie.com
+[2025-12-02 12:56:09]   PDF: 20251202 ResilienceReport (AbbVie - Walter Verhoef).pdf
+[2025-12-02 12:56:09]   Formatting email...
+[2025-12-02 12:56:09]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: walter.verhoef@abbvie.com)
+[2025-12-02 12:56:09]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:09]   Found 1 Outlook account(s)
+[2025-12-02 12:56:09]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AbbVie - Walter Verhoef).pdf...
+[2025-12-02 12:56:09]   [OK] Email configured:
+[2025-12-02 12:56:09]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      Subject: Your Resilience Scan Report – AbbVie...
+[2025-12-02 12:56:09]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:09]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:09]   Test mode: NOT updating CSV
+[2025-12-02 12:56:09]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:09] [19/23] [SEND] Sending to: ACN - Hilal L
+[2025-12-02 12:56:09]   Email address: hilal.lekehal@accenture.com
+[2025-12-02 12:56:09]   PDF: 20251202 ResilienceReport (ACN - Hilal L).pdf
+[2025-12-02 12:56:09]   Formatting email...
+[2025-12-02 12:56:09]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: hilal.lekehal@accenture.com)
+[2025-12-02 12:56:09]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:09]   Found 1 Outlook account(s)
+[2025-12-02 12:56:09]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (ACN - Hilal L).pdf...
+[2025-12-02 12:56:09]   [OK] Email configured:
+[2025-12-02 12:56:09]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      Subject: Your Resilience Scan Report – ACN...
+[2025-12-02 12:56:09]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:09]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:09]   Test mode: NOT updating CSV
+[2025-12-02 12:56:09]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:09] [20/23] [SEND] Sending to: AGILEA - vers
+[2025-12-02 12:56:09]   Email address: xavier.vers@gmail.com
+[2025-12-02 12:56:09]   PDF: 20251202 ResilienceReport (AGILEA - vers).pdf
+[2025-12-02 12:56:09]   Formatting email...
+[2025-12-02 12:56:09]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: xavier.vers@gmail.com)
+[2025-12-02 12:56:09]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:09]   Found 1 Outlook account(s)
+[2025-12-02 12:56:09]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (AGILEA - vers).pdf...
+[2025-12-02 12:56:09]   [OK] Email configured:
+[2025-12-02 12:56:09]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      Subject: Your Resilience Scan Report – AGILEA...
+[2025-12-02 12:56:09]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:09]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:09]   Test mode: NOT updating CSV
+[2025-12-02 12:56:09]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:09] [21/23] [SEND] Sending to: Agrifac Machinery B.V. - Art Kampjes
+[2025-12-02 12:56:09]   Email address: a.kampjes@agrifac.com
+[2025-12-02 12:56:09]   PDF: 20251202 ResilienceReport (Agrifac Machinery B.V. - Art Kampjes).pdf
+[2025-12-02 12:56:09]   Formatting email...
+[2025-12-02 12:56:09]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: a.kampjes@agrifac.com)
+[2025-12-02 12:56:09]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:09]   Found 1 Outlook account(s)
+[2025-12-02 12:56:09]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (Agrifac Machinery B.V. - Art Kampjes).pdf...
+[2025-12-02 12:56:09]   [OK] Email configured:
+[2025-12-02 12:56:09]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      Subject: Your Resilience Scan Report – Agrifac Machinery B....
+[2025-12-02 12:56:09]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:09]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:09]   Test mode: NOT updating CSV
+[2025-12-02 12:56:09]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:09] [22/23] [SEND] Sending to: ASSA ABLOY Opening Solutions EMEIA - Danny van der Ster
+[2025-12-02 12:56:09]   Email address: danny.vanderster@assaabloy.com
+[2025-12-02 12:56:09]   PDF: 20251202 ResilienceReport (ASSA ABLOY Opening Solutions EMEIA - Danny van der Ster).pdf
+[2025-12-02 12:56:09]   Formatting email...
+[2025-12-02 12:56:09]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: danny.vanderster@assaabloy.com)
+[2025-12-02 12:56:09]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:09]   Found 1 Outlook account(s)
+[2025-12-02 12:56:09]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport (ASSA ABLOY Opening Solutions EMEIA - Danny van der Ster).pdf...
+[2025-12-02 12:56:09]   [OK] Email configured:
+[2025-12-02 12:56:09]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:09]      Subject: Your Resilience Scan Report – ASSA ABLOY Opening S...
+[2025-12-02 12:56:09]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:09]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:09]   Test mode: NOT updating CSV
+[2025-12-02 12:56:09]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:09] [23/23] [SEND] Sending to: [Technology Company] - Marcus Pribi Setyo N
+[2025-12-02 12:56:09]   Email address: marcus.nugroho@gmail.com
+[2025-12-02 12:56:09]   PDF: 20251202 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf
+[2025-12-02 12:56:09]   Formatting email...
+[2025-12-02 12:56:09]   [TEST MODE] Sending to: cg.verhoef@windesheim.nl (original: marcus.nugroho@gmail.com)
+[2025-12-02 12:56:09]   [OUTLOOK] Attempting to send via Outlook...
+[2025-12-02 12:56:10]   Found 1 Outlook account(s)
+[2025-12-02 12:56:10]   [OK] Using priority account: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:10]   Setting recipient to: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:10]   [OK] Configured to send from: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:10]   Attaching PDF: C:\Users\Christiaan\Documents\RecilienceScan\reports\20251202 ResilienceReport ([Technology Company] - Marcus Pribi Setyo N).pdf...
+[2025-12-02 12:56:10]   [OK] Email configured:
+[2025-12-02 12:56:10]      To: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:10]      From: cg.verhoef@windesheim.nl
+[2025-12-02 12:56:10]      Subject: Your Resilience Scan Report – [Technology Company]...
+[2025-12-02 12:56:10]   [OUTLOOK] Sending via Outlook...
+[2025-12-02 12:56:10]   [OK] Email sent successfully via Outlook from cg.verhoef@windesheim.nl!
+[2025-12-02 12:56:10]   Test mode: NOT updating CSV
+[2025-12-02 12:56:10]   [OK] SUCCESS: Email sent!
+[2025-12-02 12:56:10] 
+[OK] Email distribution complete! Sent: 23, Failed: 0
+[2025-12-02 13:06:18] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-12-02 13:06:18] [INFO] No data loaded - cleaned_master.csv not found
+[2025-12-02 13:06:18] [INFO] First time setup: Use 'Data' tab to import and clean your data
+[2025-12-02 13:06:36] [START] Starting data conversion process...
+[2025-12-02 13:06:36] Looking for Excel files in /data folder...
+[2025-12-02 13:06:37] [OK] Data conversion completed!
+[2025-12-02 13:06:37] [WARNING] Could not auto-load data: Index(['company_name', 'email_address', 'name'], dtype='object')
+[2025-12-02 13:06:41] [START] Starting enhanced data cleaning with validation...
+[2025-12-02 13:06:41] Loading cleaned_master.csv for enhanced cleaning...
+[2025-12-02 13:06:41] [ERROR] Data cleaning failed - check logs for details
+[2025-12-02 13:16:00] [START] Starting data conversion process...
+[2025-12-02 13:16:00] Looking for Excel files in /data folder...
+[2025-12-02 13:16:00] [OK] Data conversion completed!
+[2025-12-02 13:16:00] [OK] Data automatically loaded: 544 records
+[2025-12-02 13:16:03] [START] Starting enhanced data cleaning with validation...
+[2025-12-02 13:16:03] Loading cleaned_master.csv for enhanced cleaning...
+[2025-12-02 13:16:03] [OK] Data cleaning completed!
+[2025-12-02 13:16:03] Summary: Removed 189 invalid/incomplete record(s)
+Removed 180 duplicate(s)
+Excluded 6 record(s) with insufficient data
+
+Final dataset: 355 valid records ready for reports
+
+Detailed reports saved to:
+- ./data/cleaning_report.txt
+- ./data/cleaning_validation_log.json
+[2025-12-02 13:16:03] [OK] Cleaned data automatically reloaded: 355 records
+[2025-12-02 13:16:18] [START] Starting batch report generation...
+[2025-12-02 13:16:18] [1/355] Generating: ID_000736 - ID_007824
+[2025-12-02 13:17:24]   [ERROR] Error: Exit code 1
+[2025-12-02 13:17:24]      epackage{pdflscape}
+[2025-12-02 13:17:24]            \usepackage{tabu}
+[2025-12-02 13:17:24]            \usepackage{threeparttable}
+[2025-12-02 13:17:24]            \usepackage{threeparttablex}
+[2025-12-02 13:17:24]            \usepackage[normalem]{ulem}
+[2025-12-02 13:17:24]            \usepackage{makecell}
+[2025-12-02 13:17:24]            \usepackage{xcolor}
+[2025-12-02 13:17:24]      Rendering PDF
+[2025-12-02 13:17:24]      running xelatex - 1
+[2025-12-02 13:17:24]        This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex)
+[2025-12-02 13:17:24]         restricted \write18 enabled.
+[2025-12-02 13:17:24]        entering extended mode
+[2025-12-02 13:17:24]      updating tlmgr
+[2025-12-02 13:17:24]      updating existing packages
+[2025-12-02 13:17:24]      ERROR: 
+[2025-12-02 13:17:24]      compilation failed- error
+[2025-12-02 13:17:24]      Missing $ inserted.
+[2025-12-02 13:17:24]      <inserted text> 
+[2025-12-02 13:17:24]                      $
+[2025-12-02 13:17:24]      l.245 \textbf{\Large ID_000736}
+[2025-12-02 13:17:24]      I've inserted a begin-math/end-math symbol since I think
+[2025-12-02 13:17:24]      you left one out. Proceed, with fingers crossed.
+[2025-12-02 13:17:24]      You may need to $ $ around an expression in this file.
+[2025-12-02 13:17:24]      see ResilienceReport.log for more information.
+[2025-12-02 13:17:24] [2/355] Generating: ID_001501 - ID_011778
+[2025-12-02 13:17:34]   [ERROR] Error: Exit code 1
+[2025-12-02 13:17:34]      epackage{pdflscape}
+[2025-12-02 13:17:34]            \usepackage{tabu}
+[2025-12-02 13:17:34]            \usepackage{threeparttable}
+[2025-12-02 13:17:34]            \usepackage{threeparttablex}
+[2025-12-02 13:17:34]            \usepackage[normalem]{ulem}
+[2025-12-02 13:17:34]            \usepackage{makecell}
+[2025-12-02 13:17:34]            \usepackage{xcolor}
+[2025-12-02 13:17:34]      Rendering PDF
+[2025-12-02 13:17:34]      running xelatex - 1
+[2025-12-02 13:17:34]        This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex)
+[2025-12-02 13:17:34]         restricted \write18 enabled.
+[2025-12-02 13:17:34]        entering extended mode
+[2025-12-02 13:17:34]      updating tlmgr
+[2025-12-02 13:17:34]      updating existing packages
+[2025-12-02 13:17:34]      ERROR: 
+[2025-12-02 13:17:34]      compilation failed- error
+[2025-12-02 13:17:34]      Missing $ inserted.
+[2025-12-02 13:17:34]      <inserted text> 
+[2025-12-02 13:17:34]                      $
+[2025-12-02 13:17:34]      l.245 \textbf{\Large ID_001501}
+[2025-12-02 13:17:34]      I've inserted a begin-math/end-math symbol since I think
+[2025-12-02 13:17:34]      you left one out. Proceed, with fingers crossed.
+[2025-12-02 13:17:34]      You may need to $ $ around an expression in this file.
+[2025-12-02 13:17:34]      see ResilienceReport.log for more information.
+[2025-12-02 13:17:34] [3/355] Generating: ID_002007 - ID_006988
+[2025-12-02 13:17:44]   [ERROR] Error: Exit code 1
+[2025-12-02 13:17:44]      epackage{pdflscape}
+[2025-12-02 13:17:44]            \usepackage{tabu}
+[2025-12-02 13:17:44]            \usepackage{threeparttable}
+[2025-12-02 13:17:44]            \usepackage{threeparttablex}
+[2025-12-02 13:17:44]            \usepackage[normalem]{ulem}
+[2025-12-02 13:17:44]            \usepackage{makecell}
+[2025-12-02 13:17:44]            \usepackage{xcolor}
+[2025-12-02 13:17:44]      Rendering PDF
+[2025-12-02 13:17:44]      running xelatex - 1
+[2025-12-02 13:17:44]        This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex)
+[2025-12-02 13:17:44]         restricted \write18 enabled.
+[2025-12-02 13:17:44]        entering extended mode
+[2025-12-02 13:17:44]      updating tlmgr
+[2025-12-02 13:17:44]      updating existing packages
+[2025-12-02 13:17:44]      ERROR: 
+[2025-12-02 13:17:44]      compilation failed- error
+[2025-12-02 13:17:44]      Missing $ inserted.
+[2025-12-02 13:17:44]      <inserted text> 
+[2025-12-02 13:17:44]                      $
+[2025-12-02 13:17:44]      l.245 \textbf{\Large ID_002007}
+[2025-12-02 13:17:44]      I've inserted a begin-math/end-math symbol since I think
+[2025-12-02 13:17:44]      you left one out. Proceed, with fingers crossed.
+[2025-12-02 13:17:44]      You may need to $ $ around an expression in this file.
+[2025-12-02 13:17:44]      see ResilienceReport.log for more information.
+[2025-12-02 13:17:44] [4/355] Generating: ID_002905 - ID_020060
+[2025-12-02 13:17:54]   [ERROR] Error: Exit code 1
+[2025-12-02 13:17:54]      epackage{pdflscape}
+[2025-12-02 13:17:54]            \usepackage{tabu}
+[2025-12-02 13:17:54]            \usepackage{threeparttable}
+[2025-12-02 13:17:54]            \usepackage{threeparttablex}
+[2025-12-02 13:17:54]            \usepackage[normalem]{ulem}
+[2025-12-02 13:17:54]            \usepackage{makecell}
+[2025-12-02 13:17:54]            \usepackage{xcolor}
+[2025-12-02 13:17:54]      Rendering PDF
+[2025-12-02 13:17:54]      running xelatex - 1
+[2025-12-02 13:17:54]        This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex)
+[2025-12-02 13:17:54]         restricted \write18 enabled.
+[2025-12-02 13:17:54]        entering extended mode
+[2025-12-02 13:17:54]      updating tlmgr
+[2025-12-02 13:17:54]      updating existing packages
+[2025-12-02 13:17:54]      ERROR: 
+[2025-12-02 13:17:54]      compilation failed- error
+[2025-12-02 13:17:54]      Missing $ inserted.
+[2025-12-02 13:17:54]      <inserted text> 
+[2025-12-02 13:17:54]                      $
+[2025-12-02 13:17:54]      l.245 \textbf{\Large ID_002905}
+[2025-12-02 13:17:54]      I've inserted a begin-math/end-math symbol since I think
+[2025-12-02 13:17:54]      you left one out. Proceed, with fingers crossed.
+[2025-12-02 13:17:54]      You may need to $ $ around an expression in this file.
+[2025-12-02 13:17:54]      see ResilienceReport.log for more information.
+[2025-12-02 13:17:54] [5/355] Generating: ID_003046 - ID_014068
+[2025-12-02 13:18:04]   [ERROR] Error: Exit code 1
+[2025-12-02 13:18:04]      epackage{pdflscape}
+[2025-12-02 13:18:04]            \usepackage{tabu}
+[2025-12-02 13:18:04]            \usepackage{threeparttable}
+[2025-12-02 13:18:04]            \usepackage{threeparttablex}
+[2025-12-02 13:18:04]            \usepackage[normalem]{ulem}
+[2025-12-02 13:18:04]            \usepackage{makecell}
+[2025-12-02 13:18:04]            \usepackage{xcolor}
+[2025-12-02 13:18:04]      Rendering PDF
+[2025-12-02 13:18:04]      running xelatex - 1
+[2025-12-02 13:18:04]        This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex)
+[2025-12-02 13:18:04]         restricted \write18 enabled.
+[2025-12-02 13:18:04]        entering extended mode
+[2025-12-02 13:18:04]      updating tlmgr
+[2025-12-02 13:18:04]      updating existing packages
+[2025-12-02 13:18:04]      ERROR: 
+[2025-12-02 13:18:04]      compilation failed- error
+[2025-12-02 13:18:04]      Missing $ inserted.
+[2025-12-02 13:18:04]      <inserted text> 
+[2025-12-02 13:18:04]                      $
+[2025-12-02 13:18:04]      l.245 \textbf{\Large ID_003046}
+[2025-12-02 13:18:04]      I've inserted a begin-math/end-math symbol since I think
+[2025-12-02 13:18:04]      you left one out. Proceed, with fingers crossed.
+[2025-12-02 13:18:04]      You may need to $ $ around an expression in this file.
+[2025-12-02 13:18:04]      see ResilienceReport.log for more information.
+[2025-12-02 13:18:04] Generation cancelled by user
+[2025-12-02 13:18:04] 
+============================================================
+[2025-12-02 13:18:04] WARNING: GENERATION INCOMPLETE
+[2025-12-02 13:18:04] ============================================================
+[2025-12-02 13:18:04] Total records: 355
+[2025-12-02 13:18:04] Processed: 5/355
+[2025-12-02 13:18:04] Successfully generated: 0
+[2025-12-02 13:18:04] Failed: 5
+[2025-12-02 13:18:04] Skipped (insufficient data): 0
+[2025-12-02 13:18:04] NOT PROCESSED: 350
+[2025-12-02 13:18:04] ============================================================
+[2025-12-02 13:18:04] 
+CRITICAL: Generation stopped early at record 5.
+[2025-12-02 13:18:05] Check error messages above for details.
+[2025-12-02 13:19:25] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-12-02 13:19:25] [INFO] No data loaded - cleaned_master.csv not found
+[2025-12-02 13:19:25] [INFO] First time setup: Use 'Data' tab to import and clean your data
+[2025-12-02 13:19:28] [START] Starting data conversion process...
+[2025-12-02 13:19:28] Looking for Excel files in /data folder...
+[2025-12-02 13:19:29] [OK] Data conversion completed!
+[2025-12-02 13:19:29] [OK] Data automatically loaded: 507 records
+[2025-12-02 13:19:31] [START] Starting enhanced data cleaning with validation...
+[2025-12-02 13:19:31] Loading cleaned_master.csv for enhanced cleaning...
+[2025-12-02 13:19:31] [OK] Data cleaning completed!
+[2025-12-02 13:19:31] Summary: Removed 39 invalid/incomplete record(s)
+Removed 9 duplicate(s)
+Excluded 4 record(s) with insufficient data
+
+Final dataset: 468 valid records ready for reports
+
+Detailed reports saved to:
+- ./data/cleaning_report.txt
+- ./data/cleaning_validation_log.json
+[2025-12-02 13:19:32] [OK] Cleaned data automatically reloaded: 468 records
+[2025-12-02 13:19:38] [START] Starting batch report generation...
+[2025-12-02 13:19:38] [1/468] [SKIP] Skipping -: No valid company name
+[2025-12-02 13:19:38] [2/468] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [3/468] Generating: 24 ICE - Casper Hondema
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [4/468] Generating: Aako B.V. - Frank Mooij
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [5/468] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [6/468] Generating: Abbott - Robert Smelt
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [7/468] Generating: Abbott - Lisa Daly
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [8/468] Generating: Abbott labs - Tim Katanik
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [9/468] Generating: AbbVie - Rene Kronenburg
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [10/468] Generating: Abbvie - Stef Beltman
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [11/468] Generating: AbbVie - Vincent
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [12/468] Generating: AbbVie - Marieke Sellies
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [13/468] Generating: AbbVie - Rob Lindeboom
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [14/468] Generating: AbbVie  - Marchel
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [15/468] Generating: AbbVie  - Jeroen Berkhof
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [16/468] Generating: AbbVie  - Miriam Porqueras Salaverri
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [17/468] Generating: AbbVie  - Henny Landkroon
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [18/468] Generating: AbbVie  - Luc Kottink
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [19/468] Generating: AbbVie  - Bas Groenwold
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [20/468] Generating: AbbVie  - Walter Verhoef
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [21/468] Generating: ACN - Hilal L
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [22/468] Generating: AGILEA - vers
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [23/468] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-12-02 13:19:38]   [SKIP] Already exists, skipping
+[2025-12-02 13:19:38] [24/468] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-12-02 13:19:46]   [OK] Success: 20251202 ResilienceReport (Agrifac Machinery B.V. - Michiel Zantinge).pdf
+[2025-12-02 13:19:47]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:19:47] [25/468] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-12-02 13:19:54]   [OK] Success: 20251202 ResilienceReport (Agrifac Machinery B.V. - Gert Klein).pdf
+[2025-12-02 13:19:54]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:19:54] [26/468] Generating: Agrifac Machinery B.V. - Ferry
+[2025-12-02 13:20:02]   [OK] Success: 20251202 ResilienceReport (Agrifac Machinery B.V. - Ferry).pdf
+[2025-12-02 13:20:02]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:20:02] [27/468] Generating: Agrifac Machinery B.V. - Huimin Ke
+[2025-12-02 13:20:10]   [OK] Success: 20251202 ResilienceReport (Agrifac Machinery B.V. - Huimin Ke).pdf
+[2025-12-02 13:20:10]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:20:10] [28/468] Generating: Agrifac Machinery B.V. - Bjorn de Lange
+[2025-12-02 13:20:18]   [OK] Success: 20251202 ResilienceReport (Agrifac Machinery B.V. - Bjorn de Lange).pdf
+[2025-12-02 13:20:18]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:20:18] [29/468] Generating: Agrifac Machinery B.V. - Nick van Huffelen
+[2025-12-02 13:20:26]   [OK] Success: 20251202 ResilienceReport (Agrifac Machinery B.V. - Nick van Huffelen).pdf
+[2025-12-02 13:20:26]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:20:26] [30/468] Generating: AGV International B.V. - Tom Broeder
+[2025-12-02 13:20:34]   [OK] Success: 20251202 ResilienceReport (AGV International B.V. - Tom Broeder).pdf
+[2025-12-02 13:20:34]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:20:34] [31/468] Generating: Ales Metaaltechniek - Dick de Leeuw
+[2025-12-02 13:20:42]   [OK] Success: 20251202 ResilienceReport (Ales Metaaltechniek - Dick de Leeuw).pdf
+[2025-12-02 13:20:42]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:20:42] [32/468] Generating: Ales Metaaltechniek - Ruben Spansier
+[2025-12-02 13:20:50]   [OK] Success: 20251202 ResilienceReport (Ales Metaaltechniek - Ruben Spansier).pdf
+[2025-12-02 13:20:50]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:20:50] [33/468] Generating: Alfa Laval Nijmegen - Henk de Lang
+[2025-12-02 13:20:58]   [OK] Success: 20251202 ResilienceReport (Alfa Laval Nijmegen - Henk de Lang).pdf
+[2025-12-02 13:20:58]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:20:58] [34/468] Generating: Alfen - Maria Verbeek
+[2025-12-02 13:21:06]   [OK] Success: 20251202 ResilienceReport (Alfen - Maria Verbeek).pdf
+[2025-12-02 13:21:06]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:21:06] [35/468] Generating: All Round shipping BV - osadolor edmund omokaro
+[2025-12-02 13:21:13]   [OK] Success: 20251202 ResilienceReport (All Round shipping BV - osadolor edmund omokaro).pdf
+[2025-12-02 13:21:13]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:21:13] [36/468] Generating: Allied Motion - Robert Frank
+[2025-12-02 13:21:21]   [OK] Success: 20251202 ResilienceReport (Allied Motion - Robert Frank).pdf
+[2025-12-02 13:21:21]   [OK] Validation passed: All values match CSV
+[2025-12-02 13:21:21] Generation cancelled by user
+[2025-12-02 13:21:21] 
+============================================================
+[2025-12-02 13:21:21] WARNING: GENERATION INCOMPLETE
+[2025-12-02 13:21:21] ============================================================
+[2025-12-02 13:21:21] Total records: 468
+[2025-12-02 13:21:21] Processed: 36/468
+[2025-12-02 13:21:21] Successfully generated: 35
+[2025-12-02 13:21:21] Failed: 0
+[2025-12-02 13:21:21] Skipped (insufficient data): 1
+[2025-12-02 13:21:21] NOT PROCESSED: 432
+[2025-12-02 13:21:21] ============================================================
+[2025-12-02 13:21:21] 
+CRITICAL: Generation stopped early at record 36.
+[2025-12-02 13:21:21] Check error messages above for details.
+[2025-12-02 13:21:21] 
+Note: 1 record(s) were skipped due to insufficient data.
+[2025-12-02 13:21:21]    These records don't have enough scores to generate a valid report.
+[2025-12-02 13:21:21]    Run 'Clean Data' to see details about removed/insufficient records.
+[2025-12-02 14:35:16] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-12-02 14:35:17] Importing email tracking data...
+[2025-12-02 14:35:17] [OK] Email tracker: 0 imported, 468 skipped
+[2025-12-02 14:35:17] [OK] Data loaded: 468 respondents, 308 companies
+[2025-12-02 14:35:20] [START] Starting data conversion process...
+[2025-12-02 14:35:20] Looking for Excel files in /data folder...
+[2025-12-02 14:35:35] [OK] Data conversion completed!
+[2025-12-02 14:35:35] [OK] Data automatically loaded: 505 records
+[2025-12-02 14:35:39] [START] Starting enhanced data cleaning with validation...
+[2025-12-02 14:35:39] Loading cleaned_master.csv for enhanced cleaning...
+[2025-12-02 14:35:39] [OK] Data cleaning completed!
+[2025-12-02 14:35:39] Summary: Removed 37 invalid/incomplete record(s)
+Removed 7 duplicate(s)
+Excluded 4 record(s) with insufficient data
+
+Final dataset: 468 valid records ready for reports
+
+Detailed reports saved to:
+- ./data/cleaning_report.txt
+- ./data/cleaning_validation_log.json
+[2025-12-02 14:35:39] [OK] Cleaned data automatically reloaded: 468 records
+[2025-12-02 14:35:48] [START] Starting batch report generation...
+[2025-12-02 14:35:48] [1/468] [SKIP] Skipping -: No valid company name
+[2025-12-02 14:35:48] [2/468] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [3/468] Generating: 24 ICE - Casper Hondema
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [4/468] Generating: Aako B.V. - Frank Mooij
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [5/468] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [6/468] Generating: Abbott - Robert Smelt
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [7/468] Generating: Abbott - Lisa Daly
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [8/468] Generating: Abbott labs - Tim Katanik
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [9/468] Generating: AbbVie - Rene Kronenburg
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [10/468] Generating: Abbvie - Stef Beltman
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [11/468] Generating: AbbVie - Vincent
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [12/468] Generating: AbbVie - Marieke Sellies
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [13/468] Generating: AbbVie - Rob Lindeboom
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [14/468] Generating: AbbVie  - Marchel
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [15/468] Generating: AbbVie  - Jeroen Berkhof
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [16/468] Generating: AbbVie  - Miriam Porqueras Salaverri
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [17/468] Generating: AbbVie  - Henny Landkroon
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [18/468] Generating: AbbVie  - Luc Kottink
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [19/468] Generating: AbbVie  - Bas Groenwold
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [20/468] Generating: AbbVie  - Walter Verhoef
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [21/468] Generating: ACN - Hilal L
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [22/468] Generating: AGILEA - vers
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [23/468] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [24/468] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [25/468] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [26/468] Generating: Agrifac Machinery B.V. - Ferry
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [27/468] Generating: Agrifac Machinery B.V. - Huimin Ke
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [28/468] Generating: Agrifac Machinery B.V. - Bjorn de Lange
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [29/468] Generating: Agrifac Machinery B.V. - Nick van Huffelen
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [30/468] Generating: AGV International B.V. - Tom Broeder
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [31/468] Generating: Ales Metaaltechniek - Dick de Leeuw
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [32/468] Generating: Ales Metaaltechniek - Ruben Spansier
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [33/468] Generating: Alfa Laval Nijmegen - Henk de Lang
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [34/468] Generating: Alfen - Maria Verbeek
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [35/468] Generating: All Round shipping BV - osadolor edmund omokaro
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [36/468] Generating: Allied Motion - Robert Frank
+[2025-12-02 14:35:48]   [SKIP] Already exists, skipping
+[2025-12-02 14:35:48] [37/468] Generating: Allied Motion Dordrecht B.V. - Max Elligens
+[2025-12-02 14:36:01]   [OK] Success: 20251202 ResilienceReport (Allied Motion Dordrecht B.V. - Max Elligens).pdf
+[2025-12-02 14:36:01]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:36:01] [38/468] Generating: Alphatronics BV - Jos Herrebrugh
+[2025-12-02 14:36:13]   [OK] Success: 20251202 ResilienceReport (Alphatronics BV - Jos Herrebrugh).pdf
+[2025-12-02 14:36:13]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:36:13] [39/468] Generating: Alpla Zwolle B.V. - Kevin Mulder
+[2025-12-02 14:36:25]   [OK] Success: 20251202 ResilienceReport (Alpla Zwolle B.V. - Kevin Mulder).pdf
+[2025-12-02 14:36:25]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:36:25] [40/468] Generating: Alpla Zwolle B.V. - Bertus Bos
+[2025-12-02 14:36:36]   [OK] Success: 20251202 ResilienceReport (Alpla Zwolle B.V. - Bertus Bos).pdf
+[2025-12-02 14:36:36]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:36:36] [41/468] Generating: Ames - Jeroen Berning
+[2025-12-02 14:36:46]   [OK] Success: 20251202 ResilienceReport (Ames - Jeroen Berning).pdf
+[2025-12-02 14:36:46]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:36:46] [42/468] Generating: Amgen - Bart Kennes
+[2025-12-02 14:36:56]   [OK] Success: 20251202 ResilienceReport (Amgen - Bart Kennes).pdf
+[2025-12-02 14:36:56]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:36:56] [43/468] Generating: AP Nederland B.V. - Egbert Wendel
+[2025-12-02 14:37:07]   [OK] Success: 20251202 ResilienceReport (AP Nederland B.V. - Egbert Wendel).pdf
+[2025-12-02 14:37:07]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:37:07] [44/468] Generating: Applied Medical - PJ Sluimer
+[2025-12-02 14:37:17]   [OK] Success: 20251202 ResilienceReport (Applied Medical - PJ Sluimer).pdf
+[2025-12-02 14:37:18]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:37:18] [45/468] Generating: Applied Medical Europe b.v.  - Ralf Slag
+[2025-12-02 14:37:29]   [OK] Success: 20251202 ResilienceReport (Applied Medical Europe b.v. - Ralf Slag).pdf
+[2025-12-02 14:37:29]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:37:29] [46/468] Generating: aristeio - Veronica
+[2025-12-02 14:37:38]   [OK] Success: 20251202 ResilienceReport (aristeio - Veronica).pdf
+[2025-12-02 14:37:38]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:37:38] [47/468] Generating: ASML - Jan Jaap van Soest
+[2025-12-02 14:37:48]   [OK] Success: 20251202 ResilienceReport (ASML - Jan Jaap van Soest).pdf
+[2025-12-02 14:37:48]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:37:48] [48/468] Generating: ASML - Fleur Koster
+[2025-12-02 14:37:59]   [OK] Success: 20251202 ResilienceReport (ASML - Fleur Koster).pdf
+[2025-12-02 14:37:59]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:37:59] Generation cancelled by user
+[2025-12-02 14:37:59] 
+============================================================
+[2025-12-02 14:37:59] WARNING: GENERATION INCOMPLETE
+[2025-12-02 14:37:59] ============================================================
+[2025-12-02 14:37:59] Total records: 468
+[2025-12-02 14:37:59] Processed: 48/468
+[2025-12-02 14:37:59] Successfully generated: 47
+[2025-12-02 14:37:59] Failed: 0
+[2025-12-02 14:37:59] Skipped (insufficient data): 1
+[2025-12-02 14:37:59] NOT PROCESSED: 420
+[2025-12-02 14:37:59] ============================================================
+[2025-12-02 14:37:59] 
+CRITICAL: Generation stopped early at record 48.
+[2025-12-02 14:37:59] Check error messages above for details.
+[2025-12-02 14:37:59] 
+Note: 1 record(s) were skipped due to insufficient data.
+[2025-12-02 14:37:59]    These records don't have enough scores to generate a valid report.
+[2025-12-02 14:37:59]    Run 'Clean Data' to see details about removed/insufficient records.
+[2025-12-02 14:54:01] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-12-02 14:54:01] Importing email tracking data...
+[2025-12-02 14:54:01] [OK] Email tracker: 0 imported, 468 skipped
+[2025-12-02 14:54:02] [OK] Data loaded: 468 respondents, 308 companies
+[2025-12-02 14:54:08] [START] Starting batch report generation...
+[2025-12-02 14:54:08] [1/468] [SKIP] Skipping -: No valid company name
+[2025-12-02 14:54:08] [2/468] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [3/468] Generating: 24 ICE - Casper Hondema
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [4/468] Generating: Aako B.V. - Frank Mooij
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [5/468] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [6/468] Generating: Abbott - Robert Smelt
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [7/468] Generating: Abbott - Lisa Daly
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [8/468] Generating: Abbott labs - Tim Katanik
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [9/468] Generating: AbbVie - Rene Kronenburg
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [10/468] Generating: Abbvie - Stef Beltman
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [11/468] Generating: AbbVie - Vincent
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [12/468] Generating: AbbVie - Marieke Sellies
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [13/468] Generating: AbbVie - Rob Lindeboom
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [14/468] Generating: AbbVie  - Marchel
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [15/468] Generating: AbbVie  - Jeroen Berkhof
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [16/468] Generating: AbbVie  - Miriam Porqueras Salaverri
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [17/468] Generating: AbbVie  - Henny Landkroon
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [18/468] Generating: AbbVie  - Luc Kottink
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [19/468] Generating: AbbVie  - Bas Groenwold
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [20/468] Generating: AbbVie  - Walter Verhoef
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [21/468] Generating: ACN - Hilal L
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [22/468] Generating: AGILEA - vers
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [23/468] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [24/468] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [25/468] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [26/468] Generating: Agrifac Machinery B.V. - Ferry
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [27/468] Generating: Agrifac Machinery B.V. - Huimin Ke
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [28/468] Generating: Agrifac Machinery B.V. - Bjorn de Lange
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [29/468] Generating: Agrifac Machinery B.V. - Nick van Huffelen
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [30/468] Generating: AGV International B.V. - Tom Broeder
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [31/468] Generating: Ales Metaaltechniek - Dick de Leeuw
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [32/468] Generating: Ales Metaaltechniek - Ruben Spansier
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [33/468] Generating: Alfa Laval Nijmegen - Henk de Lang
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [34/468] Generating: Alfen - Maria Verbeek
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [35/468] Generating: All Round shipping BV - osadolor edmund omokaro
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [36/468] Generating: Allied Motion - Robert Frank
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [37/468] Generating: Allied Motion Dordrecht B.V. - Max Elligens
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [38/468] Generating: Alphatronics BV - Jos Herrebrugh
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [39/468] Generating: Alpla Zwolle B.V. - Kevin Mulder
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [40/468] Generating: Alpla Zwolle B.V. - Bertus Bos
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [41/468] Generating: Ames - Jeroen Berning
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [42/468] Generating: Amgen - Bart Kennes
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [43/468] Generating: AP Nederland B.V. - Egbert Wendel
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [44/468] Generating: Applied Medical - PJ Sluimer
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [45/468] Generating: Applied Medical Europe b.v.  - Ralf Slag
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [46/468] Generating: aristeio - Veronica
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [47/468] Generating: ASML - Jan Jaap van Soest
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [48/468] Generating: ASML - Fleur Koster
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [49/468] Generating: ASSA ABLOY Opening Solutions EMEIA - Danny van der Ster
+[2025-12-02 14:54:08]   [SKIP] Already exists, skipping
+[2025-12-02 14:54:08] [50/468] Generating: Atos - Folkert Folkerts
+[2025-12-02 14:54:16]   [OK] Success: 20251202 ResilienceReport (Atos - Folkert Folkerts).pdf
+[2025-12-02 14:54:16]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:54:16] [51/468] Generating: Auping - Bart van der Boom
+[2025-12-02 14:54:25]   [OK] Success: 20251202 ResilienceReport (Auping - Bart van der Boom).pdf
+[2025-12-02 14:54:25]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:54:25] [52/468] Generating: Auping - Arjan van der Plas
+[2025-12-02 14:54:33]   [OK] Success: 20251202 ResilienceReport (Auping - Arjan van der Plas).pdf
+[2025-12-02 14:54:33]   [OK] Validation passed: All values match CSV
+[2025-12-02 14:54:33] Generation cancelled by user
+[2025-12-02 14:54:33] 
+============================================================
+[2025-12-02 14:54:33] WARNING: GENERATION INCOMPLETE
+[2025-12-02 14:54:33] ============================================================
+[2025-12-02 14:54:33] Total records: 468
+[2025-12-02 14:54:33] Processed: 52/468
+[2025-12-02 14:54:33] Successfully generated: 51
+[2025-12-02 14:54:33] Failed: 0
+[2025-12-02 14:54:33] Skipped (insufficient data): 1
+[2025-12-02 14:54:33] NOT PROCESSED: 416
+[2025-12-02 14:54:33] ============================================================
+[2025-12-02 14:54:34] 
+CRITICAL: Generation stopped early at record 52.
+[2025-12-02 14:54:34] Check error messages above for details.
+[2025-12-02 14:54:34] 
+Note: 1 record(s) were skipped due to insufficient data.
+[2025-12-02 14:54:34]    These records don't have enough scores to generate a valid report.
+[2025-12-02 14:54:34]    Run 'Clean Data' to see details about removed/insufficient records.
+[2025-12-02 15:01:22] Loading data from: C:\Users\Christiaan\Documents\RecilienceScan\data\cleaned_master.csv
+[2025-12-02 15:01:22] Importing email tracking data...
+[2025-12-02 15:01:22] [OK] Email tracker: 0 imported, 468 skipped
+[2025-12-02 15:01:22] [OK] Data loaded: 468 respondents, 308 companies
+[2025-12-02 15:01:26] [START] Starting batch report generation...
+[2025-12-02 15:01:26] [1/468] [SKIP] Skipping -: No valid company name
+[2025-12-02 15:01:26] [2/468] Generating: [Technology Company] - Marcus Pribi Setyo N
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [3/468] Generating: 24 ICE - Casper Hondema
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [4/468] Generating: Aako B.V. - Frank Mooij
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [5/468] Generating: Aarnink Kunststof kozijnen fabriek - Jop Reimert
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [6/468] Generating: Abbott - Robert Smelt
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [7/468] Generating: Abbott - Lisa Daly
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [8/468] Generating: Abbott labs - Tim Katanik
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [9/468] Generating: AbbVie - Rene Kronenburg
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [10/468] Generating: Abbvie - Stef Beltman
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [11/468] Generating: AbbVie - Vincent
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [12/468] Generating: AbbVie - Marieke Sellies
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [13/468] Generating: AbbVie - Rob Lindeboom
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [14/468] Generating: AbbVie  - Marchel
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [15/468] Generating: AbbVie  - Jeroen Berkhof
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [16/468] Generating: AbbVie  - Miriam Porqueras Salaverri
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [17/468] Generating: AbbVie  - Henny Landkroon
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [18/468] Generating: AbbVie  - Luc Kottink
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [19/468] Generating: AbbVie  - Bas Groenwold
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [20/468] Generating: AbbVie  - Walter Verhoef
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [21/468] Generating: ACN - Hilal L
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [22/468] Generating: AGILEA - vers
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [23/468] Generating: Agrifac Machinery B.V. - Art Kampjes
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [24/468] Generating: Agrifac Machinery B.V. - Michiel Zantinge
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [25/468] Generating: Agrifac Machinery B.V. - Gert Klein
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [26/468] Generating: Agrifac Machinery B.V. - Ferry
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [27/468] Generating: Agrifac Machinery B.V. - Huimin Ke
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [28/468] Generating: Agrifac Machinery B.V. - Bjorn de Lange
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [29/468] Generating: Agrifac Machinery B.V. - Nick van Huffelen
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [30/468] Generating: AGV International B.V. - Tom Broeder
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [31/468] Generating: Ales Metaaltechniek - Dick de Leeuw
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [32/468] Generating: Ales Metaaltechniek - Ruben Spansier
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [33/468] Generating: Alfa Laval Nijmegen - Henk de Lang
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [34/468] Generating: Alfen - Maria Verbeek
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [35/468] Generating: All Round shipping BV - osadolor edmund omokaro
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [36/468] Generating: Allied Motion - Robert Frank
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [37/468] Generating: Allied Motion Dordrecht B.V. - Max Elligens
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [38/468] Generating: Alphatronics BV - Jos Herrebrugh
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [39/468] Generating: Alpla Zwolle B.V. - Kevin Mulder
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [40/468] Generating: Alpla Zwolle B.V. - Bertus Bos
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [41/468] Generating: Ames - Jeroen Berning
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [42/468] Generating: Amgen - Bart Kennes
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [43/468] Generating: AP Nederland B.V. - Egbert Wendel
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [44/468] Generating: Applied Medical - PJ Sluimer
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [45/468] Generating: Applied Medical Europe b.v.  - Ralf Slag
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [46/468] Generating: aristeio - Veronica
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [47/468] Generating: ASML - Jan Jaap van Soest
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [48/468] Generating: ASML - Fleur Koster
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [49/468] Generating: ASSA ABLOY Opening Solutions EMEIA - Danny van der Ster
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [50/468] Generating: Atos - Folkert Folkerts
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [51/468] Generating: Auping - Bart van der Boom
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [52/468] Generating: Auping - Arjan van der Plas
+[2025-12-02 15:01:26]   [SKIP] Already exists, skipping
+[2025-12-02 15:01:26] [53/468] Generating: Avebe - Erik Pricker (1.0)
+[2025-12-02 15:01:34]   [OK] Success: 20251202 ResilienceReport (Avebe - Erik Pricker (1.0)).pdf
+[2025-12-02 15:01:34]   [OK] Validation passed: All values match CSV
+[2025-12-02 15:01:34] [54/468] Generating: Avebe - Bas Wijnbergen
+[2025-12-02 15:01:43]   [OK] Success: 20251202 ResilienceReport (Avebe - Bas Wijnbergen).pdf
+[2025-12-02 15:01:43]   [OK] Validation passed: All values match CSV
+[2025-12-02 15:01:43] [55/468] Generating: Avebe - Gerlof Tempelman
+[2025-12-02 15:01:51]   [OK] Success: 20251202 ResilienceReport (Avebe - Gerlof Tempelman).pdf
+[2025-12-02 15:01:51]   [OK] Validation passed: All values match CSV
+[2025-12-02 15:01:51] [56/468] Generating: AWL-Techniek - Stijn Kamps (1)
+[2025-12-02 15:01:59]   [OK] Success: 20251202 ResilienceReport (AWL-Techniek - Stijn Kamps (1)).pdf
+[2025-12-02 15:01:59]   [OK] Validation passed: All values match CSV
+[2025-12-02 15:01:59] [57/468] Generating: Axalta Coating Systems GmbH - Edgar Peet
+[2025-12-02 15:02:07]   [OK] Success: 20251202 ResilienceReport (Axalta Coating Systems GmbH - Edgar Peet).pdf
+[2025-12-02 15:02:07]   [OK] Validation passed: All values match CSV
+[2025-12-02 15:02:07] [58/468] Generating: Banks Holdings Ltd. - Corey Campbell
+[2025-12-02 15:02:15]   [OK] Success: 20251202 ResilienceReport (Banks Holdings Ltd. - Corey Campbell).pdf
+[2025-12-02 15:02:15]   [OK] Validation passed: All values match CSV
+[2025-12-02 15:02:15] [59/468] Generating: Barentsz Ontdekkingshuizen - Casper Hellebrekers
+[2025-12-02 15:02:23]   [OK] Success: 20251202 ResilienceReport (Barentsz Ontdekkingshuizen - Casper Hellebrekers).pdf
+[2025-12-02 15:02:23]   [OK] Validation passed: All values match CSV
+[2025-12-02 15:02:23] [60/468] Generating: BBA Pompen en Buizen - Andre Kleverwal
+[2025-12-02 15:02:31]   [OK] Success: 20251202 ResilienceReport (BBA Pompen en Buizen - Andre Kleverwal).pdf
+[2025-12-02 15:02:31]   [OK] Validation passed: All values match CSV
+[2025-12-02 15:02:31] Generation cancelled by user
+[2025-12-02 15:02:31] 
+============================================================
+[2025-12-02 15:02:31] WARNING: GENERATION INCOMPLETE
+[2025-12-02 15:02:31] ============================================================
+[2025-12-02 15:02:31] Total records: 468
+[2025-12-02 15:02:31] Processed: 60/468
+[2025-12-02 15:02:31] Successfully generated: 59
+[2025-12-02 15:02:31] Failed: 0
+[2025-12-02 15:02:31] Skipped (insufficient data): 1
+[2025-12-02 15:02:31] NOT PROCESSED: 408
+[2025-12-02 15:02:31] ============================================================
+[2025-12-02 15:02:31] 
+CRITICAL: Generation stopped early at record 60.
+[2025-12-02 15:02:31] Check error messages above for details.
+[2025-12-02 15:02:31] 
+Note: 1 record(s) were skipped due to insufficient data.
+[2025-12-02 15:02:31]    These records don't have enough scores to generate a valid report.
+[2025-12-02 15:02:31]    Run 'Clean Data' to see details about removed/insufficient records.

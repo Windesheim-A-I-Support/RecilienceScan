@@ -69,8 +69,6 @@ format:
       \usepackage[normalem]{ulem}
       \usepackage{makecell}
       \usepackage{xcolor}
-      \usepackage{tikz}
-      \usetikzlibrary{positioning}
 execute:
   echo: false
   warning: false
@@ -1711,12 +1709,9 @@ do_analysis <- analyze_pillar_gap("do")
 \newgeometry{left=0.8cm,right=0.8cm,top=1.0cm,bottom=0.8cm}
 \thispagestyle{empty}
 
-\begin{tikzpicture}[remember picture,overlay]
-  \node[opacity=0.2] at (current page.north east) [anchor=north east,xshift=-0.5cm,yshift=-0.5cm] {\includegraphics[height=1.2cm]{img/logo-resiliencescan.png}};
-  \node[opacity=0.2] at (current page.east) [anchor=east,xshift=-1cm,yshift=10cm] {\includegraphics[width=3cm]{img/logo-windesheim.png}};
-  \node[opacity=0.2] at (current page.east) [anchor=east,xshift=-1cm,yshift=7cm] {\includegraphics[width=1.2cm]{img/logo-RUG.png}};
-  \node[opacity=0.2] at (current page.east) [anchor=east,xshift=-1cm,yshift=4cm] {\includegraphics[width=3cm]{img/logo-involvation.png}};
-\end{tikzpicture}
+\begin{flushright}
+\includegraphics[height=1.5cm]{img/logo-resiliencescan.png}
+\end{flushright}
 
 \vspace{0.5cm}
 :::
@@ -1724,6 +1719,9 @@ do_analysis <- analyze_pillar_gap("do")
 ## `r if (detected_language == "dutch") "Supply Chain Resilience Analyse" else "Strategic Supply Chain Resilience Analysis"` {.unnumbered}
 
 ::: {.content-visible when-format="pdf"}
+\begin{minipage}[t]{0.70\textwidth}
+\vspace{0pt}
+
 \textbf{\Large `r company_name`}
 
 \vspace{0.3cm}
@@ -1735,6 +1733,20 @@ do_analysis <- analyze_pillar_gap("do")
 `r if (nchar(submit_date) > 0) paste("\\textbf{Survey Date:}", submit_date, "\\\\")`
 
 \textbf{Overall SCRES:} `r sprintf("%.2f", overall_score)`/5.00
+
+\vspace{0.2cm}
+
+{\small\textit{A collaboration between Hogeschool Windesheim, University of Groningen, and Involvation}}
+
+\end{minipage}\hfill
+\begin{minipage}[t]{0.26\textwidth}
+\vspace{0pt}
+\raggedleft
+\includegraphics[width=0.75\textwidth]{img/logo-windesheim.png}\\[3mm]
+\includegraphics[width=0.30\textwidth]{img/logo-RUG.png}\\[3mm]
+
+\includegraphics[width=0.75\textwidth]{img/logo-involvation.png}
+\end{minipage}
 
 \vspace{0.4cm}
 :::

@@ -1,62 +1,544 @@
 {
-  "timestamp": "2025-11-04T09:26:43.960226",
+  "timestamp": "2025-12-02T14:35:39.650795",
   "statistics": {
-    "initial_rows": 467,
-    "final_rows": 467,
-    "removed_rows": 0,
-    "records_with_insufficient_data": 0,
+    "initial_rows": 505,
+    "final_rows": 468,
+    "removed_rows": 37,
+    "records_with_insufficient_data": 4,
     "records_with_no_scores": 0,
-    "duplicates_removed": 0,
+    "duplicates_removed": 7,
     "invalid_values_replaced": 0
   },
   "errors": [],
-  "warnings": [],
+  "warnings": [
+    {
+      "level": "WARNING",
+      "message": "Row 470: Insufficient data (0/15 scores)",
+      "timestamp": "2025-12-02T14:35:39.601194",
+      "row": {
+        "company": "AB",
+        "person": "Anne",
+        "available_scores": 0
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 471: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.601866",
+      "row": {
+        "company": "Avebe",
+        "person": "Erik Pricker (0.2)",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 472: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.602332",
+      "row": {
+        "company": "Avebe",
+        "person": "Laura Wessels",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 473: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.602647",
+      "row": {
+        "company": "Avebe",
+        "person": "Saskia Vlap",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 474: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.602935",
+      "row": {
+        "company": "AVMC",
+        "person": "Hans Veltman",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 476: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.603330",
+      "row": {
+        "company": "Bidfood",
+        "person": "Hessel de Keijzer (0.2)",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 477: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.603566",
+      "row": {
+        "company": "Bosch Thermotechniek B.V.",
+        "person": "Rob ter Beek (0.2)",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 478: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.603816",
+      "row": {
+        "company": "Brink Climate Systems",
+        "person": "Susanne Westerdijk",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 479: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.604204",
+      "row": {
+        "company": "Broshuis B.V.",
+        "person": "Jasper Luik (0.1)",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 480: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.604711",
+      "row": {
+        "company": "Bruinhorst Tegels Online",
+        "person": "T. van Hierden",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 481: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.605015",
+      "row": {
+        "company": "Corbion (1)",
+        "person": "Koen Kummel (0.2)",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 484: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.605749",
+      "row": {
+        "company": "Evofenedex",
+        "person": "Nanne Schriek",
+        "email": "nanne.schriek"
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 486: Insufficient data (0/15 scores)",
+      "timestamp": "2025-12-02T14:35:39.606058",
+      "row": {
+        "company": "Fujifilm ",
+        "person": "Charlie ",
+        "available_scores": 0
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 487: Insufficient data (3/15 scores)",
+      "timestamp": "2025-12-02T14:35:39.606222",
+      "row": {
+        "company": "Global logistics ag",
+        "person": "Az muller",
+        "available_scores": 3
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 488: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.606621",
+      "row": {
+        "company": "Hermie.com",
+        "person": "Pieter Hermie",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 489: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.606901",
+      "row": {
+        "company": "Hiab Benelux",
+        "person": "Theo Zijlstra",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 490: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.607095",
+      "row": {
+        "company": "Hiab Benelux",
+        "person": "Melvyn",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 491: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.607226",
+      "row": {
+        "company": "Livin' Spas",
+        "person": "Henrick van de brug",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 492: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.607358",
+      "row": {
+        "company": "MariAlro",
+        "person": "Jinsun Kim",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 493: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.607495",
+      "row": {
+        "company": "NEDTECH",
+        "person": "Bas van Bree",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 494: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.607614",
+      "row": {
+        "company": "PT. Sam Adi Karya",
+        "person": "Arina Sabila",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 495: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.607727",
+      "row": {
+        "company": "Rituals",
+        "person": "Remco de Marie (0.2)",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 496: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.607842",
+      "row": {
+        "company": "Samsung Electronics",
+        "person": "J",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 497: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.607950",
+      "row": {
+        "company": "Scania Logistics NL",
+        "person": "Elbrich de Jong (0.1)",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 498: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.608326",
+      "row": {
+        "company": "Scania Logistics NL",
+        "person": "Aafke Christenhusz",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 499: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.608797",
+      "row": {
+        "company": "Suplacon",
+        "person": "Pim Jansen",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 501: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.609519",
+      "row": {
+        "company": "The Coca-Cola Company",
+        "person": "TCCC SCR2 EMEA 2023 Team 3",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 503: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.610270",
+      "row": {
+        "company": "The Coca-Cola Company",
+        "person": "Steven Jian",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 505: Insufficient data (0/15 scores)",
+      "timestamp": "2025-12-02T14:35:39.611048",
+      "row": {
+        "company": "Transparency Lab",
+        "person": "Jan van de Poll",
+        "available_scores": 0
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Row 506: Invalid/missing email",
+      "timestamp": "2025-12-02T14:35:39.611245",
+      "row": {
+        "company": "Vattenfall",
+        "person": "Deurwaarder",
+        "email": NaN
+      }
+    },
+    {
+      "level": "WARNING",
+      "message": "Found 7 duplicate records (keeping first occurrence)",
+      "timestamp": "2025-12-02T14:35:39.617462"
+    }
+  ],
   "info": [
     {
       "level": "INFO",
-      "message": "Backup created: ./data/backups\\cleaned_master_20251104_092643.csv",
-      "timestamp": "2025-11-04T09:26:43.857987"
+      "message": "Backup created: ./data/backups\\cleaned_master_20251202_143539.csv",
+      "timestamp": "2025-12-02T14:35:39.468663"
     },
     {
       "level": "INFO",
       "message": "Loading data from: ./data/cleaned_master.csv",
-      "timestamp": "2025-11-04T09:26:43.858091"
+      "timestamp": "2025-12-02T14:35:39.468765"
     },
     {
       "level": "INFO",
-      "message": "Loaded 467 rows, 178 columns",
-      "timestamp": "2025-11-04T09:26:43.866345"
+      "message": "Loaded 505 rows, 178 columns",
+      "timestamp": "2025-12-02T14:35:39.481566"
     },
     {
       "level": "INFO",
       "message": "All required columns present: ['company_name', 'name', 'email_address']",
-      "timestamp": "2025-11-04T09:26:43.866840"
+      "timestamp": "2025-12-02T14:35:39.482097"
     },
     {
       "level": "INFO",
       "message": "All score values were valid",
-      "timestamp": "2025-11-04T09:26:43.892591"
+      "timestamp": "2025-12-02T14:35:39.549190"
     },
     {
       "level": "INFO",
       "message": "Cleaned 15 score columns",
-      "timestamp": "2025-11-04T09:26:43.892878"
+      "timestamp": "2025-12-02T14:35:39.549340"
     },
     {
       "level": "INFO",
-      "message": "Kept 467/467 records after validation",
-      "timestamp": "2025-11-04T09:26:43.921938"
-    },
-    {
-      "level": "INFO",
-      "message": "No duplicates found",
-      "timestamp": "2025-11-04T09:26:43.925639"
+      "message": "Kept 475/505 records after validation",
+      "timestamp": "2025-12-02T14:35:39.614391"
     },
     {
       "level": "INFO",
       "message": "Saved cleaned data: ./data/cleaned_master.csv",
-      "timestamp": "2025-11-04T09:26:43.960096"
+      "timestamp": "2025-12-02T14:35:39.650163"
     }
   ],
-  "removed_records": []
+  "removed_records": [
+    {
+      "row": 470,
+      "company": "AB",
+      "person": "Anne",
+      "reason": "Only 0 valid scores (need 5)"
+    },
+    {
+      "row": 471,
+      "company": "Avebe",
+      "person": "Erik Pricker (0.2)",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 472,
+      "company": "Avebe",
+      "person": "Laura Wessels",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 473,
+      "company": "Avebe",
+      "person": "Saskia Vlap",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 474,
+      "company": "AVMC",
+      "person": "Hans Veltman",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 476,
+      "company": "Bidfood",
+      "person": "Hessel de Keijzer (0.2)",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 477,
+      "company": "Bosch Thermotechniek B.V.",
+      "person": "Rob ter Beek (0.2)",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 478,
+      "company": "Brink Climate Systems",
+      "person": "Susanne Westerdijk",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 479,
+      "company": "Broshuis B.V.",
+      "person": "Jasper Luik (0.1)",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 480,
+      "company": "Bruinhorst Tegels Online",
+      "person": "T. van Hierden",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 481,
+      "company": "Corbion (1)",
+      "person": "Koen Kummel (0.2)",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 484,
+      "company": "Evofenedex",
+      "person": "Nanne Schriek",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 486,
+      "company": "Fujifilm ",
+      "person": "Charlie ",
+      "reason": "Only 0 valid scores (need 5)"
+    },
+    {
+      "row": 487,
+      "company": "Global logistics ag",
+      "person": "Az muller",
+      "reason": "Only 3 valid scores (need 5)"
+    },
+    {
+      "row": 488,
+      "company": "Hermie.com",
+      "person": "Pieter Hermie",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 489,
+      "company": "Hiab Benelux",
+      "person": "Theo Zijlstra",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 490,
+      "company": "Hiab Benelux",
+      "person": "Melvyn",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 491,
+      "company": "Livin' Spas",
+      "person": "Henrick van de brug",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 492,
+      "company": "MariAlro",
+      "person": "Jinsun Kim",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 493,
+      "company": "NEDTECH",
+      "person": "Bas van Bree",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 494,
+      "company": "PT. Sam Adi Karya",
+      "person": "Arina Sabila",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 495,
+      "company": "Rituals",
+      "person": "Remco de Marie (0.2)",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 496,
+      "company": "Samsung Electronics",
+      "person": "J",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 497,
+      "company": "Scania Logistics NL",
+      "person": "Elbrich de Jong (0.1)",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 498,
+      "company": "Scania Logistics NL",
+      "person": "Aafke Christenhusz",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 499,
+      "company": "Suplacon",
+      "person": "Pim Jansen",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 501,
+      "company": "The Coca-Cola Company",
+      "person": "TCCC SCR2 EMEA 2023 Team 3",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 503,
+      "company": "The Coca-Cola Company",
+      "person": "Steven Jian",
+      "reason": "Invalid/missing email"
+    },
+    {
+      "row": 505,
+      "company": "Transparency Lab",
+      "person": "Jan van de Poll",
+      "reason": "Only 0 valid scores (need 5)"
+    },
+    {
+      "row": 506,
+      "company": "Vattenfall",
+      "person": "Deurwaarder",
+      "reason": "Invalid/missing email"
+    }
+  ]
 }

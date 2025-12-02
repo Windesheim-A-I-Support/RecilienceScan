@@ -230,6 +230,88 @@ def clean_column_names(columns):
     return final_names
 
 
+def map_column_names(df):
+    """
+    Intelligently map column name variations to expected standard names.
+    This ensures Excel files with different column naming conventions work correctly.
+    """
+    # Define mapping from variations to standard names
+    COLUMN_MAPPINGS = {
+        'email_address': ['email_id', 'email', 'e-mail', 'e_mail', 'mail', 'contact_email', 'emailaddress'],
+        'company_name': ['company', 'organization', 'organisation', 'firm', 'business', 'company_id', 'companyname'],
+        'name': ['respondent', 'participant', 'respondent_name', 'participant_name', 'full_name', 'fullname'],
+        'submitdate': ['date', 'submit_date', 'submission_date', 'timestamp', 'date_submitted', 'submissiondate'],
+        'function': ['role', 'job_title', 'position', 'title', 'jobtitle'],
+    }
+
+    # Normalize column names for comparison (lowercase, strip whitespace)
+    df.columns = df.columns.str.strip()
+    original_columns = df.columns.tolist()
+    normalized_columns = [col.lower().replace(' ', '_').replace('-', '_') for col in original_columns]
+
+    # Track mappings made
+    mappings_made = []
+    new_columns = []
+
+    for i, (orig_col, norm_col) in enumerate(zip(original_columns, normalized_columns)):
+        mapped = False
+
+        # Check if this column should be mapped to a standard name
+        for standard_name, variations in COLUMN_MAPPINGS.items():
+            if norm_col in [v.lower().replace(' ', '_').replace('-', '_') for v in variations]:
+                new_columns.append(standard_name)
+                mappings_made.append(f"'{orig_col}' → '{standard_name}'")
+                mapped = True
+                break
+
+        # If no mapping found, keep original (but normalized)
+        if not mapped:
+            new_columns.append(orig_col)
+
+    # Apply new column names
+    df.columns = new_columns
+
+    # Report mappings
+    if mappings_made:
+        print(f"\n[MAPPING] Applied {len(mappings_made)} column name mappings:")
+        for mapping in mappings_made:
+            print(f"   {mapping}")
+    else:
+        print("\n[MAPPING] No column name mappings needed (already using standard names)")
+
+    return df
+
+
+def validate_required_columns(df):
+    """
+    Validate that all required columns exist in the DataFrame.
+    Returns (is_valid, missing_columns)
+    """
+    # Core required columns for report generation
+    REQUIRED_COLUMNS = ['company_name', 'name', 'email_address']
+
+    # Score columns (at least the pillar averages should exist)
+    REQUIRED_SCORE_COLS = ['up__r', 'up__c', 'up__f', 'up__v', 'up__a',
+                           'in__r', 'in__c', 'in__f', 'in__v', 'in__a',
+                           'do__r', 'do__c', 'do__f', 'do__v', 'do__a']
+
+    missing_core = [col for col in REQUIRED_COLUMNS if col not in df.columns]
+    missing_scores = [col for col in REQUIRED_SCORE_COLS if col not in df.columns]
+
+    all_missing = missing_core + missing_scores
+
+    if all_missing:
+        print(f"\n[ERROR] Missing required columns:")
+        if missing_core:
+            print(f"   Core columns: {', '.join(missing_core)}")
+        if missing_scores:
+            print(f"   Score columns: {', '.join(missing_scores)}")
+        return False, all_missing
+
+    print(f"\n[VALIDATION] All required columns present ✓")
+    return True, []
+
+
 def create_backup(file_path):
     """Create a timestamped backup of a file."""
     if not Path(file_path).exists():
@@ -341,13 +423,52 @@ def merge_with_existing(new_df):
 
     # Remove merge key
     new_df = new_df.drop('_merge_key', axis=1)
+    existing_df = existing_df.drop('_merge_key', axis=1)
 
-    print(f"   [DATA] Update analysis:")
-    print(f"      - Preserved 'reportsent' status: {preserved_count} records")
-    print(f"      - New records (not sent): {new_count} records")
-    print(f"      - Total records in updated file: {len(new_df)}")
+    # APPEND MODE: Keep all existing records + add only NEW records from Excel
+    # Find records that are in new_df but NOT in existing_df
+    new_df_keys = new_df[key_columns].fillna('').astype(str).agg('||'.join, axis=1)
+    existing_keys = existing_df[key_columns].fillna('').astype(str).agg('||'.join, axis=1)
 
-    return new_df
+    # Records that are truly new (not in existing file)
+    new_only_mask = ~new_df_keys.isin(existing_keys)
+    truly_new_records = new_df[new_only_mask]
+
+    # Records that exist in both (update existing with new data, keep reportsent)
+    update_mask = new_df_keys.isin(existing_keys)
+    updated_records = new_df[update_mask]
+
+    # Update existing records: replace old data with new data, but keep reportsent
+    # Create updated_existing by merging
+    existing_with_key = existing_df.copy()
+    existing_with_key['_key'] = existing_keys
+    updated_records['_key'] = new_df_keys[update_mask]
+
+    # For each updated record, replace in existing_df
+    updated_existing = existing_df.copy()
+    for idx, row in updated_records.iterrows():
+        key = row['_key']
+        mask = existing_with_key['_key'] == key
+        if mask.any():
+            # Update all columns except reportsent
+            for col in updated_records.columns:
+                if col not in ['_key', 'reportsent'] and col in updated_existing.columns:
+                    updated_existing.loc[mask, col] = row[col]
+
+    # Clean up temporary key column
+    if '_key' in updated_existing.columns:
+        updated_existing = updated_existing.drop('_key', axis=1)
+
+    # Combine: updated existing records + truly new records
+    final_df = pd.concat([updated_existing, truly_new_records], ignore_index=True)
+
+    print(f"   [DATA] Merge analysis:")
+    print(f"      - Existing records kept: {len(existing_df)}")
+    print(f"      - Existing records updated: {len(updated_records)}")
+    print(f"      - New records added: {len(truly_new_records)}")
+    print(f"      - Total records in final file: {len(final_df)}")
+
+    return final_df
 
 
 def convert_and_save():
@@ -399,6 +520,17 @@ def convert_and_save():
         print(f"   Sample transformations (first 5):")
         for orig, clean in changed_cols[:5]:
             print(f"      '{orig}' → '{clean}'")
+
+    # Step 6.5: Map column name variations to standard names
+    df_converted = map_column_names(df_converted)
+
+    # Step 6.6: Validate required columns exist
+    is_valid, missing_cols = validate_required_columns(df_converted)
+    if not is_valid:
+        print(f"\n[ERROR] Excel file is missing required columns for report generation")
+        print(f"   Please check EXPECTED_CSV_FORMAT.md for required column names")
+        print(f"   Missing: {', '.join(missing_cols)}")
+        return False
 
     # Step 7: Remove completely empty rows
     initial_rows = len(df_converted)

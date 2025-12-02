@@ -24,7 +24,8 @@
       "Bash(if exist ResilienceReport_files rmdir /s /q ResilienceReport_files)",
       "Bash(del /q *.aux *.log 2)",
       "Bash(powershell -Command:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(copy /Y ResilienceReport.qmd.backup_watermark ResilienceReport.qmd)"
     ],
     "deny": [],
     "ask": []
