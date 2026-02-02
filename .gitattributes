@@ -1,2 +1,14 @@
+# Auto-detect text files and perform LF normalization
+* text=auto
+
+# Force LF line endings for shell scripts
+*.sh text eol=lf
+
+# Docker files
+Dockerfile text auto
+docker-compose.yml text auto
+docker-compose.yaml text auto
+
+# Export ignore rules
 example.tex export-ignore
 example.pdf export-ignore
