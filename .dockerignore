@@ -1,0 +1,73 @@
+# Version control
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Node
+node_modules/
+
+# Data files
+data/
+reports/
+logs/
+
+# Videos and large media
+videos/
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Generated output files
+*.pdf
+*.tex
+*.tex.old
+
+# Databases
+*.db
+*.db.backup*
+
+# Quarto cache
+.quarto/
+*_cache/
+*_files/
+
+# R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.luarc.json
+
+# Auto Claude
+.auto-claude/
+
+# Test files
+test_*.py
+test_*.pdf
+test_output.*
+test_reports/
+
+# Miscellaneous
+archive/
+images/
+*.log
