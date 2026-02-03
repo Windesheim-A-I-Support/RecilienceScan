@@ -491,7 +491,19 @@ def create_backup(file_path):
     Create a timestamped backup of a file in the backups directory.
     Returns backup path or None if source doesn't exist.
     """
-    raise NotImplementedError("create_backup not yet implemented")
+    if not Path(file_path).exists():
+        return None
+
+    os.makedirs(BACKUP_DIR, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = Path(file_path).stem
+    ext = Path(file_path).suffix
+    backup_path = os.path.join(BACKUP_DIR, f"{filename}_{timestamp}{ext}")
+
+    shutil.copy2(file_path, backup_path)
+    print(f"[BACKUP] Backup created: {backup_path}")
+    logger.info(f"Backup created: {backup_path} (source: {file_path})")
+    return backup_path
 
 
 def safe_upsert_merge(existing_df, incoming_df, primary_key=PRIMARY_KEY):
@@ -655,7 +667,35 @@ def log_ingestion(stats):
     Stats dict should include: source, format, encoding, rows_added,
     rows_updated, columns_added.
     """
-    raise NotImplementedError("log_ingestion not yet implemented")
+    os.makedirs(LOG_DIR, exist_ok=True)
+
+    source = stats.get("source", "unknown")
+    fmt = stats.get("format", "unknown")
+    encoding = stats.get("encoding", "unknown")
+    rows_loaded = stats.get("rows_loaded", 0)
+    rows_added = stats.get("rows_added", 0)
+    rows_updated = stats.get("rows_updated", 0)
+    rows_unchanged = stats.get("rows_unchanged", 0)
+    columns_added = stats.get("columns_added", [])
+    total_rows = stats.get("total_rows", 0)
+    total_columns = stats.get("total_columns", 0)
+    status = stats.get("status", "success")
+    error = stats.get("error", None)
+
+    logger.info(
+        f"INGESTION | source={source} | format={fmt} | encoding={encoding} | "
+        f"rows_loaded={rows_loaded} | rows_added={rows_added} | "
+        f"rows_updated={rows_updated} | rows_unchanged={rows_unchanged} | "
+        f"columns_added={len(columns_added)} | "
+        f"total_rows={total_rows} | total_columns={total_columns} | "
+        f"status={status}"
+    )
+
+    if columns_added:
+        logger.info(f"New columns added: {columns_added}")
+
+    if error:
+        logger.error(f"Ingestion error for {source}: {error}")
 
 
 def ingest_file(file_path):
@@ -664,7 +704,207 @@ def ingest_file(file_path):
     detect format -> load -> normalize -> evolve schema -> upsert merge -> save -> log.
     Returns summary stats dict.
     """
-    raise NotImplementedError("ingest_file not yet implemented")
+    file_path = str(file_path)
+    stats = {
+        "source": Path(file_path).name,
+        "format": None,
+        "encoding": None,
+        "rows_loaded": 0,
+        "rows_added": 0,
+        "rows_updated": 0,
+        "rows_unchanged": 0,
+        "columns_added": [],
+        "total_rows": 0,
+        "total_columns": 0,
+        "status": "failed",
+        "error": None,
+    }
+
+    print(f"\n{'=' * 70}")
+    print(f"[IMPORT] Ingesting: {file_path}")
+    print(f"{'=' * 70}")
+    logger.info(f"Starting ingestion of {file_path}")
+
+    # Step 1: Validate file exists
+    if not os.path.exists(file_path):
+        msg = f"File not found: {file_path}"
+        print(f"[ERROR] {msg}")
+        logger.error(msg)
+        stats["error"] = msg
+        log_ingestion(stats)
+        return stats
+
+    # Step 2: Detect format
+    fmt = detect_format(file_path)
+    if fmt is None:
+        msg = f"Unsupported or undetectable format: {file_path}"
+        print(f"[ERROR] {msg}")
+        stats["error"] = msg
+        log_ingestion(stats)
+        return stats
+    stats["format"] = fmt
+
+    # Step 3: Load file based on format
+    df = None
+    try:
+        if fmt in ("xlsx", "xls"):
+            df = load_xlsx(file_path)
+            stats["encoding"] = "binary"
+        elif fmt in ("csv", "tsv"):
+            df = load_csv_tsv(file_path)
+            # Try to detect encoding used from the cascade
+            try:
+                _, enc = read_with_encoding_cascade(file_path)
+                stats["encoding"] = enc
+            except Exception:
+                stats["encoding"] = "unknown"
+        else:
+            msg = f"No loader available for format: {fmt}"
+            print(f"[ERROR] {msg}")
+            stats["error"] = msg
+            log_ingestion(stats)
+            return stats
+    except Exception as e:
+        msg = f"Load failed: {type(e).__name__}: {e}"
+        print(f"[ERROR] {msg}")
+        logger.error(f"Load failed for {file_path}: {msg}")
+        stats["error"] = msg
+        log_ingestion(stats)
+        return stats
+
+    if df is None or df.empty:
+        msg = f"No data loaded from {file_path}"
+        print(f"[WARNING]  {msg}")
+        stats["error"] = msg
+        log_ingestion(stats)
+        return stats
+
+    stats["rows_loaded"] = len(df)
+    print(f"[OK] Loaded {len(df)} rows, {len(df.columns)} columns")
+
+    # Step 4: Normalize column names
+    try:
+        df = normalize_columns(df)
+        print(f"[OK] Column names normalized")
+    except Exception as e:
+        msg = f"Column normalization failed: {type(e).__name__}: {e}"
+        print(f"[ERROR] {msg}")
+        logger.error(msg)
+        stats["error"] = msg
+        log_ingestion(stats)
+        return stats
+
+    # Step 5: Load existing master_database.csv if it exists
+    master_df = None
+    if os.path.exists(MASTER_DB_PATH):
+        try:
+            master_df = pd.read_csv(MASTER_DB_PATH, encoding="utf-8")
+            print(f"[OK] Loaded existing master_database.csv ({len(master_df)} rows, {len(master_df.columns)} columns)")
+            logger.info(f"Loaded existing master: {len(master_df)} rows, {len(master_df.columns)} columns")
+        except Exception as e:
+            print(f"[WARNING]  Could not load existing master_database.csv: {e}")
+            logger.warning(f"Could not load master_database.csv: {e}")
+            master_df = None
+
+    # Step 6: Evolve schema — add new columns to master
+    if master_df is not None and not master_df.empty:
+        master_df, new_cols = evolve_schema(master_df, df)
+        if new_cols:
+            stats["columns_added"] = new_cols
+            print(f"[DATA] Schema evolved: added {len(new_cols)} new column(s): {new_cols}")
+    else:
+        # No existing master — all columns are "new"
+        stats["columns_added"] = list(df.columns)
+
+    # Step 7: Backup cleaned_master.csv if it exists
+    if os.path.exists(OUTPUT_PATH):
+        try:
+            create_backup(OUTPUT_PATH)
+        except Exception as e:
+            print(f"[WARNING]  Backup failed: {e}")
+            logger.warning(f"Backup of {OUTPUT_PATH} failed: {e}")
+
+    # Step 8: Upsert merge into cleaned_master
+    existing_cleaned = None
+    if os.path.exists(OUTPUT_PATH):
+        try:
+            existing_cleaned = pd.read_csv(OUTPUT_PATH, encoding="utf-8")
+            print(f"[OK] Loaded existing cleaned_master.csv ({len(existing_cleaned)} rows)")
+            logger.info(f"Loaded existing cleaned_master: {len(existing_cleaned)} rows")
+        except Exception as e:
+            print(f"[WARNING]  Could not load existing cleaned_master.csv: {e}")
+            logger.warning(f"Could not load cleaned_master.csv: {e}")
+            existing_cleaned = None
+
+    try:
+        merged_df = safe_upsert_merge(existing_cleaned, df, PRIMARY_KEY)
+    except Exception as e:
+        msg = f"Upsert merge failed: {type(e).__name__}: {e}"
+        print(f"[ERROR] {msg}")
+        logger.error(msg)
+        stats["error"] = msg
+        log_ingestion(stats)
+        return stats
+
+    # Calculate merge stats
+    if existing_cleaned is not None and not existing_cleaned.empty:
+        stats["rows_added"] = max(0, len(merged_df) - len(existing_cleaned))
+        # rows_updated is approximate — count rows that existed before
+        stats["rows_updated"] = min(len(existing_cleaned), len(df))
+    else:
+        stats["rows_added"] = len(merged_df)
+        stats["rows_updated"] = 0
+
+    stats["total_rows"] = len(merged_df)
+    stats["total_columns"] = len(merged_df.columns)
+
+    # Step 9: Save both CSVs (UTF-8, no index)
+    os.makedirs(DATA_DIR, exist_ok=True)
+
+    try:
+        # Save master_database.csv (schema superset)
+        if master_df is not None and not master_df.empty:
+            # Merge master schema with merged data
+            master_merged = safe_upsert_merge(master_df, df, PRIMARY_KEY)
+            # Ensure master has all columns from merged_df too
+            for col in merged_df.columns:
+                if col not in master_merged.columns:
+                    master_merged[col] = pd.NA
+            master_merged.to_csv(MASTER_DB_PATH, index=False, encoding="utf-8")
+        else:
+            merged_df.to_csv(MASTER_DB_PATH, index=False, encoding="utf-8")
+
+        print(f"[SAVE] Saved master_database.csv")
+        logger.info(f"Saved master_database.csv")
+    except Exception as e:
+        msg = f"Failed to save master_database.csv: {type(e).__name__}: {e}"
+        print(f"[ERROR] {msg}")
+        logger.error(msg)
+        stats["error"] = msg
+        log_ingestion(stats)
+        return stats
+
+    try:
+        # Save cleaned_master.csv (working dataset)
+        merged_df.to_csv(OUTPUT_PATH, index=False, encoding="utf-8")
+        print(f"[SAVE] Saved cleaned_master.csv ({len(merged_df)} rows, {len(merged_df.columns)} columns)")
+        logger.info(f"Saved cleaned_master.csv: {len(merged_df)} rows, {len(merged_df.columns)} columns")
+    except Exception as e:
+        msg = f"Failed to save cleaned_master.csv: {type(e).__name__}: {e}"
+        print(f"[ERROR] {msg}")
+        logger.error(msg)
+        stats["error"] = msg
+        log_ingestion(stats)
+        return stats
+
+    # Step 10: Log ingestion
+    stats["status"] = "success"
+    log_ingestion(stats)
+
+    print(f"\n[OK] Ingestion complete: {stats['rows_loaded']} rows loaded, "
+          f"{stats['rows_added']} added, {stats['total_rows']} total rows")
+
+    return stats
 
 
 def ingest_directory(dir_path=DATA_DIR, pattern="*"):
