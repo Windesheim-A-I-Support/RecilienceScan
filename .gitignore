@@ -93,3 +93,9 @@ test_reports/
 
 /.luarc.json
 nul
+.auto-claude/
+.auto-claude-security.json
+.claude_settings.json
+.auto-claude/
+.auto-claude-security.json
+.claude_settings.json
