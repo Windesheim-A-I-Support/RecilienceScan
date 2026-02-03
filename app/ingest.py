@@ -421,7 +421,69 @@ def normalize_columns(df):
     strip, lowercase, underscores, remove special chars, handle NaN/dupes.
     Returns DataFrame with cleaned column names.
     """
-    raise NotImplementedError("normalize_columns not yet implemented")
+    if df is None or df.empty:
+        logger.warning("normalize_columns called with empty or None DataFrame")
+        return df
+
+    cleaned = []
+    for i, col in enumerate(df.columns):
+        try:
+            # Handle None, NaN, and other non-string types
+            if col is None or (isinstance(col, float) and pd.isna(col)) or str(col).strip() == "":
+                col_name = f"column_{i + 1}"
+            else:
+                # Convert to string and clean following convert_data.py pattern
+                col_name = (
+                    str(col)
+                    .strip()
+                    .lower()
+                    .replace(" ", "_")
+                    .replace("-", "_")
+                    .replace(":", "")
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("[", "")
+                    .replace("]", "")
+                )
+                # Remove any remaining non-alphanumeric characters (except underscore)
+                col_name = re.sub(r"[^\w]", "", col_name)
+                # Collapse multiple underscores into one
+                col_name = re.sub(r"_+", "_", col_name)
+                # Strip leading/trailing underscores
+                col_name = col_name.strip("_")
+
+            # Handle empty result after cleaning
+            if not col_name:
+                col_name = f"column_{i + 1}"
+
+            # Prefix columns that start with a digit
+            if col_name[0].isdigit():
+                col_name = f"col_{col_name}"
+
+            cleaned.append(col_name)
+        except Exception as e:
+            logger.warning(f"Error cleaning column {i} ({col}): {e}")
+            cleaned.append(f"column_{i + 1}")
+
+    # Handle duplicate column names by appending numeric suffix
+    seen = {}
+    deduped = []
+    for name in cleaned:
+        if name in seen:
+            seen[name] += 1
+            deduped.append(f"{name}_{seen[name]}")
+        else:
+            seen[name] = 0
+            deduped.append(name)
+
+    original_cols = list(df.columns)
+    df = df.copy()
+    df.columns = deduped
+
+    logger.info(
+        f"Normalized {len(deduped)} column names"
+    )
+    return df
 
 
 def create_backup(file_path):
