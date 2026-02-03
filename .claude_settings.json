@@ -1,0 +1,39 @@
+{
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  },
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "allow": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Glob(./**)",
+      "Grep(./**)",
+      "Read(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude\\worktrees\\tasks\\014-p2-normalization/**)",
+      "Write(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude\\worktrees\\tasks\\014-p2-normalization/**)",
+      "Edit(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude\\worktrees\\tasks\\014-p2-normalization/**)",
+      "Glob(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude\\worktrees\\tasks\\014-p2-normalization/**)",
+      "Grep(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude\\worktrees\\tasks\\014-p2-normalization/**)",
+      "Read(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude\\worktrees\\tasks\\014-p2-normalization\\.auto-claude\\specs\\014-p2-normalization/**)",
+      "Write(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude\\worktrees\\tasks\\014-p2-normalization\\.auto-claude\\specs\\014-p2-normalization/**)",
+      "Edit(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude\\worktrees\\tasks\\014-p2-normalization\\.auto-claude\\specs\\014-p2-normalization/**)",
+      "Read(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude/**)",
+      "Write(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude/**)",
+      "Edit(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude/**)",
+      "Glob(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude/**)",
+      "Grep(C:\\Users\\chris\\Documents\\RecilienceScan\\.auto-claude/**)",
+      "Bash(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "mcp__context7__resolve-library-id(*)",
+      "mcp__context7__get-library-docs(*)",
+      "mcp__graphiti-memory__search_nodes(*)",
+      "mcp__graphiti-memory__search_facts(*)",
+      "mcp__graphiti-memory__add_episode(*)",
+      "mcp__graphiti-memory__get_episodes(*)",
+      "mcp__graphiti-memory__get_entity_edge(*)"
+    ]
+  }
+}
