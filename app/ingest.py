@@ -101,7 +101,43 @@ def read_with_encoding_cascade(file_path):
     utf-8 -> utf-8-sig -> cp1252 -> latin1.
     Returns (content_string, encoding_used) or raises on total failure.
     """
-    raise NotImplementedError("read_with_encoding_cascade not yet implemented")
+    file_path = str(file_path)
+
+    if not os.path.exists(file_path):
+        print(f"[ERROR] File not found: {file_path}")
+        logger.error(f"File not found: {file_path}")
+        raise FileNotFoundError(f"File not found: {file_path}")
+
+    errors = []
+    for encoding in ENCODING_CASCADE:
+        try:
+            with open(file_path, "r", encoding=encoding) as f:
+                content = f.read()
+            print(f"[OK] Read file with encoding: {encoding}")
+            logger.info(f"Successfully read {file_path} with encoding: {encoding}")
+            return content, encoding
+        except UnicodeDecodeError as e:
+            print(f"[WARNING]  Encoding {encoding} failed, trying next...")
+            logger.warning(f"Encoding {encoding} failed for {file_path}: {e}")
+            errors.append((encoding, str(e)))
+        except PermissionError:
+            print(f"[ERROR] File is locked — please close it in other programs")
+            logger.error(f"Permission denied reading {file_path}")
+            raise
+        except Exception as e:
+            print(f"[ERROR] Unexpected error reading with {encoding}: {e}")
+            logger.error(f"Unexpected error reading {file_path} with {encoding}: {e}")
+            errors.append((encoding, str(e)))
+
+    # All encodings failed
+    error_summary = "; ".join(f"{enc}: {err}" for enc, err in errors)
+    msg = f"All encodings failed for {file_path}: {error_summary}"
+    print(f"[ERROR] {msg}")
+    logger.error(msg)
+    raise UnicodeDecodeError(
+        "multi", b"", 0, 1,
+        f"All encoding attempts failed for {file_path}. Tried: {', '.join(ENCODING_CASCADE)}"
+    )
 
 
 def _detect_header_row(df, max_rows_to_check=10):
@@ -264,7 +300,119 @@ def load_csv_tsv(file_path):
     Load a CSV or TSV file with encoding cascade and delimiter auto-detection.
     Returns DataFrame or None on failure.
     """
-    raise NotImplementedError("load_csv_tsv not yet implemented")
+    file_path = str(file_path)
+    file_ext = Path(file_path).suffix.lower()
+    print(f"\n[LOAD] Loading CSV/TSV file: {file_path}")
+    logger.info(f"Loading CSV/TSV file: {file_path}")
+
+    # Check if file exists
+    if not os.path.exists(file_path):
+        print(f"[ERROR] File not found: {file_path}")
+        logger.error(f"File not found: {file_path}")
+        return None
+
+    # Read raw content with encoding cascade
+    try:
+        content, encoding_used = read_with_encoding_cascade(file_path)
+    except PermissionError:
+        print(f"[ERROR] File is locked — please close it in other programs")
+        logger.error(f"Permission denied: {file_path}")
+        return None
+    except (FileNotFoundError, UnicodeDecodeError) as e:
+        print(f"[ERROR] Could not read file: {e}")
+        logger.error(f"Could not read file {file_path}: {e}")
+        return None
+    except Exception as e:
+        print(f"[ERROR] Unexpected error reading file: {type(e).__name__}: {e}")
+        logger.error(f"Unexpected error reading {file_path}: {type(e).__name__}: {e}")
+        return None
+
+    # Check for empty content
+    if not content or not content.strip():
+        print("[WARNING]  File is empty — skipping")
+        logger.warning(f"File is empty: {file_path}")
+        return None
+
+    # Auto-detect delimiter using csv.Sniffer
+    delimiter = "\t" if file_ext == ".tsv" else ","
+    try:
+        # Use first 8KB for sniffing
+        sample = content[:8192]
+        dialect = csv.Sniffer().sniff(sample)
+        delimiter = dialect.delimiter
+        if delimiter == "\t":
+            print(f"[INFO]  Detected tab-delimited format")
+        elif delimiter == ",":
+            print(f"[INFO]  Detected comma-delimited format")
+        else:
+            print(f"[INFO]  Detected delimiter: {repr(delimiter)}")
+        logger.info(f"Detected delimiter {repr(delimiter)} for {file_path}")
+    except csv.Error:
+        # Fall back to extension-based detection
+        if file_ext == ".tsv":
+            delimiter = "\t"
+            print(f"[WARNING]  Sniffer failed, using tab delimiter for .tsv file")
+        else:
+            delimiter = ","
+            print(f"[WARNING]  Sniffer failed, using comma delimiter for .csv file")
+        logger.warning(f"csv.Sniffer failed for {file_path}, using default delimiter {repr(delimiter)}")
+
+    # Load into DataFrame using pandas
+    df = None
+    try:
+        from io import StringIO
+        df = pd.read_csv(
+            StringIO(content),
+            sep=delimiter,
+            header=None,
+            dtype=str,
+            keep_default_na=False,
+        )
+    except Exception as e:
+        print(f"[ERROR] CSV/TSV parse failed: {type(e).__name__}: {e}")
+        print(f"[INFO]  Tip: Check that the file is a valid CSV/TSV and not corrupted")
+        logger.error(f"CSV/TSV parse failed for {file_path}: {type(e).__name__}: {e}")
+        return None
+
+    # Validate loaded data
+    if df is None or df.empty:
+        print("[WARNING]  File loaded but contains no data")
+        logger.warning(f"File loaded but empty: {file_path}")
+        return None
+
+    if df.shape[0] < 2:
+        print("[WARNING]  File must have at least 2 rows (header + data)")
+        logger.warning(f"File has fewer than 2 rows: {file_path}")
+        return None
+
+    if df.shape[1] < 3:
+        print("[WARNING]  File must have at least 3 columns")
+        logger.warning(f"File has fewer than 3 columns: {file_path}")
+        return None
+
+    # Restore proper NaN handling (we used keep_default_na=False to preserve encoding)
+    df = df.replace("", pd.NA)
+
+    # Detect header row
+    header_idx = _detect_header_row(df)
+
+    # Set header and remove rows above it
+    header_values = df.iloc[header_idx]
+    df = df.iloc[header_idx + 1 :].reset_index(drop=True)
+    df.columns = header_values.values
+
+    # Drop completely empty rows
+    df = df.dropna(how="all").reset_index(drop=True)
+
+    print(
+        f"[OK] Loaded {len(df)} rows, {len(df.columns)} columns "
+        f"from {Path(file_path).name} (encoding: {encoding_used})"
+    )
+    logger.info(
+        f"Successfully loaded {len(df)} rows, {len(df.columns)} columns "
+        f"from {file_path} (encoding: {encoding_used}, delimiter: {repr(delimiter)})"
+    )
+    return df
 
 
 def normalize_columns(df):
