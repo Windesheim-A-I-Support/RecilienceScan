@@ -93,9 +93,10 @@ test_reports/
 
 /.luarc.json
 nul
+<<<<<<< HEAD
+# Auto Claude (local-only, never commit)
 .auto-claude/
 .auto-claude-security.json
 .claude_settings.json
-.auto-claude/
-.auto-claude-security.json
-.claude_settings.json
+
+>>>>>>> auto-claude/014-p2-normalization
