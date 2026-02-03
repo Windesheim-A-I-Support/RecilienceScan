@@ -610,7 +610,43 @@ def evolve_schema(master_df, incoming_df):
     Backfills existing rows with empty values for new columns.
     Returns (updated_master_df, list_of_added_columns).
     """
-    raise NotImplementedError("evolve_schema not yet implemented")
+    # Handle None/empty inputs gracefully
+    if master_df is None or master_df.empty:
+        if incoming_df is None or incoming_df.empty:
+            logger.info("evolve_schema: both DataFrames empty, no schema changes")
+            return pd.DataFrame(), []
+        logger.info(
+            f"evolve_schema: no existing master, adopting incoming schema "
+            f"({len(incoming_df.columns)} columns)"
+        )
+        return master_df if master_df is not None else pd.DataFrame(), list(incoming_df.columns)
+
+    if incoming_df is None or incoming_df.empty:
+        logger.info("evolve_schema: no incoming data, schema unchanged")
+        return master_df.copy(), []
+
+    # Identify new columns in incoming that are not in master
+    master_cols = set(master_df.columns)
+    incoming_cols = set(incoming_df.columns)
+    new_cols = sorted(incoming_cols - master_cols)
+
+    if not new_cols:
+        logger.info("evolve_schema: no new columns to add")
+        return master_df.copy(), []
+
+    # Work on a copy to avoid mutating the original
+    result = master_df.copy()
+
+    # Add each new column to master with pd.NA for existing rows
+    for col in new_cols:
+        result[col] = pd.NA
+        logger.info(f"Schema evolution: added new column '{col}'")
+
+    logger.info(
+        f"evolve_schema: added {len(new_cols)} new column(s): {new_cols}"
+    )
+
+    return result, new_cols
 
 
 def log_ingestion(stats):
