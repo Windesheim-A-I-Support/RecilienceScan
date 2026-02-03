@@ -51,7 +51,48 @@ def detect_format(file_path):
     Detect file format by extension and content inspection.
     Returns format string: 'xlsx', 'xls', 'csv', 'tsv', or None.
     """
-    raise NotImplementedError("detect_format not yet implemented")
+    file_path = str(file_path)
+    ext = Path(file_path).suffix.lower()
+
+    if ext not in SUPPORTED_EXTENSIONS:
+        print(f"[WARNING]  Unsupported file extension: {ext}")
+        print(f"[INFO]  Supported formats: {', '.join(sorted(SUPPORTED_EXTENSIONS))}")
+        logger.warning(f"Unsupported file extension: {ext} for file {file_path}")
+        return None
+
+    if not os.path.exists(file_path):
+        print(f"[ERROR] File not found: {file_path}")
+        logger.error(f"File not found: {file_path}")
+        return None
+
+    # Map extension to format string
+    ext_map = {".xlsx": "xlsx", ".xls": "xls", ".csv": "csv", ".tsv": "tsv"}
+    fmt = ext_map.get(ext)
+
+    # For CSV files, inspect content to detect if it's actually TSV
+    if fmt == "csv":
+        try:
+            with open(file_path, "rb") as f:
+                sample = f.read(8192)
+            # Decode sample for sniffing
+            try:
+                text = sample.decode("utf-8")
+            except UnicodeDecodeError:
+                text = sample.decode("latin1")
+            try:
+                dialect = csv.Sniffer().sniff(text)
+                if dialect.delimiter == "\t":
+                    fmt = "tsv"
+                    print(f"[INFO]  File has .csv extension but tab-delimited — treating as TSV")
+                    logger.info(f"File {file_path} has .csv extension but detected as TSV")
+            except csv.Error:
+                pass  # Keep original csv format
+        except Exception as e:
+            logger.warning(f"Content inspection failed for {file_path}: {e}")
+
+    print(f"[INFO]  Detected format: {fmt} for {Path(file_path).name}")
+    logger.info(f"Detected format: {fmt} for {file_path}")
+    return fmt
 
 
 def read_with_encoding_cascade(file_path):
@@ -63,12 +104,159 @@ def read_with_encoding_cascade(file_path):
     raise NotImplementedError("read_with_encoding_cascade not yet implemented")
 
 
+def _detect_header_row(df, max_rows_to_check=10):
+    """
+    Intelligently detect which row contains the actual header.
+    Looks for rows with column-like content using keyword matching.
+    Returns the index of the header row.
+    """
+    for idx in range(min(max_rows_to_check, len(df))):
+        try:
+            row_values = df.iloc[idx]
+
+            # Convert to string safely, handling NaN and other types
+            row_strings = []
+            for val in row_values:
+                if pd.isna(val):
+                    row_strings.append("")
+                else:
+                    row_strings.append(str(val).lower())
+
+            # Check if this row contains header-like keywords
+            keyword_matches = sum(
+                any(keyword in row_str for keyword in HEADER_KEYWORDS)
+                for row_str in row_strings
+            )
+
+            # Additional checks for header-like rows
+            text_count = sum(
+                1
+                for s in row_strings
+                if s and not s.replace(".", "").replace("-", "").isdigit()
+            )
+            non_empty = sum(1 for s in row_strings if s)
+
+            if keyword_matches >= 3:
+                print(f"[OK] Detected header at row {idx + 1} (index {idx})")
+                logger.info(
+                    f"Header detected at row {idx + 1} with {keyword_matches} keyword matches"
+                )
+                return idx
+            elif (
+                text_count > len(row_strings) * 0.7
+                and non_empty > len(row_strings) * 0.5
+            ):
+                print(f"[OK] Detected likely header at row {idx + 1} (index {idx})")
+                logger.info(
+                    f"Likely header at row {idx + 1}: {text_count} text cells, "
+                    f"{non_empty}/{len(row_strings)} non-empty"
+                )
+                return idx
+        except Exception as e:
+            logger.warning(f"Error checking row {idx} for header: {e}")
+            continue
+
+    print("[WARNING]  Using default header row (index 0)")
+    logger.warning("Could not detect header row, defaulting to index 0")
+    return 0
+
+
 def load_xlsx(file_path):
     """
     Load an Excel (.xlsx/.xls) file with header detection, file lock check,
     and validation. Returns DataFrame with proper headers or None on failure.
     """
-    raise NotImplementedError("load_xlsx not yet implemented")
+    file_path = str(file_path)
+    file_ext = Path(file_path).suffix.lower()
+    print(f"\n[LOAD] Loading Excel file: {file_path}")
+    logger.info(f"Loading Excel file: {file_path}")
+
+    # Check if file exists
+    if not os.path.exists(file_path):
+        print(f"[ERROR] File not found: {file_path}")
+        logger.error(f"File not found: {file_path}")
+        return None
+
+    # Check if file is accessible (not locked by another program)
+    try:
+        with open(file_path, "rb") as f:
+            f.read(1)
+    except PermissionError:
+        print(f"[ERROR] File is locked — please close it in Excel or other programs")
+        logger.error(f"File is locked by another process: {file_path}")
+        return None
+    except Exception as e:
+        print(f"[ERROR] Cannot access file: {e}")
+        logger.error(f"Cannot access file {file_path}: {e}")
+        return None
+
+    # Load with appropriate engine
+    df = None
+    try:
+        if file_ext == ".xlsx":
+            try:
+                df = pd.read_excel(file_path, engine="openpyxl", header=None)
+                print(f"   [OK] Loaded with openpyxl engine")
+            except ImportError:
+                print(f"   [WARNING]  openpyxl not installed, trying default engine...")
+                logger.warning("openpyxl not available, falling back to default engine")
+                df = pd.read_excel(file_path, header=None)
+                print(f"   [OK] Loaded with default engine")
+        else:
+            try:
+                df = pd.read_excel(file_path, engine="xlrd", header=None)
+                print(f"   [OK] Loaded with xlrd engine")
+            except ImportError:
+                print(f"   [WARNING]  xlrd not installed, trying default engine...")
+                logger.warning("xlrd not available, falling back to default engine")
+                df = pd.read_excel(file_path, header=None)
+                print(f"   [OK] Loaded with default engine")
+    except FileNotFoundError:
+        print(f"[ERROR] File not found: {file_path}")
+        logger.error(f"File not found during load: {file_path}")
+        return None
+    except PermissionError:
+        print(f"[ERROR] Permission denied — file may be locked by another program")
+        logger.error(f"Permission denied during load: {file_path}")
+        return None
+    except Exception as e:
+        print(f"[ERROR] Excel load failed: {type(e).__name__}: {e}")
+        print(f"[INFO]  Tip: Make sure the file is a valid Excel file and not corrupted")
+        logger.error(f"Excel load failed for {file_path}: {type(e).__name__}: {e}")
+        return None
+
+    # Validate loaded data
+    if df is None or df.empty:
+        print("[ERROR] File loaded but contains no data")
+        logger.error(f"File loaded but empty: {file_path}")
+        return None
+
+    if df.shape[0] < 2:
+        print("[WARNING]  File must have at least 2 rows (header + data)")
+        logger.warning(f"File has fewer than 2 rows: {file_path}")
+        return None
+
+    if df.shape[1] < 3:
+        print("[WARNING]  File must have at least 3 columns")
+        logger.warning(f"File has fewer than 3 columns: {file_path}")
+        return None
+
+    # Detect header row
+    header_idx = _detect_header_row(df)
+
+    # Set header and remove rows above it
+    header_values = df.iloc[header_idx]
+    df = df.iloc[header_idx + 1 :].reset_index(drop=True)
+    df.columns = header_values.values
+
+    # Drop completely empty rows
+    df = df.dropna(how="all").reset_index(drop=True)
+
+    print(f"[OK] Loaded {len(df)} rows, {len(df.columns)} columns from {Path(file_path).name}")
+    logger.info(
+        f"Successfully loaded {len(df)} rows, {len(df.columns)} columns from {file_path}"
+    )
+    return df
 
 
 def load_csv_tsv(file_path):
