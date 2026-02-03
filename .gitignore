@@ -93,3 +93,6 @@ test_reports/
 
 /.luarc.json
 nul
+
+# Auto Claude data directory
+.auto-claude/

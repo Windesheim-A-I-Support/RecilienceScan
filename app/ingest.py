@@ -549,7 +549,11 @@ def safe_upsert_merge(existing_df, incoming_df, primary_key=PRIMARY_KEY):
         return result
 
     # Work on copies to avoid mutating originals
+    # Convert all columns to object dtype to prevent type mismatch errors
+    # when assigning values from incoming data with different types
     merged = existing_df.copy()
+    for col in merged.columns:
+        merged[col] = merged[col].astype(object)
 
     # Build index of existing primary key values for fast lookup
     existing_keys = set(merged[primary_key].dropna().astype(str))
