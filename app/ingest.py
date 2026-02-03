@@ -499,9 +499,109 @@ def safe_upsert_merge(existing_df, incoming_df, primary_key=PRIMARY_KEY):
     Merge incoming data into existing using primary key matching.
     NEVER overwrites non-empty values. Only fills empty fields.
     New rows are appended. No rows are ever deleted.
-    Returns (merged_df, stats_dict).
+    Returns merged DataFrame.
     """
-    raise NotImplementedError("safe_upsert_merge not yet implemented")
+    stats = {"rows_added": 0, "rows_updated": 0, "rows_unchanged": 0}
+
+    # Handle None/empty inputs gracefully
+    if existing_df is None or existing_df.empty:
+        if incoming_df is None or incoming_df.empty:
+            logger.info("safe_upsert_merge: both DataFrames empty, returning empty")
+            return pd.DataFrame()
+        logger.info(
+            f"safe_upsert_merge: no existing data, returning incoming ({len(incoming_df)} rows)"
+        )
+        stats["rows_added"] = len(incoming_df)
+        return incoming_df.copy()
+
+    if incoming_df is None or incoming_df.empty:
+        logger.info("safe_upsert_merge: no incoming data, returning existing unchanged")
+        return existing_df.copy()
+
+    # Drop all-NaN rows from incoming before merge
+    incoming_df = incoming_df.dropna(how="all").reset_index(drop=True)
+
+    # Fall back to append-only if primary key missing from either DataFrame
+    if primary_key not in existing_df.columns or primary_key not in incoming_df.columns:
+        print(
+            f"[WARNING]  Primary key '{primary_key}' not found in both DataFrames "
+            f"— falling back to append-only mode"
+        )
+        logger.warning(
+            f"Primary key '{primary_key}' missing, using append-only merge. "
+            f"Existing cols: {list(existing_df.columns)}, "
+            f"Incoming cols: {list(incoming_df.columns)}"
+        )
+        result = pd.concat([existing_df, incoming_df], ignore_index=True)
+        stats["rows_added"] = len(incoming_df)
+        return result
+
+    # Work on copies to avoid mutating originals
+    merged = existing_df.copy()
+
+    # Build index of existing primary key values for fast lookup
+    existing_keys = set(merged[primary_key].dropna().astype(str))
+
+    # Separate incoming rows into matched (update) and unmatched (new)
+    new_rows = []
+    for _, incoming_row in incoming_df.iterrows():
+        key_val = incoming_row.get(primary_key)
+
+        # Skip rows with empty primary key
+        if pd.isna(key_val) or str(key_val).strip() == "":
+            new_rows.append(incoming_row)
+            continue
+
+        key_str = str(key_val)
+
+        if key_str in existing_keys:
+            # Matched row: fill only empty fields in existing with non-empty incoming values
+            mask = merged[primary_key].astype(str) == key_str
+            row_updated = False
+
+            for col in incoming_row.index:
+                if col == primary_key:
+                    continue
+                if col not in merged.columns:
+                    continue
+
+                incoming_val = incoming_row[col]
+                # Skip if incoming value is empty/NaN
+                if pd.isna(incoming_val) or str(incoming_val).strip() == "":
+                    continue
+
+                # Only fill where existing value is empty/NaN
+                existing_vals = merged.loc[mask, col]
+                for idx in existing_vals.index:
+                    existing_val = merged.at[idx, col]
+                    if pd.isna(existing_val) or str(existing_val).strip() == "":
+                        merged.at[idx, col] = incoming_val
+                        row_updated = True
+
+            if row_updated:
+                stats["rows_updated"] += 1
+            else:
+                stats["rows_unchanged"] += 1
+        else:
+            # New row: append
+            new_rows.append(incoming_row)
+
+    # Append new rows
+    if new_rows:
+        new_df = pd.DataFrame(new_rows)
+        merged = pd.concat([merged, new_df], ignore_index=True)
+        stats["rows_added"] = len(new_rows)
+
+    logger.info(
+        f"safe_upsert_merge: {stats['rows_added']} added, "
+        f"{stats['rows_updated']} updated, {stats['rows_unchanged']} unchanged"
+    )
+    print(
+        f"[DATA] Upsert merge: {stats['rows_added']} new rows, "
+        f"{stats['rows_updated']} updated, {stats['rows_unchanged']} unchanged"
+    )
+
+    return merged
 
 
 def evolve_schema(master_df, incoming_df):
