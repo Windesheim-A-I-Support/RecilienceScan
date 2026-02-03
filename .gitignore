@@ -100,3 +100,9 @@ nul
 .claude_settings.json
 
 >>>>>>> auto-claude/014-p2-normalization
+
+# Auto Claude generated files
+.auto-claude-status
+.worktrees/
+.security-key
+logs/security/
