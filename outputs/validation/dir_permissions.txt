@@ -1,0 +1,21 @@
+=== Directory Permissions Check ===
+
+total 24
+drwxr-xr-x 1 root root    94 Feb  3 17:56 .
+drwxr-xr-x 1 root root  4096 Feb  3 17:51 ..
+-rw-r--r-- 1 root root  3868 Feb  3 15:08 cleaning_report.txt
+-rw-r--r-- 1 root root 14138 Feb  3 15:08 cleaning_validation_log.json
+
+total 12
+drwxr-xr-x 1 root root  184 Feb  3 17:56 .
+drwxr-xr-x 1 root root 4096 Feb  3 17:51 ..
+drwxr-xr-x 1 root root  836 Feb  3 15:08 2025-10-17_radar_chart_fix
+drwxr-xr-x 1 root root  364 Feb  3 15:08 2025-10-21_email_tracking_integration
+-rw-r--r-- 1 root root  466 Feb  3 17:51 container_startup.log
+-rw-r--r-- 1 root root 1162 Feb  3 15:08 INDEX.md
+
+=== Write Test ===
+-rw-r--r-- 1 root root 0 Feb  3 17:56 /data/.test
+-rw-r--r-- 1 root root 0 Feb  3 17:56 /logs/.test
+
+Result: OK - Both directories exist and are writable

@@ -1,0 +1,7 @@
+company_name,email_address,score,note,status
+Acme Corp,contact@acmecorp.com,85,Existing customer,active
+Beta Industries,info@betaindustries.com,72,,active
+Gamma Solutions,,91,High priority,active
+Delta Enterprises,support@deltaenterprises.com,,New lead,pending
+Epsilon Tech,sales@epsilontech.com,79,Follow up needed,active
+Zeta Systems,,,,inactive
