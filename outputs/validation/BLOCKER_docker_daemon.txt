@@ -1,0 +1,48 @@
+================================================================
+BLOCKER: Docker Daemon Not Running
+================================================================
+
+Subtask: subtask-2-1 - Verify Docker daemon availability
+Status: BLOCKED
+Date: 2026-02-03
+
+ISSUE:
+-------
+Docker is installed (version 29.2.1) but the Docker daemon is not
+running or not responding to commands.
+
+SYMPTOMS:
+---------
+- Command hangs/timeouts: docker info
+- Command hangs/timeouts: docker ps
+- Verification fails: docker info > /dev/null 2>&1 && echo 'OK' || echo 'FAIL'
+
+IMPACT:
+-------
+Cannot proceed with:
+✗ Docker image build (subtask-2-2)
+✗ Container startup (subtask-2-3)
+✗ Runtime environment validation (subtasks 2-4, 2-5, 2-6)
+✗ All data ingestion tests (Phase 3)
+✗ Merge validation tests (Phase 4)
+✗ Persistence tests (Phase 5)
+✗ Validation report generation (Phase 6)
+
+RESOLUTION STEPS:
+-----------------
+1. Start the Docker daemon:
+   - Linux: sudo systemctl start docker
+   - Mac/Windows: Start Docker Desktop application
+
+2. Verify Docker is running:
+   docker info
+
+3. Ensure current user has Docker permissions:
+   - Linux: sudo usermod -aG docker $USER (then logout/login)
+   - Mac/Windows: Check Docker Desktop settings
+
+4. Once resolved, resume from subtask-2-1:
+   source auto-claude/.venv/bin/activate && \
+   python auto-claude/run.py --spec 004 --parallel 1
+
+================================================================
