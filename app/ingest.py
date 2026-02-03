@@ -912,7 +912,135 @@ def ingest_directory(dir_path=DATA_DIR, pattern="*"):
     Ingest all supported files matching pattern in a directory.
     Calls ingest_file() for each. Returns aggregated stats dict.
     """
-    raise NotImplementedError("ingest_directory not yet implemented")
+    dir_path = str(dir_path)
+
+    print(f"\n{'=' * 70}")
+    print(f"[SEARCH] Scanning directory: {dir_path} (pattern: {pattern})")
+    print(f"{'=' * 70}")
+    logger.info(f"Starting directory ingestion: {dir_path} (pattern: {pattern})")
+
+    # Validate directory exists
+    if not os.path.isdir(dir_path):
+        msg = f"Directory not found: {dir_path}"
+        print(f"[ERROR] {msg}")
+        logger.error(msg)
+        return {
+            "total_files": 0,
+            "successful": 0,
+            "failed": 0,
+            "total_rows_added": 0,
+            "total_rows_updated": 0,
+            "total_columns_added": [],
+            "errors": [msg],
+            "file_results": [],
+        }
+
+    # Find all matching files
+    search_path = os.path.join(dir_path, pattern)
+    all_files = glob.glob(search_path)
+
+    # Filter to supported extensions only
+    supported_files = [
+        f for f in all_files
+        if Path(f).suffix.lower() in SUPPORTED_EXTENSIONS
+        and os.path.isfile(f)
+    ]
+
+    # Exclude output files from ingestion
+    exclude_names = {"cleaned_master.csv", "master_database.csv"}
+    supported_files = [
+        f for f in supported_files
+        if Path(f).name not in exclude_names
+    ]
+
+    # Sort by modification time (most recent first) for consistent ordering
+    supported_files.sort(key=os.path.getmtime, reverse=True)
+
+    if not supported_files:
+        msg = f"No supported files found in {dir_path} (pattern: {pattern})"
+        print(f"[WARNING]  {msg}")
+        logger.warning(msg)
+        return {
+            "total_files": 0,
+            "successful": 0,
+            "failed": 0,
+            "total_rows_added": 0,
+            "total_rows_updated": 0,
+            "total_columns_added": [],
+            "errors": [],
+            "file_results": [],
+        }
+
+    print(f"[OK] Found {len(supported_files)} supported file(s)")
+    for f in supported_files:
+        print(f"   - {Path(f).name}")
+    logger.info(f"Found {len(supported_files)} supported files in {dir_path}")
+
+    # Aggregate stats
+    aggregate = {
+        "total_files": len(supported_files),
+        "successful": 0,
+        "failed": 0,
+        "total_rows_added": 0,
+        "total_rows_updated": 0,
+        "total_columns_added": [],
+        "errors": [],
+        "file_results": [],
+    }
+
+    # Process each file
+    for i, file_path in enumerate(supported_files, 1):
+        print(f"\n[INFO]  Processing file {i}/{len(supported_files)}: {Path(file_path).name}")
+        logger.info(f"Processing file {i}/{len(supported_files)}: {file_path}")
+
+        try:
+            result = ingest_file(file_path)
+            aggregate["file_results"].append(result)
+
+            if result.get("status") == "success":
+                aggregate["successful"] += 1
+                aggregate["total_rows_added"] += result.get("rows_added", 0)
+                aggregate["total_rows_updated"] += result.get("rows_updated", 0)
+                new_cols = result.get("columns_added", [])
+                if new_cols:
+                    aggregate["total_columns_added"].extend(new_cols)
+            else:
+                aggregate["failed"] += 1
+                error = result.get("error", "Unknown error")
+                aggregate["errors"].append(f"{Path(file_path).name}: {error}")
+        except Exception as e:
+            aggregate["failed"] += 1
+            msg = f"{Path(file_path).name}: {type(e).__name__}: {e}"
+            aggregate["errors"].append(msg)
+            logger.error(f"Unexpected error ingesting {file_path}: {e}")
+            print(f"[ERROR] Unexpected error: {e}")
+
+    # Deduplicate columns_added list
+    aggregate["total_columns_added"] = sorted(set(aggregate["total_columns_added"]))
+
+    # Print summary
+    print(f"\n{'=' * 70}")
+    print(f"[DATA] Directory ingestion summary:")
+    print(f"   Files processed: {aggregate['total_files']}")
+    print(f"   Successful: {aggregate['successful']}")
+    print(f"   Failed: {aggregate['failed']}")
+    print(f"   Total rows added: {aggregate['total_rows_added']}")
+    print(f"   Total rows updated: {aggregate['total_rows_updated']}")
+    if aggregate["total_columns_added"]:
+        print(f"   New columns: {len(aggregate['total_columns_added'])}")
+    if aggregate["errors"]:
+        print(f"   Errors:")
+        for err in aggregate["errors"]:
+            print(f"      - {err}")
+    print(f"{'=' * 70}")
+
+    logger.info(
+        f"Directory ingestion complete: {aggregate['successful']}/{aggregate['total_files']} "
+        f"succeeded, {aggregate['total_rows_added']} rows added, "
+        f"{len(aggregate['total_columns_added'])} new columns"
+    )
+
+    return aggregate
 
 
 if __name__ == "__main__":
