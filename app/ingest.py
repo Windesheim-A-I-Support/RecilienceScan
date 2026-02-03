@@ -511,7 +511,8 @@ def safe_upsert_merge(existing_df, incoming_df, primary_key=PRIMARY_KEY):
     Merge incoming data into existing using primary key matching.
     NEVER overwrites non-empty values. Only fills empty fields.
     New rows are appended. No rows are ever deleted.
-    Returns merged DataFrame.
+    Returns tuple of (merged_DataFrame, merge_stats_dict) where merge_stats_dict
+    contains rows_added, rows_updated, rows_unchanged.
     """
     stats = {"rows_added": 0, "rows_updated": 0, "rows_unchanged": 0}
 
@@ -519,16 +520,16 @@ def safe_upsert_merge(existing_df, incoming_df, primary_key=PRIMARY_KEY):
     if existing_df is None or existing_df.empty:
         if incoming_df is None or incoming_df.empty:
             logger.info("safe_upsert_merge: both DataFrames empty, returning empty")
-            return pd.DataFrame()
+            return pd.DataFrame(), stats
         logger.info(
             f"safe_upsert_merge: no existing data, returning incoming ({len(incoming_df)} rows)"
         )
         stats["rows_added"] = len(incoming_df)
-        return incoming_df.copy()
+        return incoming_df.copy(), stats
 
     if incoming_df is None or incoming_df.empty:
         logger.info("safe_upsert_merge: no incoming data, returning existing unchanged")
-        return existing_df.copy()
+        return existing_df.copy(), stats
 
     # Drop all-NaN rows from incoming before merge
     incoming_df = incoming_df.dropna(how="all").reset_index(drop=True)
@@ -546,7 +547,7 @@ def safe_upsert_merge(existing_df, incoming_df, primary_key=PRIMARY_KEY):
         )
         result = pd.concat([existing_df, incoming_df], ignore_index=True)
         stats["rows_added"] = len(incoming_df)
-        return result
+        return result, stats
 
     # Work on copies to avoid mutating originals
     # Convert all columns to object dtype to prevent type mismatch errors
@@ -617,7 +618,7 @@ def safe_upsert_merge(existing_df, incoming_df, primary_key=PRIMARY_KEY):
         f"{stats['rows_updated']} updated, {stats['rows_unchanged']} unchanged"
     )
 
-    return merged
+    return merged, stats
 
 
 def evolve_schema(master_df, incoming_df):
@@ -841,7 +842,7 @@ def ingest_file(file_path):
             existing_cleaned = None
 
     try:
-        merged_df = safe_upsert_merge(existing_cleaned, df, PRIMARY_KEY)
+        merged_df, merge_stats = safe_upsert_merge(existing_cleaned, df, PRIMARY_KEY)
     except Exception as e:
         msg = f"Upsert merge failed: {type(e).__name__}: {e}"
         print(f"[ERROR] {msg}")
@@ -850,14 +851,10 @@ def ingest_file(file_path):
         log_ingestion(stats)
         return stats
 
-    # Calculate merge stats
-    if existing_cleaned is not None and not existing_cleaned.empty:
-        stats["rows_added"] = max(0, len(merged_df) - len(existing_cleaned))
-        # rows_updated is approximate — count rows that existed before
-        stats["rows_updated"] = min(len(existing_cleaned), len(df))
-    else:
-        stats["rows_added"] = len(merged_df)
-        stats["rows_updated"] = 0
+    # Use actual merge stats from safe_upsert_merge()
+    stats["rows_added"] = merge_stats["rows_added"]
+    stats["rows_updated"] = merge_stats["rows_updated"]
+    stats["rows_unchanged"] = merge_stats["rows_unchanged"]
 
     stats["total_rows"] = len(merged_df)
     stats["total_columns"] = len(merged_df.columns)
@@ -869,7 +866,7 @@ def ingest_file(file_path):
         # Save master_database.csv (schema superset)
         if master_df is not None and not master_df.empty:
             # Merge master schema with merged data
-            master_merged = safe_upsert_merge(master_df, df, PRIMARY_KEY)
+            master_merged, _ = safe_upsert_merge(master_df, df, PRIMARY_KEY)
             # Ensure master has all columns from merged_df too
             for col in merged_df.columns:
                 if col not in master_merged.columns:
