@@ -5,6 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ResilienceScan Control Panel{% endblock %}</title>
     <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        /* Workflow styles */
+        #workflow {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+
+        .workflow-steps {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .workflow-step {
+            flex: 1 1 200px;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            transition: transform 0.3s ease;
+        }
+
+        .workflow-step:hover {
+            transform: translateY(-2px);
+        }
+
+        .workflow-step h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.2rem;
+        }
+
+        .workflow-step p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .workflow-steps {
+                flex-direction: column;
+            }
+
+            .workflow-step {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
