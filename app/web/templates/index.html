@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section id="upload">
+    <h2>Upload Data File</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="file">Select file (xlsx, csv, tsv):</label>
+        <input type="file" id="file" name="file" accept=".xlsx,.xls,.csv,.tsv" required>
+        <button type="submit">Upload</button>
+    </form>
+</section>
+
+<section id="actions">
+    <h2>Pipeline Actions</h2>
+    <button onclick="runIngestion()">Run Ingestion (P2)</button>
+    <button onclick="runRendering()">Render Report (P3)</button>
+</section>
+
+<section id="recent-runs">
+    <h2>Recent Runs</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Run ID</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if runs %}
+                {% for run in runs %}
+                <tr>
+                    <td>{{ run.run_id[:8] }}...</td>
+                    <td>{{ run.type }}</td>
+                    <td class="status-{{ run.status }}">{{ run.status }}</td>
+                    <td>{{ run.created_at }}</td>
+                    <td>
+                        {% if run.status == 'failed' %}
+                        <a href="/logs/{{ run.run_id }}">View Logs</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="5">No runs yet</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</section>
+
+<script>
+async function runIngestion() {
+    try {
+        var response = await fetch('/run/ingest', { method: 'POST' });
+        var result = await response.json();
+        alert('Ingestion started: ' + result.run_id);
+        location.reload();
+    } catch (e) {
+        alert('Error: ' + e);
+    }
+}
+
+async function runRendering() {
+    var company = prompt('Enter company name:');
+    if (!company) return;
+
+    try {
+        var response = await fetch('/run/render', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ company_name: company })
+        });
+        var result = await response.json();
+        alert('Rendering started: ' + result.run_id);
+        location.reload();
+    } catch (e) {
+        alert('Error: ' + e);
+    }
+}
+</script>
+{% endblock %}
