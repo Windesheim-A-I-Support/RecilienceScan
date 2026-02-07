@@ -18,6 +18,7 @@ scipy>=1.10.0
 # Windows-specific (Outlook integration)
 pywin32>=305 ; platform_system=="Windows"
 
+
 # HTTP requests (for web features if used)
 requests>=2.31.0
 
