@@ -1,0 +1,52 @@
+{
+  "files_to_modify": {
+    "web": [
+      "app/web/templates/base.html",
+      "app/web/templates/index.html",
+      "app/web/routes/home.py",
+      "app/web/routes/runs.py",
+      "app/web/routes/upload.py",
+      "app/web/file_handler.py",
+      "app/web/run_tracker.py",
+      "app/web/main.py"
+    ]
+  },
+  "files_to_reference": [
+    "app/web/routes/pipeline.py",
+    "app/web/routes/reports.py",
+    "app/web/routes/logs.py",
+    "app/web/pipeline_orchestrator.py",
+    "app/web/file_handler.py",
+    "app/web/run_tracker.py",
+    "tests/web/test_upload.py",
+    "tests/web/test_pipeline_integration.py",
+    "tests/web/test_run_tracking.py"
+  ],
+  "patterns": {
+    "router_pattern": "All routes use APIRouter with tags and proper HTTP methods",
+    "validation_pattern": "File validation uses extension whitelist + size limits + sanitization",
+    "run_tracking_pattern": "UUID-based metadata with JSON storage in /logs/runs/",
+    "template_pattern": "Jinja2 templates with base.html inheritance and blocks",
+    "error_handling_pattern": "HTTPException for API errors, structured logging",
+    "docker_pattern": "Multi-runtime container with health checks and proper directory structure"
+  },
+  "existing_implementations": {
+    "description": "Fully functional P4 web interface with FastAPI backend, file upload validation, run tracking, and pipeline orchestration",
+    "relevant_files": [
+      "app/web/main.py",
+      "app/web/routes/home.py",
+      "app/web/routes/upload.py",
+      "app/web/file_handler.py",
+      "app/web/run_tracker.py",
+      "app/web/pipeline_orchestrator.py",
+      "app/web/templates/index.html",
+      "Dockerfile",
+      "docker-compose.yml"
+    ],
+    "security_features": {
+      "file_validation": "Extension whitelist (.xlsx, .xls, .csv, .tsv), 50MB size limit, filename sanitization",
+      "path_safety": "Prevents path traversal, auto-renames duplicates, ensures valid extensions",
+      "run_tracking": "UUID-based IDs, structured metadata, proper status transitions"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "project_type": "monorepo",
+  "services": {
+    "web": {
+      "path": "./app/web",
+      "tech_stack": ["python", "fastapi", "jinja2", "uvicorn"],
+      "port": 8080,
+      "dev_command": "uvicorn app.web.main:app --host 0.0.0.0 --port 8080",
+      "test_command": "pytest tests/web/"
+    },
+    "backend": {
+      "path": ".",
+      "tech_stack": ["python"],
+      "port": null,
+      "dev_command": null,
+      "test_command": "pytest"
+    }
+  },
+  "infrastructure": {
+    "docker": true,
+    "database": "postgresql",
+    "data_directories": {
+      "incoming": "/data/incoming",
+      "reports": "/reports",
+      "logs": "/logs"
+    }
+  },
+  "conventions": {
+    "linter": "ruff",
+    "formatter": "black",
+    "testing": "pytest",
+    "async_testing": "pytest-asyncio",
+    "routes": "APIRouter modular organization",
+    "templates": "Jinja2 with base template inheritance"
+  }
+}
