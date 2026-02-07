@@ -6,12 +6,13 @@ This document maps the complete UI flow for the ResilienceScan web interface, sh
 ## Application Entry Points
 
 ### **1. Landing Page** (`GET /`)
-- **Purpose**: Main entry point showing 4 primary actions
+- **Purpose**: Main entry point with navigation and recent runs
 - **Template**: `index.html`
 - **Flow**:
   1. User accesses `http://localhost:8000/`
-  2. Homepage renders with recent runs list
-  3. Displays 4 primary action cards
+  2. Homepage renders with recent runs table
+  3. Provides navigation to runs and reports
+  4. Contains embedded forms for file upload and pipeline execution
 
 ### **2. Health Check** (`GET /health`)
 - **Purpose**: Container health verification
@@ -25,15 +26,14 @@ This document maps the complete UI flow for the ResilienceScan web interface, sh
 
 ### **Workflow A: File Upload**
 ```
-GET / → Upload File Card → GET /upload → POST /upload → Success Response
+GET / → Embedded Upload Form → POST /upload → JSON Response
 ```
 
-#### **Step 1: Upload Form** (`GET /upload`)
-- **Purpose**: Display file upload interface
-- **Template**: `upload.html`
+#### **Step 1: Upload Form** (`GET /`)
+- **Purpose**: Display file upload interface (embedded in homepage)
+- **Location**: Embedded in landing page section
 - **Form Fields**:
   - File input (accepts .xlsx, .xls, .csv, .tsv)
-  - Hidden CSRF token (if implemented)
   - Submit button
 
 #### **Step 2: File Processing** (`POST /upload`)
@@ -44,12 +44,12 @@ GET / → Upload File Card → GET /upload → POST /upload → Success Response
 
 ### **Workflow B: Pipeline Execution**
 ```
-GET / → Run Ingestion Card → POST /run/ingest → GET /runs → GET /logs/{run_id}
+GET / → Embedded Pipeline Buttons → POST /run/ingest → GET /runs → GET /logs/{run_id}
 ```
 
 #### **Step 1: Trigger Ingestion** (`POST /run/ingest`)
 - **Purpose**: Start P2 ingestion pipeline
-- **Input**: Optional filename parameter
+- **Input**: Optional filename parameter (defaults to most recent upload)
 - **Process**:
   - Validates file existence
   - Triggers ingestion pipeline
@@ -65,7 +65,7 @@ GET / → Run Ingestion Card → POST /run/ingest → GET /runs → GET /logs/{r
   - Action type (ingest/render)
   - Timestamp
   - Status (pending/running/completed/failed)
-  - Links to logs and outputs
+  - Links to logs (only for failed runs)
 
 #### **Step 3: View Run Logs** (`GET /logs/{run_id}`)
 - **Purpose**: Access detailed run logs
@@ -74,13 +74,13 @@ GET / → Run Ingestion Card → POST /run/ingest → GET /runs → GET /logs/{r
 
 ### **Workflow C: Report Generation**
 ```
-GET / → Run Report Card → POST /run/render → GET /reports → GET /reports/{filename}
+GET / → Embedded Report Button → POST /run/render → GET /reports → GET /reports/{filename}
 ```
 
 #### **Step 1: Trigger Rendering** (`POST /run/render`)
 - **Purpose**: Start P3 report generation
 - **Input**:
-  - `company_name` (required)
+  - `company_name` (required, prompted via JavaScript)
   - `person_name` (optional)
   - `output_format` (default: pdf)
 - **Process**:
@@ -111,23 +111,25 @@ GET / → Run Report Card → POST /run/render → GET /reports → GET /reports
 │                    Landing Page (/)                         │
 ├────────────────────────────────────────────────────────────────────────────┤
 │  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │                    Primary Actions                        │  │
-│  │  • Upload File  → GET /upload                             │  │
+│  │                    Embedded Forms                        │  │
+│  │  • Upload File  → POST /upload                             │  │
 │  │  • Run Ingestion→ POST /run/ingest                        │  │
 │  │  • Run Report   → POST /run/render                       │  │
-│  │  • Download Outputs→ GET /reports                        │  │
 │  └───────────────────────────────────────────────────────────────────────────┘  │
 ├────────────────────────────────────────────────────────────────────────────┤
 │  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │                    Runs Management                         │  │
+│  │                    Navigation Links                       │  │
 │  │  • View Runs    → GET /runs                              │  │
-│  │  • Run Details  → GET /runs/{run_id}                     │  │
+│  │  • List Reports → GET /reports                           │  │
+│  └──────────────────────────────────────────────────────────────────────────┘  │
+├────────────────────────────────────────────────────────────────────────────┤
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │                    Runs Management                         │  │
 │  │  • View Logs    → GET /logs/{run_id}                     │  │
 │  └──────────────────────────────────────────────────────────────────────────┘  │
 ├────────────────────────────────────────────────────────────────────────────┤
 │  ┌──────────────────────────────────────────────────────────────────┐  │
 │  │                    Reports Management                      │  │
-│  │  • List Reports → GET /reports                           │  │
 │  │  • Download     → GET /reports/{filename}                │  │
 │  └──────────────────────────────────────────────────────────────────────────┘  │
 └────────────────────────────────────────────────────────────────────────────┘
@@ -137,8 +139,7 @@ GET / → Run Report Card → POST /run/render → GET /reports → GET /reports
 
 | Endpoint | Method | Purpose | Template |
 |----------|--------|---------|----------|
-| `/` | GET | Landing page with recent runs | `index.html` |
-| `/upload` | GET | File upload form | `upload.html` |
+| `/` | GET | Landing page with recent runs and embedded forms | `index.html` |
 | `/upload` | POST | Process file upload | - |
 | `/run/ingest` | POST | Trigger ingestion pipeline | - |
 | `/run/render` | POST | Trigger rendering pipeline | - |
@@ -152,19 +153,20 @@ GET / → Run Report Card → POST /run/render → GET /reports → GET /reports
 ## Data Flow Patterns
 
 ### **File Upload Flow**
-1. User selects file via `/upload` form
+1. User selects file via embedded upload form in `/`
 2. POST to `/upload` with multipart form data
-3. Server validates file type/size
+3. Server validates file type/size (50MB max)
 4. File saved to `/uploads/` with sanitized name
 5. Returns JSON confirmation with file path
 
 ### **Pipeline Execution Flow**
-1. User triggers action via `/run/ingest` or `/run/render`
-2. Server creates UUID for run
-3. Pipeline orchestrator executes P2/P3 processes
-4. Run metadata stored in `/logs/runs/{run_id}.json`
-5. Logs written to `/logs/runs/{run_id}.log`
-6. Response includes run status and statistics
+1. User triggers action via embedded buttons in `/`
+2. POST to `/run/ingest` or `/run/render`
+3. Server creates UUID for run
+4. Pipeline orchestrator executes P2/P3 processes
+5. Run metadata stored in `/logs/runs/{run_id}.json`
+6. Logs written to `/logs/runs/{run_id}.log`
+7. Response includes run status and statistics
 
 ### **Report Access Flow**
 1. User requests report list via `/reports`
@@ -176,7 +178,7 @@ GET / → Run Report Card → POST /run/render → GET /reports → GET /reports
 ## Security Considerations
 
 ### **Input Validation**
-- File uploads: Type whitelist, size limits, filename sanitization
+- File uploads: Type whitelist (.xlsx, .xls, .csv, .tsv), size limits (50MB), filename sanitization
 - Path parameters: Prevent directory traversal
 - Query parameters: Validation and sanitization
 
@@ -198,6 +200,9 @@ GET / → Run Report Card → POST /run/render → GET /reports → GET /reports
 - Proper cleanup of temporary files
 
 ### **Database Operations**
+- JSON file storage for run metadata
+- Efficient file system operations
+- Caching for frequently accessed data
 - JSON file storage for run metadata
 - Efficient file system operations
 - Caching for frequently accessed data
