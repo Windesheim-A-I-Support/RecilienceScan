@@ -16,7 +16,7 @@ PyPDF2>=3.0.0
 scipy>=1.10.0
 
 # Windows-specific (Outlook integration)
-pywin32>=305
+pywin32>=305 ; platform_system=="Windows"
 
 # HTTP requests (for web features if used)
 requests>=2.31.0
