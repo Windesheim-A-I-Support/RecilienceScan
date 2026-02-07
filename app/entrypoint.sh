@@ -48,5 +48,5 @@ log "============================================="
 # Provides web control panel for P2/P3 pipeline orchestration
 # Runs in foreground to keep container alive
 # ---------------------------------------------------------------------------
-cd /app
+cd /
 exec uvicorn app.web.main:app --host 0.0.0.0 --port ${HEALTH_PORT}
