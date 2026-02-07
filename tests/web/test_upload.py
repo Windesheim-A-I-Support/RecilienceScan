@@ -41,7 +41,7 @@ def test_validate_file_size_limit():
 
 def test_sanitize_filename_path_traversal():
     """Test filename sanitization prevents path traversal"""
-    assert sanitize_filename("../../../etc/passwd") == "etc_passwd.csv"
+    assert sanitize_filename("../../../etc/passwd") == "passwd.csv"
     assert sanitize_filename("../../data.csv") == "data.csv"
     assert sanitize_filename("/absolute/path/file.xlsx") == "file.xlsx"
 

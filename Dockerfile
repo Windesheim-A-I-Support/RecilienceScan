@@ -65,6 +65,7 @@ RUN mkdir -p /app /data /reports /logs \
 # Copy application files
 # ---------------------------------------------------------------------------
 COPY app/ /app/
+COPY tests/ /tests/
 RUN chmod +x /app/entrypoint.sh
 
 # ---------------------------------------------------------------------------
