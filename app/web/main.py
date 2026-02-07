@@ -10,6 +10,9 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+# Import routers
+from app.web.routes import home, upload, pipeline, runs, reports, logs
+
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -29,11 +32,13 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 # Configure templates
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
-
-@app.get("/health")
-async def health_check():
-    """Container health check endpoint"""
-    return {"status": "ok", "service": "resiliencescan-web"}
+# Register routers
+app.include_router(home.router)
+app.include_router(upload.router)
+app.include_router(pipeline.router)
+app.include_router(runs.router)
+app.include_router(reports.router)
+app.include_router(logs.router)
 
 
 if __name__ == "__main__":

@@ -40,45 +40,13 @@ log "${LOCALE_INFO}"
 
 log "============================================="
 log "All runtimes verified successfully"
-log "Starting health server on port ${HEALTH_PORT}..."
+log "Starting FastAPI web server on port ${HEALTH_PORT}..."
 log "============================================="
 
 # ---------------------------------------------------------------------------
-# Minimal HTTP health server using Python http.server
-# Responds to /health with JSON status
+# Start FastAPI web server using uvicorn
+# Provides web control panel for P2/P3 pipeline orchestration
 # Runs in foreground to keep container alive
 # ---------------------------------------------------------------------------
-exec python3 -c "
-import json
-from http.server import HTTPServer, BaseHTTPRequestHandler
-
-HEALTH_RESPONSE = json.dumps({
-    'status': 'healthy',
-    'runtimes': {
-        'r': True,
-        'python': True,
-        'quarto': True
-    }
-})
-
-class HealthHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/health':
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(HEALTH_RESPONSE.encode('utf-8'))
-        else:
-            self.send_response(404)
-            self.send_header('Content-Type', 'application/json')
-            self.end_headers()
-            self.wfile.write(json.dumps({'error': 'not found'}).encode('utf-8'))
-
-    def log_message(self, format, *args):
-        # Suppress default access logging to keep stdout clean
-        pass
-
-server = HTTPServer(('0.0.0.0', ${HEALTH_PORT}), HealthHandler)
-print(f'Health server listening on port ${HEALTH_PORT}')
-server.serve_forever()
-"
+cd /app
+exec uvicorn app.web.main:app --host 0.0.0.0 --port ${HEALTH_PORT}

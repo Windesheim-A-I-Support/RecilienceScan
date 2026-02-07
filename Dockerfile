@@ -35,6 +35,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 # ---------------------------------------------------------------------------
+# Install Python dependencies
+# ---------------------------------------------------------------------------
+COPY requirements.txt /tmp/requirements.txt
+RUN pip3 install --no-cache-dir -r /tmp/requirements.txt \
+    && rm /tmp/requirements.txt
+
+# ---------------------------------------------------------------------------
 # (4) Quarto CLI from official GitHub .deb release (pinned version)
 # ---------------------------------------------------------------------------
 ARG QUARTO_VERSION=1.6.39
