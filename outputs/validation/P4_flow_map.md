@@ -1,7 +1,7 @@
 # ResilienceScan Web Interface Flow Map
 
 ## Overview
-This document maps the complete UI flow for the ResilienceScan web interface, showing how users navigate through the application to upload files, trigger pipelines, and access outputs.
+This document maps the complete UI flow for the ResilienceScan web interface, showing how users navigate through the application to upload files, trigger pipelines, and access outputs based on the actual implemented routes.
 
 ## Application Entry Points
 
@@ -107,32 +107,32 @@ GET / → Embedded Report Button → POST /run/render → GET /reports → GET /
 ## Navigation Map
 
 ```
-┌────────────────────────────────────────────────────────────────────────────┐
+┌─────────────────────────────────────────────────────────────────────┐
 │                    Landing Page (/)                         │
-├────────────────────────────────────────────────────────────────────────────┤
-│  ┌──────────────────────────────────────────────────────────────────┐  │
+├─────────────────────────────────────────────────────────────────────┤
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
 │  │                    Embedded Forms                        │  │
 │  │  • Upload File  → POST /upload                             │  │
 │  │  • Run Ingestion→ POST /run/ingest                        │  │
 │  │  • Run Report   → POST /run/render                       │  │
-│  └───────────────────────────────────────────────────────────────────────────┘  │
-├────────────────────────────────────────────────────────────────────────────┤
-│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  └─────────────────────────────────────────────────────────────────────┘  │
+├─────────────────────────────────────────────────────────────────────┤
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
 │  │                    Navigation Links                       │  │
 │  │  • View Runs    → GET /runs                              │  │
 │  │  • List Reports → GET /reports                           │  │
-│  └──────────────────────────────────────────────────────────────────────────┘  │
-├────────────────────────────────────────────────────────────────────────────┤
-│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  └─────────────────────────────────────────────────────────────────────┘  │
+├─────────────────────────────────────────────────────────────────────┤
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
 │  │                    Runs Management                         │  │
 │  │  • View Logs    → GET /logs/{run_id}                     │  │
-│  └──────────────────────────────────────────────────────────────────────────┘  │
-├────────────────────────────────────────────────────────────────────────────┤
-│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  └─────────────────────────────────────────────────────────────────────┘  │
+├─────────────────────────────────────────────────────────────────────┤
+│  ┌──────────────────────────────────────────────────────────────────────┐  │
 │  │                    Reports Management                      │  │
 │  │  • Download     → GET /reports/{filename}                │  │
-│  └──────────────────────────────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────────────┘
+│  └─────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
 ## API Endpoints Summary
@@ -144,7 +144,6 @@ GET / → Embedded Report Button → POST /run/render → GET /reports → GET /
 | `/run/ingest` | POST | Trigger ingestion pipeline | - |
 | `/run/render` | POST | Trigger rendering pipeline | - |
 | `/runs` | GET | List recent runs | - |
-| `/runs/{run_id}` | GET | Get run details | - |
 | `/logs/{run_id}` | GET | View run logs | - |
 | `/reports` | GET | List available reports | - |
 | `/reports/{filename}` | GET | Download report | - |
@@ -198,44 +197,3 @@ GET / → Embedded Report Button → POST /run/render → GET /reports → GET /
 - Streaming file uploads to prevent memory issues
 - Asynchronous file operations
 - Proper cleanup of temporary files
-
-### **Database Operations**
-- JSON file storage for run metadata
-- Efficient file system operations
-- Caching for frequently accessed data
-- JSON file storage for run metadata
-- Efficient file system operations
-- Caching for frequently accessed data
-
-## Monitoring and Observability
-
-### **Health Checks**
-- Basic health endpoint available
-- Consider adding readiness and liveness probes
-- Monitor file system and service dependencies
-
-### **Logging**
-- Structured logging with run context
-- Log aggregation for troubleshooting
-- Performance metrics collection
-
-## Future Enhancements
-
-### **Immediate Priorities**
-1. Add user authentication and authorization
-2. Implement rate limiting for API endpoints
-3. Add file cleanup for old uploads and reports
-4. Enhance error pages with user guidance
-
-### **Long-term Goals**
-1. Real-time status updates via WebSockets
-2. Advanced analytics dashboard
-3. Multi-tenant support
-4. Automated report scheduling
-
----
-
-**Note**: This flow map represents the current implementation state. Some UI components (landing page, error pages, runs list view) are implemented but may require additional polish to meet P4 requirements for a teaching-friendly interface.
-
-**Last Updated**: 2026-02-07
-**Version**: 1.0.0
