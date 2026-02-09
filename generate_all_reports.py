@@ -144,8 +144,7 @@ def generate_reports():
         import subprocess
         try:
             result = subprocess.run(
-                cmd,
-                shell=True,
+                cmd.split(),
                 capture_output=True,
                 text=True,
                 timeout=120  # 2 minute timeout per report

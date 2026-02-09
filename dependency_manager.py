@@ -347,14 +347,13 @@ class DependencyManager:
 
         if cmd_info['command']:
             try:
-                # For Linux/Mac with package manager
-                result = subprocess.run(
-                    cmd_info['command'],
-                    shell=True,
-                    capture_output=True,
-                    text=True,
-                    timeout=300
-                )
+                    # For Linux/Mac with package manager
+                    result = subprocess.run(
+                        cmd_info['command'].split(),
+                        capture_output=True,
+                        text=True,
+                        timeout=300
+                    )
 
                 return {
                     'success': result.returncode == 0,
@@ -384,11 +383,10 @@ class DependencyManager:
         """Install Quarto (platform specific)"""
         cmd_info = self.get_quarto_install_command()
 
-        if cmd_info['command']:
+                if cmd_info['command']:
             try:
                 result = subprocess.run(
-                    cmd_info['command'],
-                    shell=True,
+                    cmd_info['command'].split(),
                     capture_output=True,
                     text=True,
                     timeout=300
