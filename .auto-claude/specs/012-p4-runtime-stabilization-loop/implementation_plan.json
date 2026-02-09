@@ -1,0 +1,270 @@
+{
+  "feature": "p4_runtime_stabilization_loop",
+  "description": "Iteratively run, inspect, and fix the ResilienceScan web application until it serves the home page without backend or frontend errors.",
+  "mode": "execution",
+  "rules": [
+    "Do NOT read the entire repository.",
+    "Only read files that are directly implicated by errors.",
+    "Prefer runtime evidence over speculation.",
+    "Fix one error at a time, then re-run.",
+    "Stop when no errors remain."
+  ],
+  "loop": {
+    "enabled": true,
+    "stop_condition": "All of the following are true:\n- GET / returns HTTP 200\n- No uncaught exceptions in backend logs\n- Browser console shows no errors for the home page\n- /static/style.css either exists or is no longer referenced"
+  },
+  "phases": [
+    {
+      "id": "phase-1-run-observe",
+      "name": "Phase 1 - Run and Observe",
+      "subtasks": [
+        {
+          "id": "subtask-1-1",
+          "description": "Start the application using docker compose",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker compose up --build -d",
+            "expected": "Services started successfully"
+          },
+          "status": "completed",
+          "notes": "Application started successfully using docker compose. Container is healthy and responding to health checks.",
+          "updated_at": "2026-02-09T07:51:26.978551+00:00"
+        },
+        {
+          "id": "subtask-1-2",
+          "description": "Make initial GET request to capture backend logs",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8000/",
+            "expected": "Any HTTP status code"
+          },
+          "status": "completed",
+          "notes": "Initial GET request successful - received HTTP 500 status code. Application is running on port 8080 (not 8000 as specified). Backend logs show FastAPI server is running and responding to health checks. This 500 response will be analyzed in next phase to identify the root cause.",
+          "updated_at": "2026-02-09T07:52:34.768278+00:00"
+        },
+        {
+          "id": "subtask-1-3",
+          "description": "Capture backend logs for error analysis",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker compose logs resiliencescan",
+            "expected": "Log output captured"
+          },
+          "status": "completed",
+          "notes": "Backend logs captured successfully. Error identified: Jinja2 template syntax error with unknown 'endblock' tag on line 105 of index.html template.",
+          "updated_at": "2026-02-09T07:53:22.827819+00:00"
+        }
+      ],
+      "phase": 1
+    },
+    {
+      "id": "phase-2-diagnose-first-error",
+      "name": "Phase 2 - Diagnose the First Blocking Error",
+      "subtasks": [
+        {
+          "id": "subtask-2-1",
+          "description": "Analyze backend logs for exceptions and warnings",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "manual",
+            "instructions": "Review backend logs to identify the first blocking Python exception or warning"
+          },
+          "status": "completed",
+          "notes": "Backend logs analyzed successfully. Identified primary blocking error: Jinja2 TemplateSyntaxError at /app/web/templates/index.html line 105 due to unknown 'endblock' tag. Application is healthy (health endpoint works on port 8080). Also found FastAPIDeprecationWarning in runs.py line 33 using deprecated regex parameter.",
+          "updated_at": "2026-02-09T07:55:05.785424+00:00"
+        },
+        {
+          "id": "subtask-2-2",
+          "description": "Check browser console for frontend errors",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "manual",
+            "instructions": "Open browser console at http://localhost:8000/ and capture any JavaScript errors"
+          },
+          "status": "pending"
+        },
+        {
+          "id": "subtask-2-3",
+          "description": "Trace error to specific file and line number",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "manual",
+            "instructions": "Identify the exact file and line number where the error occurs"
+          },
+          "status": "pending"
+        }
+      ],
+      "phase": 2
+    },
+    {
+      "id": "phase-3-apply-minimal-fix",
+      "name": "Phase 3 - Apply Minimal Fix",
+      "subtasks": [
+        {
+          "id": "subtask-3-1",
+          "description": "Read the file implicated by the error",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "manual",
+            "instructions": "Read the specific file that contains the error to understand the context"
+          },
+          "status": "pending"
+        },
+        {
+          "id": "subtask-3-2",
+          "description": "Apply minimal fix to resolve the error",
+          "service": "main",
+          "files_to_modify": [
+            "[error-file-path]"
+          ],
+          "files_to_create": [],
+          "patterns_from": [
+            "app/web/routes/home.py",
+            "app/web/main.py"
+          ],
+          "verification": {
+            "type": "manual",
+            "instructions": "Apply the smallest possible fix to resolve the identified error"
+          },
+          "status": "pending"
+        }
+      ],
+      "phase": 3
+    },
+    {
+      "id": "phase-4-rerun-validate",
+      "name": "Phase 4 - Re-run and Validate",
+      "subtasks": [
+        {
+          "id": "subtask-4-1",
+          "description": "Rebuild and restart the application",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker compose up --build -d",
+            "expected": "Services started successfully"
+          },
+          "status": "pending"
+        },
+        {
+          "id": "subtask-4-2",
+          "description": "Re-test GET request and check for remaining errors",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8000/",
+            "expected": "HTTP 200 or next error status"
+          },
+          "status": "pending"
+        },
+        {
+          "id": "subtask-4-3",
+          "description": "Check backend logs for new or remaining errors",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "command",
+            "command": "docker compose logs resiliencescan",
+            "expected": "Log output showing no errors or next error"
+          },
+          "status": "pending"
+        }
+      ],
+      "phase": 4
+    },
+    {
+      "id": "phase-5-repeat-until-clean",
+      "name": "Phase 5 - Repeat Until Clean",
+      "subtasks": [
+        {
+          "id": "subtask-5-1",
+          "description": "Check if all errors are resolved",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "manual",
+            "instructions": "Verify that HTTP 200 is returned consistently, no backend exceptions, and no frontend errors"
+          },
+          "status": "pending"
+        },
+        {
+          "id": "subtask-5-2",
+          "description": "If errors remain, repeat diagnosis and fix phases",
+          "service": "main",
+          "files_to_modify": [],
+          "files_to_create": [],
+          "patterns_from": [],
+          "verification": {
+            "type": "manual",
+            "instructions": "If any errors remain, repeat phases 2-4 until clean"
+          },
+          "status": "pending"
+        }
+      ],
+      "phase": 5
+    }
+  ],
+  "constraints": [
+    "Do not suppress errors with generic try/except unless explicitly required.",
+    "Do not hide failures behind UI messages.",
+    "Do not expand scope beyond the web interface.",
+    "Do not modify files unrelated to the observed error."
+  ],
+  "acceptance_criteria": [
+    "Backend logs show no uncaught exceptions when loading the home page.",
+    "Browser console shows no errors on page load.",
+    "GET / returns HTTP 200 consistently.",
+    "The stabilization loop terminates automatically."
+  ],
+  "deliverables": [
+    "A working home page rendered without errors.",
+    "A brief summary of fixes applied during stabilization."
+  ],
+  "status": "in_progress",
+  "planStatus": "in_progress",
+  "xstateState": "coding",
+  "executionPhase": "coding",
+  "updated_at": "2026-02-09T07:54:32.957Z",
+  "workflow_type": "feature",
+  "lastEvent": {
+    "eventId": "1a07fa96-331d-4e4f-8ec4-fa9d18254af3",
+    "sequence": 0,
+    "type": "PLANNING_COMPLETE",
+    "timestamp": "2026-02-09T07:50:42.142480+00:00"
+  },
+  "last_updated": "2026-02-09T07:55:05.785437+00:00"
+}
