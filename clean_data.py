@@ -6,9 +6,9 @@ from datetime import datetime
 import shutil
 
 # Configuration
-DATA_DIR = "./data"
-INPUT_PATH = "./data/cleaned_master.csv"
-BACKUP_DIR = "./data/backups"
+DATA_DIR = "/app/data"
+INPUT_PATH = "/app/outputs/cleaned_master.csv"
+BACKUP_DIR = os.path.join(DATA_DIR, "backups")
 
 # Required columns for report generation
 REQUIRED_COLUMNS = ['company_name', 'name']
@@ -284,6 +284,12 @@ def clean_and_fix():
 
     issues = []
     summary_lines = []
+
+    # Step 0: Check if data directory exists
+    if not os.path.isdir("/app/data"):
+        print(f"\n[ERROR] FAILED: Data directory not found: /app/data")
+        print(f"   Please ensure the data directory exists and contains the converted data file")
+        return False, "Data directory not found"
 
     # Step 1: Check if input file exists
     if not Path(INPUT_PATH).exists():
