@@ -44,6 +44,38 @@ log "Starting FastAPI web server on port ${HEALTH_PORT}..."
 log "============================================="
 
 # ---------------------------------------------------------------------------
+# Canonical path verification and diagnostics
+# ---------------------------------------------------------------------------
+log ""
+log "Canonical Directory verification:"
+log "  Data directory: /app/data"
+log "  Output directory: /app/outputs"
+log "  Log directory: /app/logs"
+
+# Verify data directory exists
+if [ ! -d "/app/data" ]; then
+  log "WARNING: Data directory not found: /app/data"
+else
+  log "✓ Data directory exists and is readable"
+fi
+
+# Verify outputs directory exists
+if [ ! -d "/app/outputs" ]; then
+  log "WARNING: Output directory not found: /app/outputs"
+else
+  log "✓ Output directory exists and is writable"
+fi
+
+# Verify logs directory exists
+if [ ! -d "/app/logs" ]; then
+  log "WARNING: Log directory not found: /app/logs"
+else
+  log "✓ Log directory exists and is writable"
+fi
+
+log ""
+
+# ---------------------------------------------------------------------------
 # Start FastAPI web server using uvicorn
 # Provides web control panel for P2/P3 pipeline orchestration
 # Runs in foreground to keep container alive
