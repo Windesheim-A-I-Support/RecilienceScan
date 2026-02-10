@@ -6,9 +6,9 @@ from datetime import datetime
 import shutil
 
 # Configuration
-DATA_DIR = "./data"
-OUTPUT_PATH = "./data/cleaned_master.csv"
-BACKUP_DIR = "./data/backups"
+DATA_DIR = "/app/data"
+OUTPUT_PATH = "/app/outputs/cleaned_master.csv"
+BACKUP_DIR = os.path.join(DATA_DIR, "backups")
 
 # Supported file patterns (in priority order)
 FILE_PATTERNS = [
