@@ -7,10 +7,10 @@ from datetime import datetime
 import random
 
 # Configuration
-DATA_DIR = "./data"
-CLEANED_CSV = "./data/cleaned_master.csv"
-VALIDATION_OUTPUT = "./data/integrity_validation_report.json"
-REPORT_OUTPUT = "./data/integrity_validation_report.txt"
+DATA_DIR = "/app/data"
+CLEANED_CSV = "/app/outputs/cleaned_master.csv"
+VALIDATION_OUTPUT = "/app/outputs/integrity_validation_report.json"
+REPORT_OUTPUT = "/app/outputs/integrity_validation_report.txt"
 
 # Excel file patterns (same as convert_data.py)
 FILE_PATTERNS = [
@@ -64,6 +64,11 @@ class DataIntegrityValidator:
         print("FINDING SOURCE EXCEL FILE")
         print("="*70)
 
+        # Check if data directory exists
+        if not Path(DATA_DIR).exists():
+            self.log('ERROR', f"No data files found: data directory does not exist at {DATA_DIR}")
+            return None
+
         for pattern in FILE_PATTERNS:
             search_path = Path(DATA_DIR) / pattern
             matches = list(glob.glob(str(search_path)))
@@ -76,7 +81,7 @@ class DataIntegrityValidator:
                     self.log('INFO', f"Multiple files found, using most recent")
                 return excel_file
 
-        self.log('ERROR', "No Excel file found in data directory")
+        self.log('ERROR', "No data files found: no Excel files matching expected patterns in data directory")
         return None
 
     def load_excel_data(self, excel_path):
@@ -139,7 +144,7 @@ class DataIntegrityValidator:
         print("="*70)
 
         if not Path(CLEANED_CSV).exists():
-            self.log('ERROR', f"Cleaned CSV not found: {CLEANED_CSV}")
+            self.log('ERROR', f"ERROR: missing input file - Cleaned CSV not found at {CLEANED_CSV}")
             return None
 
         try:
@@ -150,7 +155,7 @@ class DataIntegrityValidator:
             return df
 
         except Exception as e:
-            self.log('ERROR', f"Failed to load CSV: {e}")
+            self.log('ERROR', f"ERROR: failed to load input data - Failed to load CSV: {e}")
             return None
 
     def create_record_key(self, row):
@@ -300,6 +305,8 @@ class DataIntegrityValidator:
 
     def generate_report(self):
         """Generate human-readable report"""
+        import os
+
         lines = []
         lines.append("="*70)
         lines.append("DATA INTEGRITY VALIDATION REPORT")
@@ -363,13 +370,22 @@ class DataIntegrityValidator:
         report_text = '\n'.join(lines)
         print("\n" + report_text)
 
-        with open(REPORT_OUTPUT, 'w') as f:
-            f.write(report_text)
+        try:
+            # Ensure output directory exists
+            output_dir = Path(REPORT_OUTPUT).parent
+            os.makedirs(output_dir, exist_ok=True)
 
-        self.log('INFO', f"Report saved: {REPORT_OUTPUT}")
+            with open(REPORT_OUTPUT, 'w') as f:
+                f.write(report_text)
+
+            self.log('INFO', f"Report saved: {REPORT_OUTPUT}")
+        except Exception as e:
+            self.log('ERROR', f"ERROR: failed to write output - Failed to save report: {e}")
 
     def save_validation_log(self):
         """Save detailed JSON log"""
+        import os
+
         log_data = {
             'timestamp': datetime.now().isoformat(),
             'statistics': self.statistics,
@@ -379,10 +395,17 @@ class DataIntegrityValidator:
             'info': self.info
         }
 
-        with open(VALIDATION_OUTPUT, 'w') as f:
-            json.dump(log_data, f, indent=2)
+        try:
+            # Ensure output directory exists
+            output_dir = Path(VALIDATION_OUTPUT).parent
+            os.makedirs(output_dir, exist_ok=True)
 
-        self.log('INFO', f"Validation log saved: {VALIDATION_OUTPUT}")
+            with open(VALIDATION_OUTPUT, 'w') as f:
+                json.dump(log_data, f, indent=2)
+
+            self.log('INFO', f"Validation log saved: {VALIDATION_OUTPUT}")
+        except Exception as e:
+            self.log('ERROR', f"ERROR: failed to write output - Failed to save validation log: {e}")
 
 def main(num_samples=10):
     """Main validation function"""
