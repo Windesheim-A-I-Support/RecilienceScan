@@ -1,0 +1,13 @@
+{
+  "run_id": "9f710bd4-9371-48f4-b5f1-3a05c6f88bfe",
+  "type": "render",
+  "status": "failed",
+  "filename": null,
+  "created_at": "2026-02-09T15:49:29.389877",
+  "updated_at": "2026-02-09T15:49:29.392581",
+  "completed_at": "2026-02-09T15:49:29.392587",
+  "error": "No module named 'generate_single_report'",
+  "company_name": "Vattenfall",
+  "person_name": null,
+  "output_format": "pdf"
+}

@@ -1,0 +1,10 @@
+{
+  "run_id": "2872853b-5422-479e-b70e-bbc6532c8918",
+  "type": "ingest",
+  "status": "failed",
+  "filename": null,
+  "created_at": "2026-02-09T08:47:27.620147",
+  "updated_at": "2026-02-09T08:47:27.967529",
+  "completed_at": "2026-02-09T08:47:27.967539",
+  "error": "No files found in /data/incoming/"
+}
