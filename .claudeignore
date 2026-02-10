@@ -1,0 +1,31 @@
+# Claude Code ignore list — CRITICAL
+
+# Auto-Claude internals
+.auto-claude/
+.claude/
+
+# Generated artifacts
+outputs/
+logs/
+reports/
+build/
+dist/
+venv/
+__pycache__/
+
+# Large data & binaries
+data/
+*.csv
+*.xlsx
+*.pdf
+*.ipynb
+*.zip
+*.tar.gz
+*.otf
+
+# Logs and noise
+gui_log.txt
+validation_results.json
+
+# Git metadata
+.git/
