@@ -1,7 +1,3 @@
-# =============================================================================
-# ResilienceScan - Docker Compose
-# Single-service container foundation with R, Python, Quarto, and TinyTeX
-# =============================================================================
 services:
   resiliencescan:
     build:
@@ -9,9 +5,9 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./data:/data
-      - ./reports:/reports
-      - ./logs:/logs
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+      - ./logs:/app/logs
       - ./app/web/static:/app/web/static:rw
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
