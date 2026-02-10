@@ -6,8 +6,11 @@ set -euo pipefail
 # Verifies runtimes, logs versions, and starts health endpoint server
 # =============================================================================
 
-LOG_FILE="/logs/container_startup.log"
+LOG_FILE="/app/logs/container_startup.log"
 HEALTH_PORT=8080
+
+# Ensure log directory exists
+mkdir -p /app/logs
 
 # ---------------------------------------------------------------------------
 # Runtime version logging (stdout + log file)
