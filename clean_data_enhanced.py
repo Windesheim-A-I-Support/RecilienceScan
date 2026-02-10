@@ -8,11 +8,11 @@ import shutil
 import json
 
 # Configuration
-DATA_DIR = "./data"
-INPUT_PATH = "./data/cleaned_master.csv"
-BACKUP_DIR = "./data/backups"
-VALIDATION_LOG = "./data/cleaning_validation_log.json"
-CLEANING_REPORT = "./data/cleaning_report.txt"
+DATA_DIR = "/app/data"
+INPUT_PATH = "/app/data/cleaned_master.csv"
+BACKUP_DIR = "/app/data/backups"
+VALIDATION_LOG = "/app/data/cleaning_validation_log.json"
+CLEANING_REPORT = "/app/data/cleaning_report.txt"
 
 # Required columns for report generation
 REQUIRED_COLUMNS = ['company_name', 'name', 'email_address']
@@ -58,19 +58,23 @@ class DataCleaningValidator:
 
     def create_backup(self, file_path):
         """Create a timestamped backup of a file."""
-        if not Path(file_path).exists():
-            self.log_issue('WARNING', f"Input file not found: {file_path}")
+        try:
+            if not Path(file_path).exists():
+                self.log_issue('WARNING', f"Input file not found: {file_path}")
+                return None
+
+            os.makedirs(BACKUP_DIR, exist_ok=True)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = Path(file_path).stem
+            ext = Path(file_path).suffix
+            backup_path = os.path.join(BACKUP_DIR, f"{filename}_{timestamp}{ext}")
+
+            shutil.copy2(file_path, backup_path)
+            self.log_issue('INFO', f"Backup created: {backup_path}")
+            return backup_path
+        except Exception as e:
+            self.log_issue('ERROR', f"Failed to create backup: {e}")
             return None
-
-        os.makedirs(BACKUP_DIR, exist_ok=True)
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = Path(file_path).stem
-        ext = Path(file_path).suffix
-        backup_path = os.path.join(BACKUP_DIR, f"{filename}_{timestamp}{ext}")
-
-        shutil.copy2(file_path, backup_path)
-        self.log_issue('INFO', f"Backup created: {backup_path}")
-        return backup_path
 
     def validate_columns(self, df):
         """Validate that required columns exist"""
@@ -243,9 +247,13 @@ class DataCleaningValidator:
         # Save detailed replacement log
         if replacement_log:
             replacement_df = pd.DataFrame(replacement_log)
-            replacement_log_path = './data/value_replacements_log.csv'
-            replacement_df.to_csv(replacement_log_path, index=False)
-            self.log_issue('INFO', f"Saved {len(replacement_log)} replacement details to: {replacement_log_path}")
+            replacement_log_path = '/app/data/value_replacements_log.csv'
+            try:
+                os.makedirs(DATA_DIR, exist_ok=True)
+                replacement_df.to_csv(replacement_log_path, index=False)
+                self.log_issue('INFO', f"Saved {len(replacement_log)} replacement details to: {replacement_log_path}")
+            except Exception as e:
+                self.log_issue('ERROR', f"Failed to save replacement log: {e}")
 
         if total_replacements > 0:
             self.log_issue('WARNING', f"Total invalid values replaced: {total_replacements}")
@@ -280,23 +288,29 @@ class DataCleaningValidator:
 
     def save_validation_log(self):
         """Save detailed validation log"""
-        # Convert numpy int64 to Python int for JSON serialization
-        stats = {k: int(v) if isinstance(v, (np.int64, np.int32)) else v
-                 for k, v in self.statistics.items()}
+        try:
+            # Ensure DATA_DIR exists
+            os.makedirs(DATA_DIR, exist_ok=True)
 
-        log_data = {
-            'timestamp': datetime.now().isoformat(),
-            'statistics': stats,
-            'errors': self.issues,
-            'warnings': self.warnings,
-            'info': self.info,
-            'removed_records': self.removed_records
-        }
+            # Convert numpy int64 to Python int for JSON serialization
+            stats = {k: int(v) if isinstance(v, (np.int64, np.int32)) else v
+                     for k, v in self.statistics.items()}
 
-        with open(VALIDATION_LOG, 'w') as f:
-            json.dump(log_data, f, indent=2)
+            log_data = {
+                'timestamp': datetime.now().isoformat(),
+                'statistics': stats,
+                'errors': self.issues,
+                'warnings': self.warnings,
+                'info': self.info,
+                'removed_records': self.removed_records
+            }
 
-        self.log_issue('INFO', f"Validation log saved: {VALIDATION_LOG}")
+            with open(VALIDATION_LOG, 'w') as f:
+                json.dump(log_data, f, indent=2)
+
+            self.log_issue('INFO', f"Validation log saved: {VALIDATION_LOG}")
+        except Exception as e:
+            self.log_issue('ERROR', f"Failed to save validation log: {e}")
 
     def generate_report(self):
         """Generate human-readable cleaning report"""
@@ -354,11 +368,18 @@ class DataCleaningValidator:
 
         report_text = '\n'.join(lines)
 
-        with open(CLEANING_REPORT, 'w') as f:
-            f.write(report_text)
+        try:
+            # Ensure DATA_DIR exists
+            os.makedirs(DATA_DIR, exist_ok=True)
 
-        print("\n" + report_text)
-        self.log_issue('INFO', f"Cleaning report saved: {CLEANING_REPORT}")
+            with open(CLEANING_REPORT, 'w') as f:
+                f.write(report_text)
+
+            print("\n" + report_text)
+            self.log_issue('INFO', f"Cleaning report saved: {CLEANING_REPORT}")
+        except Exception as e:
+            print("\n" + report_text)
+            self.log_issue('ERROR', f"Failed to save cleaning report: {e}")
 
 def clean_and_fix():
     """
@@ -366,6 +387,14 @@ def clean_and_fix():
     Returns (success: bool, summary: str) tuple.
     """
     validator = DataCleaningValidator()
+
+    # Ensure data directory exists
+    try:
+        os.makedirs(DATA_DIR, exist_ok=True)
+    except Exception as e:
+        error_msg = f"Failed to create data directory {DATA_DIR}: {e}"
+        print(f"[ERROR] {error_msg}")
+        return False, error_msg
 
     # Check if input file exists
     if not Path(INPUT_PATH).exists():
@@ -425,6 +454,7 @@ def clean_and_fix():
 
     # Save cleaned data
     try:
+        os.makedirs(DATA_DIR, exist_ok=True)
         df.to_csv(INPUT_PATH, index=False)
         validator.log_issue('INFO', f"Saved cleaned data: {INPUT_PATH}")
     except Exception as e:
