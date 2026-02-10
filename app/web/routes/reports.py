@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["reports"])
 
-REPORTS_DIR = Path("/reports")
+REPORTS_DIR = Path("/app/outputs")
 
 
 @router.get("/reports")

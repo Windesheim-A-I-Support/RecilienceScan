@@ -9,12 +9,14 @@ from pathlib import Path
 from datetime import datetime
 
 # Configuration
-DATA_DIR = "./data"
-OUTPUT_PATH = "./data/cleaned_master.csv"
-MASTER_DB_PATH = "./data/master_database.csv"
-BACKUP_DIR = "./data/backups"
-LOG_DIR = "./logs"
-LOG_PATH = "./logs/ingestion.log"
+# Use canonical paths for Docker containerization
+# These paths should be mounted as volumes in docker-compose.yml
+DATA_DIR = "/app/data"
+OUTPUT_PATH = "/app/outputs/cleaned_master.csv"
+MASTER_DB_PATH = "/app/data/master_database.csv"
+BACKUP_DIR = "/app/data/backups"
+LOG_DIR = "/app/logs"
+LOG_PATH = "/app/logs/ingestion.log"
 
 # Encoding cascade order
 ENCODING_CASCADE = ["utf-8", "utf-8-sig", "cp1252", "latin1"]
