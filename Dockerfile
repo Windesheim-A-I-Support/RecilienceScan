@@ -58,8 +58,8 @@ RUN quarto install tinytex --update-path
 # ---------------------------------------------------------------------------
 # (7) Container directory structure
 # ---------------------------------------------------------------------------
-RUN mkdir -p /app /data /reports /logs \
-    && chmod 777 /data /reports /logs
+RUN mkdir -p /app/data /app/outputs /app/logs \
+    && chmod 777 /app/data /app/outputs /app/logs
 
 # ---------------------------------------------------------------------------
 # Copy application files
