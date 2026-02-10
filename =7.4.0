@@ -1,0 +1,14 @@
+Collecting pytest
+  Using cached pytest-9.0.2-py3-none-any.whl.metadata (7.6 kB)
+Collecting iniconfig>=1.0.1 (from pytest)
+  Using cached iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Requirement already satisfied: packaging>=22 in /usr/lib/python3.14/site-packages (from pytest) (25.0)
+Requirement already satisfied: pluggy<2,>=1.5 in /usr/lib/python3.14/site-packages (from pytest) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in /usr/lib/python3.14/site-packages (from pytest) (2.19.1)
+Using cached pytest-9.0.2-py3-none-any.whl (374 kB)
+Using cached iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Installing collected packages: iniconfig, pytest
+ERROR: Could not install packages due to an OSError: [Errno 13] Permission denied: '/usr/local/lib/python3.14'
+Consider using the `--user` option or check the permissions.
+
+
