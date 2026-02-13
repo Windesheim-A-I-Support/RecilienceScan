@@ -130,14 +130,7 @@ def generate_reports():
 
         # Build quarto command with both company and person parameters
         temp_output = f"temp_{safe_company}_{safe_person}.pdf"
-        cmd = (
-            f'quarto render "{TEMPLATE}" '
-            f'-P company="{company}" '
-            f'-P person="{person}" '
-            f'--to pdf '
-            f'--output "{temp_output}"'
-            # Removed --quiet to see actual errors
-        )
+        cmd = f"quarto render {TEMPLATE} --to pdf --output {temp_output} --params '{"company": "{company}", "person": "{person}"}'"
 
         # Execute quarto render with verbose output
         print(f"   [FIX] Running: quarto render...")
