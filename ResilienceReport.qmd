@@ -242,21 +242,28 @@ create_sample_resilience_data <- function() {
   companies <- data.frame(
     company_name = c(
       "GlobalLogistics Corp",
-      "Regional Express Ltd", 
+      "Regional Express Ltd",
       "AgileStart Delivery",
       "Traditional Freight Co",
       "TechEnabled Supply"
     ),
+    country = c(
+      "Netherlands",
+      "Belgium",
+      "Netherlands",
+      "Germany",
+      "Netherlands"
+    ),
     sector = c(
       "International Logistics",
-      "Regional Transport", 
+      "Regional Transport",
       "Last-Mile Delivery",
       "Freight & Warehousing",
       "Supply Chain Technology"
     ),
     size_number_of_employees = c(
       "10,000+",
-      "1,000-4,999", 
+      "1,000-4,999",
       "50-249",
       "5,000-9,999",
       "250-999"
