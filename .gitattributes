@@ -12,3 +12,14 @@ docker-compose.yaml text auto
 # Export ignore rules
 example.tex export-ignore
 example.pdf export-ignore
+venv/
+__pycache__/
+*.pyc
+outputs/
+reports/
+logs/
+.gui_log.txt
+validation_pipeline.log
+*.pdf
+*.xlsx
+*.csv

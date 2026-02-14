@@ -1,107 +1,115 @@
 ======================================================================
 DATA CLEANING REPORT
-Generated: 2025-12-02 14:35:39
+Generated: 2026-02-13 23:55:32
 ======================================================================
 
 STATISTICS:
-  Initial rows: 505
-  Final rows: 468
-  Removed rows: 37
-  Duplicates removed: 7
-  Records with insufficient data: 4
+  Initial rows: 565
+  Final rows: 519
+  Removed rows: 46
+  Duplicates removed: 12
+  Records with insufficient data: 8
 
 REMOVED RECORDS:
-  Row 470: AB - Anne
-    Reason: Only 0 valid scores (need 5)
-  Row 471: Avebe - Erik Pricker (0.2)
+  Row 2: Vattenfall - Deurwaarder
     Reason: Invalid/missing email
-  Row 472: Avebe - Laura Wessels
+  Row 3: The Coca-Cola Company - TCCC SCR2 EMEA 2023 Team 3
     Reason: Invalid/missing email
-  Row 473: Avebe - Saskia Vlap
+  Row 4: Suplacon - Pim Jansen
     Reason: Invalid/missing email
-  Row 474: AVMC - Hans Veltman
+  Row 5: Scania Logistics NL - Elbrich de Jong (0.1)
     Reason: Invalid/missing email
-  Row 476: Bidfood - Hessel de Keijzer (0.2)
+  Row 6: Scania Logistics NL - Aafke Christenhusz
     Reason: Invalid/missing email
-  Row 477: Bosch Thermotechniek B.V. - Rob ter Beek (0.2)
+  Row 9: Rituals - Remco de Marie (0.2)
     Reason: Invalid/missing email
-  Row 478: Brink Climate Systems - Susanne Westerdijk
+  Row 10: NEDTECH - Bas van Bree
     Reason: Invalid/missing email
-  Row 479: Broshuis B.V. - Jasper Luik (0.1)
+  Row 11: Livin' Spas - Henrick van de brug
     Reason: Invalid/missing email
-  Row 480: Bruinhorst Tegels Online - T. van Hierden
+  Row 12: Corbion (1) - Koen Kummel (0.2)
     Reason: Invalid/missing email
-  Row 481: Corbion (1) - Koen Kummel (0.2)
+  Row 13: Broshuis B.V. - Jasper Luik (0.1)
     Reason: Invalid/missing email
-  Row 484: Evofenedex - Nanne Schriek
+  Row 14: Brink Climate Systems - Susanne Westerdijk
     Reason: Invalid/missing email
-  Row 486: Fujifilm  - Charlie 
-    Reason: Only 0 valid scores (need 5)
-  Row 487: Global logistics ag - Az muller
+  Row 15: Bosch Thermotechniek B.V. - Rob ter Beek (0.2)
+    Reason: Invalid/missing email
+  Row 16: Bidfood - Hessel de Keijzer (0.2)
+    Reason: Invalid/missing email
+  Row 17: AVMC - Hans Veltman
+    Reason: Invalid/missing email
+  Row 18: Avebe - Erik Pricker (0.2)
+    Reason: Invalid/missing email
+  Row 19: Avebe - Laura Wessels
+    Reason: Invalid/missing email
+  Row 20: Avebe - Saskia Vlap
+    Reason: Invalid/missing email
+  Row 24: Evofenedex - Nanne Schriek
+    Reason: Invalid/missing email
+  Row 34: Bruinhorst Tegels Online - T. van Hierden
+    Reason: Invalid/missing email
+  Row 35: Hermie.com - Pieter Hermie
+    Reason: Invalid/missing email
+  Row 117: PT. Sam Adi Karya - Arina Sabila
+    Reason: Invalid/missing email
+  Row 151: MariAlro - Jinsun Kim
+    Reason: Invalid/missing email
+  Row 152: Samsung Electronics - J
+    Reason: Invalid/missing email
+  Row 201: The Coca-Cola Company - Steven Jian
+    Reason: Invalid/missing email
+  Row 211: Global logistics ag - Az muller
     Reason: Only 3 valid scores (need 5)
-  Row 488: Hermie.com - Pieter Hermie
+  Row 217: Hiab Benelux - Theo Zijlstra
     Reason: Invalid/missing email
-  Row 489: Hiab Benelux - Theo Zijlstra
+  Row 218: Hiab Benelux - Melvyn
     Reason: Invalid/missing email
-  Row 490: Hiab Benelux - Melvyn
-    Reason: Invalid/missing email
-  Row 491: Livin' Spas - Henrick van de brug
-    Reason: Invalid/missing email
-  Row 492: MariAlro - Jinsun Kim
-    Reason: Invalid/missing email
-  Row 493: NEDTECH - Bas van Bree
-    Reason: Invalid/missing email
-  Row 494: PT. Sam Adi Karya - Arina Sabila
-    Reason: Invalid/missing email
-  Row 495: Rituals - Remco de Marie (0.2)
-    Reason: Invalid/missing email
-  Row 496: Samsung Electronics - J
-    Reason: Invalid/missing email
-  Row 497: Scania Logistics NL - Elbrich de Jong (0.1)
-    Reason: Invalid/missing email
-  Row 498: Scania Logistics NL - Aafke Christenhusz
-    Reason: Invalid/missing email
-  Row 499: Suplacon - Pim Jansen
-    Reason: Invalid/missing email
-  Row 501: The Coca-Cola Company - TCCC SCR2 EMEA 2023 Team 3
-    Reason: Invalid/missing email
-  Row 503: The Coca-Cola Company - Steven Jian
-    Reason: Invalid/missing email
-  Row 505: Transparency Lab - Jan van de Poll
+  Row 221: AB - Anne
     Reason: Only 0 valid scores (need 5)
-  Row 506: Vattenfall - Deurwaarder
-    Reason: Invalid/missing email
+  Row 424: Transparency Lab - Jan van de Poll
+    Reason: Only 0 valid scores (need 5)
+  Row 428: Fujifilm Europe B.V. - Charlie 
+    Reason: Only 0 valid scores (need 5)
+  Row 521: Tilburg University - Roland van de Kerkhof
+    Reason: Only 0 valid scores (need 5)
+  Row 522: BCI - Niels Prins
+    Reason: Only 0 valid scores (need 5)
+  Row 554: Uni Morski - Jędrzej
+    Reason: Only 3 valid scores (need 5)
+  Row 555: Technical University of Munich - Jin Peng
+    Reason: Only 0 valid scores (need 5)
 
 ERRORS:
   None
 
 WARNINGS:
-  Row 470: Insufficient data (0/15 scores)
-  Row 471: Invalid/missing email
-  Row 472: Invalid/missing email
-  Row 473: Invalid/missing email
-  Row 474: Invalid/missing email
-  Row 476: Invalid/missing email
-  Row 477: Invalid/missing email
-  Row 478: Invalid/missing email
-  Row 479: Invalid/missing email
-  Row 480: Invalid/missing email
-  Row 481: Invalid/missing email
-  Row 484: Invalid/missing email
-  Row 486: Insufficient data (0/15 scores)
-  Row 487: Insufficient data (3/15 scores)
-  Row 488: Invalid/missing email
-  Row 489: Invalid/missing email
-  Row 490: Invalid/missing email
-  Row 491: Invalid/missing email
-  Row 492: Invalid/missing email
-  Row 493: Invalid/missing email
-  ... and 11 more warnings
+  Row 2: Invalid/missing email
+  Row 3: Invalid/missing email
+  Row 4: Invalid/missing email
+  Row 5: Invalid/missing email
+  Row 6: Invalid/missing email
+  Row 9: Invalid/missing email
+  Row 10: Invalid/missing email
+  Row 11: Invalid/missing email
+  Row 12: Invalid/missing email
+  Row 13: Invalid/missing email
+  Row 14: Invalid/missing email
+  Row 15: Invalid/missing email
+  Row 16: Invalid/missing email
+  Row 17: Invalid/missing email
+  Row 18: Invalid/missing email
+  Row 19: Invalid/missing email
+  Row 20: Invalid/missing email
+  Row 24: Invalid/missing email
+  Row 34: Invalid/missing email
+  Row 35: Invalid/missing email
+  ... and 15 more warnings
 
 ======================================================================
 RECOMMENDATIONS:
-  [OK] 37 records were excluded from the master CSV
+  [OK] 46 records were excluded from the master CSV
   [OK] These records will NOT be available for report generation
   [OK] Review removed records above to ensure data quality
-  [OK] 468 valid records ready for report generation
+  [OK] 519 valid records ready for report generation
 ======================================================================

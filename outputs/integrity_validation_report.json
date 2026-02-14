@@ -1,0 +1,194 @@
+{
+  "timestamp": "2026-02-13T23:55:33.161399",
+  "statistics": {
+    "total_records_excel": 565,
+    "total_records_csv": 519,
+    "samples_validated": 8,
+    "perfect_matches": 8,
+    "acceptable_matches": 0,
+    "mismatches": 0,
+    "missing_in_csv": 2
+  },
+  "samples": [
+    {
+      "sample_num": 1,
+      "company": "Veco",
+      "person": "Maarten Nijland",
+      "email": "mnijland@idexcorp.com",
+      "fields_checked": 18,
+      "fields_matched": 18,
+      "mismatches": [],
+      "status": "perfect"
+    },
+    {
+      "sample_num": 2,
+      "company": "ForFarmers",
+      "person": "Corn\u00e9 Romeijn",
+      "email": "corne.romeijn@forfarmers.eu",
+      "fields_checked": 18,
+      "fields_matched": 18,
+      "mismatches": [],
+      "status": "perfect"
+    },
+    {
+      "sample_num": 3,
+      "company": "Atos",
+      "person": "Folkert Folkerts",
+      "email": "folkert.folkerts@atos.net",
+      "fields_checked": 18,
+      "fields_matched": 18,
+      "mismatches": [],
+      "status": "perfect"
+    },
+    {
+      "sample_num": 4,
+      "company": "NEDTECH",
+      "status": "missing_in_csv"
+    },
+    {
+      "sample_num": 5,
+      "company": "Promeco",
+      "person": "Jessica Akerberg",
+      "email": "jessica.akerberg@promeco.fi",
+      "fields_checked": 18,
+      "fields_matched": 18,
+      "mismatches": [],
+      "status": "perfect"
+    },
+    {
+      "sample_num": 6,
+      "company": "Radboudumc",
+      "person": "Kevin Overgoor",
+      "email": "kevin.overgoor@radboudumc.nl",
+      "fields_checked": 18,
+      "fields_matched": 18,
+      "mismatches": [],
+      "status": "perfect"
+    },
+    {
+      "sample_num": 7,
+      "company": "The Coca-Cola Company",
+      "person": "TCCC SCR2 EMEA 2024 Team 1",
+      "email": "cchaida@coca-cola.com",
+      "fields_checked": 18,
+      "fields_matched": 18,
+      "mismatches": [],
+      "status": "perfect"
+    },
+    {
+      "sample_num": 8,
+      "company": "Scania Logistics NL",
+      "person": "Jasper Jansen",
+      "email": "jasper.jansen@scania.com",
+      "fields_checked": 18,
+      "fields_matched": 18,
+      "mismatches": [],
+      "status": "perfect"
+    },
+    {
+      "sample_num": 9,
+      "company": "Technical University of Munich",
+      "status": "missing_in_csv"
+    },
+    {
+      "sample_num": 10,
+      "company": "Involvation",
+      "person": "Stan van de Rijdt",
+      "email": "s.vanderijdt@involvation.com",
+      "fields_checked": 18,
+      "fields_matched": 18,
+      "mismatches": [],
+      "status": "perfect"
+    }
+  ],
+  "errors": [],
+  "warnings": [
+    {
+      "level": "WARNING",
+      "message": "Record not found in CSV: NEDTECH",
+      "timestamp": "2026-02-13T23:55:33.158665"
+    },
+    {
+      "level": "WARNING",
+      "message": "Record not found in CSV: Technical University of Munich",
+      "timestamp": "2026-02-13T23:55:33.159750"
+    }
+  ],
+  "info": [
+    {
+      "level": "INFO",
+      "message": "Found Excel file: /app/data/Resilience - MasterDatabase.xlsx",
+      "timestamp": "2026-02-13T23:55:32.661872"
+    },
+    {
+      "level": "INFO",
+      "message": "Loaded raw Excel: 567 rows x 179 columns",
+      "timestamp": "2026-02-13T23:55:33.121503"
+    },
+    {
+      "level": "INFO",
+      "message": "Detected header at row 2",
+      "timestamp": "2026-02-13T23:55:33.121858"
+    },
+    {
+      "level": "INFO",
+      "message": "Excel data rows: 565",
+      "timestamp": "2026-02-13T23:55:33.128534"
+    },
+    {
+      "level": "INFO",
+      "message": "CSV data rows: 519",
+      "timestamp": "2026-02-13T23:55:33.145639"
+    },
+    {
+      "level": "INFO",
+      "message": "Created CSV lookup with 519 unique records",
+      "timestamp": "2026-02-13T23:55:33.157235"
+    },
+    {
+      "level": "INFO",
+      "message": "Perfect match: 18/18 fields",
+      "timestamp": "2026-02-13T23:55:33.157840"
+    },
+    {
+      "level": "INFO",
+      "message": "Perfect match: 18/18 fields",
+      "timestamp": "2026-02-13T23:55:33.158208"
+    },
+    {
+      "level": "INFO",
+      "message": "Perfect match: 18/18 fields",
+      "timestamp": "2026-02-13T23:55:33.158518"
+    },
+    {
+      "level": "INFO",
+      "message": "Perfect match: 18/18 fields",
+      "timestamp": "2026-02-13T23:55:33.158923"
+    },
+    {
+      "level": "INFO",
+      "message": "Perfect match: 18/18 fields",
+      "timestamp": "2026-02-13T23:55:33.159179"
+    },
+    {
+      "level": "INFO",
+      "message": "Perfect match: 18/18 fields",
+      "timestamp": "2026-02-13T23:55:33.159394"
+    },
+    {
+      "level": "INFO",
+      "message": "Perfect match: 18/18 fields",
+      "timestamp": "2026-02-13T23:55:33.159627"
+    },
+    {
+      "level": "INFO",
+      "message": "Perfect match: 18/18 fields",
+      "timestamp": "2026-02-13T23:55:33.160009"
+    },
+    {
+      "level": "INFO",
+      "message": "Report saved: /app/outputs/integrity_validation_report.txt",
+      "timestamp": "2026-02-13T23:55:33.161366"
+    }
+  ]
+}

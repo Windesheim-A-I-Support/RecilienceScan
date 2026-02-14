@@ -1,0 +1,64 @@
+======================================================================
+DATA INTEGRITY VALIDATION REPORT
+Generated: 2026-02-13 23:55:33
+======================================================================
+
+OVERVIEW:
+  Excel file records: 565
+  CSV file records: 519
+  Records removed during cleaning: 46
+
+SAMPLE VALIDATION RESULTS:
+  Samples validated: 8
+  Perfect matches: 8
+  Acceptable matches (>90%): 0
+  Mismatches: 0
+  Missing in CSV: 2
+
+  Overall accuracy: 100.0%
+
+DETAILED SAMPLE RESULTS:
+
+  [1] Veco - Maarten Nijland
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [2] ForFarmers - Corné Romeijn
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [3] Atos - Folkert Folkerts
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [4] NEDTECH
+      Status: MISSING IN CSV
+
+  [5] Promeco - Jessica Akerberg
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [6] Radboudumc - Kevin Overgoor
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [7] The Coca-Cola Company - TCCC SCR2 EMEA 2024 Team 1
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [8] Scania Logistics NL - Jasper Jansen
+      Status: PERFECT
+      Matched: 18/18 fields
+
+  [9] Technical University of Munich
+      Status: MISSING IN CSV
+
+  [10] Involvation - Stan van de Rijdt
+      Status: PERFECT
+      Matched: 18/18 fields
+
+======================================================================
+VERDICT:
+  [OK] Data integrity is acceptable (>90% accuracy)
+  [!] Minor discrepancies found - review details above
+======================================================================
