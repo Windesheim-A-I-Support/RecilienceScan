@@ -1443,6 +1443,10 @@ if (file.exists(data_file)) {
 # Extract company and person information
 company_name <- params$company
 person_name <- if(!is.null(params$person)) params$person else ""
+# Sanitize: treat placeholder values as empty
+if (is.na(person_name) || trimws(person_name) %in% c("-", "?", "N/A", "n/a", "NA", "Unknown", "unknown", "")) {
+  person_name <- ""
+}
 
 # Initialize dashboard data
 dashboard_data <- NULL
@@ -1457,7 +1461,9 @@ tryCatch({
     # Extract person information from the data
     if ("name" %in% colnames(dashboard_data) && (is.na(person_name) || person_name == "")) {
       person_name <- as.character(dashboard_data$name[1])
-      if (is.na(person_name)) person_name <- ""
+      if (is.na(person_name) || trimws(person_name) %in% c("-", "?", "N/A", "n/a", "NA", "Unknown", "unknown", "")) {
+        person_name <- ""
+      }
     }
 
   } else if (exists("df_raw_validated") && !is.null(df_raw_validated)) {
@@ -1472,7 +1478,9 @@ tryCatch({
         # Extract person information from the data
         if ("name" %in% colnames(dashboard_data) && (is.na(person_name) || person_name == "")) {
           person_name <- as.character(dashboard_data$name[1])
-          if (is.na(person_name)) person_name <- ""
+          if (is.na(person_name) || trimws(person_name) %in% c("-", "?", "N/A", "n/a", "NA", "Unknown", "unknown", "")) {
+            person_name <- ""
+          }
         }
       }
     }
@@ -1485,7 +1493,9 @@ submit_date <- ""
 if (!is.null(dashboard_data) && data_source == "real") {
   if ("function" %in% colnames(dashboard_data)) {
     person_function <- as.character(dashboard_data[1, "function"])
-    if (is.na(person_function)) person_function <- ""
+    if (is.na(person_function) || trimws(person_function) %in% c("-", "?", "N/A", "n/a", "NA", "")) {
+      person_function <- ""
+    }
   }
   if ("submitdate" %in% colnames(dashboard_data)) {
     raw_date <- as.character(dashboard_data[1, "submitdate"])
@@ -1730,9 +1740,9 @@ do_analysis <- analyze_pillar_gap("do")
 
 `r if (exists("has_multiple_respondents") && has_multiple_respondents) paste("\\textbf{Survey Respondents:}", nrow(company_data_all), "people from this company\\\\")`
 
-`r if (nchar(person_name) > 0) { if (nchar(person_function) > 0) paste("\\textbf{This Report:}", person_name, "---", gsub("&", "\\\\&", person_function), "\\\\") else paste("\\textbf{This Report:}", person_name, "\\\\") }`
+`r if (!is.na(person_name) && nchar(person_name) > 0) { if (!is.na(person_function) && nchar(person_function) > 0) paste("\\textbf{This Report:}", person_name, "---", gsub("&", "\\\\&", person_function), "\\\\") else paste("\\textbf{This Report:}", person_name, "\\\\") }`
 
-`r if (nchar(submit_date) > 0) paste("\\textbf{Survey Date:}", submit_date, "\\\\")`
+`r if (!is.na(submit_date) && nchar(submit_date) > 0) paste("\\textbf{Survey Date:}", submit_date, "\\\\")`
 
 \textbf{Overall SCRES:} `r sprintf("%.2f", overall_score)`/5.00
 
