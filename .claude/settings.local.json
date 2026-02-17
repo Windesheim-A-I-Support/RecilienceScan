@@ -25,7 +25,8 @@
       "Bash(del /q *.aux *.log 2)",
       "Bash(powershell -Command:*)",
       "Bash(git checkout:*)",
-      "Bash(copy /Y ResilienceReport.qmd.backup_watermark ResilienceReport.qmd)"
+      "Bash(copy /Y ResilienceReport.qmd.backup_watermark ResilienceReport.qmd)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []
