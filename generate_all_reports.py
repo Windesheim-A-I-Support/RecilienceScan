@@ -1,4 +1,5 @@
 import os
+import subprocess
 import pandas as pd
 import csv
 from pathlib import Path
@@ -19,9 +20,16 @@ def load_csv(path):
     for enc in encodings:
         try:
             with open(path, encoding=enc) as f:
-                sample = f.read(2048)
+                # Read enough lines for reliable delimiter detection
+                lines = []
+                for _ in range(5):
+                    line = f.readline()
+                    if not line:
+                        break
+                    lines.append(line)
+                sample = "".join(lines)
                 try:
-                    sep = csv.Sniffer().sniff(sample).delimiter
+                    sep = csv.Sniffer().sniff(sample, delimiters=',;\t|').delimiter
                     print(f"[OK] Delimiter '{sep}' with encoding '{enc}'")
                 except Exception:
                     sep = ","
@@ -130,22 +138,29 @@ def generate_reports():
 
         # Build quarto command with both company and person parameters
         temp_output = f"temp_{safe_company}_{safe_person}.pdf"
-        cmd = f"quarto render {TEMPLATE} --to pdf --output {temp_output} --params '{"company": "{company}", "person": "{person}"}'"
+        cmd = [
+            'quarto', 'render', str(TEMPLATE),
+            '-P', f'company={company}',
+            '-P', f'person={person}',
+            '--to', 'pdf',
+            '--output', temp_output
+        ]
 
         # Execute quarto render with verbose output
         print(f"   [FIX] Running: quarto render...")
-        import subprocess
         try:
             result = subprocess.run(
-                cmd.split(),
+                cmd,
+                cwd=ROOT,
                 capture_output=True,
                 text=True,
-                timeout=120  # 2 minute timeout per report
+                timeout=300  # 5 minute timeout per report
             )
 
             if result.returncode == 0:
-                if Path(temp_output).exists():
-                    shutil.move(temp_output, output_file)
+                temp_path = ROOT / temp_output
+                if temp_path.exists():
+                    shutil.move(str(temp_path), str(output_file))
                     print(f"   [OK] Saved: {output_file}")
                     generated += 1
                 else:
@@ -167,7 +182,7 @@ def generate_reports():
                 failed += 1
 
         except subprocess.TimeoutExpired:
-            print(f"   [ERROR] Failed: Timeout after 120 seconds")
+            print(f"   [ERROR] Failed: Timeout after 300 seconds")
             failed += 1
         except Exception as e:
             print(f"   [ERROR] Failed: {type(e).__name__}: {e}")
